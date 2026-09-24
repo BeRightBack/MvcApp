@@ -255,6 +255,22 @@ When a module is deselected at generation, ALL of these must hold:
     gitignored, parameterized by the wizard — no code change, do not touch `appsettings.json`.
   - All ports shipped as VSIX **1.0.46** (payload verified in the zip; install still
     deferred by user).
+- **Mulva's 8 photos are now the SAME person (2026-09-24):** the seed set
+  `wwwroot\Photos\Mulva\women1-8.jpg` previously pointed to 8 DIFFERENT randomuser.me
+  portraits (my earlier bulk-download defect). Replaced the 8 file CONTENTS with Pexels
+  photos of Anna Tarazevich (`https://www.pexels.com/@anntarazevich/`) — she photographs
+  herself, so every portrait is the same woman; Pexels license (free use, no attribution,
+  modifiable, verified at `https://www.pexels.com/license/`). Originals were 5400×3600
+  ~2MB each → downscaled to 800×533 JPEG q82 (49–104KB). **Filenames kept** (`women1-8.jpg`)
+  so DB rows, `UserSeedData.json`, and the VSIX vstemplate file list remain valid — a
+  pure content swap, no reseed/DB/manifest changes. Candidate #14751276 (cucumber-over-
+  eyes, face hidden) skipped; main `women1.jpg` = reading-book portrait (Id 14751277).
+  Live verified (own instance, 9001, then freed): `/Photos/Mulva/women1.jpg` + `women3.jpg`
+  → 200 image/jpeg at exact new sizes. Source build 0E/10W (baseline). Ported to VSIX
+  **1.0.47** (manifest bumped, Release 0W/0E, payload verified: 8 new sizes in the zip).
+  Committed `9cc437a` + pushed to `github.com/BeRightBack/MvcApp` (public) — photos only,
+  runtime log churn left unstaged. Follow-up if the user wants: swap other test users'
+  128×128 randomuser portraits (1 each) for the same-person treatment at better res.
 
 ## Coding conventions
 - No code comments unless asked.
