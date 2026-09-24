@@ -1,0 +1,84 @@
+@using MvcApp.Web.Areas.Admin.Models.UserViewModels
+@model UserIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<p>
+    <a asp-action="Create">@Localizer["Create New"]</a>
+</p>
+
+<form method="get" asp-action="Index">
+    <div class="form-group">
+        <input type="text" name="searchQuery" value="@Model.SearchQuery" class="form-control" placeholder="Search users..." />
+        <button type="submit" class="btn btn-primary mt-2">Search</button>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Users.First().FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users.First().LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users.First().UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users.First().Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users.First().EmailConfirmed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users.First().PhoneNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Users)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-searchQuery="@Model.SearchQuery">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

@@ -1,0 +1,65 @@
+@model List<(string UserId, string UserName, int TotalPoints, int BadgeCount)>
+@{
+    ViewData["Title"] = "Leaderboard";
+    var currentUserId = (string)ViewBag.CurrentUserId;
+    var totalPoints = (int)ViewBag.TotalPoints;
+    var level = (int)ViewBag.Level;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2>Leaderboard</h2>
+        <p class="text-muted mb-0">Top members ranked by points earned.</p>
+    </div>
+    <div class="text-end">
+        <div class="fw-bold" style="color:var(--template-primary);">@totalPoints pts</div>
+        <small class="text-muted">Level @level</small>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th style="width:60px;" class="text-center">#</th>
+                    <th>Member</th>
+                    <th class="text-center">Badges</th>
+                    <th class="text-end">Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    var entry = Model[i];
+                    var rank = i + 1;
+                    var isCurrentUser = entry.UserId == currentUserId;
+                    var rankBadge = rank switch
+                    {
+                        1 => "🥇",
+                        2 => "🥈",
+                        3 => "🥉",
+                        _ => rank.ToString()
+                    };
+                    <tr class="@(isCurrentUser ? "table-active" : "")">
+                        <td class="text-center fw-bold">@rankBadge</td>
+                        <td>
+                            <a asp-area="" asp-controller="Members" asp-action="Details" asp-route-id="@entry.UserId"
+                               class="text-decoration-none @(isCurrentUser ? "fw-bold" : "")">
+                                @entry.UserName
+                            </a>
+                            @if (isCurrentUser)
+                            {
+                                <span class="badge bg-primary ms-1">You</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <i class='bx bx-badge me-1' style="color:var(--template-primary);"></i>@entry.BadgeCount
+                        </td>
+                        <td class="text-end fw-bold" style="color:var(--template-primary);">@entry.TotalPoints</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

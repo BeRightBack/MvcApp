@@ -1,0 +1,154 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MvcApp.Core.UserDetails> SignInManager
+@{
+    ViewData["Title"] = "Home";
+    var isAuthenticated = SignInManager.IsSignedIn(User);
+}
+
+<style>
+    .lx-kicker { letter-spacing: 8px; text-transform: uppercase; color: #b9a98f; font-size: .85rem; }
+    .lx-serif { font-family: Georgia, 'Times New Roman', serif; }
+    .lx-glow-text { background: linear-gradient(180deg,#ff6b81,#e5383b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lx-btn { display: inline-block; padding: .9rem 2.6rem; border-radius: 999px; background: linear-gradient(90deg,#e5383b,#8d0801); color: #fff; font-weight: 700; text-decoration: none; border: none; }
+    .lx-btn:hover { color: #fff; opacity: .92; }
+    .lx-btn-ghost { display: inline-block; padding: .9rem 2rem; border-radius: 999px; border: 2px solid rgba(255,255,255,.25); color: #f5f0e8; font-weight: 600; text-decoration: none; }
+    .lx-btn-ghost:hover { color: #ff6b81; border-color: #ff6b81; }
+    .lx-frame { border-radius: 24px; overflow: hidden; position: relative; border: 1px solid rgba(229,56,59,.45); box-shadow: 0 0 80px rgba(186,24,27,.35); }
+    /* zoom in so only the top ~65% of the source shows (drops its baked-in text band) */
+    .lx-frame img { width: 154%; height: 154%; max-width: none; object-fit: cover; object-position: 50% 0%; margin-left: -27%; display: block; }
+    .lx-frame::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 40%; background: linear-gradient(180deg, rgba(5,5,5,0) 0%, rgba(5,5,5,.75) 55%, #050505 92%); }
+    .lx-age { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 2px solid rgba(255,107,129,.8); border-radius: 50%; color: #ff6b81; font-weight: 800; }
+    .lx-stat-n { font-family: Georgia, serif; font-size: 2.6rem; color: #ff6b81; }
+    .lx-stat-l { font-size: .8rem; letter-spacing: 3px; text-transform: uppercase; color: #8d8570; }
+    .lx-card { background: #0d0709; border: 1px solid #2a0d0d; border-radius: 18px; padding: 2.8rem 2rem; height: 100%; text-align: center; }
+    .lx-ic { width: 84px; height: 84px; margin: 0 auto 1.6rem; border-radius: 50%; border: 2px solid #e5383b; display: flex; align-items: center; justify-content: center; }
+    .lx-num { font-family: Georgia, serif; font-size: 3.6rem; color: transparent; -webkit-text-stroke: 1.5px #e5383b; line-height: 1; }
+    .lx-band { position: relative; background: url('/images/xxxciety/couple-dark-x.jpg') center 30% / cover no-repeat; }
+    .lx-band::before { content: ''; position: absolute; inset: 0; background: rgba(5,5,5,.8); }
+    .lx-band > * { position: relative; }
+</style>
+
+<!-- HERO -->
+<section class="position-relative overflow-hidden" style="background:#050505;">
+    <div class="position-absolute" style="width:900px;height:900px;border-radius:50%;right:-150px;top:-250px;background:radial-gradient(circle, rgba(186,24,27,.32) 0%, rgba(186,24,27,0) 70%);"></div>
+    <div class="container position-relative py-5" style="z-index:2;">
+        <div class="row align-items-center py-4">
+            <div class="col-lg-6 text-white py-4">
+                <div class="lx-kicker mb-3">Luxury adults-only dating</div>
+                <h1 class="lx-serif fw-normal mb-4" style="font-size:4.2rem; line-height:1.08;">
+                    Where desire<br />finds its <em class="lx-glow-text fst-italic">match</em>.
+                </h1>
+                <p class="lead mb-4" style="color:#cbbfa8; max-width:34rem;">
+                    XXXciety is a private club for adults who know exactly what they want.
+                    Verified members, absolute discretion, and connections that start with
+                    chemistry &mdash; not small talk.
+                </p>
+                <div class="d-flex flex-wrap gap-3 align-items-center mb-4">
+                    @if (!isAuthenticated)
+                    {
+                        <a asp-page="/Account/Register" class="lx-btn">Join Free</a>
+                        <a asp-page="/Account/Login" class="lx-btn-ghost">Sign In</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Discover" asp-action="Index" class="lx-btn">Discover Members</a>
+                    }
+                    <span class="lx-age">18+</span>
+                </div>
+                <div style="font-size:.8rem; color:#8d8570; letter-spacing:1px;">
+                    STRICTLY 18+ &nbsp;&bull;&nbsp; VERIFIED MEMBERS ONLY &nbsp;&bull;&nbsp; YOUR PRIVACY, GUARANTEED
+                </div>
+            </div>
+            <div class="col-lg-6 py-4">
+                <div class="lx-frame mx-auto" style="max-width:620px; aspect-ratio:1/1;">
+                    <img src="~/images/xxxciety/couple-sunset.jpg" alt="A couple silhouetted against the setting moon" />
+                </div>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="row text-center py-5 mt-3" style="border-top:1px solid #1d0a0a;">
+            <div class="col-6 col-md-3 py-3"><div class="lx-stat-n">2.4M+</div><div class="lx-stat-l">Members worldwide</div></div>
+            <div class="col-6 col-md-3 py-3"><div class="lx-stat-n">100%</div><div class="lx-stat-l">Photo-verified profiles</div></div>
+            <div class="col-6 col-md-3 py-3"><div class="lx-stat-n">96</div><div class="lx-stat-l">Countries</div></div>
+            <div class="col-6 col-md-3 py-3"><div class="lx-stat-n">0</div><div class="lx-stat-l">Data sold. Ever.</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section style="background:#050505; padding:5rem 0;">
+    <div class="container text-center">
+        <div class="lx-kicker mb-2">Why XXXciety</div>
+        <h2 class="lx-serif fw-normal text-white mb-5" style="font-size:3rem;">Seduction, with standards.</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="lx-card">
+                    <div class="lx-ic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ff6b81" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg></div>
+                    <h3 class="lx-serif fw-normal text-white fs-4 mb-3">Verified &amp; Real</h3>
+                    <p style="color:#b0a58f;">Every member passes photo verification and a human review. No bots, no catfish &mdash; only real adults, exactly as pictured.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="lx-card">
+                    <div class="lx-ic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ff6b81" stroke-width="1.8"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.6"/></svg></div>
+                    <h3 class="lx-serif fw-normal text-white fs-4 mb-3">Private by Design</h3>
+                    <p style="color:#b0a58f;">Blurred-photo controls, invisible mode, and end-to-end encrypted messages. What happens on XXXciety stays on XXXciety.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="lx-card">
+                    <div class="lx-ic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ff6b81" stroke-width="1.8"><path d="M12 21C7 16.5 3 13 3 8.8 3 6 5 4 7.5 4c1.7 0 3.3.9 4.5 2.6C13.2 4.9 14.8 4 16.5 4 19 4 21 6 21 8.8c0 4.2-4 7.7-9 12.2z"/></svg></div>
+                    <h3 class="lx-serif fw-normal text-white fs-4 mb-3">Curated Matches</h3>
+                    <p style="color:#b0a58f;">Desire is personal. Our matching learns your tastes and intentions &mdash; and introduces you to people who share them.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STEPS -->
+<section style="background:#0a0507; border-top:1px solid #1d0a0a; padding:5rem 0;">
+    <div class="container">
+        <h2 class="lx-serif fw-normal text-white text-center mb-5" style="font-size:2.6rem;">Three steps to your next rendezvous.</h2>
+        <div class="row g-4">
+            <div class="col-md-4 d-flex gap-3">
+                <div class="lx-num">01</div>
+                <div>
+                    <h4 class="lx-serif fw-normal text-white fs-5 mb-2">Create your allure</h4>
+                    <p style="color:#b0a58f;">A profile that says what you want &mdash; elegantly. Verify once, and the red velvet rope lifts.</p>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex gap-3">
+                <div class="lx-num">02</div>
+                <div>
+                    <h4 class="lx-serif fw-normal text-white fs-5 mb-2">Match on chemistry</h4>
+                    <p style="color:#b0a58f;">Browse curated profiles or let desire find you. Flirt, chat, exchange &mdash; at your pace, on your terms.</p>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex gap-3">
+                <div class="lx-num">03</div>
+                <div>
+                    <h4 class="lx-serif fw-normal text-white fs-5 mb-2">Meet in the real world</h4>
+                    <p style="color:#b0a58f;">When the spark is mutual, take it offline. Our members don't waste time &mdash; they make memories.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="lx-band text-center" style="padding:6rem 0;">
+    <div class="container">
+        <h2 class="lx-serif fw-normal text-white mb-3" style="font-size:3.2rem;">Your secret is safe.<br />Your desires aren't.</h2>
+        <p class="lead mb-4" style="color:#cbbfa8;">Join 2.4 million adults who chose passion without compromise.</p>
+        @if (!isAuthenticated)
+        {
+            <a asp-page="/Account/Register" class="lx-btn fs-5">Enter XXXciety</a>
+        }
+        else
+        {
+            <a asp-controller="Discover" asp-action="Index" class="lx-btn fs-5">Enter XXXciety</a>
+        }
+    </div>
+</section>

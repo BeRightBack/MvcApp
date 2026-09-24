@@ -1,0 +1,64 @@
+@model IEnumerable<BlogPost>
+@{
+    ViewData["Title"] = "Blog";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="mb-4"><i class="fa fa-pencil-square-o"></i> Blog</h1>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success"]</div>
+            }
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">No posts yet. Check back soon!</div>
+            }
+
+            @foreach (var post in Model)
+            {
+                <article class="card mb-4">
+                    @if (!string.IsNullOrEmpty(post.FeaturedImagePath))
+                    {
+                        <img src="@post.FeaturedImagePath" class="card-img-top" alt="@post.Title" style="max-height:300px;object-fit:cover">
+                    }
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            <a asp-action="Post" asp-route-slug="@post.Slug" class="text-decoration-none">@post.Title</a>
+                        </h2>
+                        <div class="text-muted mb-2">
+                            <small>
+                                <i class="fa fa-user"></i> @post.CreatedByUsername
+                                <i class="fa fa-calendar ms-2"></i> @(post.PublishedAt?.ToString("MMM dd, yyyy") ?? post.CreatedAt.ToString("MMM dd, yyyy"))
+                                @if (post.Category != null)
+                                {
+                                    <i class="fa fa-folder ms-2"></i>
+                                    <a asp-action="Category" asp-route-slug="@post.Category.Slug" class="text-muted">@post.Category.Name</a>
+                                }
+                                <i class="fa fa-eye ms-2"></i> @post.ViewCount
+                                <i class="fa fa-comment ms-2"></i> @post.Comments?.Count(c => c.IsApproved && !c.IsDeleted)
+                            </small>
+                        </div>
+                        @if (!string.IsNullOrEmpty(post.Excerpt))
+                        {
+                            <p class="card-text">@post.Excerpt</p>
+                        }
+                        else
+                        {
+                            <div class="card-text">@Html.Raw(post.Content.Length > 500 ? post.Content[..500] + "..." : post.Content)</div>
+                        }
+                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">Read More</a>
+                    </div>
+                </article>
+            }
+
+            @await Html.PartialAsync("_BlogPagination")
+        </div>
+        <div class="col-lg-4">
+            @await Html.PartialAsync("_BlogSidebar")
+        </div>
+    </div>
+</div>

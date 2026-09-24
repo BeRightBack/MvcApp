@@ -1,0 +1,71 @@
+@model MvcApp.Module.IPTV.Models.SubscriptionViewModels.SubscriptionViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = @Localizer["Create Subscription - Admin"];
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="IptvSubscription" asp-action="Index">@Localizer["Subscriptions"]</a></li>
+        <li class="breadcrumb-item active">@Localizer["Create"]</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">@Localizer["Create Subscription"]</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="UserEmail" class="form-label">@Localizer["User Email"]</label>
+                <input asp-for="UserEmail" class="form-control" type="email" required />
+                <span asp-validation-for="UserEmail" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SubscriptionPlanId" class="form-label">@Localizer["Subscription Plan"]</label>
+                <select asp-for="SubscriptionPlanId" asp-items="ViewBag.SubscriptionPlans" class="form-select" required></select>
+                <span asp-validation-for="SubscriptionPlanId" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StartDate" class="form-label">@Localizer["Start Date"]</label>
+                    <input asp-for="StartDate" class="form-control" type="datetime-local" required />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="EndDate" class="form-label">@Localizer["End Date"]</label>
+                    <input asp-for="EndDate" class="form-control" type="datetime-local" required />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">@Localizer["Status"]</label>
+                <select asp-for="Status" asp-items="@(new SelectList(Model.StatusOptions, "Value", "Text"))" class="form-select"></select>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="UserCode" class="form-label">@Localizer["User Code"]</label>
+                    <input asp-for="UserCode" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Password" class="form-label">@Localizer["Password"]</label>
+                    <input asp-for="Password" class="form-control" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">@Localizer["Create"]</button>
+            <a asp-controller="IptvSubscription" asp-action="Index" class="btn btn-secondary">@Localizer["Back to List"]</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

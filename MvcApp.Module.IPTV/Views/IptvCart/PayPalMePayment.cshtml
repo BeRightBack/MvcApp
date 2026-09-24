@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = @Localizer["PayPal.Me Payment - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Complete your PayPal.Me payment."];
+}
+
+<div class="container py-5">
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-body text-center p-5">
+            <i class="fa fa-paypal fa-4x text-primary mb-4"></i>
+            <h2>@Localizer["PayPal.Me Payment"]</h2>
+            <p class="lead">@Localizer["Click the button below to complete your payment via PayPal.Me."]</p>
+            <p class="text-muted">@Localizer["After completing your payment, click the verification button to activate your subscription."]</p>
+            <a href="@ViewBag.Link" target="_blank" class="btn btn-primary btn-lg mb-3">
+                <i class="fa fa-paypal me-2"></i>@Localizer["Pay via PayPal.Me"]
+            </a>
+            <form asp-controller="IptvCart" asp-action="VerifyPayPalMePayment" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)" method="post">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fa fa-check me-2"></i>@Localizer["I Have Paid - Activate My Subscription"]
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

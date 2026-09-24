@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = @Localizer["Free Subscription - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Your free trial subscription has been created."];
+}
+
+<div class="container py-5 text-center">
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-body p-5">
+            <i class="fa fa-gift fa-5x text-warning mb-4"></i>
+            <h2>@Localizer["Free Subscription Created!"]</h2>
+            <p class="lead">@ViewBag.Message</p>
+            <p>@Localizer["Your free trial subscription has been created. Check your email for your credentials and setup instructions."]</p>
+            <a asp-controller="IptvHome" asp-action="Setup" class="btn btn-primary">@Localizer["How to Set Up"]</a>
+            <a asp-controller="IptvHome" asp-action="Index" class="btn btn-outline-primary ms-2">@Localizer["Back to Home"]</a>
+        </div>
+    </div>
+</div>

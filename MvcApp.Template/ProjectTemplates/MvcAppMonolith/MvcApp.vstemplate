@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="ProjectGroup" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>MvcApp Modular Monolith (ASP.NET Core 10)</Name>
+    <Description>Multi-project modular monolith: ASP.NET Core 10 MVC, Identity, MySQL, SignalR and 10 feature modules. Projects are named with your chosen prefix (e.g. MyApp.Core, MyApp.Web).</Description>
+    <ProjectType>CSharp</ProjectType>
+    <LanguageTag>C#</LanguageTag>
+    <PlatformTag>Windows</PlatformTag>
+    <ProjectTypeTag>Web</ProjectTypeTag>
+    <SortOrder>1000</SortOrder>
+    <DefaultName>MvcApp</DefaultName>
+    <CreateNewFolder>true</CreateNewFolder>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectTemplateLinks>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Common" CopyParameters="true">MvcApp.Common/MvcApp.Common.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Core" CopyParameters="true">MvcApp.Core/MvcApp.Core.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Identity" CopyParameters="true">MvcApp.Identity/MvcApp.Identity.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Infrastructure" CopyParameters="true">MvcApp.Infrastructure/MvcApp.Infrastructure.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Localization" CopyParameters="true">MvcApp.Localization/MvcApp.Localization.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.Ads" CopyParameters="true">MvcApp.Module.Ads/MvcApp.Module.Ads.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.Blog" CopyParameters="true">MvcApp.Module.Blog/MvcApp.Module.Blog.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.Chat" CopyParameters="true">MvcApp.Module.Chat/MvcApp.Module.Chat.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.Forum" CopyParameters="true">MvcApp.Module.Forum/MvcApp.Module.Forum.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.IPTV" CopyParameters="true">MvcApp.Module.IPTV/MvcApp.Module.IPTV.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.Messages" CopyParameters="true">MvcApp.Module.Messages/MvcApp.Module.Messages.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.Pages" CopyParameters="true">MvcApp.Module.Pages/MvcApp.Module.Pages.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.Shared" CopyParameters="true">MvcApp.Module.Shared/MvcApp.Module.Shared.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.Store" CopyParameters="true">MvcApp.Module.Store/MvcApp.Module.Store.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Module.Video" CopyParameters="true">MvcApp.Module.Video/MvcApp.Module.Video.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Razor" CopyParameters="true">MvcApp.Razor/MvcApp.Razor.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Services" CopyParameters="true">MvcApp.Services/MvcApp.Services.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="$safeprojectname$.Web" CopyParameters="true">MvcApp.Web/MvcApp.Web.vstemplate</ProjectTemplateLink>
+    </ProjectTemplateLinks>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>TemplateWizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bdc294accda97181</Assembly>
+    <FullClassName>TemplateWizard.CustomProjectWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

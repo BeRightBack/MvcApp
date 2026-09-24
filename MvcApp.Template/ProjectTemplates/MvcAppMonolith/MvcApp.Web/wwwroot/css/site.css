@@ -1,0 +1,281 @@
+
+/*:root {
+    --header-height: 3rem;
+    --nav-width: 68px;
+    --first-color: #4723D9;
+    --first-color-light: #AFA5D9;
+    --white-color: #F7F6FB;
+    --body-font: 'Nunito', sans-serif;
+    --normal-font-size: 1rem;
+    --z-fixed: 100
+}
+
+*, ::before, ::after {
+    box-sizing: border-box
+}
+
+body {
+    position: relative;
+    margin: var(--header-height) 0 0 0;
+    padding: 0 1rem;
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+    transition: .5s
+}
+
+a {
+    text-decoration: none
+}
+
+*/
+
+/*.l-navbar {
+    position: fixed;
+    top: 0;
+    left: -30%;
+    width: var(--nav-width);
+    height: 100vh;
+    background-color: var(--first-color);
+    padding: .5rem 1rem 0 0;
+    transition: .5s;
+    z-index: var(--z-fixed)
+}
+
+.nav {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden
+}
+
+.nav_logo, .nav_link {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    align-items: center;
+    column-gap: 1rem;
+    padding: .5rem 0 .5rem 1.5rem
+}
+
+.nav_logo {
+    margin-bottom: 2rem
+}
+
+.nav_logo-icon {
+    font-size: 1.25rem;
+    color: var(--white-color)
+}
+
+.nav_logo-name {
+    color: var(--white-color);
+    font-weight: 700
+}
+
+.nav_link {
+    position: relative;
+    color: var(--first-color-light);
+    margin-bottom: 1.5rem;
+    transition: .3s
+}
+
+    .nav_link:hover {
+        color: var(--white-color)
+    }
+
+.nav_icon {
+    font-size: 1.25rem
+}
+
+.show {
+    left: 0
+}
+
+.body-pd {
+    padding-left: calc(var(--nav-width) + 1rem)
+}
+
+.active {
+    color: var(--white-color)
+}
+
+    .active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 2px;
+        height: 32px;
+        background-color: var(--white-color)
+    }
+
+.height-100 {
+    height: 100vh
+}*/
+
+/*@media screen and (min-width: 768px) {
+    body {
+        margin: calc(var(--header-height) + 1rem) 0 0 0;
+        padding-left: calc(var(--nav-width) + 2rem)
+    }
+
+    .header {
+        height: calc(var(--header-height) + 1rem);
+        padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
+    }
+
+    .header_img {
+        width: 30px;
+        height: 30px
+    }
+
+        .header_img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+    .l-navbar {
+        left: 0;
+        padding: 1rem 1rem 0 0
+    }
+
+    .show {
+        width: calc(var(--nav-width) + 156px)
+    }
+
+    .body-pd {
+        padding-left: calc(var(--nav-width) + 188px)
+    }
+
+    .main-content,
+    .navbar {
+        margin-left: 70px;
+        padding-right: 50px;
+        transition: margin-left 0.3s ease;
+    }
+
+        .main-content.shifted,
+        .navbar.shifted {
+            margin-left: 250px;
+            padding-right: 250px;
+        }
+}
+*/
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+/* Ad module banners */
+.ad-zone { display: block; }
+.ad-zone .ad-banner img { max-width: 100%; height: auto; display: block; }
+.ad-zone .ad-banner-link { display: inline-block; }
+
+/* Center banners in the footer zone (all templates). Handles the rotation case
+   too: with rotation, banners are wrapped in a block-level .ad-rotate-item. */
+footer .ad-zone {
+  text-align: center;
+}
+footer .ad-zone .ad-banner,
+footer .ad-zone .ad-banner-link,
+footer .ad-zone .ad-rotate-item {
+  display: inline-block;
+  vertical-align: middle;
+}
+footer .ad-zone .ad-banner img {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* Ad banner rotation */
+.ad-rotate-item.ad-rotate-visible { animation: adRotateFadeIn .6s ease; }
+@keyframes adRotateFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.navbar.scrolled {
+    background-color: #fff;
+}
+.navbar.scrolled .nav-link {
+    color: #333;
+}
+.navbar.scrolled .navbar-brand {
+    color: #222;
+}
+
+/* Member cards */
+.match-card {
+    border-color: #e74c6f !important;
+    box-shadow: 0 0 0 3px rgba(231, 76, 111, 0.15);
+}
+
+.match-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    background: linear-gradient(135deg, #fdcb6e, #e74c6f);
+    color: #fff;
+    padding: 0.25rem 0.6rem;
+    border-radius: 50rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.online-dot {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #2ecc71;
+    border: 2px solid #fff;
+}
+
+.online-text {
+    color: #2ecc71;
+    font-weight: 600;
+}
+
+.tag-btn {
+    background: #f1f3f5 !important;
+    color: #495057 !important;
+    cursor: pointer;
+}
+.tag-btn:hover {
+    background: #dee2e6 !important;
+}
+.tag-btn.tag-selected {
+    background: linear-gradient(135deg, #e74c6f, #fd79a8) !important;
+    color: #fff !important;
+}
+

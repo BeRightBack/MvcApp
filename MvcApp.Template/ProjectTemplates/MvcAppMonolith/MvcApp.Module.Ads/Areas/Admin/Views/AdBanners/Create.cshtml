@@ -1,0 +1,276 @@
+@model MvcApp.Module.Ads.Entities.AdBanner
+@{
+    ViewData["Title"] = ViewData["Action"]?.ToString() == "Create" ? "Create Banner" : "Edit Banner";
+    Layout = "_AdminLayout";
+    var zones = ViewBag.Zones as SelectList;
+    var bannerTypes = ViewBag.BannerTypes as IEnumerable<SelectListItem>;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4><i class="bx bx-image"></i> @ViewData["Title"]</h4>
+    <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary"><i class="bx bx-arrow-back"></i> Back</a>
+</div>
+
+<form asp-action="@ViewData["Action"]" method="post" class="card" enctype="multipart/form-data">
+    <div class="card-body">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CreatedAt" />
+        <input type="hidden" asp-for="UpdatedAt" />
+
+        <div class="row mb-3">
+            <label asp-for="ZoneId" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <select asp-for="ZoneId" class="form-select" asp-items="zones" disabled="@(ViewData["Action"]?.ToString() == "Edit")"></select>
+                <span asp-validation-for="ZoneId" class="text-danger"></span>
+                @if (ViewData["Action"]?.ToString() == "Edit")
+                {
+                    <input type="hidden" asp-for="ZoneId" />
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="Name" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <input asp-for="Name" class="form-control" maxlength="200" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="Type" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <select asp-for="Type" class="form-select" asp-items="bannerTypes" id="bannerTypeSelect"></select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3" id="contentField">
+            <label asp-for="Content" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                @if (Model.Type == MvcApp.Module.Ads.Entities.AdBannerType.Html || Model.Type == MvcApp.Module.Ads.Entities.AdBannerType.Script)
+                {
+                    <textarea asp-for="Content" class="form-control font-monospace" rows="8" maxlength="4000" placeholder="HTML or script content"></textarea>
+                }
+                else
+                {
+                    <input asp-for="Content" class="form-control" placeholder="@(Model.Type == MvcApp.Module.Ads.Entities.AdBannerType.Image ? "Image URL or path" : "Text content")" maxlength="4000" />
+                }
+                <span asp-validation-for="Content" class="text-danger"></span>
+                <div class="form-text" id="contentHelp"></div>
+            </div>
+        </div>
+
+        <div class="row mb-3" id="uploadField">
+            <label class="col-sm-2 col-form-label fw-bold" for="imageFile">Upload Image</label>
+            <div class="col-sm-10">
+                <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".png,.jpg,.jpeg,.gif,.webp,.svg" />
+                @Html.ValidationMessage("imageFile", new { @class = "text-danger" })
+                <div class="form-text">
+                    Saved into this zone's folder (<code>/images/ads/&lt;zone&gt;/</code>). Max 2 MB. Overrides the URL above when a file is chosen.
+                    @if (ViewBag.ZoneFormat != null)
+                    {
+                        <text>This zone expects <strong>@ViewBag.ZoneFormat</strong> px images.</text>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3" id="targetUrlField">
+            <label asp-for="TargetUrl" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="TargetUrl" class="form-control" placeholder="https://example.com" maxlength="500" />
+                <span asp-validation-for="TargetUrl" class="text-danger"></span>
+                <div class="form-text">Destination URL when banner is clicked (Image/Html types).</div>
+            </div>
+        </div>
+
+        <div class="row mb-3" id="altTextField">
+            <label asp-for="AltText" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="AltText" class="form-control" placeholder="Banner description" maxlength="200" />
+                <span asp-validation-for="AltText" class="text-danger"></span>
+                <div class="form-text">Alt text for image banners.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="CssClass" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="CssClass" class="form-control" placeholder="custom-banner-class" maxlength="200" />
+                <span asp-validation-for="CssClass" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="Weight" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <input asp-for="Weight" type="number" class="form-control" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+                <div class="form-text">Higher weight = shown first within the zone.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="StartDate" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="StartDate" type="datetime-local" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+                <div class="form-text">Leave empty for immediate start.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="EndDate" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="EndDate" type="datetime-local" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+                <div class="form-text">Leave empty for no end date.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="TargetRoles" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="TargetRoles" class="form-control" placeholder="Admin, Editor, Anonymous" maxlength="500" />
+                <span asp-validation-for="TargetRoles" class="text-danger"></span>
+                <div class="form-text">Comma-separated roles. Use "Anonymous" for non-logged-in users. Empty = all users.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="TargetCultures" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="TargetCultures" class="form-control" placeholder="en, fr, es" maxlength="200" />
+                <span asp-validation-for="TargetCultures" class="text-danger"></span>
+                <div class="form-text">Comma-separated culture codes. Empty = all cultures.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="MaxImpressionsPerDay" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="MaxImpressionsPerDay" type="number" min="0" class="form-control" />
+                <span asp-validation-for="MaxImpressionsPerDay" class="text-danger"></span>
+                <div class="form-text">0 = unlimited.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="MaxClicksPerDay" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="MaxClicksPerDay" type="number" min="0" class="form-control" />
+                <span asp-validation-for="MaxClicksPerDay" class="text-danger"></span>
+                <div class="form-text">0 = unlimited.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="IsActive" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <div class="form-check form-switch">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label class="form-check-label" asp-for="IsActive">Active</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary"><i class="bx bx-save"></i> Save</button>
+        <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        function updateFieldsForType(type) {
+            const contentField = document.getElementById('contentField');
+            const targetUrlField = document.getElementById('targetUrlField');
+            const altTextField = document.getElementById('altTextField');
+            const uploadField = document.getElementById('uploadField');
+            const contentHelp = document.getElementById('contentHelp');
+            const contentInput = contentField.querySelector('input, textarea');
+
+            // Reset
+            contentField.style.display = '';
+            targetUrlField.style.display = '';
+            altTextField.style.display = '';
+            uploadField.style.display = 'none';
+
+            switch (type) {
+                case '0': // Image
+                    if (contentInput.tagName !== 'INPUT') {
+                        const newInput = document.createElement('input');
+                        newInput.type = 'text';
+                        newInput.className = 'form-control';
+                        newInput.name = 'Content';
+                        newInput.id = 'Content';
+                        newInput.maxLength = 4000;
+                        newInput.placeholder = 'Image URL or path';
+                        newInput.value = contentInput.value;
+                        contentInput.replaceWith(newInput);
+                    }
+                    contentHelp.textContent = 'Image URL or path (e.g., /images/banner.jpg or https://cdn.example.com/ad.png)';
+                    altTextField.style.display = '';
+                    targetUrlField.style.display = '';
+                    uploadField.style.display = '';
+                    break;
+                case '1': // Html
+                    if (contentInput.tagName !== 'TEXTAREA') {
+                        const newInput = document.createElement('textarea');
+                        newInput.className = 'form-control font-monospace';
+                        newInput.name = 'Content';
+                        newInput.id = 'Content';
+                        newInput.rows = 8;
+                        newInput.maxLength = 4000;
+                        newInput.placeholder = 'HTML content';
+                        newInput.value = contentInput.value;
+                        contentInput.replaceWith(newInput);
+                    }
+                    contentHelp.textContent = 'Raw HTML. Links will be rewritten to track clicks.';
+                    altTextField.style.display = 'none';
+                    targetUrlField.style.display = '';
+                    break;
+                case '2': // Script
+                    if (contentInput.tagName !== 'TEXTAREA') {
+                        const newInput = document.createElement('textarea');
+                        newInput.className = 'form-control font-monospace';
+                        newInput.name = 'Content';
+                        newInput.id = 'Content';
+                        newInput.rows = 8;
+                        newInput.maxLength = 4000;
+                        newInput.placeholder = 'Script tag content (e.g., AdSense code)';
+                        newInput.value = contentInput.value;
+                        contentInput.replaceWith(newInput);
+                    }
+                    contentHelp.textContent = 'Third-party script (AdSense, etc.). No click tracking.';
+                    altTextField.style.display = 'none';
+                    targetUrlField.style.display = 'none';
+                    break;
+                case '3': // Text
+                    if (contentInput.tagName !== 'INPUT') {
+                        const newInput = document.createElement('input');
+                        newInput.type = 'text';
+                        newInput.className = 'form-control';
+                        newInput.name = 'Content';
+                        newInput.id = 'Content';
+                        newInput.maxLength = 4000;
+                        newInput.placeholder = 'Text content';
+                        newInput.value = contentInput.value;
+                        contentInput.replaceWith(newInput);
+                    }
+                    contentHelp.textContent = 'Plain text link/button.';
+                    altTextField.style.display = 'none';
+                    targetUrlField.style.display = '';
+                    break;
+            }
+        }
+
+        document.getElementById('bannerTypeSelect')?.addEventListener('change', e => {
+            updateFieldsForType(e.target.value);
+        });
+
+        // Initial
+        updateFieldsForType('@((int)Model.Type)');
+    </script>
+}

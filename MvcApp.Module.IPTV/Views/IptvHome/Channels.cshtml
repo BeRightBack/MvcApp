@@ -1,0 +1,61 @@
+@{
+    ViewData["Title"] = @Localizer["Channel List - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Download the full channel list of Quebec Iptv with over 10,000 channels."];
+    ViewData["Keywords"] = @Localizer["IPTV channels, channel list, IPTV Quebec, channel lineup"];
+}
+
+<div class="container py-5">
+    <h1 class="text-center mb-4">@Localizer["Our Channel List"]</h1>
+    <p class="text-center lead mb-5">@Localizer["Explore our extensive channel lineup with over 10,000 live channels from around the world."]</p>
+
+    <div class="card mx-auto" style="max-width: 800px;">
+        <div class="card-body text-center p-5">
+            <i class="fa fa-file-excel-o fa-4x text-success mb-3"></i>
+            <h3>@Localizer["Full Channel List"]</h3>
+            <p>@Localizer["Download the complete channel list in Excel format to browse all available channels."]</p>
+            <a href="~/_content/MvcApp.Module.IPTV/channels/FULL_Channel_List.xlsx" class="btn btn-success btn-lg">
+                <i class="fa fa-download me-2"></i>@Localizer["Download Channel List"]
+            </a>
+        </div>
+    </div>
+
+    <h2 class="text-center mt-5 mb-4">@Localizer["Channel Categories"]</h2>
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fa fa-futbol-o fa-3x text-primary mb-3"></i>
+                    <h5>@Localizer["Sports"]</h5>
+                    <p class="text-muted">@Localizer["BeIN, DAZN, Sky Sports, ESPN, RDS and more"]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fa fa-film fa-3x text-danger mb-3"></i>
+                    <h5>@Localizer["Movies"]</h5>
+                    <p class="text-muted">@Localizer["HBO, Cinemax, Showtime, and more"]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fa fa-newspaper-o fa-3x text-warning mb-3"></i>
+                    <h5>@Localizer["News"]</h5>
+                    <p class="text-muted">@Localizer["CNN, BBC, Fox News, CBC, and more"]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fa fa-language fa-3x text-info mb-3"></i>
+                    <h5>@Localizer["International"]</h5>
+                    <p class="text-muted">@Localizer["Arabic, French, Spanish, Indian, Portuguese and more"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

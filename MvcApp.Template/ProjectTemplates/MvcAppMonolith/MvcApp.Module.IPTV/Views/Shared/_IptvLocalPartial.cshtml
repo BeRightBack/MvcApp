@@ -1,0 +1,35 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.Extensions.Options
+@using System.Globalization
+
+@inject IOptions<RequestLocalizationOptions> LocalizationOptions
+
+@{
+    var culture = CultureInfo.CurrentCulture.Name;
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>()?.RequestCulture.Culture ?? CultureInfo.CurrentCulture;
+}
+
+<div class="nav-item dropdown">
+    <button class="btn btn-link nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @requestCulture.NativeName
+    </button>
+    <div class="dropdown-menu" aria-labelledby="language-dropdown">
+        @foreach (var cultureItem in LocalizationOptions.Value.SupportedUICultures)
+        {
+            var currentCulture = new CultureInfo(cultureItem.Name);
+            var isCurrent = string.Equals(cultureItem.Name, culture, StringComparison.CurrentCultureIgnoreCase);
+            <a class="dropdown-item @(isCurrent ? "active" : "")" href="#"
+               onclick="document.getElementById('culture').value='@cultureItem.Name';document.getElementById('cultureForm').submit(); return false;">
+                @currentCulture.NativeName
+            </a>
+        }
+    </div>
+</div>
+
+<form id="cultureForm" method="post" asp-controller="IptvHome" asp-action="ChangeLanguage">
+    <input type="hidden" name="culture" id="culture" value="@culture" />
+    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+</form>

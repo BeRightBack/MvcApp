@@ -1,0 +1,125 @@
+@model MvcApp.Module.IPTV.Models.SubscriptionViewModels.SubscriptionIndexViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = @Localizer["Subscriptions - Admin"];
+    var totalPages = (int)Math.Ceiling((double)Model.TotalItems / Model.PageSize);
+}
+
+<partial name="_IptvStatusMessage" />
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>@Localizer["Subscriptions"]</h2>
+    <a asp-controller="IptvSubscription" asp-action="Create" class="btn btn-success">
+        <i class="fa fa-plus me-2"></i>@Localizer["Create Subscription"]
+    </a>
+</div>
+
+<form asp-controller="IptvSubscription" asp-action="Index" method="get" class="row g-3 mb-3">
+    <div class="col-auto">
+        <input type="text" name="searchQuery" value="@Model.SearchQuery" class="form-control" placeholder="@Localizer["Search by user or status..."]" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">@Localizer["Search"]</button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-controller="IptvSubscription" asp-action="Index" asp-route-sortOrder="@(Model.SortOrder == "username_desc" ? "username" : "username_desc")" asp-route-searchQuery="@Model.SearchQuery">
+                        @Localizer["User"] <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="IptvSubscription" asp-action="Index" asp-route-sortOrder="@(Model.SortOrder == "plan_desc" ? "plan" : "plan_desc")" asp-route-searchQuery="@Model.SearchQuery">
+                        @Localizer["Plan"] <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="IptvSubscription" asp-action="Index" asp-route-sortOrder="@(Model.SortOrder == "startdate_desc" ? "startdate" : "startdate_desc")" asp-route-searchQuery="@Model.SearchQuery">
+                        @Localizer["Start Date"] <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="IptvSubscription" asp-action="Index" asp-route-sortOrder="@(Model.SortOrder == "enddate_desc" ? "enddate" : "enddate_desc")" asp-route-searchQuery="@Model.SearchQuery">
+                        @Localizer["End Date"] <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="IptvSubscription" asp-action="Index" asp-route-sortOrder="@(Model.SortOrder == "status_desc" ? "status" : "status_desc")" asp-route-searchQuery="@Model.SearchQuery">
+                        @Localizer["Status"] <i class="fa fa-sort"></i>
+                    </a>
+                </th>
+                <th class="text-end">@Localizer["Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Subscriptions.Count == 0)
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted">@Localizer["No subscriptions found."]</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var subscription in Model.Subscriptions)
+                {
+                    <tr>
+                        <td>@subscription.UserName</td>
+                        <td>@subscription.SubscriptionPlanName</td>
+                        <td>@subscription.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>@subscription.EndDate.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            @if (subscription.Status == "active")
+                            {
+                                <span class="badge bg-success">@subscription.Status</span>
+                            }
+                            else if (subscription.Status == "pending")
+                            {
+                                <span class="badge bg-warning text-dark">@subscription.Status</span>
+                            }
+                            else if (subscription.Status == "processing")
+                            {
+                                <span class="badge bg-info">@subscription.Status</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">@subscription.Status</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-controller="IptvSubscription" asp-action="Details" asp-route-id="@subscription.Id" class="btn btn-sm btn-info" title="@Localizer["Details"]">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a asp-controller="IptvSubscription" asp-action="Edit" asp-route-id="@subscription.Id" class="btn btn-sm btn-primary" title="@Localizer["Edit"]">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <a asp-controller="IptvSubscription" asp-action="Delete" asp-route-id="@subscription.Id" class="btn btn-sm btn-danger" title="@Localizer["Delete"]">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (totalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (var i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-controller="IptvSubscription" asp-action="Index"
+                       asp-route-pageNumber="@i" asp-route-searchQuery="@Model.SearchQuery" asp-route-sortOrder="@Model.SortOrder">
+                        @i
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

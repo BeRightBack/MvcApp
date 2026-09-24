@@ -1,0 +1,13 @@
+@model ContentPage
+@{
+    ViewData["Title"] = Model.Title;
+    var rendered = ViewData["RenderedBody"] as string ?? string.Empty;
+}
+
+<div class="container py-4">
+    <article class="content-page">
+        <div class="content-page-body">
+            @Html.Raw(rendered)
+        </div>
+    </article>
+</div>

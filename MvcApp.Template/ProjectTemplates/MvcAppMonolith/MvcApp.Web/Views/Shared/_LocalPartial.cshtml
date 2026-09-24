@@ -1,0 +1,44 @@
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
+@{
+    var currentCurrency = HttpContextAccessor.HttpContext?.Session?.GetString("SelectedCurrency") ?? "USD";
+    string returnUrl = ViewContext.HttpContext.Request.Path;
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureItems = LocOptions.Value.SupportedUICultures!
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
+        .ToList();
+}
+
+<div class="dropdown">
+    <a href="#" class="nav-link py-1 px-2" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" title="Language &amp; Currency">
+        <i class='bx bx-globe' style="font-size:1.2rem;"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-3" style="min-width:200px;">
+        <form method="post" asp-controller="Home" asp-action="SetCurrency" asp-antiforgery="true">
+            <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+            <label class="form-label small fw-semibold mb-1">Currency</label>
+            <select name="currency" onchange="this.form.submit()" class="form-select form-select-sm">
+                <option value="USD" selected="@(currentCurrency == "USD" ? "selected" : null)">USD ($)</option>
+                <option value="CAD" selected="@(currentCurrency == "CAD" ? "selected" : null)">CAD (CA$)</option>
+                <option value="EUR" selected="@(currentCurrency == "EUR" ? "selected" : null)">EUR (&euro;)</option>
+                <option value="GBP" selected="@(currentCurrency == "GBP" ? "selected" : null)">GBP (&pound;)</option>
+            </select>
+        </form>
+        <hr class="dropdown-divider" />
+        <form asp-area="" asp-action="ChangeLanguage" asp-controller="Home" method="post">
+            <input type="hidden" id="returnUrl" name="returnUrl" value="@returnUrl" />
+            <label class="form-label small fw-semibold mb-1">Language</label>
+            <select id="culture" name="culture" class="form-select form-select-sm"
+                    onchange="this.form.submit();"
+                    asp-items="cultureItems"
+                    asp-for="@requestCulture!.RequestCulture.UICulture.Name">
+            </select>
+        </form>
+    </div>
+</div>

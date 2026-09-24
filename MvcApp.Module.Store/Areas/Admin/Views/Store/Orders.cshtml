@@ -1,0 +1,65 @@
+@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "Orders";
+    ViewBag.CurrentPage = "Store";
+}
+
+<h1>Orders</h1>
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa fa-dashboard"></i> Dashboard</a>
+</div>
+
+<div class="btn-group mb-3" role="group">
+    <a asp-action="Orders" class="btn btn-outline-primary btn-sm @(ViewBag.StatusFilter == null ? "active" : "")">All</a>
+    @foreach (var s in Enum.GetValues<OrderStatus>())
+    {
+        <a asp-action="Orders" asp-route-status="@((int)s)" class="btn btn-outline-primary btn-sm @(ViewBag.StatusFilter != null && (OrderStatus)ViewBag.StatusFilter == s ? "active" : "")">@s</a>
+    }
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Order #</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td><strong>#@order.Id</strong></td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@(order.ShippingName ?? order.UserId)</td>
+                    <td>@order.Items.Sum(i => i.Quantity)</td>
+                    <td><strong>$@order.TotalAmount.ToString("F2")</strong></td>
+                    <td><span class="badge @(order.Status == OrderStatus.Delivered ? "bg-success" : order.Status == OrderStatus.Cancelled ? "bg-danger" : order.Status == OrderStatus.Shipped ? "bg-info" : order.Status == OrderStatus.Processing ? "bg-warning" : "bg-secondary")">@order.Status</span></td>
+                    <td><span class="badge bg-@(order.PaymentStatus == PaymentStatus.Paid ? "success" : "secondary")">@order.PaymentStatus</span></td>
+                    <td><a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary"><i class="fa fa-eye"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (ViewBag.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                    <a asp-action="Orders" asp-route-page="@i" asp-route-status="@ViewBag.StatusFilter" class="page-link">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

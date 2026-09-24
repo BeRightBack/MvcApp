@@ -1,0 +1,44 @@
+@model List<MvcApp.Core.Badge>
+@{
+    ViewData["Title"] = "Badges";
+    var userBadges = (Dictionary<int, DateTime>)ViewBag.UserBadges;
+    var totalPoints = (int)ViewBag.TotalPoints;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2>Badges</h2>
+        <p class="text-muted mb-0">Collect badges by completing achievements. @userBadges.Count / @Model.Count earned.</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class='bx bx-arrow-back me-1'></i>Back to Points
+    </a>
+</div>
+
+@foreach (var category in Model.GroupBy(b => b.Category).OrderBy(g => g.Key))
+{
+    <h5 class="mt-4 mb-3" style="color:var(--template-heading);">@category.Key</h5>
+    <div class="row g-3">
+        @foreach (var badge in category)
+        {
+            var earned = userBadges.ContainsKey(badge.Id);
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="content-card text-center p-3 @(earned ? "" : "opacity-50")">
+                    <div class="mb-2" style="font-size:2rem; color: @(earned ? "var(--template-primary)" : "#ccc");">
+                        <i class='@badge.Icon'></i>
+                    </div>
+                    <h6 class="mb-1" style="color:var(--template-heading);">@badge.Name</h6>
+                    <small class="text-muted">@badge.Description</small>
+                    @if (earned)
+                    {
+                        <div class="mt-2"><span class="badge bg-success">Earned</span></div>
+                    }
+                    else
+                    {
+                        <div class="mt-2"><span class="badge bg-secondary">Locked</span></div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}

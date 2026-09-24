@@ -1,0 +1,53 @@
+@model ContentPageSnippet
+@{
+    ViewData["Title"] = "Edit Snippet";
+}
+
+<h1><i class="fa fa-pencil"></i> Edit Snippet</h1>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" asp-validation-summary="All"></div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="Id" value="@Model.Id" />
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Name</label>
+                        <input type="text" name="Name" class="form-control" required maxlength="150" value="@Model.Name" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Category</label>
+                        <input type="text" name="Category" class="form-control" maxlength="100" value="@Model.Category" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Description (optional)</label>
+                        <input type="text" name="Description" class="form-control" maxlength="500" value="@Model.Description" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Content (HTML / Razor)</label>
+                        <textarea name="Content" class="form-control font-monospace" rows="14" required
+                                  spellcheck="false">@Model.Content</textarea>
+                        <div class="form-text">
+                            HTML is inserted as-is. You may use Razor helpers such as
+                            <code>@@Button("Visit", "https://example.com")</code> — the page body renders them on the public site.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">Back to list</a>
+        </form>
+    </div>
+</div>

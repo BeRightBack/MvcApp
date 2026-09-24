@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"] - Quebec Iptv</title>
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/_content/MvcApp.Module.IPTV/css/styles2.min.css" rel="stylesheet" />
+    <link href="~/_content/MvcApp.Module.IPTV/css/site.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header class="header" id="header">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="IptvHome" asp-action="Index">
+                    <img src="~/_content/MvcApp.Module.IPTV/Logos/logo-transparent-png.png" alt="Logo" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <div class="header_toggle" id="header-toggle"><i class='bx bx-menu'></i></div>
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="IptvStore" asp-action="Index">@Localizer["Store"]</a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDashboardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">@Localizer["Dashboard"]</a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDashboardDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="IptvAdmin" asp-action="Index">IPTV Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Main Admin Panel</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                    <partial name="_IptvLocalPartial" />
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        var defaultImage = Url.Content("~/_content/MvcApp.Module.IPTV/images/default-user.png");
+                        <div class="header_img">
+                            <img src="@Url.Action("GetProfilePicture", "Account", new { userId })"
+                                 onerror="this.onerror=null;this.src='@defaultImage';" alt="User Image" width="30" height="30">
+                        </div>
+                    }
+                    <partial name="_IptvLoginPartial" />
+                </div>
+            </div>
+        </nav>
+
+        <div class="l-navbar" id="nav-bar">
+            <nav class="nav">
+                <div>
+                    <a asp-controller="IptvAdmin" asp-action="Index" class="nav_logo">
+                        <i class='bx bx-layer nav_logo-icon'></i>
+                        <span class="nav_logo-name">Dashboard</span>
+                    </a>
+                    <div class="nav_list">
+                        <a asp-controller="IptvSubscription" asp-action="Index" class="nav_link">
+                            <i class='fa fa-users nav_icon'></i>
+                            <span class="nav_name">Subscriptions</span>
+                        </a>
+                        <a asp-controller="IptvPlan" asp-action="Index" class="nav_link">
+                            <i class='fa fa-credit-card nav_icon'></i>
+                            <span class="nav_name">Subscriptions Plans</span>
+                        </a>
+                        <form asp-controller="IptvAdmin" asp-action="UpdateSubscriptionStatuses" method="post" style="display:inline;">
+                            <button type="submit" class="nav_link" style="width:100%; text-align:left; border:none; background:none; cursor:pointer;">
+                                <i class='fa fa-refresh nav_icon'></i>
+                                <span class="nav_name">Update Subscription Statuses</span>
+                            </button>
+                        </form>
+                        <a class="nav_link dropdown-toggle" id="usersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class='fa fa-user nav_icon'></i>
+                            <span class="nav_name">Users</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+                            <li>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">All Users</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Create">Create User</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Role" asp-action="Index">Roles</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="RoleAdmin" asp-action="Index">User Roles</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="IptvSubscription" asp-action="Index">Subscriptions</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="IptvPlan" asp-action="Index">Subscriptions Plans</a>
+                            </li>
+                        </ul>
+                        <a asp-area="Admin" asp-controller="Language" asp-action="Index" class="nav_link">
+                            <i class='fa fa-language nav_icon'></i>
+                            <span class="nav_name">Language</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="Localization" asp-action="Index" class="nav_link">
+                            <i class='fa fa-map-marker nav_icon'></i>
+                            <span class="nav_name">Localization</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="Visitor" asp-action="Index" class="nav_link">
+                            <i class='fa fa-line-chart nav_icon'></i>
+                            <span class="nav_name">Stats</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="nav_link">
+                            <i class='fa fa-tachometer nav_icon'></i>
+                            <span class="nav_name">Main Admin Dashboard</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="Modules" asp-action="Index" class="nav_link">
+                            <i class='fa fa-puzzle-piece nav_icon'></i>
+                            <span class="nav_name">Modules</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="SystemSettings" asp-action="Index" class="nav_link">
+                            <i class='fa fa-cog nav_icon'></i>
+                            <span class="nav_name">System Settings</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="Templates" asp-action="Index" class="nav_link">
+                            <i class='fa fa-paint-brush nav_icon'></i>
+                            <span class="nav_name">UI Templates</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="AuditLogs" asp-action="Index" class="nav_link">
+                            <i class='fa fa-history nav_icon'></i>
+                            <span class="nav_name">Audit Logs</span>
+                        </a>
+                    </div>
+                </div>
+                <a class="nav_link" asp-page="/Account/Logout">
+                    <i class='fa fa-sign-out nav_icon'></i>
+                    <span class="nav_name">SignOut</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    <div class="main-content" id="main-content">
+        <main role="main" class="main pb-3">
+            <partial name="_IptvStatusMessage" />
+            @RenderBody()
+        </main>
+
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; @DateTime.Now.Year - Quebec Iptv - <a asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
+            </div>
+        </footer>
+    </div>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/_content/MvcApp.Module.IPTV/js/site.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,116 @@
+@model MvcApp.Module.Ads.Entities.AdZone
+@{
+    ViewData["Title"] = ViewData["Action"]?.ToString() == "Create" ? "Create Ad Zone" : "Edit Ad Zone";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4><i class="bx bx-layout"></i> @ViewData["Title"]</h4>
+    <a asp-action="Index" class="btn btn-secondary"><i class="bx bx-arrow-back"></i> Back</a>
+</div>
+
+<form asp-action="@ViewData["Action"]" method="post" class="card">
+    <div class="card-body">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CreatedAt" />
+        <input type="hidden" asp-for="UpdatedAt" />
+
+        <div class="row mb-3">
+            <label asp-for="Key" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <input asp-for="Key" class="form-control font-monospace" placeholder="top-header" maxlength="100" readonly="@(ViewData["Action"]?.ToString() == "Edit")" />
+                <span asp-validation-for="Key" class="text-danger"></span>
+                <div class="form-text">Unique machine key (e.g., top-header, sidebar-left). Cannot be changed after creation.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="Name" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <input asp-for="Name" class="form-control" placeholder="Top Header" maxlength="200" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="Description" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <textarea asp-for="Description" class="form-control" rows="2" maxlength="500" placeholder="Optional description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="MaxBanners" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <input asp-for="MaxBanners" type="number" min="0" class="form-control" />
+                <span asp-validation-for="MaxBanners" class="text-danger"></span>
+                <div class="form-text">Maximum banners to show at once. 0 = unlimited. Extra banners rotate (weighted by Weight).</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label fw-bold">Banner Format</label>
+            <div class="col-sm-5">
+                <div class="input-group">
+                    <input asp-for="BannerWidth" type="number" min="0" class="form-control" placeholder="Width (px)" />
+                    <span class="input-group-text">×</span>
+                    <input asp-for="BannerHeight" type="number" min="0" class="form-control" placeholder="Height (px)" />
+                </div>
+                <span asp-validation-for="BannerWidth" class="text-danger"></span>
+                <span asp-validation-for="BannerHeight" class="text-danger"></span>
+                <div class="form-text">Expected image size for this zone (e.g., 970 × 250). Uploaded images are validated against it. Leave empty for any size.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="ExcludeFromLandingPage" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <div class="form-check form-switch">
+                    <input asp-for="ExcludeFromLandingPage" class="form-check-input" />
+                    <label class="form-check-label" asp-for="ExcludeFromLandingPage">Exclude this zone from the landing page (home page)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="DefaultCssClass" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="DefaultCssClass" class="form-control" placeholder="ad-zone ad-top-header mb-3" maxlength="200" />
+                <span asp-validation-for="DefaultCssClass" class="text-danger"></span>
+                <div class="form-text">CSS classes for the zone container.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="BannerWrapperTemplate" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="BannerWrapperTemplate" class="form-control" placeholder="<div class="ad-item">{0}</div>" maxlength="500" />
+                <span asp-validation-for="BannerWrapperTemplate" class="text-danger"></span>
+                <div class="form-text">Wrapper HTML for each banner. Use <code>{0}</code> as placeholder for banner HTML.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="DisplayOrder" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="DisplayOrder" type="number" class="form-control" />
+                <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="IsActive" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <div class="form-check form-switch">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label class="form-check-label" asp-for="IsActive">Active</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary"><i class="bx bx-save"></i> Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

@@ -1,0 +1,47 @@
+@inject MvcApp.Core.Abstractions.INavService NavService
+@inject MvcApp.Core.Abstractions.ITemplateService TemplateService
+
+@{
+    var socialItems = await NavService.GetSocialDropdownAsync();
+    var activeTemplate = await TemplateService.GetActiveTemplateAsync();
+    var icon = await GetSocialIconAsync(activeTemplate);
+}
+
+@if (socialItems.Any())
+{
+    <div class="dropdown">
+        <a href="#" class="nav-link py-1 px-2" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" title="Social">
+            <i class="@icon" style="font-size:1.2rem;"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+            @foreach (var item in socialItems)
+            {
+                @if (item.Type == MvcApp.Core.NavItemType.Divider)
+                {
+                    <li><hr class="dropdown-divider" /></li>
+                }
+                else
+                {
+                    <li>
+                        <a class="dropdown-item"
+                           asp-area="@item.Area"
+                           asp-controller="@item.Controller"
+                           asp-action="@item.Action"
+                           asp-route-slug="@item.Slug">
+                            <i class="@item.Icon me-2"></i>@item.Label
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+}
+
+@functions {
+    private async Task<string> GetSocialIconAsync(string template)
+    {
+        var settings = Context.RequestServices.GetRequiredService<MvcApp.Core.Abstractions.ISettingsService>();
+        var icon = await settings.GetAsync($"SiteNav.{template}.SocialDropdownIcon");
+        return string.IsNullOrWhiteSpace(icon) ? "bx bx-heart" : icon;
+    }
+}

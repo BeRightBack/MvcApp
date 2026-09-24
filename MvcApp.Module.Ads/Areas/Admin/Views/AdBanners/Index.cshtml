@@ -1,0 +1,191 @@
+@model IEnumerable<MvcApp.Module.Ads.Entities.AdBanner>
+@{
+    ViewData["Title"] = "Ad Banners";
+    Layout = "_AdminLayout";
+    var selectedZoneId = ViewBag.SelectedZoneId as int?;
+    var zones = ViewBag.Zones as SelectList;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4><i class="bx bx-image"></i> Ad Banners</h4>
+    <div>
+        <form asp-action="Index" method="get" class="d-inline">
+            <select name="zoneId" class="form-select form-select-sm d-inline-block w-auto" onchange="this.form.submit()">
+                <option value="">-- Select Zone --</option>
+                @foreach (var item in zones ?? Enumerable.Empty<SelectListItem>())
+                {
+                    <option value="@item.Value" selected="@(item.Value == selectedZoneId?.ToString())">@item.Text</option>
+                }
+            </select>
+        </form>
+        @if (selectedZoneId.HasValue)
+        {
+            <a asp-action="Create" asp-route-zoneId="@selectedZoneId" class="btn btn-primary btn-sm ms-2"><i class="bx bx-plus"></i> New Banner</a>
+        }
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!selectedZoneId.HasValue)
+{
+    <div class="alert alert-info">Select a zone to manage its banners.</div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="bannersTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 40px">Order</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Preview</th>
+                            <th>Schedule</th>
+                            <th>Targeting</th>
+                            <th>Weight</th>
+                            <th>Limits</th>
+                            <th>Active</th>
+                            <th style="width: 120px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sortable-tbody">
+                        @foreach (var banner in Model)
+                        {
+                            <tr data-banner-id="@banner.Id">
+                                <td>
+                                    <span class="drag-handle text-muted" title="Drag to reorder"><i class="bx bx-grip-vertical"></i></span>
+                                </td>
+                                <td>@banner.Name</td>
+                                <td><span class="badge bg-info">@banner.Type</span></td>
+                                <td>
+                                    @if (banner.Type == MvcApp.Module.Ads.Entities.AdBannerType.Image && !string.IsNullOrWhiteSpace(banner.Content))
+                                    {
+                                        <img src="@banner.Content" alt="" style="max-width: 80px; max-height: 40px;" class="border rounded" />
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">@(banner.Content?[..Math.Min(50, (banner.Content?.Length ?? 0))])...</span>
+                                    }
+                                </td>
+                                <td class="small">
+                                    @if (banner.StartDate.HasValue || banner.EndDate.HasValue)
+                                    {
+                                        <div>@(banner.StartDate?.ToString("MMM dd") ?? "Anytime") → @(banner.EndDate?.ToString("MMM dd") ?? "No end")</div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Always</span>
+                                    }
+                                </td>
+                                <td class="small">
+                                    @if (!string.IsNullOrWhiteSpace(banner.TargetRoles))
+                                    {
+                                        <div><i class="bx bx-user"></i> @banner.TargetRoles</div>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(banner.TargetCultures))
+                                    {
+                                        <div><i class="bx bx-globe"></i> @banner.TargetCultures</div>
+                                    }
+                                    @if (string.IsNullOrWhiteSpace(banner.TargetRoles) && string.IsNullOrWhiteSpace(banner.TargetCultures))
+                                    {
+                                        <span class="text-muted">All</span>
+                                    }
+                                </td>
+                                <td>@banner.Weight</td>
+                                <td class="small">
+                                    @{
+                                        if (banner.MaxImpressionsPerDay > 0) { <div><i class="bx bx-show"></i> @banner.MaxImpressionsPerDay/day</div> }
+                                        if (banner.MaxClicksPerDay > 0) { <div><i class="bx bx-mouse"></i> @banner.MaxClicksPerDay/day</div> }
+                                        if (banner.MaxImpressionsPerDay == 0 && banner.MaxClicksPerDay == 0) { <span class="text-muted">Unlimited</span> }
+                                    }
+                                </td>
+                                <td>
+                                    @if (banner.IsActive && banner.IsScheduled)
+                                    {
+                                        <span class="badge bg-success">Live</span>
+                                    }
+                                    else if (banner.IsActive && !banner.IsScheduled)
+                                    {
+                                        <span class="badge bg-warning text-dark">Scheduled</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Paused</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Edit" asp-route-id="@banner.Id" class="btn btn-outline-primary" title="Edit"><i class="bx bx-edit"></i></a>
+                                        <form asp-action="Delete" asp-route-id="@banner.Id" asp-route-zoneId="@banner.ZoneId" method="post" style="display:inline" onsubmit="return confirm('Delete this banner?');">
+                                            <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bx bx-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // Simple drag-to-reorder for banners
+        document.addEventListener('DOMContentLoaded', function () {
+            const tbody = document.querySelector('.sortable-tbody');
+            if (!tbody) return;
+
+            let dragged = null;
+
+            tbody.querySelectorAll('tr').forEach(row => {
+                row.draggable = true;
+                row.addEventListener('dragstart', e => {
+                    dragged = row;
+                    row.classList.add('dragging');
+                });
+                row.addEventListener('dragend', e => {
+                    row.classList.remove('dragging');
+                    dragged = null;
+                });
+                row.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    const after = getDragAfterElement(tbody, e.clientY);
+                    if (after) tbody.insertBefore(dragged, after);
+                    else tbody.appendChild(dragged);
+                });
+            });
+
+            function getDragAfterElement(container, y) {
+                const rows = [...container.querySelectorAll('tr:not(.dragging)')];
+                return rows.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    if (offset < 0 && offset > closest.offset) return { offset, element: child };
+                    return closest;
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+
+            // Save order on drop
+            tbody.addEventListener('drop', async () => {
+                const ids = [...tbody.querySelectorAll('tr')].map(r => parseInt(r.dataset.bannerId));
+                const zoneId = @selectedZoneId;
+                await fetch(`/Admin/Ads/Banners/Reorder?zoneId=${zoneId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value },
+                    body: JSON.stringify(ids)
+                });
+            });
+        });
+    </script>
+}

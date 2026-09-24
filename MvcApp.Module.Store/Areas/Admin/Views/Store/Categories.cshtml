@@ -1,0 +1,44 @@
+@model IEnumerable<ProductCategory>
+@{
+    ViewData["Title"] = "Categories";
+    ViewBag.CurrentPage = "Store";
+}
+
+<h1>Categories</h1>
+
+<div class="mb-3">
+    <a asp-action="CreateCategory" class="btn btn-primary"><i class="fa fa-plus"></i> Create Category</a>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa fa-dashboard"></i> Dashboard</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>Sort Order</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in Model)
+            {
+                <tr>
+                    <td>@cat.Name</td>
+                    <td><code>@cat.Slug</code></td>
+                    <td>@cat.SortOrder</td>
+                    <td>@cat.CreatedAt.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <form asp-action="DeleteCategory" method="post" class="d-inline" onsubmit="return confirm('Delete this category?')">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@cat.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

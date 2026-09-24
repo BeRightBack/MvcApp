@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+		<PackageReference Include="ChartJSCore" Version="3.12.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.10">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.10">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="3.0.114" />
+		<PackageReference Include="MimeKit" Version="4.17.0" />
+		<PackageReference Include="NuGet.Packaging" Version="7.6.0" />
+		<PackageReference Include="NuGet.Protocol" Version="7.6.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+		<PackageReference Include="Serilog.Sinks.MySQL" Version="6.1.0" />
+		<PackageReference Include="System.Drawing.Common" Version="10.0.10" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
+	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MvcApp.Common\MvcApp.Common.csproj" />
+    <ProjectReference Include="..\MvcApp.Core\MvcApp.Core.csproj" />
+    <ProjectReference Include="..\MvcApp.Identity\MvcApp.Identity.csproj" />
+    <ProjectReference Include="..\MvcApp.Infrastructure\MvcApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\MvcApp.Localization\MvcApp.Localization.csproj" />
+    <ProjectReference Include="..\MvcApp.Razor\MvcApp.Razor.csproj" />
+    <ProjectReference Include="..\MvcApp.Services\MvcApp.Services.csproj" />
+    <ProjectReference Include="..\MvcApp.Module.Forum\MvcApp.Module.Forum.csproj" />
+    <ProjectReference Include="..\MvcApp.Module.Blog\MvcApp.Module.Blog.csproj" />
+    <ProjectReference Include="..\MvcApp.Module.Chat\MvcApp.Module.Chat.csproj" />
+    <ProjectReference Include="..\MvcApp.Module.Video\MvcApp.Module.Video.csproj" />
+    <ProjectReference Include="..\MvcApp.Module.Messages\MvcApp.Module.Messages.csproj" />
+    <ProjectReference Include="..\MvcApp.Module.Store\MvcApp.Module.Store.csproj" />
+    <ProjectReference Include="..\MvcApp.Module.IPTV\MvcApp.Module.IPTV.csproj" />
+    <ProjectReference Include="..\MvcApp.Module.Pages\MvcApp.Module.Pages.csproj" />
+    <ProjectReference Include="..\MvcApp.Module.Utility\MvcApp.Module.Utility.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+  </ItemGroup>
+
+</Project>

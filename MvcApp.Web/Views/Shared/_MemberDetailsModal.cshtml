@@ -1,0 +1,123 @@
+@model MvcApp.Web.Models.LikesViewModels.MemberCardViewModel
+@using MvcApp.Core.Models
+@using MvcApp.Infrastructure.Extentions
+@{
+    var returnUrl = ViewData["ReturnUrl"] as string ?? "/Likes";
+    var m = Model.Member;
+    var interests = (m.Interests ?? string.Empty)
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        .Take(8)
+        .ToList();
+}
+<div class="modal fade" id="@Model.ModalId" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    @m.KnownAs, @m.Age
+                    @if (m.IsMutual)
+                    {
+                        <span class="badge text-bg-danger ms-1">Mutual match</span>
+                    }
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (Model.IsBlockedByYou)
+                {
+                    <div class="alert alert-warning py-2 small">
+                        <i class='bx bx-block'></i> You have blocked this member. Unblock to see their profile and start messaging.
+                    </div>
+                }
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <img src="@m.MainPhotoUrl" class="img-fluid rounded-3 w-100" style="object-fit:cover; aspect-ratio:3/4;"
+                             onerror="this.onerror=null;this.src='/images/default-user.png';" alt="@m.KnownAs">
+                    </div>
+                    <div class="col-md-8">
+                        @if (!string.IsNullOrEmpty(m.Introduction))
+                        {
+                            <p class="mb-3">@m.Introduction</p>
+                        }
+                        @if (!string.IsNullOrEmpty(m.LookingFor))
+                        {
+                            <p class="mb-3"><strong>Looking for:</strong> @m.LookingFor</p>
+                        }
+                        <div class="small text-muted mb-3">
+                            <div class="mb-1"><i class='bx bx-map-pin'></i> @m.City, @m.State</div>
+                            @if (!string.IsNullOrEmpty(m.Gender))
+                            {
+                                <div class="mb-1"><i class='bx bx-user'></i> @m.Gender</div>
+                            }
+                            <div>
+                                <i class='bx bx-time-five'></i>
+                                @if (m.LastActive.IsOnline())
+                                {
+                                    <span class="online-text">Online now</span>
+                                }
+                                else
+                                {
+                                    <text>Last active @m.LastActive.TimeAgo()</text>
+                                }
+                            </div>
+                        </div>
+                        @if (interests.Count > 0)
+                        {
+                            <h6 class="fw-bold mb-2">Interests</h6>
+                            <div>
+                                @foreach (var interest in interests)
+                                {
+                                    <span class="badge me-1 mb-1">@interest</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @if (Model.ShowMessageButton)
+                {
+                    <a class="btn btn-primary" href="/Messages/Chat/@m.Id">
+                        <i class='bx bx-message-rounded-dots'></i> Send Message
+                    </a>
+                }
+                @if (Model.ShowLikeButton)
+                {
+                    <form method="post" asp-controller="Likes" asp-action="Toggle" class="d-inline">
+                        <input type="hidden" name="likedUserId" value="@m.Id" />
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn @(m.IsLikedByYou ? "btn-danger" : "btn-outline-danger")">
+                            <i class='bx @(m.IsLikedByYou ? "bxs-heart" : "bx-heart")'></i>
+                            @(m.IsLikedByYou ? "Unlike" : Model.LikeLabel)
+                        </button>
+                    </form>
+                }
+                @if (Model.IsBlockedByYou)
+                {
+                    <form method="post" asp-controller="Likes" asp-action="Unblock" class="d-inline">
+                        <input type="hidden" name="blockedUserId" value="@m.Id" />
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-success">
+                            <i class='bx bx-user-check'></i> Unblock
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <form method="post" asp-controller="Likes" asp-action="Block" class="d-inline"
+                          onsubmit="return confirm('Block @m.KnownAs? You won\u2019t see each other\u2019s profiles or messages.');">
+                        <input type="hidden" name="blockedUserId" value="@m.Id" />
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class='bx bx-block'></i> Block
+                        </button>
+                    </form>
+                }
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

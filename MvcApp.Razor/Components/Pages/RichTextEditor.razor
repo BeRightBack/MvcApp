@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+<div class="form-group">
+    <label class="form-label" for="editor">Description</label><br />
+    <button @onclick="Bold">Bold</button>
+    <button @onclick="Italic">Italic</button>
+    <InputTextArea @bind-Value="Value" id="editor" class="form-control" @oninput="UpdateText" style="width:100%; height:300px;"></InputTextArea>
+
+
+</div>
+<p>InputValue: @InputValue</p>
+<p>Word Count: @WordCount</p>
+
+
+@code {
+    // private string Value;
+    private string InputValue = "";
+    private int WordCount = 0;
+
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    public Task UpdateText(ChangeEventArgs e)
+    {
+        Value = e.Value!.ToString();
+        InputValue = Value!;
+        WordCount = string.IsNullOrEmpty(Value) ? 0 : System.Text.RegularExpressions.Regex.Matches(Value, @"\w+").Count;
+
+        return ValueChanged.InvokeAsync(Value);
+    }
+
+    void Bold()
+    {
+        Value += "<strong></strong>";
+    }
+
+    void Italic()
+    {
+        Value += "<em></em>";
+    }
+}

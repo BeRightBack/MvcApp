@@ -1,0 +1,173 @@
+@model MvcApp.Core.Event
+@using MvcApp.Core
+@using MvcApp.Infrastructure.Extentions
+@{
+    ViewData["Title"] = Model.Title;
+    var goingCount = Model.RSVPs?.Count(r => r.Status == RSVPStatus.Going) ?? 0;
+    var maybeCount = Model.RSVPs?.Count(r => r.Status == RSVPStatus.Maybe) ?? 0;
+    var interestedCount = Model.RSVPs?.Count(r => r.Status == RSVPStatus.Interested) ?? 0;
+    var userRSVP = ViewBag.UserRSVP as EventRSVP;
+    var currentUserId = ViewBag.CurrentUserId as string;
+}
+
+<section class="py-4">
+    <div class="container">
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill mb-4">
+            <i class='bx bx-arrow-back'></i> Back to Events
+        </a>
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="row g-4">
+            <div class="col-md-8">
+                <!-- Event Header -->
+                <div class="card border-0 rounded-4 shadow-sm overflow-hidden mb-4">
+                    <div class="position-relative" style="height:300px; background:linear-gradient(135deg,#667eea,#764ba2);">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl" class="w-100 h-100" style="object-fit:cover;" alt="@Model.Title">
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center h-100">
+                                <i class='bx bx-calendar-event' style="font-size:6rem; color:rgba(255,255,255,0.3);"></i>
+                            </div>
+                        }
+                        @if (Model.Category != null)
+                        {
+                            <span class="position-absolute top-0 end-0 m-3 badge bg-white text-dark fs-6">
+                                <i class='bx @(Model.Category!.Icon ?? "bx-calendar-event")'></i> @Model.Category!.Name
+                            </span>
+                        }
+                    </div>
+                    <div class="card-body p-4">
+                        <h2 class="fw-bold mb-2">@Model.Title</h2>
+                        <div class="d-flex flex-wrap gap-3 text-muted mb-3">
+                            <span><i class='bx bx-calendar'></i> @Model.EventDate.ToString("dddd, MMMM dd, yyyy")</span>
+                            <span><i class='bx bx-time'></i> @Model.EventDate.ToString("hh:mm tt")</span>
+                            <span><i class='bx bx-map-pin'></i> @Model.City, @Model.Country</span>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <div class="mb-4">
+                                <h5 class="fw-bold">About this event</h5>
+                                <p class="text-muted" style="white-space:pre-line;">@Model.Description</p>
+                            </div>
+                        }
+
+                        <div class="d-flex align-items-center gap-2 text-muted small">
+                            <span>Created by <strong>@Model.Creator?.KnownAs</strong></span>
+                            <span>&middot;</span>
+                            <span>@Model.CreatedAt.TimeAgo()</span>
+                        </div>
+
+                        @if (Model.CreatorId == currentUserId || User.IsInRole("Admin"))
+                        {
+                            <div class="mt-3 d-flex gap-2">
+                                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary rounded-pill">
+                                    <i class='bx bx-edit'></i> Edit
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Delete this event?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-danger rounded-pill">
+                                        <i class='bx bx-trash'></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Attendees -->
+                <div class="card border-0 rounded-4 shadow-sm p-4">
+                    <h5 class="fw-bold mb-3"><i class='bx bx-group'></i> Attendees</h5>
+                    @if (Model.RSVPs?.Any() == true)
+                    {
+                        <div class="row g-2">
+                            @foreach (var rsvp in Model.RSVPs.Where(r => r.Status == RSVPStatus.Going))
+                            {
+                                <div class="col-auto">
+                                    <div class="d-flex align-items-center gap-2 badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">
+                                        <i class='bx bx-user'></i> @rsvp.User?.KnownAs
+                                    </div>
+                                </div>
+                            }
+                            @foreach (var rsvp in Model.RSVPs.Where(r => r.Status == RSVPStatus.Maybe))
+                            {
+                                <div class="col-auto">
+                                    <div class="d-flex align-items-center gap-2 badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill">
+                                        <i class='bx bx-user'></i> @rsvp.User?.KnownAs (maybe)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No one has RSVP'd yet. Be the first!</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-md-4">
+                <!-- RSVP Card -->
+                <div class="card border-0 rounded-4 shadow-sm p-4 mb-4">
+                    <h5 class="fw-bold mb-3">RSVP</h5>
+                    <div class="d-flex gap-2 mb-3">
+                        <form asp-action="RSVP" asp-route-eventId="@Model.Id" asp-route-status="Going" method="post" class="flex-fill">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn w-100 rounded-pill @(userRSVP?.Status == RSVPStatus.Going ? "btn-success" : "btn-outline-success")">
+                                <i class='bx bx-check'></i> Going (@goingCount)
+                            </button>
+                        </form>
+                        <form asp-action="RSVP" asp-route-eventId="@Model.Id" asp-route-status="Maybe" method="post" class="flex-fill">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn w-100 rounded-pill @(userRSVP?.Status == RSVPStatus.Maybe ? "btn-warning" : "btn-outline-warning")">
+                                <i class='bx bx-question-mark'></i> Maybe (@maybeCount)
+                            </button>
+                        </form>
+                    </div>
+                    <form asp-action="RSVP" asp-route-eventId="@Model.Id" asp-route-status="Interested" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn w-100 rounded-pill @(userRSVP?.Status == RSVPStatus.Interested ? "btn-info" : "btn-outline-info")">
+                            <i class='bx bx-heart'></i> Interested (@interestedCount)
+                        </button>
+                    </form>
+
+                    @if (Model.MaxAttendees > 0)
+                    {
+                        <hr />
+                        <div class="text-center text-muted small">
+                            <strong>@goingCount</strong> of <strong>@Model.MaxAttendees</strong> spots filled
+                            <div class="progress mt-2" style="height:8px;">
+                                <div class="progress-bar" style="width:@(Model.MaxAttendees > 0 ? (goingCount * 100 / Model.MaxAttendees) : 0)%"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Event Info -->
+                <div class="card border-0 rounded-4 shadow-sm p-4">
+                    <h5 class="fw-bold mb-3">Event Info</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class='bx bx-calendar text-primary me-2'></i> @Model.EventDate.ToString("dddd, MMMM dd, yyyy")</li>
+                        <li class="mb-2"><i class='bx bx-time text-primary me-2'></i> @Model.EventDate.ToString("hh:mm tt")</li>
+                        <li class="mb-2"><i class='bx bx-map-pin text-primary me-2'></i> @Model.City, @Model.Country</li>
+                        @if (Model.MaxAttendees > 0)
+                        {
+                            <li><i class='bx bx-group text-primary me-2'></i> Max @Model.MaxAttendees attendees</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

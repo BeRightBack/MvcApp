@@ -1,0 +1,186 @@
+@model IEnumerable<MvcApp.Core.Report>
+@using MvcApp.Core
+@{
+    ViewData["Title"] = "Reports";
+    var filter = ViewBag.Filter as string ?? "pending";
+    var pendingCount = (int)ViewBag.PendingCount;
+    var reasonLabels = new Dictionary<ReportReason, string> {
+        { ReportReason.Spam, "Spam" }, { ReportReason.InappropriateContent, "Inappropriate Content" },
+        { ReportReason.FakeProfile, "Fake Profile" }, { ReportReason.Harassment, "Harassment" },
+        { ReportReason.Underage, "Underage" }, { ReportReason.Scam, "Scam" }, { ReportReason.Other, "Other" }
+    };
+}
+
+<section class="py-4">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold"><i class='bx bx-flag'></i> User Reports</h2>
+                <p class="text-muted mb-0">
+                    @if (pendingCount > 0)
+                    {
+                        <span class="badge bg-danger me-2">@pendingCount pending</span>
+                    }
+                    Review reports from users
+                </p>
+            </div>
+        </div>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Message"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="mb-3">
+            @{
+                var pendingClass = filter == "pending" ? "btn-danger" : "btn-outline-danger";
+                var reviewedClass = filter == "reviewed" ? "btn-success" : "btn-outline-success";
+                var dismissedClass = filter == "dismissed" ? "btn-secondary" : "btn-outline-secondary";
+            }
+            <div class="btn-group">
+                <a asp-action="Index" asp-route-filter="pending" class="btn @pendingClass">
+                    Pending <span class="badge bg-white text-danger ms-1">@pendingCount</span>
+                </a>
+                <a asp-action="Index" asp-route-filter="reviewed" class="btn @reviewedClass">Reviewed</a>
+                <a asp-action="Index" asp-route-filter="dismissed" class="btn @dismissedClass">Dismissed</a>
+            </div>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class='bx bx-check-circle' style="font-size:4rem; color:#27ae60;"></i>
+                <h4 class="mt-3">All clear!</h4>
+                <p class="text-muted">No reports to review.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Reporter</th>
+                            <th>Reported User</th>
+                            <th>Reason</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var report in Model)
+                        {
+                            var reasonLabel = reasonLabels.ContainsKey(report.Reason) ? reasonLabels[report.Reason] : report.Reason.ToString();
+                            <tr>
+                                <td class="text-muted">#@report.Id</td>
+                                <td>
+                                    <a asp-area="" asp-controller="Members" asp-action="Details" asp-route-id="@report.Reporter?.UserName" class="text-decoration-none">
+                                        @report.Reporter?.KnownAs
+                                    </a>
+                                    <small class="text-muted d-block">@@@report.Reporter?.UserName</small>
+                                </td>
+                                <td>
+                                    <a asp-area="" asp-controller="Members" asp-action="Details" asp-route-id="@report.ReportedUser?.UserName" class="text-decoration-none">
+                                        @report.ReportedUser?.KnownAs
+                                    </a>
+                                    <small class="text-muted d-block">@@@report.ReportedUser?.UserName</small>
+                                </td>
+                                <td><span class="badge bg-warning text-dark">@reasonLabel</span></td>
+                                <td class="small" style="max-width:200px;">@(report.Description ?? "—")</td>
+                                <td class="small text-muted">@report.CreatedAt.ToString("MMM d, h:mm tt")</td>
+                                <td>
+                                    @if (report.Status == ReportStatus.Pending)
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (report.Status == ReportStatus.Reviewed)
+                                    {
+                                        <span class="badge bg-success">Reviewed</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Dismissed</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (report.Status == ReportStatus.Pending)
+                                    {
+                                        <div class="d-flex gap-1 flex-wrap">
+                                            <form asp-action="MarkReviewed" asp-route-id="@report.Id" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="notes" value="Marked reviewed" />
+                                                <button type="submit" class="btn btn-sm btn-outline-success rounded-pill">
+                                                    <i class='bx bx-check'></i> Reviewed
+                                                </button>
+                                            </form>
+                                            <form asp-action="Dismiss" asp-route-id="@report.Id" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="notes" value="Dismissed" />
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill">
+                                                    <i class='bx bx-x'></i> Dismiss
+                                                </button>
+                                            </form>
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill"
+                                                    onclick="document.getElementById('banForm_@report.Id').style.display='block'">
+                                                <i class='bx bx-block'></i> Ban
+                                            </button>
+                                            <div id="banForm_@report.Id" style="display:none;" class="mt-1 w-100">
+                                                <form asp-action="BanAndDismiss" asp-route-id="@report.Id" method="post" class="d-flex gap-1">
+                                                    @Html.AntiForgeryToken()
+                                                    <select name="durationHours" class="form-select form-select-sm" style="width:auto;">
+                                                        <option value="24">24 hours</option>
+                                                        <option value="72" selected>3 days</option>
+                                                        <option value="168">1 week</option>
+                                                        <option value="720">30 days</option>
+                                                        <option value="-1">Indefinite</option>
+                                                    </select>
+                                                    <input type="text" name="notes" class="form-control form-control-sm" placeholder="Reason" style="width:150px;" />
+                                                    <button type="submit" class="btn btn-sm btn-danger rounded-pill">Confirm</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @if (!string.IsNullOrEmpty(report.AdminNotes))
+                                        {
+                                            <small class="text-muted">@report.AdminNotes</small>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if ((int)ViewBag.TotalPages > 1)
+            {
+                <div class="d-flex justify-content-center mt-4">
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item @((int)ViewBag.Page <= 1 ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@((int)ViewBag.Page - 1)" asp-route-filter="@filter">Previous</a>
+                            </li>
+                            @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == (int)ViewBag.Page ? "active" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-filter="@filter">@i</a>
+                                </li>
+                            }
+                            <li class="page-item @((int)ViewBag.Page >= (int)ViewBag.TotalPages ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@((int)ViewBag.Page + 1)" asp-route-filter="@filter">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            }
+        }
+    </div>
+</section>

@@ -1,0 +1,146 @@
+@model MvcApp.Web.Models.LikesViewModels.MemberCardViewModel
+@using MvcApp.Core.Models
+@using MvcApp.Core
+@using MvcApp.Infrastructure.Extentions
+@{
+    var returnUrl = ViewData["ReturnUrl"] as string ?? "/Likes";
+    var m = Model.Member;
+    var interests = (m.Interests ?? string.Empty)
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        .Take(3)
+        .ToList();
+    var categoryColors = new Dictionary<InterestCategory, string> {
+        { InterestCategory.Interest, "primary" }, { InterestCategory.Fantasy, "danger" },
+        { InterestCategory.Hobby, "success" }, { InterestCategory.Lifestyle, "info" },
+        { InterestCategory.Kink, "warning" }
+    };
+    var superLikesUsed = ViewBag.SuperLikesUsedToday as int? ?? 0;
+    var superLikeLimit = ViewBag.SuperLikeLimit as int? ?? 1;
+    var boostActive = ViewBag.IsBoostActive as bool? ?? false;
+}
+<div class="col-md-3 col-sm-6">
+    <div class="card border-0 rounded-4 overflow-hidden shadow-sm h-100 @(m.IsMutual ? "match-card" : "")">
+        <div class="position-relative" style="height:250px; overflow:hidden;">
+            <img src="@m.MainPhotoUrl" class="w-100 h-100" style="object-fit:cover; @(m.IsPhotoBlurred ? "filter:blur(12px);transform:scale(1.05);" : "")"
+                 onerror="this.onerror=null;this.src='/images/default-user.png';" alt="@m.KnownAs">
+            @if (m.IsPhotoBlurred)
+            {
+                <div class="position-absolute top-50 start-50 translate-middle text-center" style="z-index:3;">
+                    <i class='bx bx-lock' style="font-size:2rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.5);"></i>
+                    <div class="text-white fw-semibold small" style="text-shadow:0 2px 8px rgba(0,0,0,0.5);">Like to reveal</div>
+                </div>
+            }
+            @if (m.IsMutual)
+            {
+                <span class="match-badge"><i class='bx bxs-heart me-1'></i>It's a Match!</span>
+            }
+            @if (m.LastActive.IsOnline())
+            {
+                <span class="online-dot" title="Online now"></span>
+            }
+            @if (m.IsAvailable)
+            {
+                <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark" title="Available tonight">
+                    <i class='bx bx-moon'></i> Tonight
+                </span>
+            }
+            @if (m.IsBoosted)
+            {
+                <span class="position-absolute bottom-0 start-0 m-2 badge" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;" title="Boosted profile">
+                    <i class='bx bx-bolt'></i> Boosted
+                </span>
+            }
+        </div>
+        <div class="card-body text-center p-3">
+            <h5 class="fw-bold mb-1">
+                @m.KnownAs, @m.Age
+                @if (m.IsVerified)
+                {
+                    <i class='bx bxs-check-circle text-info' title="Verified" style="font-size:0.9rem;"></i>
+                }
+                @if (m.IsVip)
+                {
+                    <i class='bx bxs-crown text-warning' title="VIP Member" style="font-size:0.9rem;"></i>
+                }
+            </h5>
+            <div class="text-muted small mb-1">
+                <i class='bx bx-map-pin'></i> @m.City
+                @if (!string.IsNullOrEmpty(m.State))
+                {
+                    <span>, @m.State</span>
+                }
+            </div>
+            <div class="text-muted small">
+                <i class='bx bx-time-five'></i>
+                @if (m.LastActive.IsOnline())
+                {
+                    <span class="online-text">Online now</span>
+                }
+                else
+                {
+                    <text>Active @m.LastActive.TimeAgo()</text>
+                }
+            </div>
+            @if (m.InterestTags.Count > 0)
+            {
+                <div class="mt-2 mb-2">
+                    @foreach (var tag in m.InterestTags.Take(5))
+                    {
+                        var color = categoryColors.ContainsKey(tag.Category) ? categoryColors[tag.Category] : "secondary";
+                        <span class="badge bg-@color bg-opacity-10 text-@color me-1">@tag.Name</span>
+                    }
+                </div>
+            }
+            else if (interests.Count > 0)
+            {
+                <div class="mt-2 mb-2">
+                    @foreach (var interest in interests)
+                    {
+                        <span class="badge me-1">@interest</span>
+                    }
+                </div>
+            }
+            <div class="d-flex justify-content-center gap-2 mt-2 flex-wrap">
+                @if (Model.ShowLikeButton)
+                {
+                    <form method="post" asp-controller="Likes" asp-action="Toggle">
+                        <input type="hidden" name="likedUserId" value="@m.Id" />
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm rounded-pill @(m.IsLikedByYou ? "btn-danger" : "btn-outline-danger")">
+                            <i class='bx @(m.IsLikedByYou ? "bxs-heart" : "bx-heart")'></i> @Model.LikeLabel
+                        </button>
+                    </form>
+                    @if (!m.IsSuperLikedByYou && superLikesUsed < superLikeLimit)
+                    {
+                        <form method="post" asp-controller="SuperLike" asp-action="Send">
+                            <input type="hidden" name="targetUserId" value="@m.Id" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm rounded-pill btn-outline-warning" title="Super Like — they'll see you first">
+                                <i class='bx bx-star'></i> Super
+                            </button>
+                        </form>
+                    }
+                    else if (m.IsSuperLikedByYou)
+                    {
+                        <span class="btn btn-sm rounded-pill btn-warning">
+                            <i class='bx bxs-star'></i> Super Liked
+                        </span>
+                    }
+                }
+                @if (Model.ShowMessageButton)
+                {
+                    <a class="btn btn-sm rounded-pill btn-outline-primary" href="/Messages/Chat/@m.Id">
+                        <i class='bx bx-message-rounded-dots'></i> Message
+                    </a>
+                }
+                <a class="btn btn-sm rounded-pill btn-outline-secondary" asp-controller="Members" asp-action="Details" asp-route-id="@m.Username">
+                    <i class='bx bx-user'></i> Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_MemberDetailsModal", Model)
+</div>

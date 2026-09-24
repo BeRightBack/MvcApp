@@ -1,0 +1,56 @@
+@model IEnumerable<BlogPost>
+@{
+    var category = ViewBag.Category as BlogCategory;
+    ViewData["Title"] = category?.Name ?? "Category";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Blog</a></li>
+                    <li class="breadcrumb-item active">@category?.Name</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4"><i class="fa fa-folder"></i> @category?.Name</h1>
+            @if (!string.IsNullOrEmpty(category?.Description))
+            {
+                <p class="text-muted">@category.Description</p>
+            }
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">No posts in this category.</div>
+            }
+
+            @foreach (var post in Model)
+            {
+                <article class="card mb-3">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <a asp-action="Post" asp-route-slug="@post.Slug" class="text-decoration-none">@post.Title</a>
+                        </h3>
+                        <div class="text-muted mb-2">
+                            <small>
+                                <i class="fa fa-user"></i> @post.CreatedByUsername
+                                <i class="fa fa-calendar ms-2"></i> @(post.PublishedAt?.ToString("MMM dd, yyyy") ?? post.CreatedAt.ToString("MMM dd, yyyy"))
+                            </small>
+                        </div>
+                        @if (!string.IsNullOrEmpty(post.Excerpt))
+                        {
+                            <p>@post.Excerpt</p>
+                        }
+                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">Read More</a>
+                    </div>
+                </article>
+            }
+
+            @await Html.PartialAsync("_BlogPagination")
+        </div>
+        <div class="col-lg-4">
+            @await Html.PartialAsync("_BlogSidebar")
+        </div>
+    </div>
+</div>

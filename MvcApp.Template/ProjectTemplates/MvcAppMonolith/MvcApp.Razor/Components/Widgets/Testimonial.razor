@@ -1,0 +1,18 @@
+@using MvcApp.Core
+@attribute [BlazorPageComponent("Testimonial", DisplayName = "Testimonial", Description = "Centered quote card with author attribution.", Category = "Content")]
+<figure class="text-center my-4 p-4 bg-light rounded-3">
+    <blockquote class="blockquote mb-3">
+        <p class="fs-4 fst-italic">&ldquo;@Quote&rdquo;</p>
+    </blockquote>
+    <figcaption class="blockquote-footer mb-0">
+        @Author@(string.IsNullOrWhiteSpace(Role) ? "" : ", " + Role)
+    </figcaption>
+</figure>
+
+@code {
+    [Parameter] public string Quote { get; set; } = "This changed the way we work.";
+
+    [Parameter] public string Author { get; set; } = "Jane Doe";
+
+    [Parameter] public string? Role { get; set; }
+}

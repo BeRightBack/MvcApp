@@ -1,0 +1,95 @@
+@model Order
+@{
+    ViewData["Title"] = "Order #" + Model.Id;
+    ViewBag.CurrentPage = "Store";
+}
+
+<h1>Order #@Model.Id</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header"><strong>Order Details</strong></div>
+            <div class="card-body">
+                <p><strong>Date:</strong> @Model.OrderDate.ToString("yyyy-MM-dd HH:mm")</p>
+                <p><strong>Status:</strong> <span class="badge bg-secondary">@Model.Status</span></p>
+                <p><strong>Payment:</strong> <span class="badge bg-@(Model.PaymentStatus == PaymentStatus.Paid ? "success" : "secondary")">@Model.PaymentStatus</span></p>
+                <p><strong>Method:</strong> @Model.PaymentMethod</p>
+                <p><strong>Subtotal:</strong> $@Model.Subtotal.ToString("F2")</p>
+                <p><strong>Shipping:</strong> $@Model.ShippingCost.ToString("F2")</p>
+                <p><strong>Tax:</strong> $@Model.Tax.ToString("F2")</p>
+                <p class="h5"><strong>Total:</strong> $@Model.TotalAmount.ToString("F2")</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header"><strong>Shipping Information</strong></div>
+            <div class="card-body">
+                <p>@Model.ShippingName</p>
+                <p>@Model.ShippingAddress</p>
+                <p>@Model.ShippingCity, @Model.ShippingState @Model.ShippingPostalCode</p>
+                <p>@Model.ShippingCountry</p>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-header"><strong>Update Status</strong></div>
+            <div class="card-body">
+                <form asp-action="UpdateOrderStatus" method="post" class="d-flex gap-2">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <select name="status" class="form-select" asp-items="Html.GetEnumSelectList<OrderStatus>()"></select>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-refresh"></i> Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Notes != null)
+{
+    <div class="alert alert-info">
+        <strong>Notes:</strong> @Model.Notes
+    </div>
+}
+
+<h3>Items</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            @if (!string.IsNullOrEmpty(item.ProductImage))
+                            {
+                                <img src="@item.ProductImage" alt="@item.ProductName" style="width:50px;height:50px;object-fit:cover;" class="me-2 rounded">
+                            }
+                            <span>@item.ProductName</span>
+                        </div>
+                    </td>
+                    <td>$@item.UnitPrice.ToString("F2")</td>
+                    <td>@item.Quantity</td>
+                    <td>$@((item.UnitPrice * item.Quantity).ToString("F2"))</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td><strong>$@Model.TotalAmount.ToString("F2")</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<a asp-action="Orders" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Back to Orders</a>

@@ -1,0 +1,80 @@
+@model MvcApp.Core.Event
+@using MvcApp.Core
+@{
+    ViewData["Title"] = "Edit Event";
+    var categories = ViewBag.Categories as List<EventCategory> ?? [];
+}
+
+<section class="py-4">
+    <div class="container">
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary rounded-pill mb-4">
+            <i class='bx bx-arrow-back'></i> Back to Event
+        </a>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card border-0 rounded-4 shadow-sm p-4">
+                    <h3 class="fw-bold mb-4"><i class='bx bx-edit'></i> Edit Event</h3>
+
+                    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Title *</label>
+                            <input asp-for="Title" class="form-control rounded-pill" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Date & Time *</label>
+                                <input asp-for="EventDate" type="datetime-local" class="form-control rounded-pill" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Category</label>
+                                <select name="categoryId" class="form-select rounded-pill">
+                                    <option value="">Select category...</option>
+                                    @foreach (var cat in categories)
+                                    {
+                                        <option value="@cat.Id" selected="@(Model.CategoryId == cat.Id)">@cat.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">City *</label>
+                                <input asp-for="City" class="form-control rounded-pill" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Country *</label>
+                                <input asp-for="Country" class="form-control rounded-pill" required />
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Image URL</label>
+                                <input asp-for="ImageUrl" class="form-control rounded-pill" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Max Attendees</label>
+                                <input asp-for="MaxAttendees" type="number" class="form-control rounded-pill" min="0" />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn w-100 btn-lg rounded-pill btn-primary">
+                            <i class='bx bx-check'></i> Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

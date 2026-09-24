@@ -1,0 +1,63 @@
+@model MvcApp.Module.IPTV.Models.SubscriptionViewModels.SubscriptionViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = @Localizer["Subscription Details - Admin"];
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="IptvSubscription" asp-action="Index">@Localizer["Subscriptions"]</a></li>
+        <li class="breadcrumb-item active">@Localizer["Details"]</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">@Localizer["Subscription Details"]</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">@Localizer["User"]</dt>
+            <dd class="col-sm-9">@Model.UserName</dd>
+
+            <dt class="col-sm-3">@Localizer["Plan"]</dt>
+            <dd class="col-sm-9">@Model.SubscriptionPlanName</dd>
+
+            <dt class="col-sm-3">@Localizer["Start Date"]</dt>
+            <dd class="col-sm-9">@Model.StartDate.ToString("yyyy-MM-dd HH:mm")</dd>
+
+            <dt class="col-sm-3">@Localizer["End Date"]</dt>
+            <dd class="col-sm-9">@Model.EndDate.ToString("yyyy-MM-dd HH:mm")</dd>
+
+            <dt class="col-sm-3">@Localizer["Status"]</dt>
+            <dd class="col-sm-9">
+                @if (Model.Status == "active")
+                {
+                    <span class="badge bg-success">@Model.Status</span>
+                }
+                else if (Model.Status == "pending")
+                {
+                    <span class="badge bg-warning text-dark">@Model.Status</span>
+                }
+                else if (Model.Status == "processing")
+                {
+                    <span class="badge bg-info">@Model.Status</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">@Model.Status</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">@Localizer["User Code"]</dt>
+            <dd class="col-sm-9"><code>@Model.UserCode</code></dd>
+
+            <dt class="col-sm-3">@Localizer["Password"]</dt>
+            <dd class="col-sm-9"><code>@Model.Password</code></dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-controller="IptvSubscription" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">@Localizer["Edit"]</a>
+        <a asp-controller="IptvSubscription" asp-action="Index" class="btn btn-secondary">@Localizer["Back to List"]</a>
+    </div>
+</div>

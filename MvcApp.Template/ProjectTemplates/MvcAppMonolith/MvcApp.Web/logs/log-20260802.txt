@@ -1,0 +1,222 @@
+2026-08-02 12:19:30.940 -04:00 [INF] dev env
+2026-08-02 12:24:26.728 -04:00 [INF] dev env
+2026-08-02 12:41:02.377 -04:00 [INF] dev env
+2026-08-02 12:59:24.499 -04:00 [INF] dev env
+2026-08-02 13:12:36.099 -04:00 [INF] dev env
+2026-08-02 13:33:25.228 -04:00 [INF] dev env
+2026-08-02 13:45:26.233 -04:00 [INF] dev env
+2026-08-02 13:46:06.274 -04:00 [INF] dev env
+2026-08-02 14:03:56.918 -04:00 [INF] prod env
+2026-08-02 14:10:44.065 -04:00 [INF] dev env
+2026-08-02 14:18:43.667 -04:00 [INF] dev env
+2026-08-02 14:24:44.975 -04:00 [INF] prod env
+2026-08-02 14:33:11.027 -04:00 [INF] dev env
+2026-08-02 14:38:18.533 -04:00 [INF] prod env
+2026-08-02 14:41:58.021 -04:00 [INF] prod env
+2026-08-02 14:44:13.756 -04:00 [INF] prod env
+2026-08-02 14:55:12.405 -04:00 [INF] dev env
+2026-08-02 14:57:56.701 -04:00 [INF] prod env
+2026-08-02 15:01:31.065 -04:00 [INF] prod env
+2026-08-02 15:07:23.457 -04:00 [INF] prod env
+2026-08-02 15:10:46.576 -04:00 [INF] prod env
+2026-08-02 15:14:08.172 -04:00 [INF] dev env
+2026-08-02 16:04:22.065 -04:00 [INF] dev env
+2026-08-02 16:08:28.852 -04:00 [INF] prod env
+2026-08-02 16:46:00.605 -04:00 [INF] dev env
+2026-08-02 18:15:03.551 -04:00 [INF] dev env
+2026-08-02 18:56:29.018 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 171
+2026-08-02 18:57:06.876 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 171
+2026-08-02 18:58:25.537 -04:00 [FTL] Application start-up failed 2
+System.InvalidOperationException: The following errors occurred with attribute routing information:
+
+Error 1:
+For action: 'MvcApp.Module.Pages.Controllers.PagesController.View (MvcApp.Module.Pages)'
+Error: While processing template 'pages/{slug:regex(^[a-zA-Z0-9-]+$)}', a replacement value for the token 'a-zA-Z0-9-' could not be found. Available tokens: 'action, controller'. To use a '[' or ']' as a literal string in a route or within a constraint, use '[[' or ']]' instead.
+   at Microsoft.AspNetCore.Mvc.ApplicationModels.ApplicationModelFactory.Flatten[TResult](ApplicationModel application, Func`5 flattener)
+   at Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerActionDescriptorProvider.OnProvidersExecuting(ActionDescriptorProviderContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.DefaultActionDescriptorCollectionProvider.UpdateCollection()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.DefaultActionDescriptorCollectionProvider.Initialize()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.DefaultActionDescriptorCollectionProvider.GetChangeToken()
+   at Microsoft.Extensions.Primitives.ChangeToken.ChangeTokenRegistration`1..ctor(Func`1 changeTokenProducer, Action`1 changeTokenConsumer, TState state)
+   at Microsoft.Extensions.Primitives.ChangeToken.OnChange(Func`1 changeTokenProducer, Action changeTokenConsumer)
+   at Microsoft.AspNetCore.Mvc.Routing.ActionEndpointDataSourceBase.Subscribe()
+   at Microsoft.AspNetCore.Builder.ControllerEndpointRouteBuilderExtensions.GetOrCreateDataSource(IEndpointRouteBuilder endpoints)
+   at Microsoft.AspNetCore.Builder.ControllerEndpointRouteBuilderExtensions.MapControllerRoute(IEndpointRouteBuilder endpoints, String name, String pattern, Object defaults, Object constraints, Object dataTokens)
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 216
+2026-08-02 19:00:11.816 -04:00 [INF] dev env
+2026-08-02 19:03:32.772 -04:00 [INF] dev env
+2026-08-02 19:07:22.559 -04:00 [INF] dev env
+2026-08-02 19:20:02.861 -04:00 [INF] dev env
+2026-08-02 19:38:09.968 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 171
+2026-08-02 19:39:42.801 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 171
+2026-08-02 19:40:24.858 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 171
+2026-08-02 19:40:58.226 -04:00 [INF] dev env
+2026-08-02 19:41:01.732 -04:00 [FTL] Application start-up failed 1
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.contentpagesnippets' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Program.<<Main>$>g__SeedPageSnippetsAsync|0_6(WebApplication app) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 361
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 239
+2026-08-02 19:41:01.776 -04:00 [FTL] Application start-up failed 2
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.contentpagesnippets' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Program.<<Main>$>g__SeedPageSnippetsAsync|0_6(WebApplication app) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 361
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 239
+2026-08-02 19:41:58.074 -04:00 [INF] dev env
+2026-08-02 19:42:01.546 -04:00 [FTL] Application start-up failed 1
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.contentpagesnippets' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Program.<<Main>$>g__SeedPageSnippetsAsync|0_6(WebApplication app) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 361
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 239
+2026-08-02 19:42:01.563 -04:00 [FTL] Application start-up failed 2
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.contentpagesnippets' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Program.<<Main>$>g__SeedPageSnippetsAsync|0_6(WebApplication app) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 361
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 239
+2026-08-02 19:43:02.622 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 171
+2026-08-02 19:43:49.355 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 171
+2026-08-02 19:44:02.383 -04:00 [INF] dev env
+2026-08-02 19:48:14.664 -04:00 [INF] dev env
+2026-08-02 19:51:57.269 -04:00 [INF] dev env
+2026-08-02 19:54:01.510 -04:00 [INF] dev env
+2026-08-02 19:55:42.597 -04:00 [INF] dev env
+2026-08-02 20:12:12.649 -04:00 [INF] dev env
+2026-08-02 20:25:01.519 -04:00 [INF] dev env
+2026-08-02 20:27:21.653 -04:00 [INF] dev env
+2026-08-02 20:59:06.527 -04:00 [INF] dev env
+2026-08-02 21:05:04.196 -04:00 [INF] dev env
+2026-08-02 21:08:22.339 -04:00 [INF] dev env
+2026-08-02 21:19:37.273 -04:00 [INF] dev env
+2026-08-02 21:27:42.702 -04:00 [INF] dev env
+2026-08-02 21:51:12.776 -04:00 [INF] dev env
+2026-08-02 21:56:40.084 -04:00 [INF] dev env
+2026-08-02 22:18:37.039 -04:00 [INF] dev env
+2026-08-02 22:31:00.217 -04:00 [INF] dev env
+2026-08-02 22:33:55.813 -04:00 [INF] dev env
+2026-08-02 22:37:45.027 -04:00 [INF] dev env
+2026-08-02 22:57:22.494 -04:00 [INF] dev env
+2026-08-02 23:27:08.581 -04:00 [INF] dev env
+2026-08-02 23:37:39.655 -04:00 [INF] dev env

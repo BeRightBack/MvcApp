@@ -1,0 +1,82 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using MvcApp.Core
+@using MvcApp.Core.Abstractions
+@inject SignInManager<UserDetails> SignInManager
+@inject UserManager<UserDetails> UserManager
+@inject INavService NavService
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var defaultImage = Url.Content("~/images/default-user.png");
+    var profileItems = await NavService.GetProfileDropdownAsync();
+
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="@Url.Action("GetProfilePicture", "Account", new { userId })"
+                 onerror="this.onerror=null;this.src='@defaultImage';"
+                 alt="" class="rounded-circle" style="width:30px;height:30px;object-fit:cover;" />
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+            <li class="dropdown-header fw-bold">@User.Identity?.Name</li>
+            <li><hr class="dropdown-divider" /></li>
+            @foreach (var item in profileItems)
+            {
+                @if (item.Type == NavItemType.Divider)
+                {
+                    <li><hr class="dropdown-divider" /></li>
+                }
+                else if (item.Controller == "Account" && item.Action == "Logout")
+                {
+                    <li>
+                        <form asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="dropdown-item"><i class='bx bx-log-out me-2'></i>@item.Label</button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a class="dropdown-item"
+                           asp-area="@item.Area"
+                           asp-controller="@item.Controller"
+                           asp-action="@item.Action"
+                           asp-route-slug="@item.Slug">
+                            <i class="@item.Icon me-2"></i>@item.Label
+                        </a>
+                    </li>
+                }
+            }
+            @{
+                var isAdmin = User.IsInRole("Admin");
+                var isModerator = User.IsInRole("Admin") || User.IsInRole("Moderator");
+            }
+            @if (isAdmin || isModerator)
+            {
+                <li><hr class="dropdown-divider" /></li>
+            }
+            @if (isAdmin)
+            {
+                <li>
+                    <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                        <i class='bx bx-cog me-2'></i>Admin Panel
+                    </a>
+                </li>
+            }
+            else if (isModerator)
+            {
+                <li>
+                    <a class="dropdown-item" asp-area="Admin" asp-controller="Bans" asp-action="Index">
+                        <i class='bx bx-shield-quarter me-2'></i>Moderation
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <a class="btn btn-sm btn-outline-secondary rounded-pill px-3" asp-area="" asp-page="/Account/Login">Sign In</a>
+}

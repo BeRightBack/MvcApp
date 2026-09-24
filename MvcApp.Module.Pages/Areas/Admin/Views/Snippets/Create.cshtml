@@ -1,0 +1,48 @@
+@model ContentPageSnippet
+@{
+    ViewData["Title"] = "New Snippet";
+}
+
+<h1><i class="fa fa-plus"></i> New Snippet</h1>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" asp-validation-summary="All"></div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Name</label>
+                        <input type="text" name="Name" class="form-control" required maxlength="150" value="@Model.Name" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Category</label>
+                        <input type="text" name="Category" class="form-control" maxlength="100" value="@Model.Category" placeholder="General" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Description (optional)</label>
+                        <input type="text" name="Description" class="form-control" maxlength="500" value="@Model.Description" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Content (HTML / Razor)</label>
+                        <textarea name="Content" class="form-control font-monospace" rows="14" required
+                                  spellcheck="false">@Model.Content</textarea>
+                        <div class="form-text">
+                            HTML is inserted as-is. You may use Razor helpers such as
+                            <code>@@Button("Visit", "https://example.com")</code> — the page body renders them on the public site.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Create Snippet</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

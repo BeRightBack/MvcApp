@@ -1,0 +1,28 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MvcApp.Core.UserDetails> SignInManager
+@inject UserManager<MvcApp.Core.UserDetails> UserManager
+@{
+    ViewData["Title"] = "Home";
+}
+<section class="hero-article mb-5" style="background-image:linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.6)),url('https://images.unsplash.com/photo-1504711434969-e33886168d6c?w=1400&h=600&fit=crop');">
+    <div class="overlay">
+        <span class="category-label">Featured Story</span>
+        <h1 class="display-3 text-white fw-bold">Where Ideas Take Shape</h1>
+        <p class="lead text-white-50">Exploring the intersection of culture, technology, and human experience.</p>
+    </div>
+</section>
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-12"><div class="section-divider"></div></div>
+    </div>
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <article class="article-card"><h3 class="fw-bold">The Art of Slow Living</h3><div class="article-meta mb-2">July 30, 2026 — 6 min read</div><p class="text-muted">In a world that never stops, choosing to slow down is a radical act of self-preservation...</p></article>
+            <article class="article-card"><h3 class="fw-bold">Beyond the Frame</h3><div class="article-meta mb-2">July 28, 2026 — 8 min read</div><p class="text-muted">How modern photographers are redefining visual storytelling for the digital age...</p></article>
+            <article class="article-card"><h3 class="fw-bold">Silicon and Soil</h3><div class="article-meta mb-2">July 25, 2026 — 5 min read</div><p class="text-muted">The surprising ways technology is transforming sustainable agriculture...</p></article>
+        </div>
+        <div class="col-lg-4">
+            <div class="card p-4"><h5 class="fw-bold">Categories</h5><ul class="list-unstyled"><li class="mb-2"><a href="#">Culture</a></li><li class="mb-2"><a href="#">Technology</a></li><li class="mb-2"><a href="#">Design</a></li><li class="mb-2"><a href="#">Travel</a></li><li><a href="#">Opinion</a></li></ul></div>
+        </div>
+    </div>
+</div>

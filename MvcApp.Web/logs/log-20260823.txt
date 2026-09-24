@@ -1,0 +1,460 @@
+2026-08-23 14:53:49.074 -04:00 [INF] dev env
+2026-08-23 14:53:55.035 -04:00 [INF] Starting role seeding...
+2026-08-23 14:53:55.103 -04:00 [INF] Role Admin already exists
+2026-08-23 14:53:55.111 -04:00 [INF] Role Moderator already exists
+2026-08-23 14:53:55.113 -04:00 [INF] Role seeding completed.
+2026-08-23 14:53:55.117 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-08-23 14:53:55.461 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-08-23 14:53:55.591 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-08-23 14:53:55.601 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-08-23 14:53:55.709 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-08-23 14:53:55.936 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-08-23 14:53:57.123 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-08-23 14:53:57.946 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-23 14:53:59.696 -04:00 [INF] HTTP GET /css/styles2.min.css responded 304 in 49.2168 ms
+2026-08-23 14:53:59.696 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 304 in 53.2422 ms
+2026-08-23 14:53:59.696 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 304 in 47.8131 ms
+2026-08-23 14:53:59.698 -04:00 [INF] HTTP GET /css/site.css responded 200 in 64.3721 ms
+2026-08-23 14:53:59.712 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 73.2582 ms
+2026-08-23 14:53:59.713 -04:00 [INF] HTTP GET /css/templates/dating.css responded 304 in 0.2693 ms
+2026-08-23 14:53:59.717 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 304 in 0.2446 ms
+2026-08-23 14:53:59.721 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 9.5237 ms
+2026-08-23 14:53:59.727 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 19.6155 ms
+2026-08-23 14:53:59.729 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 304 in 0.3480 ms
+2026-08-23 14:53:59.733 -04:00 [INF] HTTP GET / responded 200 in 2621.2957 ms
+2026-08-23 14:53:59.736 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Ads/js/ads-rotate.js responded 304 in 0.2157 ms
+2026-08-23 14:53:59.737 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 304 in 0.2375 ms
+2026-08-23 14:53:59.738 -04:00 [INF] HTTP GET /js/site.js responded 304 in 0.3014 ms
+2026-08-23 14:53:59.743 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 10.8742 ms
+2026-08-23 14:53:59.749 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 6.5056 ms
+2026-08-23 14:53:59.863 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 304 in 0.5060 ms
+2026-08-23 14:54:06.084 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 154.6118 ms
+2026-08-23 14:54:07.093 -04:00 [INF] HTTP GET /images/ads/content-bottom/fattvset-v2-970x250.png responded 304 in 0.8043 ms
+2026-08-23 14:54:11.969 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 41.0562 ms
+2026-08-23 14:54:17.969 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 31.7496 ms
+2026-08-23 14:54:18.677 -04:00 [INF] HTTP GET /images/ads/content-bottom/fattvset-970x250.png responded 304 in 0.5021 ms
+2026-08-23 14:54:20.943 -04:00 [INF] HTTP GET / responded 200 in 215.0959 ms
+2026-08-23 14:54:20.963 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 4.2213 ms
+2026-08-23 14:54:20.965 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 5.5205 ms
+2026-08-23 14:54:20.991 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 32.6858 ms
+2026-08-23 14:54:27.045 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 24.8946 ms
+2026-08-23 14:54:33.023 -04:00 [INF] HTTP GET /images/ads/content-bottom/xxxciety-970x250.png responded 304 in 0.5961 ms
+2026-08-23 14:54:33.044 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 23.0740 ms
+2026-08-23 14:54:39.037 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.3078 ms
+2026-08-23 14:54:45.041 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 24.8539 ms
+2026-08-23 14:54:51.043 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 27.9935 ms
+2026-08-23 14:54:57.046 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 22.8632 ms
+2026-08-23 14:54:59.993 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-08-23 14:55:00.229 -04:00 [INF] HTTP GET /Account/Login responded 200 in 311.8930 ms
+2026-08-23 14:55:00.247 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 304 in 0.5763 ms
+2026-08-23 14:55:00.249 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 304 in 2.1082 ms
+2026-08-23 14:55:00.253 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 8.4774 ms
+2026-08-23 14:55:00.253 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 7.6503 ms
+2026-08-23 14:55:02.339 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-08-23 14:55:02.343 -04:00 [INF] User admin logged in.
+2026-08-23 14:55:02.351 -04:00 [INF] HTTP POST /Account/Login responded 302 in 393.9773 ms
+2026-08-23 14:55:02.485 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-23 14:55:02.686 -04:00 [INF] HTTP GET / responded 200 in 324.2797 ms
+2026-08-23 14:55:02.712 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 6.6906 ms
+2026-08-23 14:55:02.715 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 11.3778 ms
+2026-08-23 14:55:02.718 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 2.7969 ms
+2026-08-23 14:55:02.741 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 3.4748 ms
+2026-08-23 14:55:02.750 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 46.6524 ms
+2026-08-23 14:55:08.800 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 20.2336 ms
+2026-08-23 14:55:11.444 -04:00 [INF] HTTP GET /Admin responded 200 in 401.0464 ms
+2026-08-23 14:55:11.466 -04:00 [INF] HTTP GET /css/admin.css responded 304 in 0.5575 ms
+2026-08-23 14:55:11.496 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 32.0741 ms
+2026-08-23 14:55:19.943 -04:00 [INF] HTTP GET /Admin/Templates responded 200 in 107.3827 ms
+2026-08-23 14:55:19.987 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 28.5299 ms
+2026-08-23 14:55:27.286 -04:00 [INF] HTTP POST /Admin/Templates/SetActive responded 302 in 143.1684 ms
+2026-08-23 14:55:27.345 -04:00 [INF] HTTP GET /Admin/Templates responded 200 in 48.5200 ms
+2026-08-23 14:55:27.386 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 26.0281 ms
+2026-08-23 14:55:32.087 -04:00 [INF] HTTP GET / responded 200 in 283.3556 ms
+2026-08-23 14:55:32.106 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 1.2827 ms
+2026-08-23 14:55:32.110 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 2.9201 ms
+2026-08-23 14:55:32.112 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 6.1001 ms
+2026-08-23 14:55:32.118 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.2936 ms
+2026-08-23 14:55:32.134 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 27.9632 ms
+2026-08-23 14:55:32.138 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 1.1038 ms
+2026-08-23 14:55:38.251 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 17.2528 ms
+2026-08-23 14:55:43.679 -04:00 [INF] HTTP GET /Store/Cart responded 200 in 216.4649 ms
+2026-08-23 14:55:43.699 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.3008 ms
+2026-08-23 14:55:43.699 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 2.8866 ms
+2026-08-23 14:55:43.723 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 27.9113 ms
+2026-08-23 14:55:45.247 -04:00 [INF] HTTP GET /Notifications responded 200 in 251.5257 ms
+2026-08-23 14:55:45.269 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.8762 ms
+2026-08-23 14:55:45.270 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.8009 ms
+2026-08-23 14:55:45.296 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 29.8441 ms
+2026-08-23 14:55:50.259 -04:00 [INF] HTTP GET /Matches responded 200 in 275.8105 ms
+2026-08-23 14:55:50.305 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 32.1762 ms
+2026-08-23 14:55:50.307 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 32.3218 ms
+2026-08-23 14:55:50.331 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 58.2740 ms
+2026-08-23 14:55:56.383 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 23.9075 ms
+2026-08-23 14:56:02.384 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.9243 ms
+2026-08-23 14:56:06.451 -04:00 [INF] HTTP GET /Vip responded 200 in 401.8702 ms
+2026-08-23 14:56:06.472 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.2903 ms
+2026-08-23 14:56:06.473 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 2.4920 ms
+2026-08-23 14:56:06.494 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 24.9216 ms
+2026-08-23 14:56:12.512 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.4711 ms
+2026-08-23 14:56:16.510 -04:00 [INF] HTTP GET /Admin responded 200 in 41.8860 ms
+2026-08-23 14:56:16.555 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 29.3926 ms
+2026-08-23 14:56:28.961 -04:00 [INF] HTTP GET /Admin/Templates responded 200 in 44.0312 ms
+2026-08-23 14:56:29.002 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 25.6614 ms
+2026-08-23 14:56:38.219 -04:00 [INF] HTTP POST /Admin/Templates/SetActive responded 302 in 24.2831 ms
+2026-08-23 14:56:38.270 -04:00 [INF] HTTP GET /Admin/Templates responded 200 in 43.5316 ms
+2026-08-23 14:56:38.321 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 34.6387 ms
+2026-08-23 14:56:42.817 -04:00 [INF] HTTP GET / responded 200 in 201.5332 ms
+2026-08-23 14:56:42.833 -04:00 [INF] HTTP GET /css/templates/gaming.css responded 200 in 0.8706 ms
+2026-08-23 14:56:42.838 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 4.7822 ms
+2026-08-23 14:56:42.840 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 4.4888 ms
+2026-08-23 14:56:42.859 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 25.6281 ms
+2026-08-23 14:56:49.040 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 26.4112 ms
+2026-08-23 14:56:55.037 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.5848 ms
+2026-08-23 14:57:01.036 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 23.4595 ms
+2026-08-23 14:57:07.037 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.6968 ms
+2026-08-23 14:57:13.029 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 20.2209 ms
+2026-08-23 14:57:19.033 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.7737 ms
+2026-08-23 14:57:25.036 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.5417 ms
+2026-08-23 14:57:31.037 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.9478 ms
+2026-08-23 14:57:37.038 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 23.0146 ms
+2026-08-23 14:57:43.038 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.0859 ms
+2026-08-23 14:57:49.031 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 19.7869 ms
+2026-08-23 14:57:55.037 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.8259 ms
+2026-08-23 14:58:01.030 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 20.8128 ms
+2026-08-23 14:58:07.036 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.4962 ms
+2026-08-23 14:58:13.038 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 22.4574 ms
+2026-08-23 14:58:19.035 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.7963 ms
+2026-08-23 14:58:25.040 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.5804 ms
+2026-08-23 14:58:31.036 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 20.5234 ms
+2026-08-23 14:58:37.029 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 25.1401 ms
+2026-08-23 14:58:39.004 -04:00 [INF] HTTP GET /Admin responded 200 in 50.4298 ms
+2026-08-23 14:58:39.093 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 69.7551 ms
+2026-08-23 14:58:43.774 -04:00 [INF] HTTP GET /Admin/TemplateNav responded 200 in 194.2316 ms
+2026-08-23 14:58:43.821 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 30.5172 ms
+2026-08-23 14:58:52.598 -04:00 [INF] HTTP POST /Admin/TemplateNav/Save responded 302 in 136.4469 ms
+2026-08-23 14:58:52.668 -04:00 [INF] HTTP GET /Admin/TemplateNav responded 200 in 58.6764 ms
+2026-08-23 14:58:52.724 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 35.5224 ms
+2026-08-23 14:59:05.058 -04:00 [INF] HTTP GET / responded 200 in 237.8938 ms
+2026-08-23 14:59:05.081 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 5.4755 ms
+2026-08-23 14:59:05.082 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 5.0524 ms
+2026-08-23 14:59:05.105 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 28.5031 ms
+2026-08-23 14:59:11.122 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.8294 ms
+2026-08-23 14:59:17.127 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 23.4013 ms
+2026-08-23 14:59:20.394 -04:00 [INF] HTTP GET /Admin responded 200 in 40.9122 ms
+2026-08-23 14:59:20.448 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 41.5259 ms
+2026-08-23 14:59:25.434 -04:00 [INF] HTTP GET /Admin/TemplateNav responded 200 in 55.8081 ms
+2026-08-23 14:59:25.480 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 29.9485 ms
+2026-08-23 14:59:34.042 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 4.2482 ms
+2026-08-23 14:59:34.043 -04:00 [INF] HTTP GET /css/admin.css responded 200 in 4.0787 ms
+2026-08-23 14:59:34.055 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 19.5551 ms
+2026-08-23 14:59:34.062 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 25.9027 ms
+2026-08-23 14:59:34.065 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 27.9113 ms
+2026-08-23 14:59:34.078 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 40.7485 ms
+2026-08-23 14:59:41.246 -04:00 [INF] HTTP POST /Admin/TemplateNav/Save responded 302 in 61.2905 ms
+2026-08-23 14:59:41.327 -04:00 [INF] HTTP GET /Admin/TemplateNav responded 200 in 71.1963 ms
+2026-08-23 14:59:41.356 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 23.3903 ms
+2026-08-23 14:59:43.778 -04:00 [INF] HTTP GET / responded 200 in 149.7442 ms
+2026-08-23 14:59:43.796 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 1.1419 ms
+2026-08-23 14:59:43.798 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.5992 ms
+2026-08-23 14:59:43.799 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.0848 ms
+2026-08-23 14:59:43.816 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 21.4029 ms
+2026-08-23 14:59:49.860 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 23.0210 ms
+2026-08-23 14:59:55.859 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.0162 ms
+2026-08-23 15:00:01.865 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 25.4465 ms
+2026-08-23 15:00:07.871 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.4096 ms
+2026-08-23 15:00:13.861 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.4069 ms
+2026-08-23 15:00:19.860 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 22.4762 ms
+2026-08-23 15:00:25.872 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.9356 ms
+2026-08-23 15:00:31.857 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 18.7663 ms
+2026-08-23 15:00:37.861 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 19.3189 ms
+2026-08-23 15:00:43.396 -04:00 [INF] HTTP GET /Vip responded 200 in 147.2916 ms
+2026-08-23 15:00:43.415 -04:00 [INF] HTTP GET /css/layout-override.css responded 304 in 0.3346 ms
+2026-08-23 15:00:43.419 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 5.0315 ms
+2026-08-23 15:00:43.420 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.7326 ms
+2026-08-23 15:00:43.448 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 33.5538 ms
+2026-08-23 15:00:47.420 -04:00 [INF] HTTP GET /Store responded 200 in 388.0629 ms
+2026-08-23 15:00:47.445 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 5.1618 ms
+2026-08-23 15:00:47.445 -04:00 [INF] HTTP GET /images/no-image.png responded 404 in 5.0175 ms
+2026-08-23 15:00:47.454 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.6939 ms
+2026-08-23 15:00:47.482 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 41.9782 ms
+2026-08-23 15:00:48.840 -04:00 [INF] HTTP GET /Chat/Rooms responded 200 in 197.6651 ms
+2026-08-23 15:00:48.860 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.2930 ms
+2026-08-23 15:00:48.860 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 2.6147 ms
+2026-08-23 15:00:48.886 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 29.2373 ms
+2026-08-23 15:00:51.122 -04:00 [INF] HTTP GET /Forum responded 200 in 294.4857 ms
+2026-08-23 15:00:51.141 -04:00 [INF] HTTP GET /css/layout-override.css responded 304 in 0.4570 ms
+2026-08-23 15:00:51.148 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 7.4842 ms
+2026-08-23 15:00:51.148 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 6.0696 ms
+2026-08-23 15:00:51.172 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 30.8864 ms
+2026-08-23 15:00:57.232 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.4089 ms
+2026-08-23 15:01:03.228 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.7727 ms
+2026-08-23 15:01:09.228 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 18.0630 ms
+2026-08-23 15:01:15.229 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 18.8583 ms
+2026-08-23 15:01:21.230 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 19.7269 ms
+2026-08-23 15:01:25.576 -04:00 [INF] HTTP GET /Admin responded 200 in 46.5260 ms
+2026-08-23 15:01:25.632 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 38.9428 ms
+2026-08-23 15:01:33.635 -04:00 [INF] HTTP GET /Admin/TemplateNav responded 200 in 57.9116 ms
+2026-08-23 15:01:33.685 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 33.7472 ms
+2026-08-23 15:02:02.645 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 0.8855 ms
+2026-08-23 15:02:02.649 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 1.4365 ms
+2026-08-23 15:02:02.645 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 1.7587 ms
+2026-08-23 15:02:02.648 -04:00 [INF] HTTP GET /css/admin.css responded 200 in 3.3219 ms
+2026-08-23 15:02:02.649 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 5.2403 ms
+2026-08-23 15:02:02.655 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 12.1002 ms
+2026-08-23 15:02:06.833 -04:00 [INF] HTTP POST /Admin/TemplateNav/Save responded 302 in 65.5313 ms
+2026-08-23 15:02:06.898 -04:00 [INF] HTTP GET /Admin/TemplateNav responded 200 in 55.7837 ms
+2026-08-23 15:02:06.940 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 24.8797 ms
+2026-08-23 15:02:09.325 -04:00 [INF] HTTP GET / responded 200 in 135.8165 ms
+2026-08-23 15:02:09.344 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.9382 ms
+2026-08-23 15:02:09.346 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.9663 ms
+2026-08-23 15:02:09.347 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.1470 ms
+2026-08-23 15:02:09.384 -04:00 [INF] HTTP GET /images/ads/content-bottom/fattvset-970x250.png responded 200 in 2.0264 ms
+2026-08-23 15:02:09.384 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 41.2306 ms
+2026-08-23 15:02:14.263 -04:00 [INF] HTTP GET /Account/Manage responded 200 in 408.4439 ms
+2026-08-23 15:02:14.282 -04:00 [INF] HTTP GET /css/layout-override.css responded 304 in 0.2594 ms
+2026-08-23 15:02:14.285 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 2.9151 ms
+2026-08-23 15:02:14.285 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.5713 ms
+2026-08-23 15:02:14.308 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 26.3235 ms
+2026-08-23 15:02:20.368 -04:00 [INF] HTTP GET /images/ads/content-bottom/fattvset-v2-970x250.png responded 200 in 2.2469 ms
+2026-08-23 15:02:20.386 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.0228 ms
+2026-08-23 15:02:26.370 -04:00 [INF] HTTP GET /images/ads/content-bottom/xxxciety-970x250.png responded 200 in 2.0590 ms
+2026-08-23 15:02:26.384 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 18.5183 ms
+2026-08-23 15:02:32.384 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 18.4857 ms
+2026-08-23 15:02:38.384 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.2964 ms
+2026-08-23 15:02:44.384 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 19.6745 ms
+2026-08-23 15:02:50.384 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 18.6449 ms
+2026-08-23 15:02:56.388 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.8491 ms
+2026-08-23 15:03:02.389 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.6384 ms
+2026-08-23 15:03:08.385 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.6042 ms
+2026-08-23 15:03:14.387 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 20.0562 ms
+2026-08-23 15:03:20.389 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.0247 ms
+2026-08-23 15:03:26.388 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 22.1430 ms
+2026-08-23 15:03:32.384 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 18.1916 ms
+2026-08-23 15:03:38.386 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 18.4700 ms
+2026-08-23 15:03:44.390 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.9405 ms
+2026-08-23 15:03:47.364 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.9250 ms
+2026-08-23 15:03:48.406 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 1.9040 ms
+2026-08-23 15:03:48.408 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 2.8323 ms
+2026-08-23 15:03:48.409 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 5.2879 ms
+2026-08-23 15:03:48.410 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 0.9887 ms
+2026-08-23 15:03:48.434 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 1.9848 ms
+2026-08-23 15:03:48.438 -04:00 [INF] HTTP GET /css/site.css responded 200 in 0.8147 ms
+2026-08-23 15:03:48.438 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 29.0715 ms
+2026-08-23 15:03:48.439 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 0.5843 ms
+2026-08-23 15:03:48.442 -04:00 [INF] HTTP GET /css/templates/gaming.css responded 200 in 0.7196 ms
+2026-08-23 15:03:50.385 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.2971 ms
+2026-08-23 15:03:56.387 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 19.0595 ms
+2026-08-23 15:04:02.389 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 17.9592 ms
+2026-08-23 15:04:08.387 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 20.8167 ms
+2026-08-23 15:08:21.201 -04:00 [INF] dev env
+2026-08-23 15:08:26.767 -04:00 [INF] Starting role seeding...
+2026-08-23 15:08:26.831 -04:00 [INF] Role Admin already exists
+2026-08-23 15:08:26.838 -04:00 [INF] Role Moderator already exists
+2026-08-23 15:08:26.840 -04:00 [INF] Role seeding completed.
+2026-08-23 15:08:26.844 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-08-23 15:08:27.144 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-08-23 15:08:27.242 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-08-23 15:08:27.251 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-08-23 15:08:27.330 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-08-23 15:08:27.534 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-08-23 15:08:28.315 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-08-23 15:08:28.963 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-23 15:08:30.163 -04:00 [INF] HTTP GET / responded 200 in 1854.0290 ms
+2026-08-23 15:08:30.246 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 77.5585 ms
+2026-08-23 15:08:30.252 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 87.4799 ms
+2026-08-23 15:08:30.252 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 60.2703 ms
+2026-08-23 15:08:30.252 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 87.9772 ms
+2026-08-23 15:08:30.252 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 84.6005 ms
+2026-08-23 15:08:30.259 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 4.9868 ms
+2026-08-23 15:08:30.259 -04:00 [INF] HTTP GET /css/site.css responded 200 in 6.8250 ms
+2026-08-23 15:08:30.259 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 3.1771 ms
+2026-08-23 15:08:30.261 -04:00 [INF] HTTP GET /css/templates/gaming.css responded 200 in 0.9342 ms
+2026-08-23 15:08:30.264 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.7300 ms
+2026-08-23 15:08:30.285 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 13.2369 ms
+2026-08-23 15:08:30.285 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 12.6482 ms
+2026-08-23 15:08:30.294 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 28.6986 ms
+2026-08-23 15:08:30.303 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Ads/js/ads-rotate.js responded 200 in 33.2516 ms
+2026-08-23 15:08:30.325 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 72.6110 ms
+2026-08-23 15:08:30.365 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 106.7067 ms
+2026-08-23 15:08:30.367 -04:00 [INF] HTTP GET /images/ads/content-bottom/fattvset-970x250.png responded 200 in 1.2532 ms
+2026-08-23 15:08:30.381 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 13.0088 ms
+2026-08-23 15:08:30.472 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 103.9741 ms
+2026-08-23 15:08:35.281 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-08-23 15:08:35.574 -04:00 [INF] HTTP GET /Account/Login responded 200 in 394.5118 ms
+2026-08-23 15:08:35.595 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 7.4249 ms
+2026-08-23 15:08:35.597 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 8.3983 ms
+2026-08-23 15:08:35.651 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 61.9000 ms
+2026-08-23 15:08:35.686 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 97.6321 ms
+2026-08-23 15:08:37.551 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-08-23 15:08:37.554 -04:00 [INF] User admin logged in.
+2026-08-23 15:08:37.562 -04:00 [INF] HTTP POST /Account/Login responded 302 in 372.7418 ms
+2026-08-23 15:08:37.731 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-23 15:08:37.995 -04:00 [INF] HTTP GET / responded 200 in 423.4351 ms
+2026-08-23 15:08:38.016 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 5.4066 ms
+2026-08-23 15:08:38.044 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 32.3894 ms
+2026-08-23 15:08:38.068 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 57.2470 ms
+2026-08-23 15:08:44.073 -04:00 [INF] HTTP GET /images/ads/content-bottom/fattvset-v2-970x250.png responded 200 in 3.0348 ms
+2026-08-23 15:08:44.189 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 120.3539 ms
+2026-08-23 15:08:44.833 -04:00 [INF] HTTP GET /Admin responded 200 in 309.9748 ms
+2026-08-23 15:08:44.849 -04:00 [INF] HTTP GET /css/admin.css responded 200 in 0.8505 ms
+2026-08-23 15:08:44.878 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 30.2283 ms
+2026-08-23 15:08:45.055 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.js responded 200 in 206.8188 ms
+2026-08-23 15:08:48.755 -04:00 [INF] HTTP GET /Admin/Templates responded 200 in 92.3739 ms
+2026-08-23 15:08:48.809 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 37.0876 ms
+2026-08-23 15:08:50.780 -04:00 [INF] HTTP POST /Admin/Templates/SetActive responded 302 in 95.9018 ms
+2026-08-23 15:08:50.843 -04:00 [INF] HTTP GET /Admin/Templates responded 200 in 53.7625 ms
+2026-08-23 15:08:50.881 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 24.7655 ms
+2026-08-23 15:08:52.542 -04:00 [INF] HTTP GET /Admin/TemplateNav responded 200 in 169.0605 ms
+2026-08-23 15:08:52.576 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 27.5158 ms
+2026-08-23 15:09:32.909 -04:00 [INF] HTTP POST /Admin/TemplateNav/Save responded 302 in 105.7931 ms
+2026-08-23 15:09:32.972 -04:00 [INF] HTTP GET /Admin/TemplateNav responded 200 in 54.8297 ms
+2026-08-23 15:09:33.011 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 21.5490 ms
+2026-08-23 15:09:35.366 -04:00 [INF] HTTP GET / responded 200 in 220.7457 ms
+2026-08-23 15:09:35.386 -04:00 [INF] HTTP GET /css/templates/dating.css responded 200 in 2.0256 ms
+2026-08-23 15:09:35.451 -04:00 [INF] HTTP GET /css/layout-override.css responded 304 in 66.8595 ms
+2026-08-23 15:09:35.451 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 67.9305 ms
+2026-08-23 15:09:35.482 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 64.5461 ms
+2026-08-23 15:09:35.525 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 107.4408 ms
+2026-08-23 15:09:35.526 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 141.2047 ms
+2026-08-23 15:09:35.616 -04:00 [INF] HTTP GET /images/default-user.png responded 200 in 1.1287 ms
+2026-08-23 15:09:41.729 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 24.9265 ms
+2026-08-23 15:09:43.740 -04:00 [INF] HTTP GET /Messages responded 200 in 669.5684 ms
+2026-08-23 15:09:43.757 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 2.6544 ms
+2026-08-23 15:09:43.757 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.3622 ms
+2026-08-23 15:09:43.781 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 27.2951 ms
+2026-08-23 15:09:46.508 -04:00 [INF] HTTP GET /Video responded 200 in 238.2895 ms
+2026-08-23 15:09:46.523 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.3196 ms
+2026-08-23 15:09:46.523 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 2.8610 ms
+2026-08-23 15:09:46.544 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 23.4650 ms
+2026-08-23 15:09:47.567 -04:00 [INF] HTTP GET /Chat/Rooms responded 200 in 175.7300 ms
+2026-08-23 15:09:47.586 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 2.4880 ms
+2026-08-23 15:09:47.587 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.2998 ms
+2026-08-23 15:09:47.608 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 25.1084 ms
+2026-08-23 15:09:49.178 -04:00 [INF] HTTP GET /Forum responded 200 in 247.1810 ms
+2026-08-23 15:09:49.194 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 2.6650 ms
+2026-08-23 15:09:49.200 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 9.7317 ms
+2026-08-23 15:09:49.219 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 28.3859 ms
+2026-08-23 15:09:55.278 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.7125 ms
+2026-08-23 15:10:01.257 -04:00 [INF] HTTP GET /images/ads/content-bottom/xxxciety-970x250.png responded 200 in 2.1030 ms
+2026-08-23 15:10:01.276 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.8796 ms
+2026-08-23 15:10:07.267 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 19.2297 ms
+2026-08-23 15:10:13.270 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.3097 ms
+2026-08-23 15:10:19.281 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.9145 ms
+2026-08-23 15:10:25.281 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 25.2497 ms
+2026-08-23 15:10:31.282 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 23.9641 ms
+2026-08-23 15:10:37.281 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.2928 ms
+2026-08-23 15:10:43.283 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 24.8555 ms
+2026-08-23 15:10:49.283 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 23.5025 ms
+2026-08-23 15:10:55.271 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 19.6661 ms
+2026-08-23 15:11:01.282 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 23.3399 ms
+2026-08-23 15:11:07.286 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 27.7085 ms
+2026-08-23 15:11:13.281 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.2204 ms
+2026-08-23 15:11:19.281 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 20.8883 ms
+2026-08-23 15:11:25.270 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.0266 ms
+2026-08-23 15:11:31.281 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.5609 ms
+2026-08-23 15:11:37.283 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 22.0934 ms
+2026-08-23 15:11:43.278 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.4522 ms
+2026-08-23 15:11:49.269 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.8538 ms
+2026-08-23 15:11:55.266 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 20.1461 ms
+2026-08-23 15:12:01.282 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.7344 ms
+2026-08-23 15:12:07.273 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 25.1599 ms
+2026-08-23 15:12:13.271 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 22.8820 ms
+2026-08-23 15:12:19.283 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.6381 ms
+2026-08-23 15:12:25.270 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.8223 ms
+2026-08-23 15:12:31.273 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 23.9713 ms
+2026-08-23 15:12:37.271 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 23.0344 ms
+2026-08-23 15:12:43.272 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 23.1432 ms
+2026-08-23 15:12:49.275 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 25.5418 ms
+2026-08-23 15:12:55.271 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.2474 ms
+2026-08-23 15:13:01.271 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 24.0452 ms
+2026-08-23 15:13:07.282 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 23.4709 ms
+2026-08-23 15:13:13.270 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 20.5458 ms
+2026-08-23 15:13:19.269 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 20.9626 ms
+2026-08-23 15:13:25.275 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 24.0128 ms
+2026-08-23 15:13:31.275 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.6344 ms
+2026-08-23 15:13:37.273 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.7448 ms
+2026-08-23 15:13:43.273 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.8812 ms
+2026-08-23 15:13:49.270 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.3886 ms
+2026-08-23 15:13:55.274 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.6811 ms
+2026-08-23 15:14:01.274 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.7673 ms
+2026-08-23 15:14:07.270 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.9895 ms
+2026-08-23 15:14:13.287 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 20.7522 ms
+2026-08-23 15:14:19.272 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 20.5950 ms
+2026-08-23 15:14:25.274 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.3278 ms
+2026-08-23 15:14:31.273 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 19.5885 ms
+2026-08-23 15:14:37.300 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 42.9598 ms
+2026-08-23 15:14:43.310 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 54.7724 ms
+2026-08-23 15:14:49.273 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 19.7603 ms
+2026-08-23 15:14:55.275 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.3795 ms
+2026-08-23 15:15:01.274 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 20.1967 ms
+2026-08-23 15:15:07.275 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.0483 ms
+2026-08-23 15:15:13.282 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 26.2064 ms
+2026-08-23 15:15:19.279 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 23.3648 ms
+2026-08-23 15:15:25.276 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 20.2281 ms
+2026-08-23 15:15:31.276 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 19.7501 ms
+2026-08-23 15:15:37.277 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 20.2791 ms
+2026-08-23 15:15:43.281 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.3124 ms
+2026-08-23 15:15:49.276 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 19.4323 ms
+2026-08-23 15:15:55.281 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.8562 ms
+2026-08-23 15:16:01.279 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.2038 ms
+2026-08-23 15:16:07.280 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 20.9691 ms
+2026-08-23 15:16:13.288 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 28.3477 ms
+2026-08-23 15:16:19.278 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.0566 ms
+2026-08-23 15:16:25.280 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 19.9939 ms
+2026-08-23 15:16:31.278 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 20.3525 ms
+2026-08-23 15:16:37.281 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 19.0410 ms
+2026-08-23 15:16:43.277 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.5277 ms
+2026-08-23 15:16:49.282 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.7238 ms
+2026-08-23 15:16:55.282 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.3424 ms
+2026-08-23 15:17:01.266 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 19.5809 ms
+2026-08-23 15:17:07.268 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.3305 ms
+2026-08-23 15:17:13.269 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.0835 ms
+2026-08-23 15:17:19.284 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 21.0132 ms
+2026-08-23 15:17:25.270 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 22.5736 ms
+2026-08-23 15:17:31.281 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 22.2188 ms
+2026-08-23 15:17:37.285 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 20.5342 ms
+2026-08-23 15:17:43.270 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.8607 ms
+2026-08-23 15:17:49.272 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 23.9011 ms
+2026-08-23 15:17:55.268 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 20.1995 ms
+2026-08-23 15:18:01.269 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.7539 ms
+2026-08-23 15:18:07.271 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.0101 ms
+2026-08-23 15:18:13.273 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 22.2062 ms
+2026-08-23 15:18:19.271 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 21.7015 ms
+2026-08-23 15:18:25.269 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 20.7048 ms
+2026-08-23 15:18:31.269 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 20.3957 ms
+2026-08-23 15:18:37.272 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 23.3418 ms
+2026-08-23 15:18:43.267 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 18.5761 ms
+2026-08-23 15:18:49.273 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 22.6623 ms
+2026-08-23 15:18:55.274 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 20.9624 ms
+2026-08-23 15:19:01.273 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 21.5662 ms
+2026-08-23 15:19:07.276 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 23.8019 ms
+2026-08-23 15:19:13.271 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 18.5645 ms
+2026-08-23 15:19:19.269 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 16.7436 ms
+2026-08-23 15:19:25.272 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 18.6737 ms
+2026-08-23 20:14:56.314 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp\MvcApp.Web\Program.cs:line 224
+2026-08-23 20:16:34.320 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp\MvcApp.Web\Program.cs:line 224
+2026-08-23 20:18:08.287 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp\MvcApp.Web\Program.cs:line 224

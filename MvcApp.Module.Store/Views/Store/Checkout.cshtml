@@ -1,0 +1,102 @@
+@model IEnumerable<CartItem>
+@{
+    ViewData["Title"] = "Checkout";
+    var subtotal = Model.Sum(i => i.UnitPrice * i.Quantity);
+    var shippingCost = subtotal >= 100 ? 0 : 10;
+    var tax = subtotal * 0.10m;
+    var total = subtotal + shippingCost + tax;
+}
+
+<h1>Checkout</h1>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Shipping Information</h5>
+                <form asp-action="PlaceOrder" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="shippingName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <input type="text" name="shippingAddress" class="form-control" required />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" name="shippingCity" class="form-control" required />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">State</label>
+                            <input type="text" name="shippingState" class="form-control" />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Postal Code</label>
+                            <input type="text" name="shippingPostalCode" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Country</label>
+                        <input type="text" name="shippingCountry" class="form-control" required />
+                    </div>
+                    <hr />
+                    <h5>Payment Method</h5>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" value="COD" id="cod" checked />
+                            <label class="form-check-label" for="cod">Cash on Delivery</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" value="PayPal" id="paypal" />
+                            <label class="form-check-label" for="paypal">PayPal</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Order Notes (optional)</label>
+                        <textarea name="notes" class="form-control" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg w-100">
+                        <i class="fa fa-check"></i> Place Order - $@total.ToString("F2")
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Order Summary</h5>
+                <table class="table table-borderless">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ProductName x @item.Quantity</td>
+                            <td class="text-end">$@((item.UnitPrice * item.Quantity).ToString("F2"))</td>
+                        </tr>
+                    }
+                </table>
+                <hr />
+                <div class="d-flex justify-content-between">
+                    <span>Subtotal</span>
+                    <span>$@subtotal.ToString("F2")</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Shipping</span>
+                    <span>@(shippingCost > 0 ? "$" + shippingCost.ToString("F2") : "Free")</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Tax</span>
+                    <span>$@tax.ToString("F2")</span>
+                </div>
+                <hr />
+                <div class="d-flex justify-content-between fw-bold h5">
+                    <span>Total</span>
+                    <span class="text-primary">$@total.ToString("F2")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

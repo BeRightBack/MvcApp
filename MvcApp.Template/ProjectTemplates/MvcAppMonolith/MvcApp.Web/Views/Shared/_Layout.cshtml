@@ -1,0 +1,277 @@
+@using System.Security.Claims
+@inject MvcApp.Core.Abstractions.ITemplateService TemplateService
+@inject MvcApp.Core.Abstractions.IBrandingService Branding
+@inject MvcApp.Core.Abstractions.INavService NavService
+@{
+    var activeTemplate = await TemplateService.GetActiveTemplateAsync();
+    var templateCss = activeTemplate == "Default" ? null : $"~/css/templates/{activeTemplate.ToLowerInvariant()}.css";
+    var siteName = await Branding.GetSiteNameAsync();
+    var logoUrl = await Branding.GetLogoUrlAsync();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @siteName</title>
+    <script type="importmap"></script>    
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-icons/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="~/css/styles2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MvcApp.Web.styles.css" asp-append-version="true" />
+    <style>
+        .navbar.fixed-top { position: fixed !important; }
+        body { margin-bottom: 0 !important; }
+    </style>
+    @if (templateCss != null)
+    {
+        <link rel="stylesheet" href="@templateCss" asp-append-version="true" />
+    }
+    <link rel="stylesheet" href="~/css/layout-override.css" asp-append-version="true" />
+</head>
+<body>
+@if (activeTemplate == "Business")
+{
+    <div class="page">
+        <div class="sidebar">
+            <div class="top-row ps-3 navbar navbar-dark">
+                <div class="container-fluid d-flex align-items-center">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                        @if (logoUrl != null)
+                        {
+                            <img src="@logoUrl" alt="@siteName" style="height: 28px;" />
+                        }
+                        else
+                        {
+                            @siteName
+                        }
+                    </a>
+                    <span class="ms-auto"></span>
+                    @await Component.InvokeAsync("CartBadges")
+                    @await Component.InvokeAsync("NotificationBadge")
+                </div>
+            </div>
+            <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+            <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+                <nav class="nav flex-column">
+                @foreach (var item in await NavService.GetNavItemsAsync())
+                    {
+                        <div class="nav-item px-3">
+                            <a class="nav-link" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a>
+                        </div>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="nav-item px-3">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">@Localizer["Dashboard"]</a>
+                        </div>
+                    }
+                    @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                    {
+                        <div class="nav-item px-3">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Bans" asp-action="Index">@Localizer["Moderation"]</a>
+                        </div>
+                    }
+                </nav>
+                <hr class="sidebar-divider" />
+                @await Html.PartialAsync("_LoginPartial")
+            </div>
+        </div>
+        <main>
+            <div class="top-row px-4">
+                <button type="button" class="sidebar-toggle" aria-label="Toggle sidebar" title="Toggle sidebar">
+                    <i class="bx bx-menu"></i>
+                </button>
+                <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+                <span class="ms-auto"></span>
+                <partial name="_LocalPartial" />
+            </div>
+            <article class="content px-4">
+                @await Component.InvokeAsync("AdZone", new { zoneKey = "content-top" })
+                @RenderBody()
+                @await Component.InvokeAsync("AdZone", new { zoneKey = "content-bottom" })
+            </article>
+        </main>
+    </div>
+}
+else
+{
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm fixed-top">
+            <div class="container-fluid px-3 px-lg-4">
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    @if (logoUrl != null)
+                    {
+                        <img src="@logoUrl" alt="@siteName" style="height: 28px;" />
+                    }
+                    else
+                    {
+                        @siteName
+                    }
+                </a>
+
+                <div class="d-flex align-items-center gap-1 order-sm-2">
+                    <partial name="_LocalPartial" />
+                    @await Component.InvokeAsync("NotificationBadge")
+                    @await Component.InvokeAsync("CartBadges")
+                    <partial name="_SocialDropdown" />
+                    <partial name="_LoginPartial" />
+                </div>
+
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex order-sm-1">
+                    <ul class="navbar-nav me-auto">
+                        @foreach (var item in await NavService.GetNavItemsAsync())
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-2 px-lg-3" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    @await Component.InvokeAsync("AdZone", new { zoneKey = "top-header" })
+    <div class="container" style="padding-top: 80px;">
+        <main role="main" class="main pb-3">
+            @await Component.InvokeAsync("AdZone", new { zoneKey = "content-top" })
+            @RenderBody()
+            @await Component.InvokeAsync("AdZone", new { zoneKey = "content-bottom" })
+        </main>
+    </div>
+}
+    <hr />
+    <footer class="footer bg-light text-dark py-4">
+    <div class="container">
+        @if (activeTemplate == "Business")
+        {
+            <div class="row">
+                <div class="col text-center mb-4">
+                    @if (logoUrl != null)
+                    {
+                        <img src="@logoUrl" alt="@siteName" style="height: 36px;" />
+                    }
+                    else
+                    {
+                        <span class="fw-bold" style="font-family: var(--template-font-heading); color: var(--template-heading);">@siteName</span>
+                    }
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-4">
+                <h5>@Localizer["About Us"]</h5>
+                    <p>@siteName offers a modern platform built for connection, collaboration, and community.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>@Localizer["Quick Links"]</h5>
+                <ul class="list-unstyled">
+                    @foreach (var item in await NavService.GetFooterItemsAsync())
+                    {
+                        <li><a class="nav-link" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>@Localizer["Follow Us"]</h5>
+                <ul class="list-unstyled">
+                    <li><a href="https://www.facebook.com/yourprofile" target="_blank"><i class="fa fa-facebook"></i> Facebook</a></li>
+                    <li><a href="https://www.twitter.com/yourprofile" target="_blank"><i class="fa fa-twitter"></i> Twitter</a></li>
+                    <li><a href="https://www.instagram.com/yourprofile" target="_blank"><i class="fa fa-instagram"></i> Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col text-center">
+                &copy; @DateTime.Now.Year - @siteName - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
+            </div>
+        </div>
+        @await Component.InvokeAsync("AdZone", new { zoneKey = "footer" })
+    </div>
+</footer>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script>
+        (function () {
+            window.notificationBadge = {
+                render: function (count) {
+                    document.querySelectorAll('.notification-badge').forEach(function (li) {
+                        var span = li.querySelector('.notification-badge-count');
+                        if (count > 0) {
+                            if (!span) {
+                                span = document.createElement('span');
+                                span.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge-count';
+                                span.style.fontSize = '0.65rem';
+                                var a = li.querySelector('a');
+                                if (a) a.appendChild(span);
+                            }
+                            span.textContent = count;
+                        } else if (span) {
+                            span.remove();
+                        }
+                    });
+                }
+            };
+
+            if (!document.querySelector('.notification-badge') || typeof signalR === 'undefined') return;
+
+            var connection = new signalR.HubConnectionBuilder()
+                .withUrl('/notificationhub')
+                .withAutomaticReconnect()
+                .build();
+
+            connection.on('UpdateNotificationCount', function (count) {
+                window.notificationBadge.render(count);
+            });
+
+            connection.start().then(function () {
+                return connection.invoke('GetUnreadCount');
+            }).then(function (count) {
+                window.notificationBadge.render(count);
+            }).catch(function () { });
+        })();
+    </script>
+    <base href="~/" />
+    <component type="typeof(Microsoft.AspNetCore.Components.Web.HeadOutlet)" render-mode="ServerPrerendered" />
+    <script src="_framework/blazor.server.js"></script>
+    @if (activeTemplate == "Business")
+    {
+        <script>
+            (function () {
+                var page = document.querySelector('.page');
+                if (!page) return;
+                var toggle = document.querySelector('.sidebar-toggle');
+                if (toggle) {
+                    toggle.addEventListener('click', function () {
+                        page.classList.toggle('sidebar-collapsed');
+                        try {
+                            localStorage.setItem('business.sidebar.collapsed', page.classList.contains('sidebar-collapsed') ? '1' : '0');
+                        } catch (e) { }
+                    });
+                }
+                try {
+                    if (localStorage.getItem('business.sidebar.collapsed') === '1') {
+                        page.classList.add('sidebar-collapsed');
+                    }
+                } catch (e) { }
+                var path = window.location.pathname.toLowerCase();
+                document.querySelectorAll('.nav-scrollable .nav-link').forEach(function (a) {
+                    var href = a.getAttribute('href');
+                    if (href && href.toLowerCase() === path) a.classList.add('active');
+                });
+            })();
+        </script>
+    }
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

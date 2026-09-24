@@ -1,0 +1,158 @@
+@{
+    ViewData["Title"] = @Localizer["FAQ - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Frequently asked questions."];
+    ViewData["Keywords"] = "FAQ, IPTV, help, support";
+}
+<h2><strong>FAQ</strong></h2>
+<div class="accordion" id="faqAccordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                @Localizer["How Long Does It Take To Process My Order?"]
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+                <br />
+                <p>@Localizer["Our normal time for processing orders is between 7am and 10pm daily. Times may vary on weekends."] </p>
+
+                <p>@Localizer[" We receive notification of all orders placed and all payments sent."] </p>
+
+                <p>@Localizer["Please be patient. Once your payment is received, order processing typically takes between 30 minutes and 12 hours, depending on the volume of orders."]</p>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                @Localizer["How or When Can I Renew My Services?"]
+            </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+                <br />
+                <p>@Localizer["You can renew anytime you like by placing an order and selecting renewal at checkout."] </p>
+
+                <p>@Localizer["To avoid service interruption it is recommended to renew prior to your expiry date."] </p>
+
+                <p>@Localizer["You will lose no time as accounts are extended from their respective expiry dates."] </p>
+
+                <p>@Localizer["If you decide to let it expire because you will be on vacation or will not require the service for a period of time, no problem."] </p>
+
+                <p>@Localizer["Just renew when you are ready, allowing us time to process your order, and begin enjoying the service again."] </p>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                @Localizer["What Devices Are Supported?"]
+            </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+                <br />
+                <p>@Localizer["We support a wide range of devices."] </p>
+
+                <p>@Localizer[" Most commonly used are the Amazon Firestick or FireTV Cube, BuzzTV box, and Formuler/Dreamlink devices."]</p>
+
+                <p>@Localizer["We do not endorse any particular devices."]</p>
+
+                <p>@Localizer["We highly recommend doing some research and choosing the best device to suit your needs."]</p>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFour">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                @Localizer["Buffering or Freezing?"]
+            </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+                <br />
+                1. <strong>@Localizer["Check Internet Speed"]</strong><br />
+
+                <p>@Localizer["First try rebooting your modem, router and device to see if that helps."]</p>
+
+                <p>@Localizer["The number one reason users experience IPTV Buffering is caused by slow or intermittent internet speeds."]</p>
+
+                <p>@Localizer["While you don’t require tons of bandwidth to stream content, IPTV Services typically require at least 20 Mbps for live streaming."]</p>
+
+                <p>@Localizer["Many devices have speedtest apps available for download in their appstore. Use these to TEST YOUR SPEED DIRECTLY ON YOUR DEVICE as results vary on phones or laptops."]</p>
+
+                <p>@Localizer["If you find your internet speed is minimal, you may want to consider using an ethernet or wired connection, moving your device closer to your router, or even upgrading your internet package."]</p>
+
+                <p>@Localizer["Keep in mind, unlimited internet does not refer to your speed, only to your data usage."]</p><br />
+
+                2. <strong>@Localizer["Possible server issue"]</strong><br />
+
+                <p>@Localizer["If you’ve tested your speed and the issue persists it may be the channel source itself or work being done to maintain the servers."] </p>
+
+                <p>@Localizer["Although the aim is to provide the best experience possible sometimes an issue may arise that requires special attention."]</p>
+
+                <p>@Localizer["Please give it a bit of time for the issue to be resolved as we check things regularly."]</p>
+
+                <p>@Localizer["If it persists feel free to use our reporting form by following the link below."]</p>
+
+                <p><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">@Localizer["Contact Us"]</a></p>
+
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFive">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                <p>@Localizer["Does this service (IPTV) works in my country?"] </p>
+            </button>
+        </h2>
+        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+                <br />
+                <p>@Localizer["IPTV works all over the world, no matter where you live or where you are. Since you have a stable Internet connection, you will be able to watch thousands of TV channels."] </p>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSix">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                <p>@Localizer["Do I need a satellite dish to watch IPTV?"] </p>
+            </button>
+        </h2>
+        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+                <br />
+                <p>@Localizer[" No, you will connect to our servers via internet and you don’t need dish and satellite equipments."] </p>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSeven">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                @Localizer["What is the best payment method?"]
+            </button>
+        </h2>
+        <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+                <br />
+                <p>@Localizer["In Canada Interac (e-transfer) Elsewhere use Paypal"] </p>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingEight">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                @Localizer["Non-Refundable Policy After Activation"]
+            </button>
+        </h2>
+        <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+                <br />
+                <p>@Localizer["After the activation of your subscription, we do not offer refunds or make any changes."] </p>
+                <p>@Localizer["We are responsible only for the activation of the subscription for the agreed period."]
+
+                @Localizer["We highly recommend purchasing a mounth subscription before committing to a long term subscription to ensure our service meets your needs."]</p>
+            </div>
+        </div>
+    </div>
+</div><br /><br /><br />

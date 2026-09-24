@@ -1,0 +1,94 @@
+@model IEnumerable<MvcApp.Module.Ads.Entities.AdZone>
+@{
+    ViewData["Title"] = "Ad Zones";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4><i class="bx bx-layout"></i> Ad Zones</h4>
+    <a asp-action="Create" class="btn btn-primary"><i class="bx bx-plus"></i> New Zone</a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Key</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Format</th>
+                        <th>Max Banners</th>
+                        <th>Landing Page</th>
+                        <th>CSS Class</th>
+                        <th>Order</th>
+                        <th>Active</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var zone in Model)
+                    {
+                        <tr>
+                            <td><code>@zone.Key</code></td>
+                            <td>@zone.Name</td>
+                            <td class="text-muted small">@zone.Description</td>
+                            <td>
+                                @if (zone.Format != null)
+                                {
+                                    <span class="badge bg-info text-dark"><i class="bx bx-crop"></i> @zone.Format</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">any</span>
+                                }
+                            </td>
+                            <td>@(zone.MaxBanners == 0 ? "∞" : zone.MaxBanners.ToString())</td>
+                            <td>
+                                @if (zone.ExcludeFromLandingPage)
+                                {
+                                    <span class="badge bg-warning text-dark"><i class="bx bx-home-alt"></i> Excluded</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success"><i class="bx bx-home-alt"></i> Included</span>
+                                }
+                            </td>
+                            <td><code class="small">@zone.DefaultCssClass</code></td>
+                            <td>@zone.DisplayOrder</td>
+                            <td>
+                                @if (zone.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactive</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Edit" asp-route-id="@zone.Id" class="btn btn-outline-primary" title="Edit"><i class="bx bx-edit"></i></a>
+                                    <form asp-action="Delete" asp-route-id="@zone.Id" method="post" style="display:inline" onsubmit="return confirm('Delete this zone and all its banners?');">
+                                        <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bx bx-trash"></i></button>
+                                    </form>
+                                    <a asp-controller="AdBanners" asp-action="Index" asp-route-zoneId="@zone.Id" class="btn btn-outline-info" title="Manage Banners"><i class="bx bx-image"></i></a>
+                                    <a asp-controller="AdPlacements" asp-action="Index" asp-route-zoneId="@zone.Id" class="btn btn-outline-secondary" title="Placements"><i class="bx bx-map-pin"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

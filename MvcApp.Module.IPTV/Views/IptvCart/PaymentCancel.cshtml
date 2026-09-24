@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = @Localizer["Payment Canceled - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Your payment was canceled."];
+}
+
+<div class="container py-5 text-center">
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-body p-5">
+            <i class="fa fa-times-circle fa-5x text-danger mb-4"></i>
+            <h2>@Localizer["Payment Canceled"]</h2>
+            <p class="lead">@ViewBag.Message</p>
+            <p>@Localizer["If you have any questions, please contact our support team."]</p>
+            <a asp-controller="IptvCart" asp-action="Checkout" class="btn btn-primary">@Localizer["Try Again"]</a>
+            <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-primary ms-2">@Localizer["Contact Us"]</a>
+        </div>
+    </div>
+</div>

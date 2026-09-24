@@ -1,0 +1,156 @@
+@model IEnumerable<ForumPost>
+@{
+    var thread = ViewBag.Thread as ForumThread;
+    var forum = ViewBag.Forum as Forum;
+    var currentUserId = ViewBag.CurrentUserId as string;
+    var isAdmin = ViewBag.IsAdmin as bool? ?? false;
+    ViewData["Title"] = thread?.Title ?? "Thread";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Forums</a></li>
+            <li class="breadcrumb-item"><a asp-action="Forum" asp-route-id="@forum?.Id">@forum?.Name</a></li>
+            <li class="breadcrumb-item active">@thread?.Title</li>
+        </ol>
+    </nav>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mb-0">
+            @if (thread?.IsPinned == true) { <i class="fa fa-thumb-tack text-danger"></i> }
+            @if (thread?.IsLocked == true) { <i class="fa fa-lock text-warning"></i> }
+            @thread?.Title
+        </h1>
+        <div>
+            @if (isAdmin)
+            {
+                <form asp-action="PinThread" method="post" style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="threadId" value="@thread?.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-info" title="Toggle Pin">
+                        <i class="fa fa-thumb-tack"></i>
+                    </button>
+                </form>
+                <form asp-action="LockThread" method="post" style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="threadId" value="@thread?.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-warning" title="Toggle Lock">
+                        <i class="fa fa-lock"></i>
+                    </button>
+                </form>
+                <form asp-action="DeleteThread" method="post" style="display:inline"
+                      onsubmit="return confirm('Delete entire thread?');">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="threadId" value="@thread?.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Thread">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </form>
+            }
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <a asp-action="Forum" asp-route-id="@forum?.Id" class="btn btn-outline-secondary btn-sm">
+            <i class="fa fa-arrow-left"></i> Back to @forum?.Name
+        </a>
+    </div>
+
+    @foreach (var post in Model)
+    {
+        <div class="card mb-3" id="post-@post.Id">
+            <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                <div>
+                    <strong>@post.CreatedByUsername</strong>
+                    <small class="text-muted ms-2">@post.CreatedAt.ToString("MMM dd, yyyy HH:mm")</small>
+                    @if (post.UpdatedAt.HasValue)
+                    {
+                        <small class="text-muted ms-2">(edited @post.UpdatedAt.Value.ToString("MMM dd, yyyy HH:mm"))</small>
+                    }
+                </div>
+                <div>
+                    @if (post.CreatedById == currentUserId || isAdmin)
+                    {
+                        <a asp-action="EditPost" asp-route-id="@post.Id" class="btn btn-sm btn-outline-primary" title="Edit">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <form asp-action="DeletePost" method="post" style="display:inline"
+                              onsubmit="return confirm('Delete this post?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="postId" value="@post.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+                    }
+                    <span class="badge bg-secondary">#@post.Id</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="forum-post-content">
+                    @Html.Raw(post.Content)
+                </div>
+            </div>
+        </div>
+    }
+
+    @{
+        var page = (int)ViewBag.Page;
+        var totalPages = (int)ViewBag.TotalPages;
+    }
+    @if (totalPages > 1)
+    {
+        <nav class="mt-3">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(page <= 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Thread" asp-route-id="@thread?.Id" asp-route-page="@(page - 1)">Previous</a>
+                </li>
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == page ? "active" : "")">
+                        <a class="page-link" asp-action="Thread" asp-route-id="@thread?.Id" asp-route-page="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(page >= totalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Thread" asp-route-id="@thread?.Id" asp-route-page="@(page + 1)">Next</a>
+                </li>
+            </ul>
+        </nav>
+    }
+
+    @if (thread?.IsLocked == true)
+    {
+        <div class="alert alert-warning mt-3">
+            <i class="fa fa-lock"></i> This thread is locked. No new replies can be posted.
+        </div>
+    }
+    else
+    {
+        <div class="card mt-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fa fa-reply"></i> Post a Reply</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Reply" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="threadId" value="@thread?.Id" />
+                    @{ ViewData["RteName"] = "content"; ViewData["RteHeight"] = 200; }
+                    <partial name="_RichTextEditor" />
+                    <button type="submit" class="btn btn-primary mt-2">
+                        <i class="fa fa-paper-plane"></i> Submit Reply
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+</div>

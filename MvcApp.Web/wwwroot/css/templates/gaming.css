@@ -1,0 +1,218 @@
+/* Gaming — dark neon style for a gaming community */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --template-primary: #00f5ff;
+    --template-primary-dark: #00b8c4;
+    --template-primary-light: rgba(0,245,255,0.15);
+    --template-secondary: #ff00aa;
+    --template-accent: #ffee00;
+    --template-bg: #0a0a12;
+    --template-bg-alt: #12121e;
+    --template-text: #c8c8d4;
+    --template-text-light: #6c6c80;
+    --template-heading: #ffffff;
+    --template-border: #2a2a3e;
+    --template-font: 'Inter', system-ui, -apple-system, sans-serif;
+    --template-font-heading: 'Orbitron', monospace;
+    --template-radius: 0.5rem;
+    --template-radius-sm: 0.25rem;
+    --template-shadow: 0 0 20px rgba(0,245,255,0.08);
+    --template-shadow-hover: 0 0 40px rgba(0,245,255,0.2);
+    --template-transition: 0.2s ease;
+    --template-gradient: linear-gradient(135deg, #00f5ff 0%, #ff00aa 100%);
+}
+
+body {
+    font-family: var(--template-font);
+    color: var(--template-text);
+    background: var(--template-bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--template-font-heading);
+    color: var(--template-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.header, .navbar {
+    background: rgba(10,10,18,0.95) !important;
+    border-bottom: 1px solid var(--template-border);
+    backdrop-filter: blur(12px);
+}
+
+/* Solid navbar on scroll (must not be transparent while scrolling) */
+.navbar.scrolled {
+    background: #0a0a12 !important;
+    backdrop-filter: none;
+}
+
+.navbar a, .navbar-brand {
+    color: var(--template-heading) !important;
+}
+.navbar .nav-link.text-dark { color: var(--template-text) !important; }
+.navbar .nav-link.text-dark:hover { color: var(--template-primary) !important; text-shadow: 0 0 20px rgba(0,245,255,0.5); }
+
+/* Nav pills (tabs) must stay readable on the dark background */
+.nav-pills .nav-link {
+    color: var(--template-text) !important;
+    border: 1px solid var(--template-border);
+}
+.nav-pills .nav-link:hover {
+    color: var(--template-primary) !important;
+    border-color: var(--template-primary);
+}
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background: var(--template-gradient) !important;
+    border-color: transparent;
+    color: #0a0a12 !important;
+    font-weight: 700;
+}
+
+.card {
+    border: 1px solid var(--template-border);
+    border-radius: var(--template-radius);
+    box-shadow: var(--template-shadow);
+    background: var(--template-bg-alt);
+    color: var(--template-text);
+    transition: box-shadow var(--template-transition), transform var(--template-transition), border-color var(--template-transition);
+}
+.card:hover {
+    box-shadow: var(--template-shadow-hover);
+    transform: translateY(-4px) scale(1.01);
+    border-color: var(--template-primary);
+}
+
+.card-header,
+.card-footer {
+    color: var(--template-heading);
+}
+
+.btn {
+    border-radius: 0;
+    font-weight: 700;
+    padding: 0.6rem 1.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    transition: all var(--template-transition);
+}
+
+.btn-primary {
+    background: var(--template-primary);
+    border: none;
+    color: #0a0a12;
+    box-shadow: 0 0 20px rgba(0,245,255,0.3);
+}
+.btn-primary:hover {
+    background: var(--template-primary-dark);
+    box-shadow: 0 0 40px rgba(0,245,255,0.5);
+    color: #0a0a12;
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--template-primary);
+    color: var(--template-primary);
+    background: transparent;
+}
+.btn-outline-primary:hover {
+    background: var(--template-primary);
+    color: #0a0a12;
+    box-shadow: 0 0 30px rgba(0,245,255,0.3);
+}
+
+.form-control {
+    border-radius: 0;
+    border: 1px solid var(--template-border);
+    background: var(--template-bg);
+    color: var(--template-text);
+}
+.form-control:focus {
+    border-color: var(--template-primary);
+    box-shadow: 0 0 0 3px rgba(0,245,255,0.1);
+    background: var(--template-bg);
+    color: var(--template-heading);
+}
+
+.form-select {
+    border-radius: 0;
+    border: 1px solid var(--template-border);
+    background-color: var(--template-bg);
+    color: var(--template-heading);
+}
+.form-select:focus {
+    border-color: var(--template-primary);
+    box-shadow: 0 0 0 3px rgba(0,245,255,0.1);
+}
+
+/* Member details modal */
+.modal-content {
+    background: var(--template-bg-alt);
+    color: var(--template-text);
+    border: 1px solid var(--template-border);
+}
+.modal-header,
+.modal-footer {
+    border-color: var(--template-border);
+}
+.modal-title {
+    color: var(--template-heading);
+}
+.modal-content .btn-close {
+    filter: invert(1);
+}
+
+a { color: var(--template-primary); }
+a:hover { color: var(--template-secondary); }
+
+.table { border-radius: 0; overflow: hidden; }
+.table thead {
+    background: var(--template-bg-alt);
+    color: var(--template-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    border-bottom: 2px solid var(--template-primary);
+}
+
+.bg-primary { background: var(--template-gradient) !important; }
+.text-primary { color: var(--template-primary) !important; }
+.text-muted { color: var(--template-text-light) !important; }
+
+.badge {
+    border-radius: 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.6rem;
+    padding: 0.25rem 0.6rem;
+}
+
+.alert {
+    border-radius: 0;
+    border: none;
+}
+
+footer {
+    background: var(--template-bg-alt);
+    border-top: 1px solid var(--template-border);
+    color: var(--template-text-light);
+    font-size: 0.8rem;
+}
+footer a { color: var(--template-primary); }
+footer a:hover { color: var(--template-secondary); }
+
+::selection {
+    background: var(--template-primary);
+    color: #0a0a12;
+}
+
+.rank-badge {
+    background: var(--template-gradient);
+    color: #fff;
+    font-family: var(--template-font-heading);
+}

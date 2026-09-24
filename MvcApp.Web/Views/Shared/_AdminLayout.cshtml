@@ -1,0 +1,332 @@
+﻿@using System.Security.Claims
+@inject MvcApp.Core.Abstractions.IModuleManager ModuleManager
+@inject MvcApp.Core.Abstractions.IBrandingService Branding
+@{ var siteName = await Branding.GetSiteNameAsync(); }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="~/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Admin</title>
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/css/styles2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MvcApp.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class='bx bx-layer logo-icon'></i>
+            <span class="logo-text">Admin Panel</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">Main</div>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-item">
+                <i class='bx bx-home'></i>
+                <span class="nav-label">Home Page</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="nav-item">
+                <i class='bx bxs-dashboard'></i>
+                <span class="nav-label">Dashboard</span>
+            </a>
+
+            <div class="nav-item" onclick="toggleSubmenu(this)">
+                <i class='bx bxs-file-doc'></i>
+                <span class="nav-label">Content</span>
+                <i class='bx bx-chevron-right nav-chevron'></i>
+            </div>
+            <div class="nav-submenu">
+                <a asp-area="Admin" asp-controller="Language" asp-action="Index" class="nav-item">Languages</a>
+                <a asp-area="Admin" asp-controller="Localization" asp-action="Index" class="nav-item">Translations</a>
+                @if (await ModuleManager.IsModuleEnabledAsync("Forum"))
+                {
+                    <a asp-area="Admin" asp-controller="Forum" asp-action="Index" class="nav-item">Forums</a>
+                }
+            </div>
+
+            @if (await ModuleManager.IsModuleEnabledAsync("Pages"))
+            {
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <i class='bx bxs-file-blank'></i>
+                    <span class="nav-label">Pages</span>
+                    <i class='bx bx-chevron-right nav-chevron'></i>
+                </div>
+                <div class="nav-submenu">
+                    <a asp-area="Admin" asp-controller="Pages" asp-action="Index" class="nav-item">All Pages</a>
+                    <a asp-area="Admin" asp-controller="Pages" asp-action="Create" class="nav-item">New Page</a>
+                    <a asp-area="Admin" asp-controller="Snippets" asp-action="Index" class="nav-item">Snippets</a>
+                </div>
+            }
+
+            @if (await ModuleManager.IsModuleEnabledAsync("Ads"))
+            {
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <i class='bx bxs-megaphone'></i>
+                    <span class="nav-label">Ads</span>
+                    <i class='bx bx-chevron-right nav-chevron'></i>
+                </div>
+                <div class="nav-submenu">
+                    <a asp-area="Admin" asp-controller="AdZones" asp-action="Index" class="nav-item">Zones</a>
+                    <a asp-area="Admin" asp-controller="AdBanners" asp-action="Index" class="nav-item">Banners</a>
+                    <a asp-area="Admin" asp-controller="AdPlacements" asp-action="Index" class="nav-item">Placements</a>
+                </div>
+            }
+
+            @if (await ModuleManager.IsModuleEnabledAsync("Blog"))
+            {
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <i class='bx bxs-edit-alt'></i>
+                    <span class="nav-label">Blog</span>
+                    <i class='bx bx-chevron-right nav-chevron'></i>
+                </div>
+                <div class="nav-submenu">
+                    <a asp-area="Admin" asp-controller="Blog" asp-action="Index" class="nav-item">Posts</a>
+                    <a asp-area="Admin" asp-controller="Blog" asp-action="Categories" class="nav-item">Categories</a>
+                    <a asp-area="Admin" asp-controller="Blog" asp-action="Tags" class="nav-item">Tags</a>
+                    <a asp-area="Admin" asp-controller="Blog" asp-action="Comments" class="nav-item">Comments</a>
+                </div>
+            }
+
+            @if (await ModuleManager.IsModuleEnabledAsync("Store"))
+            {
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <i class='bx bxs-store'></i>
+                    <span class="nav-label">Shop</span>
+                    <i class='bx bx-chevron-right nav-chevron'></i>
+                </div>
+                <div class="nav-submenu">
+                    <a asp-area="Admin" asp-controller="Store" asp-action="Index" class="nav-item">Dashboard</a>
+                    <a asp-area="Admin" asp-controller="Store" asp-action="Products" class="nav-item">Products</a>
+                    <a asp-area="Admin" asp-controller="Store" asp-action="Categories" class="nav-item">Categories</a>
+                    <a asp-area="Admin" asp-controller="Store" asp-action="Orders" class="nav-item">Orders</a>
+                </div>
+            }
+
+            @if (await ModuleManager.IsModuleEnabledAsync("Iptv"))
+            {
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <i class='bx bxs-tv'></i>
+                    <span class="nav-label">IPTV</span>
+                    <i class='bx bx-chevron-right nav-chevron'></i>
+                </div>
+                <div class="nav-submenu">
+                    <a asp-controller="IptvAdmin" asp-action="Index" class="nav-item">Dashboard</a>
+                    <a asp-controller="IptvPlan" asp-action="Index" class="nav-item">Plans</a>
+                    <a asp-controller="IptvSubscription" asp-action="Index" class="nav-item">Subscriptions</a>
+                </div>
+            }
+
+            <div class="nav-item" onclick="toggleSubmenu(this)">
+                <i class='bx bxs-user-detail'></i>
+                <span class="nav-label">Users</span>
+                <i class='bx bx-chevron-right nav-chevron'></i>
+            </div>
+            <div class="nav-submenu">
+                <a asp-area="Admin" asp-controller="User" asp-action="Index" class="nav-item">All Users</a>
+                <a asp-area="Admin" asp-controller="User" asp-action="Create" class="nav-item">Create User</a>
+                <a asp-area="Admin" asp-controller="PhotoModeration" asp-action="Index" class="nav-item">Photo Moderation</a>
+                <a asp-area="Admin" asp-controller="VideoModeration" asp-action="Index" class="nav-item">Video Moderation</a>
+                <a asp-area="Admin" asp-controller="VerificationModeration" asp-action="Index" class="nav-item">Verification</a>
+                <a asp-area="Admin" asp-controller="InterestTag" asp-action="Index" class="nav-item">Interest Tags</a>
+                <a asp-area="Admin" asp-controller="Role" asp-action="Index" class="nav-item">Roles</a>
+                <a asp-area="Admin" asp-controller="RoleAdmin" asp-action="Index" class="nav-item">User Roles</a>
+            </div>
+
+            @if (await ModuleManager.IsModuleEnabledAsync("Forum") || await ModuleManager.IsModuleEnabledAsync("Chat") || await ModuleManager.IsModuleEnabledAsync("Messages"))
+            {
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <i class='bx bxs-group'></i>
+                    <span class="nav-label">Community</span>
+                    <i class='bx bx-chevron-right nav-chevron'></i>
+                </div>
+                <div class="nav-submenu">
+                    @if (await ModuleManager.IsModuleEnabledAsync("Forum"))
+                    {
+                        <a asp-area="" asp-controller="Forum" asp-action="Index" class="nav-item">Forums</a>
+                    }
+                    @if (await ModuleManager.IsModuleEnabledAsync("Chat"))
+                    {
+                        <a asp-area="Admin" asp-controller="Chat" asp-action="Index" class="nav-item">Chat Rooms</a>
+                    }
+                    @if (await ModuleManager.IsModuleEnabledAsync("Messages"))
+                    {
+                        <a asp-area="" asp-controller="Messages" asp-action="Index" class="nav-item">Messages</a>
+                    }
+                </div>
+            }
+
+            <a asp-area="Admin" asp-controller="Bans" asp-action="Index" class="nav-item">
+                <i class='bx bxs-shield-x'></i>
+                <span class="nav-label">Bans &amp; Moderation</span>
+            </a>
+
+            <a asp-area="Admin" asp-controller="ReportsModeration" asp-action="Index" class="nav-item">
+                <i class='bx bx-flag'></i>
+                <span class="nav-label">User Reports</span>
+            </a>
+
+            <a asp-area="Admin" asp-controller="Gamification" asp-action="Badges" class="nav-item">
+                <i class='bx bx-trophy'></i>
+                <span class="nav-label">Gamification</span>
+            </a>
+
+            @if (await ModuleManager.IsModuleEnabledAsync("Video"))
+            {
+                <div class="nav-item" onclick="toggleSubmenu(this)">
+                    <i class='bx bxs-video'></i>
+                    <span class="nav-label">Video</span>
+                    <i class='bx bx-chevron-right nav-chevron'></i>
+                </div>
+                <div class="nav-submenu">
+                    <a asp-area="Admin" asp-controller="Video" asp-action="Index" class="nav-item">Manage Video Rooms</a>
+                </div>
+            }
+
+            <div class="nav-item" onclick="toggleSubmenu(this)">
+                <i class='bx bxs-cog'></i>
+                <span class="nav-label">System</span>
+                <i class='bx bx-chevron-right nav-chevron'></i>
+            </div>
+            <div class="nav-submenu">
+                <a asp-area="Admin" asp-controller="AuditLogs" asp-action="Index" class="nav-item">Audit Logs</a>
+                <a asp-area="Admin" asp-controller="SystemSettings" asp-action="Index" class="nav-item">Settings</a>
+                <a asp-area="Admin" asp-controller="Modules" asp-action="Index" class="nav-item">Modules</a>
+                <a asp-area="Admin" asp-controller="Templates" asp-action="Index" class="nav-item">Templates</a>
+                <a asp-area="Admin" asp-controller="TemplateNav" asp-action="Index" class="nav-item">Template Navigation</a>
+            </div>
+
+            <div class="nav-item" onclick="toggleSubmenu(this)">
+                <i class='bx bxs-bar-chart-alt-2'></i>
+                <span class="nav-label">Analytics</span>
+                <i class='bx bx-chevron-right nav-chevron'></i>
+            </div>
+            <div class="nav-submenu">
+                <a asp-area="Admin" asp-controller="Visitor" asp-action="Index" class="nav-item">Visitor Stats</a>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class='bx bx-chevron-left' id="toggle-icon"></i>
+            </button>
+        </div>
+    </aside>
+
+    <div class="main-wrapper" id="main-wrapper">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-toggle d-md-none" onclick="toggleMobileSidebar()">
+                    <i class='bx bx-menu'></i>
+                </button>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Admin</a></li>
+                        <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="topbar-right">
+                <partial name="_LocalPartial" />
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var defaultImage = Url.Content("~/images/default-user.png");
+                    var isAdmin = User.IsInRole("Admin");
+                    var isModerator = User.IsInRole("Moderator");
+                    <div class="dropdown">
+                        <button class="btn d-flex align-items-center gap-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="border:none;background:none;padding:0.25rem 0.5rem;">
+                            <img src="@Url.Action("GetProfilePicture", "Account", new { userId, area = "" })"
+                                 onerror="this.onerror=null;this.src='@defaultImage';"
+                                 alt="" width="32" height="32"
+                                 class="rounded-circle border" style="object-fit:cover">
+                            <span class="d-none d-md-inline text-dark small fw-medium">@User.Identity.Name</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" style="min-width:200px;">
+                            <li class="px-3 py-2">
+                                <div class="fw-semibold text-dark">@User.Identity.Name</div>
+                                <div class="d-flex gap-1 mt-1">
+                                    @if (isAdmin)
+                                    {
+                                        <span class="badge" style="background:var(--primary);color:#fff;font-size:0.7rem;">Admin</span>
+                                    }
+                                    @if (isModerator)
+                                    {
+                                        <span class="badge bg-warning text-dark" style="font-size:0.7rem;">Moderator</span>
+                                    }
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a asp-page="/Account/Manage/Index" class="dropdown-item">
+                                    <i class='bx bx-user me-2'></i>My Account
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-area="" asp-controller="Home" asp-action="Index" class="dropdown-item">
+                                    <i class='bx bx-home me-2'></i>Home Page
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form asp-page="/Account/Logout"
+                                      asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                                      method="post" class="px-3 py-1">
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class='bx bx-log-out me-2'></i>Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                }
+            </div>
+        </header>
+
+        <main class="main-content">
+            @RenderBody()
+        </main>
+
+        <footer class="footer-admin">
+            &copy; @DateTime.Now.Year @siteName — <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </footer>
+    </div>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('main-wrapper').classList.toggle('expanded');
+            var icon = document.getElementById('toggle-icon');
+            icon.classList.toggle('bx-chevron-left');
+            icon.classList.toggle('bx-chevron-right');
+        }
+
+        function toggleMobileSidebar() {
+            document.getElementById('sidebar').classList.toggle('mobile-open');
+        }
+
+        function toggleSubmenu(el) {
+            var sub = el.nextElementSibling;
+            sub.classList.toggle('open');
+            el.querySelector('.nav-chevron').classList.toggle('open');
+        }
+
+        document.addEventListener('click', function (e) {
+            var sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('mobile-open')) {
+                var isClickInside = sidebar.contains(e.target) || e.target.closest('.topbar-toggle');
+                if (!isClickInside) {
+                    sidebar.classList.remove('mobile-open');
+                }
+            }
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

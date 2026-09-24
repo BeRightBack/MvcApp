@@ -1,0 +1,53 @@
+@model MvcApp.Core.InterestTag
+@{
+    ViewData["Title"] = "Delete Interest Tag";
+    var categoryColors = new Dictionary<MvcApp.Core.InterestCategory, string> {
+        { MvcApp.Core.InterestCategory.Interest, "primary" },
+        { MvcApp.Core.InterestCategory.Fantasy, "danger" },
+        { MvcApp.Core.InterestCategory.Hobby, "success" },
+        { MvcApp.Core.InterestCategory.Lifestyle, "info" },
+        { MvcApp.Core.InterestCategory.Kink, "warning" }
+    };
+    var color = categoryColors.ContainsKey(Model.Category) ? categoryColors[Model.Category] : "secondary";
+    var userCount = (int)ViewBag.UserCount;
+}
+
+<section class="py-4">
+    <div class="container" style="max-width:500px;">
+        <h2 class="fw-bold mb-4 text-danger"><i class='bx bx-trash'></i> Delete Interest Tag</h2>
+
+        <div class="card border-0 rounded-4 shadow-sm border-danger">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class='bx bx-tag text-danger' style="font-size:3rem;"></i>
+                    <h3 class="mt-2">
+                        <span class="badge bg-@color bg-opacity-10 text-@color" style="font-size:1.1rem;">@Model.Name</span>
+                    </h3>
+                    <p class="text-muted mb-0">Category: <strong>@Model.Category</strong></p>
+                    <p class="text-muted">ID: #@Model.Id</p>
+                </div>
+
+                @if (userCount > 0)
+                {
+                    <div class="alert alert-warning rounded-3">
+                        <i class='bx bx-error'></i>
+                        <strong>@userCount user(s)</strong> currently have this tag selected. Deleting will remove it from their profiles.
+                    </div>
+                }
+
+                <p class="text-center">Are you sure you want to permanently delete this tag?</p>
+
+                <div class="d-flex justify-content-center gap-2">
+                    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger rounded-pill px-4"
+                                @(userCount > 0 ? "" : "")>
+                            <i class='bx bx-trash'></i> Delete Tag
+                        </button>
+                    </form>
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

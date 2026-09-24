@@ -1,0 +1,93 @@
+@using MvcApp.Core
+@{
+    ViewData["Title"] = "My Events";
+    var attending = ViewBag.Attending as List<Event> ?? [];
+    var created = ViewBag.Created as List<Event> ?? [];
+}
+
+<section class="py-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">My Events</h1>
+                <p class="text-muted">Events you're attending and organizing</p>
+            </div>
+            <a asp-action="Create" class="btn rounded-pill" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
+                <i class='bx bx-plus'></i> Create Event
+            </a>
+        </div>
+
+        <h4 class="fw-bold mb-3"><i class='bx bx-check-circle text-success'></i> Attending</h4>
+        @if (attending.Any())
+        {
+            <div class="row g-3 mb-5">
+                @foreach (var evt in attending)
+                {
+                    <div class="col-md-4">
+                        <a asp-action="Details" asp-route-id="@evt.Id" class="text-decoration-none">
+                            <div class="card border-0 rounded-4 overflow-hidden shadow-sm h-100">
+                                <div class="position-relative" style="height:150px; background:linear-gradient(135deg,#11998e,#38ef7d);">
+                                    @if (!string.IsNullOrEmpty(evt.ImageUrl))
+                                    {
+                                        <img src="@evt.ImageUrl" class="w-100 h-100" style="object-fit:cover;" alt="@evt.Title">
+                                    }
+                                    <span class="position-absolute bottom-0 start-0 m-2 badge bg-white text-dark">
+                                        @evt.EventDate.ToString("MMM dd, yyyy")
+                                    </span>
+                                </div>
+                                <div class="card-body p-3">
+                                    <h6 class="fw-bold text-dark mb-1">@evt.Title</h6>
+                                    <small class="text-muted"><i class='bx bx-map-pin'></i> @evt.City</small>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-3 mb-5">
+                <p class="text-muted">You're not attending any events yet.</p>
+            </div>
+        }
+
+        <h4 class="fw-bold mb-3"><i class='bx bx-edit text-primary'></i> Created by You</h4>
+        @if (created.Any())
+        {
+            <div class="row g-3">
+                @foreach (var evt in created)
+                {
+                    <div class="col-md-4">
+                        <a asp-action="Details" asp-route-id="@evt.Id" class="text-decoration-none">
+                            <div class="card border-0 rounded-4 overflow-hidden shadow-sm h-100">
+                                <div class="position-relative" style="height:150px; background:linear-gradient(135deg,#667eea,#764ba2);">
+                                    @if (!string.IsNullOrEmpty(evt.ImageUrl))
+                                    {
+                                        <img src="@evt.ImageUrl" class="w-100 h-100" style="object-fit:cover;" alt="@evt.Title">
+                                    }
+                                    <span class="position-absolute bottom-0 start-0 m-2 badge bg-white text-dark">
+                                        @evt.EventDate.ToString("MMM dd, yyyy")
+                                    </span>
+                                    <span class="position-absolute top-0 end-0 m-2 badge bg-primary">
+                                        @evt.RSVPs.Count going
+                                    </span>
+                                </div>
+                                <div class="card-body p-3">
+                                    <h6 class="fw-bold text-dark mb-1">@evt.Title</h6>
+                                    <small class="text-muted"><i class='bx bx-map-pin'></i> @evt.City</small>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-3">
+                <p class="text-muted">You haven't created any events yet.</p>
+            </div>
+        }
+    </div>
+</section>

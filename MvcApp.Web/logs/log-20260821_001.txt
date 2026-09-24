@@ -1,0 +1,199 @@
+2026-08-21 23:26:12.931 -04:00 [INF] dev env
+2026-08-21 23:26:18.494 -04:00 [INF] Starting role seeding...
+2026-08-21 23:26:18.548 -04:00 [INF] Role Admin already exists
+2026-08-21 23:26:18.555 -04:00 [INF] Role Moderator already exists
+2026-08-21 23:26:18.557 -04:00 [INF] Role seeding completed.
+2026-08-21 23:26:18.560 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-08-21 23:26:18.879 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-08-21 23:26:18.987 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-08-21 23:26:18.999 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-08-21 23:26:19.059 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-08-21 23:26:19.204 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-08-21 23:26:19.239 -04:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://127.0.0.1:9001: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.EndpointsStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2026-08-21 23:26:19.436 -04:00 [FTL] Application start-up failed 1
+System.IO.IOException: Failed to bind to address http://127.0.0.1:9001: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.EndpointsStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp\MvcApp.Web\Program.cs:line 318
+2026-08-21 23:26:19.510 -04:00 [FTL] Application start-up failed 2
+System.IO.IOException: Failed to bind to address http://127.0.0.1:9001: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.EndpointsStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp\MvcApp.Web\Program.cs:line 318
+2026-08-21 23:27:28.261 -04:00 [INF] dev env
+2026-08-21 23:27:33.473 -04:00 [INF] Starting role seeding...
+2026-08-21 23:27:33.521 -04:00 [INF] Role Admin already exists
+2026-08-21 23:27:33.527 -04:00 [INF] Role Moderator already exists
+2026-08-21 23:27:33.528 -04:00 [INF] Role seeding completed.
+2026-08-21 23:27:33.531 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-08-21 23:27:33.818 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-08-21 23:27:33.933 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-08-21 23:27:33.947 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-08-21 23:27:34.025 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-08-21 23:27:34.228 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-08-21 23:27:34.776 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-08-21 23:27:35.415 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-21 23:27:36.531 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 17.2314 ms
+2026-08-21 23:27:36.547 -04:00 [INF] HTTP GET / responded 200 in 1783.0363 ms
+2026-08-21 23:27:36.547 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 51.3675 ms
+2026-08-21 23:27:36.562 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 13.9647 ms
+2026-08-21 23:27:40.651 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-08-21 23:27:40.895 -04:00 [INF] HTTP GET /Account/Login responded 200 in 351.8120 ms
+2026-08-21 23:27:40.917 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 4.9914 ms
+2026-08-21 23:27:40.919 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 5.8385 ms
+2026-08-21 23:27:43.515 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-08-21 23:27:43.518 -04:00 [INF] User admin logged in.
+2026-08-21 23:27:43.526 -04:00 [INF] HTTP POST /Account/Login responded 302 in 350.4948 ms
+2026-08-21 23:27:43.623 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-21 23:27:43.825 -04:00 [INF] HTTP GET / responded 200 in 289.3799 ms
+2026-08-21 23:27:43.846 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 4.5120 ms
+2026-08-21 23:27:43.846 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 4.0117 ms
+2026-08-21 23:27:43.857 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 5.8419 ms
+2026-08-21 23:27:43.900 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 58.4232 ms
+2026-08-21 23:27:49.997 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 121.6788 ms
+2026-08-21 23:27:54.991 -04:00 [INF] HTTP GET /Admin responded 200 in 288.6620 ms
+2026-08-21 23:27:55.032 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 27.4403 ms
+2026-08-21 23:29:29.501 -04:00 [INF] HTTP GET /Admin/ReportsModeration responded 200 in 151.2591 ms
+2026-08-21 23:29:29.546 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 30.7804 ms
+2026-08-21 23:29:31.966 -04:00 [INF] HTTP GET / responded 200 in 158.7678 ms
+2026-08-21 23:29:31.983 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.8972 ms
+2026-08-21 23:29:31.994 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 4.3223 ms
+2026-08-21 23:29:32.029 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 33.8338 ms
+2026-08-21 23:29:32.034 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 55.3540 ms
+2026-08-21 23:29:38.057 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 23.7815 ms
+2026-08-21 23:29:44.053 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 18.7309 ms
+2026-08-21 23:29:50.051 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 19.5498 ms
+2026-08-21 23:29:56.048 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 19.0591 ms
+2026-08-21 23:32:31.800 -04:00 [INF] prod env
+2026-08-21 23:32:31.883 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-08-21 23:33:06.614 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-08-21 23:33:09.331 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-08-21 23:33:10.422 -04:00 [INF] HTTP GET /Account/Login responded 200 in 3816.4901 ms
+2026-08-21 23:33:11.224 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-08-21 23:33:11.227 -04:00 [INF] User admin logged in.
+2026-08-21 23:33:11.234 -04:00 [INF] HTTP POST /Account/Login responded 302 in 730.8812 ms
+2026-08-21 23:33:11.664 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-21 23:33:12.087 -04:00 [INF] HTTP GET / responded 200 in 849.1549 ms
+2026-08-21 23:33:12.458 -04:00 [INF] HTTP GET /Admin responded 200 in 322.6109 ms
+2026-08-21 23:33:26.461 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-08-21 23:33:26.650 -04:00 [INF] HTTP GET /Account/Login responded 200 in 202.8928 ms
+2026-08-21 23:33:26.879 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-08-21 23:33:26.881 -04:00 [INF] User admin logged in.
+2026-08-21 23:33:26.882 -04:00 [INF] HTTP POST /Account/Login responded 302 in 163.8824 ms
+2026-08-21 23:33:27.074 -04:00 [INF] HTTP GET / responded 200 in 188.3139 ms
+2026-08-21 23:33:27.180 -04:00 [INF] HTTP GET /Admin responded 200 in 60.3914 ms
+2026-08-21 23:36:51.679 -04:00 [INF] prod env
+2026-08-21 23:36:51.783 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-08-21 23:37:25.645 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-08-21 23:37:28.484 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-08-21 23:37:29.570 -04:00 [INF] HTTP GET /Account/Login responded 200 in 3932.9980 ms
+2026-08-21 23:37:30.306 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-08-21 23:37:30.312 -04:00 [INF] User admin logged in.
+2026-08-21 23:37:30.319 -04:00 [INF] HTTP POST /Account/Login responded 302 in 674.8637 ms
+2026-08-21 23:37:30.707 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-21 23:37:31.005 -04:00 [INF] HTTP GET / responded 200 in 682.2236 ms
+2026-08-21 23:37:31.285 -04:00 [INF] HTTP GET /Admin responded 200 in 231.6771 ms
+2026-08-21 23:37:31.348 -04:00 [INF] HTTP GET /css/admin.css responded 200 in 7.6370 ms
+2026-08-21 23:39:53.297 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-21 23:39:53.517 -04:00 [INF] HTTP GET / responded 200 in 258.8139 ms
+2026-08-21 23:39:53.534 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 5.3271 ms
+2026-08-21 23:39:53.536 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 404 in 4.3910 ms
+2026-08-21 23:39:53.546 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 3.8981 ms
+2026-08-21 23:39:53.555 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 12.5563 ms
+2026-08-21 23:39:56.071 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-08-21 23:39:56.220 -04:00 [INF] HTTP GET /Account/Login responded 200 in 158.2582 ms
+2026-08-21 23:39:56.237 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.8245 ms
+2026-08-21 23:39:56.241 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 5.6178 ms
+2026-08-21 23:39:56.241 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 404 in 7.3522 ms
+2026-08-21 23:39:58.671 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-08-21 23:39:58.672 -04:00 [INF] User admin logged in.
+2026-08-21 23:39:58.674 -04:00 [INF] HTTP POST /Account/Login responded 302 in 153.9362 ms
+2026-08-21 23:39:58.809 -04:00 [INF] HTTP GET / responded 200 in 126.9358 ms
+2026-08-21 23:39:58.834 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 404 in 4.5208 ms
+2026-08-21 23:39:58.834 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 4.9933 ms
+2026-08-21 23:39:58.836 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.3022 ms
+2026-08-21 23:39:58.846 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 4.5813 ms
+2026-08-21 23:39:58.867 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 3.6923 ms
+2026-08-21 23:39:58.904 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 74.2570 ms
+2026-08-21 23:40:05.005 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 118.2457 ms
+2026-08-21 23:40:11.861 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 23.4627 ms
+2026-08-21 23:40:17.875 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 24.8150 ms
+2026-08-21 23:40:23.868 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 18.6568 ms
+2026-08-21 23:40:29.865 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 17.7836 ms
+2026-08-21 23:40:35.866 -04:00 [INF] HTTP POST /ads/impression/2 responded 200 in 20.7507 ms
+2026-08-21 23:40:41.855 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 15.9742 ms
+2026-08-21 23:40:47.856 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 14.8744 ms

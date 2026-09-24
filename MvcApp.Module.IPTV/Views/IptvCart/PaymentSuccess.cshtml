@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = @Localizer["Payment Successful - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Your payment was successful."];
+}
+
+<div class="container py-5 text-center">
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-body p-5">
+            <i class="fa fa-check-circle fa-5x text-success mb-4"></i>
+            <h2>@Localizer["Payment Successful!"]</h2>
+            <p class="lead">@ViewBag.Message</p>
+            <p>@Localizer["You will receive an email with your subscription credentials and setup instructions shortly."]</p>
+            <a asp-controller="IptvHome" asp-action="Setup" class="btn btn-primary">@Localizer["How to Set Up"]</a>
+            <a asp-controller="IptvHome" asp-action="Index" class="btn btn-outline-primary ms-2">@Localizer["Back to Home"]</a>
+        </div>
+    </div>
+</div>

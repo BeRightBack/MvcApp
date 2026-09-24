@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="@ViewData["Description"]" />
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <link rel="canonical" href="@ViewData["CanonicalUrl"]" />
+    <meta property="og:title" content="@ViewData["Title"]" />
+    <meta property="og:description" content="@ViewData["Description"]" />
+    <meta property="og:image" content="@Url.Content("~/images/og-image.jpg")" />
+    <meta property="og:url" content="@ViewData["CanonicalUrl"]" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@ViewData["Title"]" />
+    <meta name="twitter:description" content="@ViewData["Description"]" />
+    <meta name="twitter:image" content="@Url.Content("~/images/twitter-image.jpg")" />
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "Organization",
+      "name": "Quebec Iptv",
+      "url": "https://www.quebeciptv.org",
+      "logo": "https://www.quebeciptv.org/Logos/logo-png.png",
+      "sameAs": [
+        "https://www.facebook.com/yourprofile",
+        "https://www.twitter.com/yourprofile",
+        "https://www.instagram.com/yourprofile"
+      ]
+    }
+    </script>
+    <title>@ViewData["Title"] - @Localizer["Quebec Iptv"]</title>
+    @*<script type="importmap"></script>*@
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link href="~/css/styles.min.css" rel="stylesheet" />
+    <link href="~/lib/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/lib/aos/aos.css" rel="stylesheet" />
+    <style>
+        .navbar-toggler {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+        .navbar-collapse {
+            overflow: hidden;
+        }
+        .navbar-nav .nav-link {
+            color: #000;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff;
+        }
+        .container.body-content {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .navbar-light .navbar-toggler {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .navbar-light .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+        .navbar-collapse {
+            overflow: hidden;
+        }
+        .navbar-nav .nav-link {
+            color: #000;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff;
+        }
+        .container.body-content {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .navbar-nav {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .navbar-nav .nav-item {
+            width: 100%;
+        }
+        .navbar-nav .nav-link {
+            width: 100%;
+            text-align: left;
+        }
+        @@media (max-width: 767.98px) {
+            .navbar-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .navbar-nav .nav-item {
+                width: 100%;
+            }
+            .navbar-nav .nav-link {
+                width: 100%;
+                text-align: left;
+            }
+        }
+        .locale-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            white-space: nowrap;
+        }
+        .locale-control i {
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+        .locale-control select.form-control {
+            display: inline-block;
+            width: auto;
+            height: 2rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+        }
+        .navbar-nav:has(.locale-control) {
+            flex-direction: row !important;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .navbar-nav:has(.locale-control) .nav-item {
+            width: auto !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/Logos/logo-transparent-wht.png" alt="Logo" class="img-fluid" />
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Store" asp-action="Index">@Localizer["Store"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Setup">@Localizer["Setup"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Channels">@Localizer["Channel List"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Faq">@Localizer["FAQ"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">@Localizer["Contact"]</a>
+                    </li>
+                </ul>
+                <partial name="_LocalPartial" />
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+        <footer class="footer mt-auto py-3 bg-light">
+            <div class="container">
+                <span class="text-muted">&copy; @DateTime.Now.Year - Quebec Iptv - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a></span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="~/lib/aos/aos.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/effects.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

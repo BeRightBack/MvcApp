@@ -1,0 +1,46 @@
+@model Dictionary<string, List<MvcApp.Core.SystemSetting>>
+@{
+    ViewData["Title"] = "System Settings";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1>System Settings</h1>
+    <a asp-action="Create" class="btn btn-primary btn-admin">Add Setting</a>
+</div>
+
+@foreach (var group in Model)
+{
+    <div class="content-card mb-3">
+        <div class="card-header">@group.Key</div>
+        <div class="card-body p-0">
+            <table class="table table-admin">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                        <th>Description</th>
+                        <th>Updated</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var setting in group.Value)
+                    {
+                        <tr>
+                            <td><code>@setting.Key</code></td>
+                            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@setting.Value</td>
+                            <td class="text-muted small">@setting.Description</td>
+                            <td class="small text-muted text-nowrap">@setting.UpdatedAt.ToString("MMM dd")</td>
+                            <td class="text-nowrap">
+                                <a asp-action="Edit" asp-route-id="@setting.Id" class="btn btn-sm btn-outline-secondary btn-admin">Edit</a>
+                                <form asp-action="Delete" asp-route-id="@setting.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this setting?')">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-admin">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

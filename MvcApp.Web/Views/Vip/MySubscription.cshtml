@@ -1,0 +1,92 @@
+@model List<MvcApp.Core.Subscription>
+@{
+    ViewData["Title"] = "My Subscription";
+    var isVip = (bool)ViewBag.IsVip;
+    var user = (MvcApp.Core.UserDetails)ViewBag.CurrentUser;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>My Subscription</h4>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class='bx bx-arrow-back me-1'></i>Plans
+    </a>
+</div>
+
+@if (isVip)
+{
+    <div class="alert d-flex align-items-center gap-3 p-4 mb-4" style="background:linear-gradient(135deg,#f59e0b22,#f59e0b11);border:1px solid #f59e0b44;border-radius:12px;">
+        <i class='bx bx-crown' style="font-size:2rem;color:#f59e0b;"></i>
+        <div>
+            <div class="fw-bold" style="color:#b45309;">You're a VIP member!</div>
+            <div class="text-muted small">Status active until @user.PremiumExpiryDate.ToString("MMMM dd, yyyy")</div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-secondary d-flex align-items-center gap-3 p-4 mb-4">
+        <i class='bx bx-info-circle' style="font-size:1.5rem;"></i>
+        <div>
+            <div class="fw-semibold">You don't have an active VIP subscription.</div>
+            <div class="text-muted small">Upgrade to unlock premium features.</div>
+        </div>
+        <a asp-action="Index" class="btn btn-sm btn-primary ms-auto">Go VIP</a>
+    </div>
+}
+
+@if (Model.Any())
+{
+    <div class="content-card">
+        <div class="card-body p-0">
+            <table class="table table-admin">
+                <thead>
+                    <tr>
+                        <th>Plan</th>
+                        <th>Started</th>
+                        <th>Expires</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sub in Model)
+                    {
+                        var isActive = sub.Status == "active" && sub.EndDate > DateTime.UtcNow;
+                        <tr class="@(isActive ? "table-active" : "")">
+                            <td class="fw-semibold">
+                                @if (isActive)
+                                {
+                                    <i class='bx bx-crown text-warning me-1'></i>
+                                }
+                                @sub.SubscriptionPlan?.Name
+                            </td>
+                            <td class="text-muted">@sub.StartDate.ToString("MMM dd, yyyy")</td>
+                            <td class="text-muted">@sub.EndDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                @if (isActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else if (sub.Status == "extended")
+                                {
+                                    <span class="badge bg-info">Extended</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@sub.Status</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <i class='bx bx-receipt' style="font-size:3rem;color:#ccc;"></i>
+        <p class="text-muted mt-2">No subscriptions yet.</p>
+        <a asp-action="Index" class="btn btn-primary">Browse Plans</a>
+    </div>
+}

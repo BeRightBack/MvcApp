@@ -1,0 +1,49 @@
+/* Default template — clean, minimal baseline */
+:root {
+    --template-primary: #4e73df;
+    --template-primary-dark: #224abe;
+    --template-primary-light: #a3bffa;
+    --template-secondary: #858796;
+    --template-accent: #f8c291;
+    --template-bg: #ffffff;
+    --template-bg-alt: #f8f9fc;
+    --template-text: #5a5c69;
+    --template-text-light: #858796;
+    --template-heading: #2e2f3e;
+    --template-border: #e3e6f0;
+    --template-font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --template-radius: 0.35rem;
+    --template-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    --template-transition: 0.2s ease-in-out;
+}
+
+body {
+    font-family: var(--template-font);
+    color: var(--template-text);
+    background-color: var(--template-bg-alt);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--template-heading);
+}
+
+.btn-primary {
+    background-color: var(--template-primary);
+    border-color: var(--template-primary);
+}
+.btn-primary:hover {
+    background-color: var(--template-primary-dark);
+    border-color: var(--template-primary-dark);
+}
+
+a {
+    color: var(--template-primary);
+}
+a:hover {
+    color: var(--template-primary-dark);
+}
+
+.card {
+    border-color: var(--template-border);
+    box-shadow: var(--template-shadow);
+}

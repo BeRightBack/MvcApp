@@ -1,0 +1,1218 @@
+2026-09-23 12:08:10.286 -04:00 [INF] Starting background seeding...
+2026-09-23 12:08:10.285 -04:00 [INF] Starting web host...
+2026-09-23 12:08:10.852 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 12:08:11.209 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 12:08:13.377 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 12:08:14.746 -04:00 [ERR] An error occurred using the connection to database 'Identity_db' on server 'localhost'.
+2026-09-23 12:08:14.757 -04:00 [ERR] An exception occurred while iterating over the results of a query for context type 'MvcApp.Infrastructure.UserDbContext'.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'localhost' for user 'swan3344' using method 'caching_sha2_password' failed with message: Unknown database 'identity_db'
+ ---> MySql.Data.MySqlClient.MySqlException (0x80004005): Unknown database 'identity_db'
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticationFailed(MySqlException ex)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthenticationAsync(Byte[] data)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticateAsync(Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.AuthenticateAsync(String authMethod, Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.TryToGetDriverAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlConnection.OpenInternalAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLRelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'localhost' for user 'swan3344' using method 'caching_sha2_password' failed with message: Unknown database 'identity_db'
+ ---> MySql.Data.MySqlClient.MySqlException (0x80004005): Unknown database 'identity_db'
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticationFailed(MySqlException ex)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthenticationAsync(Byte[] data)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticateAsync(Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.AuthenticateAsync(String authMethod, Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.TryToGetDriverAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlConnection.OpenInternalAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLRelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-09-23 12:08:14.777 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'localhost' for user 'swan3344' using method 'caching_sha2_password' failed with message: Unknown database 'identity_db'
+ ---> MySql.Data.MySqlClient.MySqlException (0x80004005): Unknown database 'identity_db'
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticationFailed(MySqlException ex)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthenticationAsync(Byte[] data)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticateAsync(Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.AuthenticateAsync(String authMethod, Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.TryToGetDriverAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlConnection.OpenInternalAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLRelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at MvcApp.Infrastructure.SettingsService.GetAsync(String key) in E:\Apps\MvcApp\MvcApp.Infrastructure\SettingsService.cs:line 11
+   at MvcApp.Infrastructure.SettingsService.GetAsync[T](String key) in E:\Apps\MvcApp\MvcApp.Infrastructure\SettingsService.cs:line 17
+   at MvcApp.Web.Middlewares.SiteUnderMaintenanceMiddleware.InvokeAsync(HttpContext context, ISettingsService settings) in E:\Apps\MvcApp\MvcApp.Web\Middlewares\SiteUnderMaintenanceMiddleware.cs:line 26
+   at MvcApp.Localization.LocalizationMiddleware.InvokeAsync(HttpContext context, IStringLocalizer`1 localizer) in E:\Apps\MvcApp\MvcApp.Localization\LocalizationMiddleware.cs:line 18
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-09-23 12:08:14.924 -04:00 [ERR] HTTP GET / responded 500 in 1552.8615 ms
+2026-09-23 12:09:21.821 -04:00 [INF] Starting web host...
+2026-09-23 12:09:21.822 -04:00 [INF] Starting background seeding...
+2026-09-23 12:09:21.902 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 12:09:21.986 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 12:09:24.677 -04:00 [ERR] Failed executing DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Role` (
+    `Id` varchar(255) NOT NULL,
+    `CreatedDate` datetime(6) NOT NULL,
+    `Description` longtext NULL,
+    `Name` varchar(256) NULL,
+    `NormalizedName` varchar(256) NULL,
+    `ConcurrencyStamp` longtext NULL,
+    PRIMARY KEY (`Id`)
+);
+2026-09-23 12:09:24.684 -04:00 [FTL] Error during background seeding
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'role' already exists
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQueryInternalAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean beginTransaction, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean beginTransaction, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.MigrationCommandExecutor.ExecuteNonQueryAsync(IReadOnlyList`1 migrationCommands, IRelationalConnection connection, MigrationExecutionState executionState, Boolean commitTransaction, Nullable`1 isolationLevel, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Migrations.Internal.MySQLMigrator.MigrateImplementationAsync(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Migrations.Internal.MySQLMigrator.MigrateImplementationAsync(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Migrations.Internal.MySQLMigrator.<>c.<<MigrateAsync>b__22_1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Migrations.Internal.MySQLMigrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Migrations.Internal.MySQLMigrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at Program.<<Main>$>g__SeedSettingsAsync|0_2(WebApplication app) in E:\Apps\MvcApp\MvcApp.Web\Program.cs:line 394
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__20>d.MoveNext() in E:\Apps\MvcApp\MvcApp.Web\Program.cs:line 334
+2026-09-23 12:09:52.159 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 12:09:52.507 -04:00 [ERR] Failed executing DbCommand (8ms) [Parameters=[@key='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT `s`.`Id`, `s`.`Description`, `s`.`Group`, `s`.`Key`, `s`.`UpdatedAt`, `s`.`UpdatedBy`, `s`.`Value`
+FROM `SystemSettings` AS `s`
+WHERE `s`.`Key` = @key
+LIMIT 1
+2026-09-23 12:09:52.516 -04:00 [ERR] An exception occurred while iterating over the results of a query for context type 'MvcApp.Infrastructure.UserDbContext'.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.systemsettings' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.systemsettings' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-09-23 12:09:52.531 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.systemsettings' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at MvcApp.Infrastructure.SettingsService.GetAsync(String key) in E:\Apps\MvcApp\MvcApp.Infrastructure\SettingsService.cs:line 11
+   at MvcApp.Infrastructure.SettingsService.GetAsync[T](String key) in E:\Apps\MvcApp\MvcApp.Infrastructure\SettingsService.cs:line 17
+   at MvcApp.Web.Middlewares.SiteUnderMaintenanceMiddleware.InvokeAsync(HttpContext context, ISettingsService settings) in E:\Apps\MvcApp\MvcApp.Web\Middlewares\SiteUnderMaintenanceMiddleware.cs:line 26
+   at MvcApp.Localization.LocalizationMiddleware.InvokeAsync(HttpContext context, IStringLocalizer`1 localizer) in E:\Apps\MvcApp\MvcApp.Localization\LocalizationMiddleware.cs:line 18
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-09-23 12:09:52.551 -04:00 [ERR] HTTP GET / responded 500 in 394.7789 ms
+2026-09-23 12:11:57.236 -04:00 [INF] Starting background seeding...
+2026-09-23 12:11:57.236 -04:00 [INF] Starting web host...
+2026-09-23 12:11:57.315 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 12:11:57.396 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 12:11:57.847 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 12:11:59.113 -04:00 [ERR] An error occurred using the connection to database 'Identity_db' on server 'localhost'.
+2026-09-23 12:11:59.125 -04:00 [ERR] An exception occurred while iterating over the results of a query for context type 'MvcApp.Infrastructure.UserDbContext'.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'localhost' for user 'swan3344' using method 'caching_sha2_password' failed with message: Unknown database 'identity_db'
+ ---> MySql.Data.MySqlClient.MySqlException (0x80004005): Unknown database 'identity_db'
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticationFailed(MySqlException ex)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthenticationAsync(Byte[] data)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticateAsync(Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.AuthenticateAsync(String authMethod, Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.TryToGetDriverAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlConnection.OpenInternalAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLRelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'localhost' for user 'swan3344' using method 'caching_sha2_password' failed with message: Unknown database 'identity_db'
+ ---> MySql.Data.MySqlClient.MySqlException (0x80004005): Unknown database 'identity_db'
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticationFailed(MySqlException ex)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthenticationAsync(Byte[] data)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticateAsync(Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.AuthenticateAsync(String authMethod, Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.TryToGetDriverAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlConnection.OpenInternalAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLRelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-09-23 12:11:59.142 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'localhost' for user 'swan3344' using method 'caching_sha2_password' failed with message: Unknown database 'identity_db'
+ ---> MySql.Data.MySqlClient.MySqlException (0x80004005): Unknown database 'identity_db'
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticationFailed(MySqlException ex)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ReadPacketAsync()
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.ContinueAuthenticationAsync(Byte[] data)
+   at MySql.Data.MySqlClient.Authentication.MySqlAuthenticationPlugin.AuthenticateAsync(Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.AuthenticateAsync(String authMethod, Boolean reset)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.NativeDriver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.OpenAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.Driver.CreateAsync(MySqlConnectionStringBuilder settings, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetPooledConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.TryToGetDriverAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlPool.GetConnectionAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlConnection.OpenInternalAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLRelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at MvcApp.Infrastructure.SettingsService.GetAsync(String key) in E:\Apps\MvcApp\MvcApp.Infrastructure\SettingsService.cs:line 11
+   at MvcApp.Infrastructure.SettingsService.GetAsync[T](String key) in E:\Apps\MvcApp\MvcApp.Infrastructure\SettingsService.cs:line 17
+   at MvcApp.Web.Middlewares.SiteUnderMaintenanceMiddleware.InvokeAsync(HttpContext context, ISettingsService settings) in E:\Apps\MvcApp\MvcApp.Web\Middlewares\SiteUnderMaintenanceMiddleware.cs:line 26
+   at MvcApp.Localization.LocalizationMiddleware.InvokeAsync(HttpContext context, IStringLocalizer`1 localizer) in E:\Apps\MvcApp\MvcApp.Localization\LocalizationMiddleware.cs:line 18
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-09-23 12:11:59.235 -04:00 [ERR] HTTP GET / responded 500 in 1393.4401 ms
+2026-09-23 12:12:04.812 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 12:12:04.860 -04:00 [ERR] Failed executing DbCommand (5ms) [Parameters=[@userParameters_CurrentUsername='?' (Size = 256), @minDob='?' (DbType = DateTime), @maxDob='?' (DbType = DateTime), @p4='?' (DbType = Int32), @p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `u1`.`Id`, `u1`.`AccessFailedCount`, `u1`.`Age`, `u1`.`AgeRange`, `u1`.`ChatGroupID`, `u1`.`City`, `u1`.`ConcurrencyStamp`, `u1`.`Country`, `u1`.`Created`, `u1`.`CreatedDate`, `u1`.`DateOfBirth`, `u1`.`Email`, `u1`.`EmailConfirmed`, `u1`.`FirstName`, `u1`.`Gender`, `u1`.`Interests`, `u1`.`Introduction`, `u1`.`IsActive`, `u1`.`IsAvailable`, `u1`.`IsIncognito`, `u1`.`IsProfileComplete`, `u1`.`IsVerified`, `u1`.`KnownAs`, `u1`.`LastActive`, `u1`.`LastLoginDate`, `u1`.`LastName`, `u1`.`LastTimeOnline`, `u1`.`LockoutEnabled`, `u1`.`LockoutEnd`, `u1`.`LookingFor`, `u1`.`MatchedWithUser`, `u1`.`MessagingPermission`, `u1`.`NormalizedEmail`, `u1`.`NormalizedUserName`, `u1`.`PasswordHash`, `u1`.`PhoneNumber`, `u1`.`PhoneNumberConfirmed`, `u1`.`PremiumExpiryDate`, `u1`.`ProfilePicture`, `u1`.`ProfilePicturePath`, `u1`.`ReportedUsers`, `u1`.`Score`, `u1`.`SecurityStamp`, `u1`.`Sexuality`, `u1`.`State`, `u1`.`TotalPoints`, `u1`.`TwoFactorEnabled`, `u1`.`UserName`, `u1`.`UsernameChangeLimit`, `p`.`Id`, `p`.`Filename`, `p`.`IsApproved`, `p`.`IsMain`, `p`.`PrivacyLevel`, `p`.`UserDetailsId`, `s`.`UserId`, `s`.`TagId`, `s`.`UserDetailsId`, `s`.`Id`, `s`.`Category`, `s`.`IsCurated`, `s`.`Name`
+FROM (
+    SELECT `u`.`Id`, `u`.`AccessFailedCount`, `u`.`Age`, `u`.`AgeRange`, `u`.`ChatGroupID`, `u`.`City`, `u`.`ConcurrencyStamp`, `u`.`Country`, `u`.`Created`, `u`.`CreatedDate`, `u`.`DateOfBirth`, `u`.`Email`, `u`.`EmailConfirmed`, `u`.`FirstName`, `u`.`Gender`, `u`.`Interests`, `u`.`Introduction`, `u`.`IsActive`, `u`.`IsAvailable`, `u`.`IsIncognito`, `u`.`IsProfileComplete`, `u`.`IsVerified`, `u`.`KnownAs`, `u`.`LastActive`, `u`.`LastLoginDate`, `u`.`LastName`, `u`.`LastTimeOnline`, `u`.`LockoutEnabled`, `u`.`LockoutEnd`, `u`.`LookingFor`, `u`.`MatchedWithUser`, `u`.`MessagingPermission`, `u`.`NormalizedEmail`, `u`.`NormalizedUserName`, `u`.`PasswordHash`, `u`.`PhoneNumber`, `u`.`PhoneNumberConfirmed`, `u`.`PremiumExpiryDate`, `u`.`ProfilePicture`, `u`.`ProfilePicturePath`, `u`.`ReportedUsers`, `u`.`Score`, `u`.`SecurityStamp`, `u`.`Sexuality`, `u`.`State`, `u`.`TotalPoints`, `u`.`TwoFactorEnabled`, `u`.`UserName`, `u`.`UsernameChangeLimit`
+    FROM `User` AS `u`
+    WHERE (((((`u`.`UserName` <> @userParameters_CurrentUsername) OR `u`.`UserName` IS NULL) AND (`u`.`EmailConfirmed` AND `u`.`IsProfileComplete`)) AND NOT (`u`.`IsIncognito`)) AND (`u`.`DateOfBirth` > '0001-01-01 00:00:00.000000')) AND ((`u`.`DateOfBirth` >= @minDob) AND (`u`.`DateOfBirth` <= @maxDob))
+    ORDER BY `u`.`LastActive` DESC
+    LIMIT @p4 OFFSET @p
+) AS `u1`
+LEFT JOIN `Photos` AS `p` ON `u1`.`Id` = `p`.`UserDetailsId`
+LEFT JOIN (
+    SELECT `u0`.`UserId`, `u0`.`TagId`, `u0`.`UserDetailsId`, `i`.`Id`, `i`.`Category`, `i`.`IsCurated`, `i`.`Name`
+    FROM `UserInterestTags` AS `u0`
+    INNER JOIN `InterestTags` AS `i` ON `u0`.`TagId` = `i`.`Id`
+) AS `s` ON `u1`.`Id` = `s`.`UserDetailsId`
+ORDER BY `u1`.`LastActive` DESC, `u1`.`Id`, `p`.`Id`, `s`.`UserId`, `s`.`TagId`
+2026-09-23 12:12:04.873 -04:00 [ERR] An exception occurred while iterating over the results of a query for context type 'MvcApp.Infrastructure.UserDbContext'.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.user' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.user' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-09-23 12:12:04.914 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.user' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at MvcApp.Infrastructure.MemberRepository.GetMembersAsync(MemberParameters userParameters) in E:\Apps\MvcApp\MvcApp.Infrastructure\MemberRepository.cs:line 91
+   at MvcApp.Web.Controllers.HomeController.Index() in E:\Apps\MvcApp\MvcApp.Web\Controllers\HomeController.cs:line 83
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at MvcApp.Web.Middlewares.VisitorLoggingMiddleware.InvokeAsync(HttpContext context, UserDbContext dbContext, ISettingsService settings) in E:\Apps\MvcApp\MvcApp.Web\Middlewares\VisitorLoggingMiddleware.cs:line 77
+   at MvcApp.Web.Middlewares.BannedUserMiddleware.InvokeAsync(HttpContext context, IBanService banService) in E:\Apps\MvcApp\MvcApp.Web\Middlewares\BannedUserMiddleware.cs:line 68
+   at MvcApp.Web.Middlewares.SiteUnderMaintenanceMiddleware.InvokeAsync(HttpContext context, ISettingsService settings) in E:\Apps\MvcApp\MvcApp.Web\Middlewares\SiteUnderMaintenanceMiddleware.cs:line 43
+   at MvcApp.Localization.LocalizationMiddleware.InvokeAsync(HttpContext context, IStringLocalizer`1 localizer) in E:\Apps\MvcApp\MvcApp.Localization\LocalizationMiddleware.cs:line 18
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-09-23 12:12:04.940 -04:00 [ERR] HTTP GET / responded 500 in 649.5362 ms
+2026-09-23 12:12:09.968 -04:00 [ERR] Failed executing DbCommand (5ms) [Parameters=[@userParameters_CurrentUsername='?' (Size = 256), @minDob='?' (DbType = DateTime), @maxDob='?' (DbType = DateTime), @p4='?' (DbType = Int32), @p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `u1`.`Id`, `u1`.`AccessFailedCount`, `u1`.`Age`, `u1`.`AgeRange`, `u1`.`ChatGroupID`, `u1`.`City`, `u1`.`ConcurrencyStamp`, `u1`.`Country`, `u1`.`Created`, `u1`.`CreatedDate`, `u1`.`DateOfBirth`, `u1`.`Email`, `u1`.`EmailConfirmed`, `u1`.`FirstName`, `u1`.`Gender`, `u1`.`Interests`, `u1`.`Introduction`, `u1`.`IsActive`, `u1`.`IsAvailable`, `u1`.`IsIncognito`, `u1`.`IsProfileComplete`, `u1`.`IsVerified`, `u1`.`KnownAs`, `u1`.`LastActive`, `u1`.`LastLoginDate`, `u1`.`LastName`, `u1`.`LastTimeOnline`, `u1`.`LockoutEnabled`, `u1`.`LockoutEnd`, `u1`.`LookingFor`, `u1`.`MatchedWithUser`, `u1`.`MessagingPermission`, `u1`.`NormalizedEmail`, `u1`.`NormalizedUserName`, `u1`.`PasswordHash`, `u1`.`PhoneNumber`, `u1`.`PhoneNumberConfirmed`, `u1`.`PremiumExpiryDate`, `u1`.`ProfilePicture`, `u1`.`ProfilePicturePath`, `u1`.`ReportedUsers`, `u1`.`Score`, `u1`.`SecurityStamp`, `u1`.`Sexuality`, `u1`.`State`, `u1`.`TotalPoints`, `u1`.`TwoFactorEnabled`, `u1`.`UserName`, `u1`.`UsernameChangeLimit`, `p`.`Id`, `p`.`Filename`, `p`.`IsApproved`, `p`.`IsMain`, `p`.`PrivacyLevel`, `p`.`UserDetailsId`, `s`.`UserId`, `s`.`TagId`, `s`.`UserDetailsId`, `s`.`Id`, `s`.`Category`, `s`.`IsCurated`, `s`.`Name`
+FROM (
+    SELECT `u`.`Id`, `u`.`AccessFailedCount`, `u`.`Age`, `u`.`AgeRange`, `u`.`ChatGroupID`, `u`.`City`, `u`.`ConcurrencyStamp`, `u`.`Country`, `u`.`Created`, `u`.`CreatedDate`, `u`.`DateOfBirth`, `u`.`Email`, `u`.`EmailConfirmed`, `u`.`FirstName`, `u`.`Gender`, `u`.`Interests`, `u`.`Introduction`, `u`.`IsActive`, `u`.`IsAvailable`, `u`.`IsIncognito`, `u`.`IsProfileComplete`, `u`.`IsVerified`, `u`.`KnownAs`, `u`.`LastActive`, `u`.`LastLoginDate`, `u`.`LastName`, `u`.`LastTimeOnline`, `u`.`LockoutEnabled`, `u`.`LockoutEnd`, `u`.`LookingFor`, `u`.`MatchedWithUser`, `u`.`MessagingPermission`, `u`.`NormalizedEmail`, `u`.`NormalizedUserName`, `u`.`PasswordHash`, `u`.`PhoneNumber`, `u`.`PhoneNumberConfirmed`, `u`.`PremiumExpiryDate`, `u`.`ProfilePicture`, `u`.`ProfilePicturePath`, `u`.`ReportedUsers`, `u`.`Score`, `u`.`SecurityStamp`, `u`.`Sexuality`, `u`.`State`, `u`.`TotalPoints`, `u`.`TwoFactorEnabled`, `u`.`UserName`, `u`.`UsernameChangeLimit`
+    FROM `User` AS `u`
+    WHERE (((((`u`.`UserName` <> @userParameters_CurrentUsername) OR `u`.`UserName` IS NULL) AND (`u`.`EmailConfirmed` AND `u`.`IsProfileComplete`)) AND NOT (`u`.`IsIncognito`)) AND (`u`.`DateOfBirth` > '0001-01-01 00:00:00.000000')) AND ((`u`.`DateOfBirth` >= @minDob) AND (`u`.`DateOfBirth` <= @maxDob))
+    ORDER BY `u`.`LastActive` DESC
+    LIMIT @p4 OFFSET @p
+) AS `u1`
+LEFT JOIN `Photos` AS `p` ON `u1`.`Id` = `p`.`UserDetailsId`
+LEFT JOIN (
+    SELECT `u0`.`UserId`, `u0`.`TagId`, `u0`.`UserDetailsId`, `i`.`Id`, `i`.`Category`, `i`.`IsCurated`, `i`.`Name`
+    FROM `UserInterestTags` AS `u0`
+    INNER JOIN `InterestTags` AS `i` ON `u0`.`TagId` = `i`.`Id`
+) AS `s` ON `u1`.`Id` = `s`.`UserDetailsId`
+ORDER BY `u1`.`LastActive` DESC, `u1`.`Id`, `p`.`Id`, `s`.`UserId`, `s`.`TagId`
+2026-09-23 12:12:09.975 -04:00 [ERR] An exception occurred while iterating over the results of a query for context type 'MvcApp.Infrastructure.UserDbContext'.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.photos' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.photos' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-09-23 12:12:09.982 -04:00 [ERR] An unhandled exception has occurred while executing the request.
+MySql.Data.MySqlClient.MySqlException (0x80004005): Table 'identity_db.photos' doesn't exist
+   at MySql.Data.MySqlClient.MySqlStream.CheckForServerError()
+   at MySql.Data.MySqlClient.MySqlStream.ReadPacketAsync()
+   at MySql.Data.MySqlClient.NativeDriver.GetResultAsync(Int32 affectedRow, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResultAsync(Int32 statementId, Int32 affectedRows, Int64 insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResultAsync(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResultInternalAsync(CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderInternalAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at MySql.EntityFrameworkCore.Storage.Internal.MySQLExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at MvcApp.Infrastructure.MemberRepository.GetMembersAsync(MemberParameters userParameters) in E:\Apps\MvcApp\MvcApp.Infrastructure\MemberRepository.cs:line 91
+   at MvcApp.Web.Controllers.HomeController.Index() in E:\Apps\MvcApp\MvcApp.Web\Controllers\HomeController.cs:line 83
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at MvcApp.Web.Middlewares.VisitorLoggingMiddleware.InvokeAsync(HttpContext context, UserDbContext dbContext, ISettingsService settings) in E:\Apps\MvcApp\MvcApp.Web\Middlewares\VisitorLoggingMiddleware.cs:line 77
+   at MvcApp.Web.Middlewares.BannedUserMiddleware.InvokeAsync(HttpContext context, IBanService banService) in E:\Apps\MvcApp\MvcApp.Web\Middlewares\BannedUserMiddleware.cs:line 68
+   at MvcApp.Web.Middlewares.SiteUnderMaintenanceMiddleware.InvokeAsync(HttpContext context, ISettingsService settings) in E:\Apps\MvcApp\MvcApp.Web\Middlewares\SiteUnderMaintenanceMiddleware.cs:line 43
+   at MvcApp.Localization.LocalizationMiddleware.InvokeAsync(HttpContext context, IStringLocalizer`1 localizer) in E:\Apps\MvcApp\MvcApp.Localization\LocalizationMiddleware.cs:line 18
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-09-23 12:12:09.997 -04:00 [ERR] HTTP GET / responded 500 in 57.6657 ms
+2026-09-23 12:12:15.819 -04:00 [INF] Starting role seeding...
+2026-09-23 12:12:15.829 -04:00 [INF] Creating role: Admin
+2026-09-23 12:12:15.877 -04:00 [INF] Role Admin created successfully
+2026-09-23 12:12:15.879 -04:00 [INF] Creating role: Moderator
+2026-09-23 12:12:15.889 -04:00 [INF] Role Moderator created successfully
+2026-09-23 12:12:15.891 -04:00 [INF] Role seeding completed.
+2026-09-23 12:12:15.896 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 12:12:15.910 -04:00 [INF] Creating admin user: admin@frenzyzone.com
+2026-09-23 12:12:16.315 -04:00 [INF] Admin user created successfully.
+2026-09-23 12:12:16.397 -04:00 [INF] Admin user added to Admin role.
+2026-09-23 12:12:16.434 -04:00 [INF] Seeding 26 test users...
+2026-09-23 12:12:16.572 -04:00 [INF] Created test user: Mulva
+2026-09-23 12:12:16.673 -04:00 [INF] Created test user: Ruthie
+2026-09-23 12:12:16.775 -04:00 [INF] Created test user: Estelle
+2026-09-23 12:12:16.878 -04:00 [INF] Created test user: Susan
+2026-09-23 12:12:16.977 -04:00 [INF] Created test user: Elaine
+2026-09-23 12:12:17.081 -04:00 [INF] Created test user: Jerry
+2026-09-23 12:12:17.196 -04:00 [INF] Created test user: Kramer
+2026-09-23 12:12:17.306 -04:00 [INF] Created test user: George
+2026-09-23 12:12:17.413 -04:00 [INF] Created test user: Newman
+2026-09-23 12:12:17.513 -04:00 [INF] Created test user: Micky
+2026-09-23 12:12:17.608 -04:00 [INF] Created test user: Frank
+2026-09-23 12:12:17.705 -04:00 [INF] Created test user: Morty
+2026-09-23 12:12:17.799 -04:00 [INF] Created test user: Leo
+2026-09-23 12:12:17.915 -04:00 [INF] Created test user: Puddy
+2026-09-23 12:12:18.012 -04:00 [INF] Created test user: Lippman
+2026-09-23 12:12:18.109 -04:00 [INF] Created test user: Pitt
+2026-09-23 12:12:18.221 -04:00 [INF] Created test user: Bania
+2026-09-23 12:12:18.319 -04:00 [INF] Created test user: Chiles
+2026-09-23 12:12:18.412 -04:00 [INF] Created test user: Whatley
+2026-09-23 12:12:18.515 -04:00 [INF] Created test user: Helen
+2026-09-23 12:12:18.616 -04:00 [INF] Created test user: Nicole
+2026-09-23 12:12:18.714 -04:00 [INF] Created test user: Sammy
+2026-09-23 12:12:18.813 -04:00 [INF] Created test user: Jenny
+2026-09-23 12:12:18.919 -04:00 [INF] Created test user: Deena
+2026-09-23 12:12:19.015 -04:00 [INF] Created test user: Angelina
+2026-09-23 12:12:19.112 -04:00 [INF] Created test user: Melody
+2026-09-23 12:12:19.115 -04:00 [INF] Test users seeded successfully.
+2026-09-23 12:12:19.133 -04:00 [INF] Seeding likes and messages...
+2026-09-23 12:12:19.185 -04:00 [ERR] An error occurred while seeding likes and messages.
+System.InvalidOperationException: The instance of entity type 'UserLike' cannot be tracked because another instance with the same key value for {'SourceUserId', 'LikedUserId'} is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting key values.
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.ThrowIdentityConflict(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry, Boolean updateDuplicate)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NullableKeyIdentityMap`1.Add(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTracking(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.OnStateChanging(EntityState newState)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntryBase.SetEntityState(EntityState oldState, EntityState newState, Boolean acceptChanges, Boolean modifyProperties)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityState(EntityState entityState, Boolean acceptChanges, Boolean modifyProperties, Nullable`1 forceStateWhenUnknownKey, Nullable`1 fallbackState)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.PaintAction(EntityEntryGraphNode`1 node)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityEntryGraphIterator.TraverseGraph[TState](EntityEntryGraphNode`1 node, Func`2 handleNode)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.AttachGraph(InternalEntityEntry rootEntry, EntityState targetState, EntityState storeGeneratedWithKeySetTargetState, Boolean forceStateWhenUnknownKey)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.SetEntityState(InternalEntityEntry entry, EntityState entityState)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.Add(TEntity entity)
+   at MvcApp.Identity.Seeder.SeedLikesAndMessagesAsync(UserDbContext context, ILogger logger) in E:\Apps\MvcApp\MvcApp.Identity\Seeder.cs:line 341
+2026-09-23 12:12:19.221 -04:00 [INF] Background seeding completed.
+2026-09-23 12:12:31.103 -04:00 [INF] HTTP GET / responded 200 in 16099.6764 ms
+2026-09-23 12:13:36.408 -04:00 [INF] Starting background seeding...
+2026-09-23 12:13:36.407 -04:00 [INF] Starting web host...
+2026-09-23 12:13:36.488 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 12:13:36.573 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 12:13:36.793 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 12:13:38.701 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 12:13:39.584 -04:00 [INF] Starting role seeding...
+2026-09-23 12:13:39.609 -04:00 [INF] Role Admin already exists
+2026-09-23 12:13:39.611 -04:00 [INF] Role Moderator already exists
+2026-09-23 12:13:39.612 -04:00 [INF] Role seeding completed.
+2026-09-23 12:13:39.614 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 12:13:39.629 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 12:13:39.675 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 12:13:39.697 -04:00 [INF] Seeding likes and messages...
+2026-09-23 12:13:39.769 -04:00 [INF] HTTP GET / responded 200 in 2981.9349 ms
+2026-09-23 12:13:39.758 -04:00 [ERR] An error occurred while seeding likes and messages.
+System.InvalidOperationException: The instance of entity type 'UserLike' cannot be tracked because another instance with the same key value for {'SourceUserId', 'LikedUserId'} is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting key values.
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.ThrowIdentityConflict(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry, Boolean updateDuplicate)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NullableKeyIdentityMap`1.Add(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTracking(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.OnStateChanging(EntityState newState)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntryBase.SetEntityState(EntityState oldState, EntityState newState, Boolean acceptChanges, Boolean modifyProperties)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityState(EntityState entityState, Boolean acceptChanges, Boolean modifyProperties, Nullable`1 forceStateWhenUnknownKey, Nullable`1 fallbackState)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.PaintAction(EntityEntryGraphNode`1 node)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityEntryGraphIterator.TraverseGraph[TState](EntityEntryGraphNode`1 node, Func`2 handleNode)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.AttachGraph(InternalEntityEntry rootEntry, EntityState targetState, EntityState storeGeneratedWithKeySetTargetState, Boolean forceStateWhenUnknownKey)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.SetEntityState(InternalEntityEntry entry, EntityState entityState)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.Add(TEntity entity)
+   at MvcApp.Identity.Seeder.SeedLikesAndMessagesAsync(UserDbContext context, ILogger logger) in E:\Apps\MvcApp\MvcApp.Identity\Seeder.cs:line 341
+2026-09-23 12:13:39.774 -04:00 [INF] Background seeding completed.
+2026-09-23 12:13:43.037 -04:00 [INF] HTTP GET / responded 200 in 210.6698 ms
+2026-09-23 12:25:36.686 -04:00 [INF] Starting web host...
+2026-09-23 12:25:36.687 -04:00 [INF] Starting background seeding...
+2026-09-23 12:25:41.379 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 12:25:42.603 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 12:25:45.832 -04:00 [INF] Starting role seeding...
+2026-09-23 12:25:45.876 -04:00 [INF] Role Admin already exists
+2026-09-23 12:25:45.881 -04:00 [INF] Role Moderator already exists
+2026-09-23 12:25:45.884 -04:00 [INF] Role seeding completed.
+2026-09-23 12:25:45.888 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 12:25:46.037 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 12:25:46.119 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 12:25:46.193 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 12:25:46.224 -04:00 [INF] Seeding likes and messages...
+2026-09-23 12:25:46.634 -04:00 [INF] Likes and messages seeded successfully.
+2026-09-23 12:25:46.635 -04:00 [INF] Background seeding completed.
+2026-09-23 12:25:47.967 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 12:25:48.855 -04:00 [INF] HTTP GET / responded 200 in 2825.5873 ms
+2026-09-23 13:09:14.887 -04:00 [INF] Starting background seeding...
+2026-09-23 13:09:14.887 -04:00 [INF] Starting web host...
+2026-09-23 13:09:14.969 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 13:09:15.054 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 13:09:15.214 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 13:09:17.217 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 13:09:18.109 -04:00 [INF] Starting role seeding...
+2026-09-23 13:09:18.133 -04:00 [INF] Role Admin already exists
+2026-09-23 13:09:18.135 -04:00 [INF] Role Moderator already exists
+2026-09-23 13:09:18.136 -04:00 [INF] Role seeding completed.
+2026-09-23 13:09:18.138 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 13:09:18.154 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 13:09:18.201 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 13:09:18.208 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-09-23 13:09:18.209 -04:00 [INF] Background seeding completed.
+2026-09-23 13:09:18.303 -04:00 [INF] HTTP GET / responded 200 in 3095.5758 ms
+2026-09-23 13:10:37.031 -04:00 [INF] HTTP GET / responded 200 in 231.9073 ms
+2026-09-23 13:10:37.064 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 13.4456 ms
+2026-09-23 13:10:37.064 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 14.7448 ms
+2026-09-23 13:10:37.064 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 14.7665 ms
+2026-09-23 13:10:37.064 -04:00 [INF] HTTP GET /css/site.css responded 200 in 10.8937 ms
+2026-09-23 13:10:37.064 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 10.8682 ms
+2026-09-23 13:10:37.064 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 12.8453 ms
+2026-09-23 13:10:37.066 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 0.9851 ms
+2026-09-23 13:10:37.065 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 0.9245 ms
+2026-09-23 13:10:37.066 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.5367 ms
+2026-09-23 13:10:37.066 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 0.4253 ms
+2026-09-23 13:10:37.070 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.5446 ms
+2026-09-23 13:10:37.079 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.4370 ms
+2026-09-23 13:10:37.079 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.5028 ms
+2026-09-23 13:10:37.081 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 11.5377 ms
+2026-09-23 13:10:37.152 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 0.9023 ms
+2026-09-23 13:10:37.154 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 3.2486 ms
+2026-09-23 13:10:37.215 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 0.6700 ms
+2026-09-23 13:10:40.293 -04:00 [INF] HTTP GET /Blog responded 200 in 336.0199 ms
+2026-09-23 13:10:40.310 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.6223 ms
+2026-09-23 13:10:40.316 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.7386 ms
+2026-09-23 13:10:42.818 -04:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2026-09-23 13:10:42.819 -04:00 [INF] HTTP GET /Forum responded 302 in 12.0712 ms
+2026-09-23 13:10:42.873 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 13:10:43.040 -04:00 [INF] HTTP GET /Account/Login responded 200 in 216.8277 ms
+2026-09-23 13:10:43.057 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.1065 ms
+2026-09-23 13:10:43.058 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 0.7869 ms
+2026-09-23 13:10:43.059 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 0.4403 ms
+2026-09-23 13:10:43.060 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 2.9013 ms
+2026-09-23 13:10:45.853 -04:00 [INF] HTTP GET /Store responded 200 in 187.5291 ms
+2026-09-23 13:10:45.871 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.3101 ms
+2026-09-23 13:10:45.874 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.0971 ms
+2026-09-23 13:11:40.713 -04:00 [INF] HTTP GET /iptv responded 200 in 52216.1210 ms
+2026-09-23 13:11:40.731 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.1147 ms
+2026-09-23 13:11:40.733 -04:00 [INF] HTTP GET /lib/aos/aos.js responded 200 in 0.7365 ms
+2026-09-23 13:11:40.733 -04:00 [INF] HTTP GET /_content/MvcApp.Module.IPTV/js/effects.min.js responded 200 in 0.4885 ms
+2026-09-23 13:11:40.736 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.2451 ms
+2026-09-23 13:11:40.824 -04:00 [INF] HTTP GET /_content/MvcApp.Module.IPTV/images/picstv-familly/image10.jpg responded 200 in 1.3178 ms
+2026-09-23 13:11:41.841 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 13:11:41.960 -04:00 [INF] HTTP GET /Account/Login responded 200 in 130.5232 ms
+2026-09-23 13:11:41.977 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 2.9750 ms
+2026-09-23 13:11:41.981 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.0723 ms
+2026-09-23 13:11:44.664 -04:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2026-09-23 13:11:44.664 -04:00 [INF] HTTP GET /Admin responded 302 in 5.3574 ms
+2026-09-23 13:11:44.675 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 13:11:44.793 -04:00 [INF] HTTP GET /Account/Login responded 200 in 124.4185 ms
+2026-09-23 13:11:44.809 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.0802 ms
+2026-09-23 13:11:44.815 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.1468 ms
+2026-09-23 13:11:47.689 -04:00 [INF] HTTP GET / responded 200 in 158.6059 ms
+2026-09-23 13:11:47.709 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 2.8590 ms
+2026-09-23 13:11:47.712 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 2.8814 ms
+2026-09-23 19:19:47.207 -04:00 [INF] Starting background seeding...
+2026-09-23 19:19:47.207 -04:00 [INF] Starting web host...
+2026-09-23 19:19:47.793 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 19:19:48.176 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 19:19:48.391 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 19:19:50.916 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 19:19:52.136 -04:00 [INF] HTTP GET / responded 200 in 3750.6982 ms
+2026-09-23 19:19:52.167 -04:00 [INF] Starting role seeding...
+2026-09-23 19:19:52.196 -04:00 [INF] Role Admin already exists
+2026-09-23 19:19:52.198 -04:00 [INF] Role Moderator already exists
+2026-09-23 19:19:52.199 -04:00 [INF] Role seeding completed.
+2026-09-23 19:19:52.201 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 19:19:52.220 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 19:19:52.294 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 19:19:52.322 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-09-23 19:19:52.323 -04:00 [INF] Background seeding completed.
+2026-09-23 19:19:57.955 -04:00 [INF] HTTP GET / responded 200 in 223.4958 ms
+2026-09-23 19:19:58.012 -04:00 [INF] HTTP GET /css/site.css responded 200 in 6.3786 ms
+2026-09-23 19:19:58.020 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 7.1027 ms
+2026-09-23 19:19:58.021 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 45.9114 ms
+2026-09-23 19:19:58.021 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 45.6628 ms
+2026-09-23 19:19:58.021 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 45.4270 ms
+2026-09-23 19:19:58.022 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.7328 ms
+2026-09-23 19:19:58.022 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 48.7779 ms
+2026-09-23 19:19:58.024 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.4948 ms
+2026-09-23 19:19:58.025 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.7139 ms
+2026-09-23 19:19:58.025 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 48.6262 ms
+2026-09-23 19:19:58.031 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.4543 ms
+2026-09-23 19:19:58.091 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 60.3196 ms
+2026-09-23 19:19:58.104 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 79.2708 ms
+2026-09-23 19:19:58.116 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 17.9554 ms
+2026-09-23 19:19:58.180 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 82.8592 ms
+2026-09-23 19:19:58.206 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 10.5053 ms
+2026-09-23 19:20:01.137 -04:00 [INF] HTTP GET /Store responded 200 in 265.5335 ms
+2026-09-23 19:20:04.545 -04:00 [INF] HTTP GET /Home/Test responded 200 in 826.1816 ms
+2026-09-23 19:26:58.747 -04:00 [INF] Starting background seeding...
+2026-09-23 19:26:58.747 -04:00 [INF] Starting web host...
+2026-09-23 19:26:58.829 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 19:26:58.946 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 19:27:02.887 -04:00 [INF] Starting role seeding...
+2026-09-23 19:27:02.928 -04:00 [INF] Role Admin already exists
+2026-09-23 19:27:02.932 -04:00 [INF] Role Moderator already exists
+2026-09-23 19:27:02.933 -04:00 [INF] Role seeding completed.
+2026-09-23 19:27:02.936 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 19:27:03.142 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 19:27:03.214 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 19:27:03.222 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-09-23 19:27:03.223 -04:00 [INF] Background seeding completed.
+2026-09-23 19:28:08.296 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 19:28:08.753 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 19:28:09.490 -04:00 [INF] HTTP GET / responded 200 in 1200.2310 ms
+2026-09-23 19:28:09.529 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 11.8116 ms
+2026-09-23 19:28:09.529 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 12.0046 ms
+2026-09-23 19:28:09.529 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 13.7518 ms
+2026-09-23 19:28:09.529 -04:00 [INF] HTTP GET /css/site.css responded 200 in 11.1203 ms
+2026-09-23 19:28:09.529 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 13.7337 ms
+2026-09-23 19:28:09.529 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 13.7520 ms
+2026-09-23 19:28:09.532 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 0.6335 ms
+2026-09-23 19:28:09.534 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.4017 ms
+2026-09-23 19:28:09.539 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 0.8585 ms
+2026-09-23 19:28:09.541 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.4256 ms
+2026-09-23 19:28:09.544 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 0.6835 ms
+2026-09-23 19:28:09.583 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.9407 ms
+2026-09-23 19:28:09.583 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.9496 ms
+2026-09-23 19:28:09.683 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 1.1634 ms
+2026-09-23 19:28:09.683 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 1.2198 ms
+2026-09-23 19:28:09.711 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 0.8208 ms
+2026-09-23 19:28:55.811 -04:00 [INF] HTTP GET /Blog responded 200 in 364.5178 ms
+2026-09-23 19:29:03.198 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 19:29:03.375 -04:00 [INF] HTTP GET /Account/Login responded 200 in 236.7540 ms
+2026-09-23 19:29:03.456 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 45.8565 ms
+2026-09-23 19:29:03.497 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 86.8798 ms
+2026-09-23 19:29:56.074 -04:00 [INF] HTTP POST /Account/Login responded 200 in 161.7906 ms
+2026-09-23 19:32:02.731 -04:00 [INF] HTTP POST /Account/Login responded 200 in 121.7446 ms
+2026-09-23 19:37:21.925 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 19:37:21.929 -04:00 [INF] User admin logged in.
+2026-09-23 19:37:21.931 -04:00 [INF] HTTP POST /Account/Login responded 302 in 237.7904 ms
+2026-09-23 19:37:22.080 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 19:37:25.240 -04:00 [INF] HTTP POST /Account/Login responded 400 in 6.4009 ms
+2026-09-23 19:37:30.293 -04:00 [INF] HTTP GET / responded 200 in 8354.5988 ms
+2026-09-23 19:37:34.962 -04:00 [INF] HTTP POST /Account/Login responded 400 in 6.8984 ms
+2026-09-23 19:37:43.163 -04:00 [INF] HTTP GET / responded 200 in 124.9287 ms
+2026-09-23 19:37:43.221 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 27.4476 ms
+2026-09-23 19:37:58.117 -04:00 [INF] HTTP GET /Admin responded 200 in 206.7870 ms
+2026-09-23 19:37:58.149 -04:00 [INF] HTTP GET /css/admin.css responded 200 in 0.9454 ms
+2026-09-23 19:37:58.156 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.7288 ms
+2026-09-23 19:37:58.325 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.js responded 200 in 175.3845 ms
+2026-09-23 19:38:11.804 -04:00 [INF] HTTP GET /Admin/SystemSettings responded 200 in 56.2286 ms
+2026-09-23 19:38:11.843 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.8179 ms
+2026-09-23 19:38:31.610 -04:00 [INF] HTTP GET /Admin/Templates responded 200 in 67.7205 ms
+2026-09-23 19:38:31.646 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.0428 ms
+2026-09-23 19:38:35.553 -04:00 [INF] HTTP POST /Admin/Templates/SetActive responded 302 in 79.2356 ms
+2026-09-23 19:38:35.593 -04:00 [INF] HTTP GET /Admin/Templates responded 200 in 32.7938 ms
+2026-09-23 19:38:35.627 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.1953 ms
+2026-09-23 19:38:44.638 -04:00 [INF] HTTP GET / responded 200 in 1512.7849 ms
+2026-09-23 19:38:44.673 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 1.0339 ms
+2026-09-23 19:38:44.679 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.1762 ms
+2026-09-23 19:38:44.685 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 12.8459 ms
+2026-09-23 19:38:44.904 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 10.1894 ms
+2026-09-23 19:39:57.346 -04:00 [INF] HTTP GET /Admin responded 200 in 32.5060 ms
+2026-09-23 19:39:57.386 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.3460 ms
+2026-09-23 19:40:01.706 -04:00 [INF] HTTP GET /Admin/ReportsModeration responded 200 in 94.5073 ms
+2026-09-23 19:40:01.751 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.3240 ms
+2026-09-23 19:40:07.467 -04:00 [INF] HTTP GET /Admin/TemplateNav responded 200 in 108.6897 ms
+2026-09-23 19:40:07.496 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.3915 ms
+2026-09-23 20:09:30.977 -04:00 [INF] Starting web host...
+2026-09-23 20:09:30.977 -04:00 [INF] Starting background seeding...
+2026-09-23 20:09:31.532 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 20:09:31.893 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 20:09:32.341 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 20:09:33.947 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 20:09:34.766 -04:00 [INF] HTTP GET /Account/Login responded 200 in 2430.7684 ms
+2026-09-23 20:09:35.541 -04:00 [INF] Starting role seeding...
+2026-09-23 20:09:35.574 -04:00 [INF] Role Admin already exists
+2026-09-23 20:09:35.577 -04:00 [INF] Role Moderator already exists
+2026-09-23 20:09:35.577 -04:00 [INF] Role seeding completed.
+2026-09-23 20:09:35.580 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 20:09:35.812 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 20:09:35.879 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 20:09:35.899 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-09-23 20:09:35.899 -04:00 [INF] Background seeding completed.
+2026-09-23 20:09:40.889 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 20:09:41.071 -04:00 [INF] HTTP GET /Account/Login responded 200 in 225.8765 ms
+2026-09-23 20:09:41.106 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 14.2869 ms
+2026-09-23 20:09:41.106 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 15.3764 ms
+2026-09-23 20:09:41.106 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 15.6143 ms
+2026-09-23 20:09:41.106 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 11.9159 ms
+2026-09-23 20:09:41.106 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 14.0826 ms
+2026-09-23 20:09:41.106 -04:00 [INF] HTTP GET /css/site.css responded 200 in 11.3750 ms
+2026-09-23 20:09:41.108 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 0.6396 ms
+2026-09-23 20:09:41.108 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.4529 ms
+2026-09-23 20:09:41.108 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 0.5925 ms
+2026-09-23 20:09:41.110 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 0.4307 ms
+2026-09-23 20:09:41.113 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.4282 ms
+2026-09-23 20:09:41.116 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 5.6782 ms
+2026-09-23 20:09:41.118 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 0.4562 ms
+2026-09-23 20:09:41.119 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 0.7157 ms
+2026-09-23 20:09:41.126 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.5828 ms
+2026-09-23 20:09:41.126 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.6263 ms
+2026-09-23 20:09:41.429 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 0.9582 ms
+2026-09-23 20:09:41.429 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 0.9916 ms
+2026-09-23 20:09:41.560 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 0.8133 ms
+2026-09-23 20:09:42.544 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 20:09:42.546 -04:00 [INF] User admin logged in.
+2026-09-23 20:09:42.550 -04:00 [INF] HTTP POST /Account/Login responded 302 in 267.6895 ms
+2026-09-23 20:09:42.973 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 20:09:43.325 -04:00 [INF] HTTP GET / responded 200 in 770.6149 ms
+2026-09-23 20:09:43.339 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 0.7807 ms
+2026-09-23 20:09:43.357 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 18.8395 ms
+2026-09-23 20:09:43.365 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 0.5928 ms
+2026-09-23 20:10:29.708 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 20:10:29.840 -04:00 [INF] HTTP GET /Account/Login responded 200 in 138.5293 ms
+2026-09-23 20:10:29.862 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.5659 ms
+2026-09-23 20:10:31.021 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 20:10:31.022 -04:00 [INF] User admin logged in.
+2026-09-23 20:10:31.023 -04:00 [INF] HTTP POST /Account/Login responded 302 in 103.7846 ms
+2026-09-23 20:10:31.152 -04:00 [INF] HTTP GET / responded 200 in 123.8283 ms
+2026-09-23 20:10:31.171 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 6.2333 ms
+2026-09-23 20:44:09.004 -04:00 [INF] Starting background seeding...
+2026-09-23 20:44:09.003 -04:00 [INF] Starting web host...
+2026-09-23 20:44:09.313 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 20:44:09.483 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 20:44:11.971 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 20:44:12.952 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 20:44:13.571 -04:00 [INF] Starting role seeding...
+2026-09-23 20:44:13.595 -04:00 [INF] Role Admin already exists
+2026-09-23 20:44:13.598 -04:00 [INF] Role Moderator already exists
+2026-09-23 20:44:13.598 -04:00 [INF] Role seeding completed.
+2026-09-23 20:44:13.601 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 20:44:13.618 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 20:44:13.667 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 20:44:13.700 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-09-23 20:44:13.701 -04:00 [INF] Background seeding completed.
+2026-09-23 20:44:13.984 -04:00 [INF] HTTP GET / responded 200 in 2018.5165 ms
+2026-09-23 20:44:24.686 -04:00 [INF] HTTP GET / responded 200 in 217.9904 ms
+2026-09-23 20:44:24.713 -04:00 [INF] HTTP GET /css/site.css responded 200 in 5.5014 ms
+2026-09-23 20:44:24.721 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 6.6103 ms
+2026-09-23 20:44:24.722 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 16.7720 ms
+2026-09-23 20:44:24.722 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 16.5985 ms
+2026-09-23 20:44:24.722 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 16.9689 ms
+2026-09-23 20:44:24.722 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 19.6496 ms
+2026-09-23 20:44:24.723 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 0.5348 ms
+2026-09-23 20:44:24.725 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.4147 ms
+2026-09-23 20:44:24.726 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 18.5596 ms
+2026-09-23 20:44:24.734 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 9.9360 ms
+2026-09-23 20:44:24.735 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 7.3575 ms
+2026-09-23 20:44:24.740 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.4103 ms
+2026-09-23 20:44:24.741 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 7.3687 ms
+2026-09-23 20:44:24.791 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 52.5224 ms
+2026-09-23 20:44:24.805 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 73.8353 ms
+2026-09-23 20:44:24.937 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 10.6719 ms
+2026-09-23 20:44:25.039 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 9.7777 ms
+2026-09-23 20:44:25.119 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 89.3849 ms
+2026-09-23 20:44:25.220 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 2.0570 ms
+2026-09-23 20:44:41.054 -04:00 [INF] HTTP GET /Members responded 404 in 14.1461 ms
+2026-09-23 20:44:45.165 -04:00 [INF] HTTP GET /Members/Mulva responded 404 in 13.1643 ms
+2026-09-23 20:45:09.745 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 20:45:09.923 -04:00 [INF] HTTP GET /Account/Login responded 200 in 237.5892 ms
+2026-09-23 20:45:09.943 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 0.8874 ms
+2026-09-23 20:45:09.944 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 1.1478 ms
+2026-09-23 20:45:09.944 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 1.5319 ms
+2026-09-23 20:45:09.945 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 0.4057 ms
+2026-09-23 20:45:09.947 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 7.1315 ms
+2026-09-23 20:45:09.952 -04:00 [INF] HTTP GET /css/site.css responded 200 in 0.3965 ms
+2026-09-23 20:45:09.953 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 0.4389 ms
+2026-09-23 20:45:09.953 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 0.3863 ms
+2026-09-23 20:45:09.953 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.3688 ms
+2026-09-23 20:45:09.955 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 0.6780 ms
+2026-09-23 20:45:09.955 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 0.5765 ms
+2026-09-23 20:45:09.959 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.4472 ms
+2026-09-23 20:45:09.962 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 1.9425 ms
+2026-09-23 20:45:09.970 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.3676 ms
+2026-09-23 20:45:09.973 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.5537 ms
+2026-09-23 20:45:10.043 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 82.7896 ms
+2026-09-23 20:45:10.251 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 0.8554 ms
+2026-09-23 20:45:10.251 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 1.1093 ms
+2026-09-23 20:45:10.392 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 0.5536 ms
+2026-09-23 20:45:11.278 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 20:45:11.280 -04:00 [INF] User Mulva logged in.
+2026-09-23 20:45:11.285 -04:00 [INF] HTTP POST /Account/Login responded 302 in 204.6960 ms
+2026-09-23 20:45:11.345 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 20:45:11.519 -04:00 [INF] HTTP GET / responded 200 in 229.7031 ms
+2026-09-23 20:45:11.534 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 0.6724 ms
+2026-09-23 20:45:11.551 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 404 in 17.3096 ms
+2026-09-23 20:45:11.560 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 0.5621 ms
+2026-09-23 20:45:11.616 -04:00 [INF] HTTP GET /images/default-user.png responded 200 in 2.1901 ms
+2026-09-23 20:45:14.089 -04:00 [INF] HTTP GET /Members responded 404 in 9.4199 ms
+2026-09-23 20:45:18.662 -04:00 [INF] HTTP GET /Members/George responded 404 in 7.9974 ms
+2026-09-23 20:45:39.012 -04:00 [INF] HTTP GET /Members responded 404 in 4.4290 ms
+2026-09-23 20:45:50.701 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 20:45:50.805 -04:00 [INF] HTTP GET /Account/Login responded 200 in 110.4938 ms
+2026-09-23 20:45:50.825 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 1.6831 ms
+2026-09-23 20:45:50.826 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 0.6838 ms
+2026-09-23 20:45:50.826 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 0.6879 ms
+2026-09-23 20:45:50.826 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 0.6583 ms
+2026-09-23 20:45:50.827 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 0.3124 ms
+2026-09-23 20:45:50.833 -04:00 [INF] HTTP GET /css/site.css responded 200 in 0.3811 ms
+2026-09-23 20:45:50.834 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 0.3320 ms
+2026-09-23 20:45:50.834 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 0.3649 ms
+2026-09-23 20:45:50.834 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.3090 ms
+2026-09-23 20:45:50.835 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 0.5706 ms
+2026-09-23 20:45:50.835 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 0.5119 ms
+2026-09-23 20:45:50.841 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.4243 ms
+2026-09-23 20:45:50.842 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 0.3689 ms
+2026-09-23 20:45:50.842 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 0.3411 ms
+2026-09-23 20:45:50.850 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.3508 ms
+2026-09-23 20:45:50.850 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.3337 ms
+2026-09-23 20:45:51.116 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 0.9261 ms
+2026-09-23 20:45:51.116 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 0.4679 ms
+2026-09-23 20:45:51.254 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 0.6136 ms
+2026-09-23 20:45:52.064 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 20:45:52.064 -04:00 [INF] User Mulva logged in.
+2026-09-23 20:45:52.065 -04:00 [INF] HTTP POST /Account/Login responded 302 in 98.6473 ms
+2026-09-23 20:45:52.183 -04:00 [INF] HTTP GET / responded 200 in 113.9049 ms
+2026-09-23 20:45:52.197 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 0.5753 ms
+2026-09-23 20:45:52.202 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 404 in 5.5198 ms
+2026-09-23 20:45:52.225 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 0.5895 ms
+2026-09-23 20:45:52.268 -04:00 [INF] HTTP GET /images/default-user.png responded 200 in 0.4441 ms
+2026-09-23 20:45:55.153 -04:00 [INF] HTTP GET /Discover responded 200 in 417.7770 ms
+2026-09-23 20:45:55.164 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 2.7838 ms
+2026-09-23 20:45:55.167 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 404 in 5.7073 ms
+2026-09-23 20:45:55.372 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 3.4190 ms
+2026-09-23 20:46:00.644 -04:00 [INF] HTTP GET /Members/George responded 404 in 6.6265 ms
+2026-09-23 21:22:57.965 -04:00 [INF] Starting background seeding...
+2026-09-23 21:22:57.964 -04:00 [INF] Starting web host...
+2026-09-23 21:22:58.050 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 21:22:58.134 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 21:22:58.205 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 21:23:00.321 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 21:23:01.259 -04:00 [INF] Starting role seeding...
+2026-09-23 21:23:01.283 -04:00 [INF] Role Admin already exists
+2026-09-23 21:23:01.285 -04:00 [INF] Role Moderator already exists
+2026-09-23 21:23:01.286 -04:00 [INF] Role seeding completed.
+2026-09-23 21:23:01.288 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 21:23:01.306 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 21:23:01.321 -04:00 [INF] HTTP GET / responded 200 in 3122.5554 ms
+2026-09-23 21:23:01.355 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 21:23:01.362 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-09-23 21:23:01.363 -04:00 [INF] Background seeding completed.
+2026-09-23 21:23:13.774 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 21:23:14.019 -04:00 [INF] HTTP GET /Account/Login responded 200 in 344.2354 ms
+2026-09-23 21:23:14.051 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 14.2752 ms
+2026-09-23 21:23:14.051 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 12.4126 ms
+2026-09-23 21:23:14.051 -04:00 [INF] HTTP GET /css/site.css responded 200 in 10.0240 ms
+2026-09-23 21:23:14.051 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 10.2105 ms
+2026-09-23 21:23:14.051 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 12.7901 ms
+2026-09-23 21:23:14.051 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 12.6381 ms
+2026-09-23 21:23:14.053 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.7942 ms
+2026-09-23 21:23:14.053 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 0.8040 ms
+2026-09-23 21:23:14.053 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 0.4877 ms
+2026-09-23 21:23:14.054 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 0.6299 ms
+2026-09-23 21:23:14.054 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 0.6275 ms
+2026-09-23 21:23:14.055 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.4797 ms
+2026-09-23 21:23:14.061 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 0.4216 ms
+2026-09-23 21:23:14.061 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 0.5648 ms
+2026-09-23 21:23:14.071 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.6538 ms
+2026-09-23 21:23:14.071 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.6298 ms
+2026-09-23 21:23:14.340 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 1.0454 ms
+2026-09-23 21:23:14.340 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 1.1632 ms
+2026-09-23 21:23:14.455 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 0.7354 ms
+2026-09-23 21:23:15.397 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 21:23:15.399 -04:00 [INF] User Mulva logged in.
+2026-09-23 21:23:15.404 -04:00 [INF] HTTP POST /Account/Login responded 302 in 220.1043 ms
+2026-09-23 21:23:15.470 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 21:23:15.677 -04:00 [INF] HTTP GET / responded 200 in 268.1139 ms
+2026-09-23 21:23:15.692 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 0.9523 ms
+2026-09-23 21:23:15.716 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 0.7709 ms
+2026-09-23 21:23:15.721 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 302 in 30.3505 ms
+2026-09-23 21:23:18.741 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 302 in 16.8760 ms
+2026-09-23 21:34:52.835 -04:00 [INF] Starting background seeding...
+2026-09-23 21:34:52.834 -04:00 [INF] Starting web host...
+2026-09-23 21:34:52.913 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 21:34:53.002 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 21:34:53.449 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 21:34:55.254 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 21:34:56.231 -04:00 [INF] Starting role seeding...
+2026-09-23 21:34:56.256 -04:00 [INF] Role Admin already exists
+2026-09-23 21:34:56.258 -04:00 [INF] Role Moderator already exists
+2026-09-23 21:34:56.259 -04:00 [INF] Role seeding completed.
+2026-09-23 21:34:56.261 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 21:34:56.279 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 21:34:56.276 -04:00 [INF] HTTP GET / responded 200 in 2833.5395 ms
+2026-09-23 21:34:56.329 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 21:34:56.336 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-09-23 21:34:56.337 -04:00 [INF] Background seeding completed.
+2026-09-23 21:35:06.492 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 21:35:06.750 -04:00 [INF] HTTP GET /Account/Login responded 200 in 356.9638 ms
+2026-09-23 21:35:06.783 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 13.4846 ms
+2026-09-23 21:35:06.783 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 11.0350 ms
+2026-09-23 21:35:06.783 -04:00 [INF] HTTP GET /css/site.css responded 200 in 10.8827 ms
+2026-09-23 21:35:06.783 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 13.2813 ms
+2026-09-23 21:35:06.783 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 13.0865 ms
+2026-09-23 21:35:06.783 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 14.9881 ms
+2026-09-23 21:35:06.785 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 0.9503 ms
+2026-09-23 21:35:06.785 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 0.8761 ms
+2026-09-23 21:35:06.785 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.4800 ms
+2026-09-23 21:35:06.786 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 0.4442 ms
+2026-09-23 21:35:06.787 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 0.7203 ms
+2026-09-23 21:35:06.788 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.4763 ms
+2026-09-23 21:35:06.788 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 0.4740 ms
+2026-09-23 21:35:06.790 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 0.4876 ms
+2026-09-23 21:35:06.802 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.4424 ms
+2026-09-23 21:35:06.803 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.4612 ms
+2026-09-23 21:35:07.079 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 1.0076 ms
+2026-09-23 21:35:07.079 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 1.1084 ms
+2026-09-23 21:35:07.220 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 0.8004 ms
+2026-09-23 21:35:08.143 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 21:35:08.146 -04:00 [INF] User Kramer logged in.
+2026-09-23 21:35:08.151 -04:00 [INF] HTTP POST /Account/Login responded 302 in 225.8096 ms
+2026-09-23 21:35:08.220 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 21:35:08.445 -04:00 [INF] HTTP GET / responded 200 in 289.0377 ms
+2026-09-23 21:35:08.463 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 0.9359 ms
+2026-09-23 21:35:08.490 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 0.8483 ms
+2026-09-23 21:35:08.492 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 29.6829 ms
+2026-09-23 21:35:11.433 -04:00 [INF] HTTP GET /Photos/Kramer/kramer.jpg responded 200 in 3.2330 ms
+2026-09-23 21:35:12.502 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 16.8569 ms
+2026-09-23 22:26:02.080 -04:00 [INF] Starting web host...
+2026-09-23 22:26:02.081 -04:00 [INF] Starting background seeding...
+2026-09-23 22:26:02.160 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 22:26:02.245 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 22:26:02.384 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 22:26:04.443 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 22:26:05.311 -04:00 [INF] Starting role seeding...
+2026-09-23 22:26:05.336 -04:00 [INF] Role Admin already exists
+2026-09-23 22:26:05.338 -04:00 [INF] Role Moderator already exists
+2026-09-23 22:26:05.338 -04:00 [INF] Role seeding completed.
+2026-09-23 22:26:05.341 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 22:26:05.358 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 22:26:05.407 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 22:26:05.414 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-09-23 22:26:05.415 -04:00 [INF] Background seeding completed.
+2026-09-23 22:26:05.422 -04:00 [INF] HTTP GET / responded 200 in 3044.0749 ms
+2026-09-23 22:26:26.106 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 22:26:26.363 -04:00 [INF] HTTP GET /Account/Login responded 200 in 348.8925 ms
+2026-09-23 22:26:26.389 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 4.2068 ms
+2026-09-23 22:26:26.395 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 2.5827 ms
+2026-09-23 22:26:26.395 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 11.8704 ms
+2026-09-23 22:26:26.395 -04:00 [INF] HTTP GET /css/site.css responded 200 in 8.8048 ms
+2026-09-23 22:26:26.395 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 13.5683 ms
+2026-09-23 22:26:26.395 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 11.7376 ms
+2026-09-23 22:26:26.395 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 11.5256 ms
+2026-09-23 22:26:26.396 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 0.6834 ms
+2026-09-23 22:26:26.398 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.4822 ms
+2026-09-23 22:26:26.402 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.4299 ms
+2026-09-23 22:26:26.402 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 0.7876 ms
+2026-09-23 22:26:26.402 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 0.4527 ms
+2026-09-23 22:26:26.402 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 0.7673 ms
+2026-09-23 22:26:26.408 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 0.5126 ms
+2026-09-23 22:26:26.416 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.4171 ms
+2026-09-23 22:26:26.417 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.4184 ms
+2026-09-23 22:26:26.725 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 1.1167 ms
+2026-09-23 22:26:26.725 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 1.2396 ms
+2026-09-23 22:26:26.858 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 0.7315 ms
+2026-09-23 22:26:27.736 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 22:26:27.738 -04:00 [INF] User Mulva logged in.
+2026-09-23 22:26:27.743 -04:00 [INF] HTTP POST /Account/Login responded 302 in 223.7678 ms
+2026-09-23 22:26:27.812 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 22:26:28.047 -04:00 [INF] HTTP GET / responded 200 in 299.2749 ms
+2026-09-23 22:26:28.074 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 12.1239 ms
+2026-09-23 22:26:28.093 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 0.6845 ms
+2026-09-23 22:26:28.104 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 42.3940 ms
+2026-09-23 22:27:15.110 -04:00 [INF] HTTP GET /Photos/Mulva/women1.jpg responded 200 in 2.0444 ms
+2026-09-23 22:27:16.191 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 14.5556 ms
+2026-09-23 22:27:17.208 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 22:27:17.339 -04:00 [INF] HTTP GET /Account/Login responded 200 in 137.9682 ms
+2026-09-23 22:27:17.366 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 9.3579 ms
+2026-09-23 22:27:18.399 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 22:27:18.400 -04:00 [INF] User Kramer logged in.
+2026-09-23 22:27:18.401 -04:00 [INF] HTTP POST /Account/Login responded 302 in 98.2899 ms
+2026-09-23 22:27:18.529 -04:00 [INF] HTTP GET / responded 200 in 123.3609 ms
+2026-09-23 22:27:18.550 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 7.8912 ms
+2026-09-23 22:27:21.204 -04:00 [INF] HTTP GET /Photos/Kramer/men2.jpg responded 200 in 0.9689 ms
+2026-09-23 22:27:22.203 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 10.8013 ms
+2026-09-23 22:27:23.311 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 22:27:23.419 -04:00 [INF] HTTP GET /Account/Login responded 200 in 113.3556 ms
+2026-09-23 22:27:23.445 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 9.2522 ms
+2026-09-23 22:27:24.521 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 22:27:24.521 -04:00 [INF] User George logged in.
+2026-09-23 22:27:24.522 -04:00 [INF] HTTP POST /Account/Login responded 302 in 101.9766 ms
+2026-09-23 22:27:24.641 -04:00 [INF] HTTP GET / responded 200 in 113.7062 ms
+2026-09-23 22:27:24.663 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 8.4447 ms
+2026-09-23 22:27:27.324 -04:00 [INF] HTTP GET /Photos/George/men3.jpg responded 200 in 0.8810 ms
+2026-09-23 22:27:28.307 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 10.1580 ms
+2026-09-23 22:27:29.438 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 22:27:29.551 -04:00 [INF] HTTP GET /Account/Login responded 200 in 118.7522 ms
+2026-09-23 22:27:29.575 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 8.2748 ms
+2026-09-23 22:27:30.647 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 22:27:30.648 -04:00 [INF] User Elaine logged in.
+2026-09-23 22:27:30.648 -04:00 [INF] HTTP POST /Account/Login responded 302 in 95.2826 ms
+2026-09-23 22:27:30.774 -04:00 [INF] HTTP GET / responded 200 in 121.2958 ms
+2026-09-23 22:27:30.796 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 8.0354 ms
+2026-09-23 22:27:33.422 -04:00 [INF] HTTP GET /Photos/Elaine/women12.jpg responded 200 in 0.7866 ms
+2026-09-23 22:27:34.425 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 9.9247 ms
+2026-09-23 22:27:35.523 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 22:27:35.645 -04:00 [INF] HTTP GET /Account/Login responded 200 in 126.8505 ms
+2026-09-23 22:27:35.670 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 8.4738 ms
+2026-09-23 22:27:36.820 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 22:27:36.821 -04:00 [INF] User Mulva logged in.
+2026-09-23 22:27:36.821 -04:00 [INF] HTTP POST /Account/Login responded 302 in 100.3187 ms
+2026-09-23 22:27:36.973 -04:00 [INF] HTTP GET / responded 200 in 146.3737 ms
+2026-09-23 22:27:36.996 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 7.6815 ms
+2026-09-23 22:27:40.126 -04:00 [INF] HTTP GET /Discover responded 200 in 404.7529 ms
+2026-09-23 22:27:40.144 -04:00 [INF] HTTP GET /images/user.svg responded 404 in 6.3269 ms
+2026-09-23 22:27:40.146 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 8.1491 ms
+2026-09-23 22:27:40.150 -04:00 [INF] HTTP GET /Photos/Susan/women11.jpg responded 200 in 0.3796 ms
+2026-09-23 22:27:40.150 -04:00 [INF] HTTP GET /Photos/Newman/men4.jpg responded 200 in 0.3655 ms
+2026-09-23 22:27:40.152 -04:00 [INF] HTTP GET /Photos/Lippman/men10.jpg responded 200 in 0.7894 ms
+2026-09-23 22:27:40.152 -04:00 [INF] HTTP GET /Photos/Puddy/men9.jpg responded 200 in 0.3581 ms
+2026-09-23 22:27:40.152 -04:00 [INF] HTTP GET /Photos/Frank/men6.jpg responded 200 in 0.6998 ms
+2026-09-23 22:27:40.154 -04:00 [INF] HTTP GET /Photos/Sammy/women15.jpg responded 200 in 0.4373 ms
+2026-09-23 22:27:40.156 -04:00 [INF] HTTP GET /Photos/Nicole/women14.jpg responded 200 in 0.3843 ms
+2026-09-23 22:27:40.157 -04:00 [INF] HTTP GET /Photos/Melody/women19.jpg responded 200 in 0.4159 ms
+2026-09-23 22:27:40.158 -04:00 [INF] HTTP GET /Photos/Whatley/men14.jpg responded 200 in 0.3255 ms
+2026-09-23 22:27:40.158 -04:00 [INF] HTTP GET /Photos/Helen/women13.jpg responded 200 in 0.3230 ms
+2026-09-23 22:27:40.158 -04:00 [INF] HTTP GET /Photos/Morty/men7.jpg responded 200 in 0.3469 ms
+2026-09-23 22:27:40.160 -04:00 [INF] HTTP GET /Photos/Angelina/women18.jpg responded 200 in 0.2865 ms
+2026-09-23 22:27:40.162 -04:00 [INF] HTTP GET /Photos/Deena/women17.jpg responded 200 in 0.4291 ms
+2026-09-23 22:27:40.165 -04:00 [INF] HTTP GET /Photos/Jenny/women16.jpg responded 200 in 0.4165 ms
+2026-09-23 22:27:40.166 -04:00 [INF] HTTP GET /Photos/Jerry/men1.jpg responded 200 in 0.3268 ms
+2026-09-23 22:27:40.167 -04:00 [INF] HTTP GET /Photos/Estelle/women10.jpg responded 200 in 0.4006 ms
+2026-09-23 22:27:40.168 -04:00 [INF] HTTP GET /Photos/Leo/men8.jpg responded 200 in 0.3071 ms
+2026-09-23 22:27:40.234 -04:00 [INF] HTTP GET /images/default-user.png responded 200 in 0.8960 ms
+2026-09-23 23:12:48.788 -04:00 [INF] Starting background seeding...
+2026-09-23 23:12:48.787 -04:00 [INF] Starting web host...
+2026-09-23 23:12:48.872 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-09-23 23:12:49.406 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-09-23 23:12:54.834 -04:00 [INF] Starting role seeding...
+2026-09-23 23:12:54.875 -04:00 [INF] Role Admin already exists
+2026-09-23 23:12:54.877 -04:00 [INF] Role Moderator already exists
+2026-09-23 23:12:54.877 -04:00 [INF] Role seeding completed.
+2026-09-23 23:12:54.880 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-09-23 23:12:55.100 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-09-23 23:12:55.171 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-09-23 23:12:55.178 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-09-23 23:12:55.178 -04:00 [INF] Background seeding completed.
+2026-09-23 23:13:54.798 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 23:13:55.300 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 23:13:56.002 -04:00 [INF] HTTP GET / responded 200 in 1209.1362 ms
+2026-09-23 23:15:13.475 -04:00 [INF] HTTP GET / responded 200 in 120.7960 ms
+2026-09-23 23:15:13.826 -04:00 [INF] HTTP GET /iptv responded 200 in 265.5597 ms
+2026-09-23 23:15:13.877 -04:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2026-09-23 23:15:13.877 -04:00 [INF] HTTP GET /Events responded 302 in 10.0037 ms
+2026-09-23 23:15:13.901 -04:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2026-09-23 23:15:13.901 -04:00 [INF] HTTP GET /Gamification responded 302 in 2.2515 ms
+2026-09-23 23:15:30.665 -04:00 [INF] HTTP GET /Home/Contact responded 200 in 37362.0560 ms
+2026-09-23 23:15:42.902 -04:00 [INF] HTTP GET /Home/Contact responded 200 in 166.9268 ms
+2026-09-23 23:15:44.523 -04:00 [INF] HTTP GET /Home/Faq responded 200 in 1495.4941 ms
+2026-09-23 23:16:06.362 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-09-23 23:16:06.497 -04:00 [INF] HTTP GET /Account/Login responded 200 in 197.7763 ms
+2026-09-23 23:16:06.529 -04:00 [INF] HTTP GET /lib/font-awesome/css/font-awesome.min.css responded 200 in 12.3389 ms
+2026-09-23 23:16:06.529 -04:00 [INF] HTTP GET /lib/bootstrap/css/bootstrap.min.css responded 200 in 14.1232 ms
+2026-09-23 23:16:06.529 -04:00 [INF] HTTP GET /lib/boxicons/css/boxicons.min.css responded 200 in 11.7525 ms
+2026-09-23 23:16:06.529 -04:00 [INF] HTTP GET /css/site.css responded 200 in 9.5663 ms
+2026-09-23 23:16:06.529 -04:00 [INF] HTTP GET /css/styles2.min.css responded 200 in 9.9958 ms
+2026-09-23 23:16:06.529 -04:00 [INF] HTTP GET /lib/bootstrap-icons/font/bootstrap-icons.min.css responded 200 in 11.9852 ms
+2026-09-23 23:16:06.530 -04:00 [INF] HTTP GET /MvcApp.Web.styles.css responded 200 in 0.5999 ms
+2026-09-23 23:16:06.530 -04:00 [INF] HTTP GET /css/templates/luxury.css responded 200 in 0.4328 ms
+2026-09-23 23:16:06.531 -04:00 [INF] HTTP GET /css/layout-override.css responded 200 in 0.4458 ms
+2026-09-23 23:16:06.534 -04:00 [INF] HTTP GET /lib/jquery/jquery.min.js responded 200 in 0.7207 ms
+2026-09-23 23:16:06.534 -04:00 [INF] HTTP GET /lib/bootstrap/js/bootstrap.bundle.min.js responded 200 in 0.7538 ms
+2026-09-23 23:16:06.534 -04:00 [INF] HTTP GET /js/site.js responded 200 in 0.5633 ms
+2026-09-23 23:16:06.538 -04:00 [INF] HTTP GET /lib/jquery-validation/jquery.validate.min.js responded 200 in 0.5325 ms
+2026-09-23 23:16:06.538 -04:00 [INF] HTTP GET /lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js responded 200 in 0.3722 ms
+2026-09-23 23:16:06.549 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Chat/MvcApp.Module.Chat.fwed7x91nk.bundle.scp.css responded 200 in 0.3826 ms
+2026-09-23 23:16:06.549 -04:00 [INF] HTTP GET /_content/MvcApp.Module.Forum/MvcApp.Module.Forum.zscjpwphtj.bundle.scp.css responded 200 in 0.4199 ms
+2026-09-23 23:16:06.816 -04:00 [INF] HTTP GET /lib/font-awesome/fonts/fontawesome-webfont.woff2 responded 200 in 0.9386 ms
+2026-09-23 23:16:06.816 -04:00 [INF] HTTP GET /lib/boxicons/fonts/boxicons.woff2 responded 200 in 1.1527 ms
+2026-09-23 23:16:06.957 -04:00 [INF] HTTP GET /favicon.ico responded 200 in 0.7799 ms
+2026-09-23 23:16:07.848 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-09-23 23:16:07.850 -04:00 [INF] User Mulva logged in.
+2026-09-23 23:16:07.854 -04:00 [INF] HTTP POST /Account/Login responded 302 in 199.4922 ms
+2026-09-23 23:16:07.908 -04:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 23:16:08.067 -04:00 [INF] HTTP GET / responded 200 in 209.2586 ms
+2026-09-23 23:16:08.083 -04:00 [INF] HTTP GET /images/xxxciety/couple-sunset.jpg responded 200 in 1.0458 ms
+2026-09-23 23:16:08.106 -04:00 [INF] HTTP GET /images/xxxciety/couple-dark-x.jpg responded 200 in 0.6870 ms
+2026-09-23 23:16:08.109 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 27.7997 ms
+2026-09-23 23:16:10.597 -04:00 [INF] HTTP GET /Events responded 200 in 291.8450 ms
+2026-09-23 23:16:10.616 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 9.0643 ms
+2026-09-23 23:16:11.519 -04:00 [INF] HTTP GET /Gamification responded 200 in 230.3596 ms
+2026-09-23 23:16:11.537 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 7.6026 ms

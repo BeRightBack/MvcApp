@@ -1,0 +1,27 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MvcApp.Core.UserDetails> SignInManager
+@inject UserManager<MvcApp.Core.UserDetails> UserManager
+@{
+    ViewData["Title"] = "Home";
+    var isAuthenticated = SignInManager.IsSignedIn(User);
+}
+<section class="py-5" style="max-width:720px; margin:0 auto;">
+    <div class="py-5">
+        <h1 class="fw-bold mb-3" style="font-size:3rem; letter-spacing:-1px;">Less is More</h1>
+        <p class="lead text-muted mb-4" style="font-size:1.25rem;">A clean space for focused work and meaningful connections. No distractions, just what matters.</p>
+        @if (!isAuthenticated)
+        {
+            <a asp-page="/Account/Register" class="btn btn-primary">Get Started</a>
+        }
+        else
+        {
+            <a asp-controller="Discover" asp-action="Index" class="btn btn-primary">Explore</a>
+        }
+    </div>
+    <hr />
+    <div class="row g-4 py-4">
+        <div class="col-md-4"><h5 class="fw-bold">Write</h5><p class="text-muted small">Share your thoughts with clarity.</p></div>
+        <div class="col-md-4"><h5 class="fw-bold">Connect</h5><p class="text-muted small">Find people who resonate.</p></div>
+        <div class="col-md-4"><h5 class="fw-bold">Grow</h5><p class="text-muted small">Build something that lasts.</p></div>
+    </div>
+</section>

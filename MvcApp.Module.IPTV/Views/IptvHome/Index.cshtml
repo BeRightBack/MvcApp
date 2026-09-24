@@ -1,0 +1,189 @@
+@model PlansViewModel
+@using Microsoft.AspNetCore.Http
+@using System.Globalization
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = @Localizer["Home - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Welcome to Quebec Iptv, your source for high-quality IPTV services."];
+    ViewData["Keywords"] = "IPTV, Quebec, Streaming, Live Channels, Online TV, VOD, Canada TV";
+
+    // Fallback to "USD" if no selection found
+    var selectedCurrency = HttpContextAccessor.HttpContext?.Session.GetString("SelectedCurrency") ?? "USD";
+
+    // Example dummy conversion: you could integrate a real service
+    var rates = new Dictionary<string, decimal> {
+        { "USD", 1.0m },
+        { "CAD", 1.33m },
+        { "EUR", 0.95m },
+        { "GBP", 0.85m },
+    };
+    var selectedRate = rates.TryGetValue(selectedCurrency, out var rate)
+        ? rate
+        : 1.0m;
+
+    // Choose an appropriate CultureInfo for display:
+    var displayCulture = selectedCurrency switch
+    {
+        "EUR" => new System.Globalization.CultureInfo("fr-FR"),
+        "CAD" => new System.Globalization.CultureInfo("en-CA"),
+        "GBP" => new System.Globalization.CultureInfo("en-GB"),
+        _ => new System.Globalization.CultureInfo("en-US")
+    };
+    //var usCulture = new CultureInfo("en-US");
+}
+
+@if (ViewData["StatusMessage"] != null)
+{
+    <div class="alert alert-info">@ViewData["StatusMessage"]</div>
+}
+
+<!-- Header -->
+<div class="container">
+    <header class="header">
+        <div class="header-content">
+            <h1 class="header-title"><bold>@Localizer["Quebec IPTV Entertainment"]</bold></h1>
+            <p class="header-subtitle"><bold>@Localizer["Enjoy your favorite TV shows and movies in the comfort of your own home."]</bold></p>
+            <p class="header-sub-subtitle"><bold>@Localizer["Enjoy Over 6500+ Live Channels and a Big Selection of Movies and TV Shows on Your Devices"]</bold></p>
+            <form method="get" asp-controller="IptvStore" asp-action="Index">
+                <input type="hidden" name="buttonType" value="buyNow" />
+                <button type="submit" class="btn btn-primary buy-now">
+                    @Localizer["Buy Now"]
+                </button>
+            </form>
+        </div>
+        <div class="header-background"></div>
+    </header>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>@Localizer["Trusted by thousands of satisfied clients across the world"]</h2>
+                <p>@Localizer["6500 + Channels, Enjoy your favorite content anywhere: TV, PC, Mobile, or Tablet."]</p>
+                <p></p>
+                <form method="get" asp-controller="IptvStore" asp-action="Index">
+                    <input type="hidden" name="buttonType" value="buySubscriptionNow" />
+                    <button type="submit" class="btn btn-primary buy-subscription-now">
+                        @Localizer["Buy Subscription Now"]
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr />
+</main>
+<!-- Plans Section -->
+<section class="plans">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>@Localizer["Plans"]</h2>
+                <p>@Localizer["Choose the plan that best suits your needs."]</p>
+            </div>
+        </div>
+        <div class="row">
+            @if (Model.SubscriptionPlans != null && Model.SubscriptionPlans.Any())
+            {
+                @foreach (var plan in Model.SubscriptionPlans)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header text-center">
+                                <!-- Corrected line -->
+                                <h3 class="card-title">@plan.Name</h3>
+                                <p>@Localizer[@plan.DescriptionShort!]</p>
+                                <p>@Localizer[@plan.Description!]</p>
+                            </div>
+                            @if (plan.SubscriptionDetails != null && plan.SubscriptionDetails.Any())
+                            {
+                                <ul class="list-group list-group-flush">
+                                    @foreach (var detail in plan.SubscriptionDetails)
+                                    {
+                                        var _duration = "";
+                                        var _unit = "";
+                                        @if (detail.DurationInHours.HasValue && detail.DurationInHours.Value > 0)
+                                        {
+                                            _duration = @detail.DurationInHours.ToString();
+                                            _unit = "Hours";
+                                        }
+                                        else
+                                        {
+                                            _duration = @detail.DurationInMonths.ToString();
+                                            _unit = "Month(s)";
+                                        }
+                                        decimal originalUsdPrice = detail.Price; // Assume US base
+                                        decimal convertedPrice = originalUsdPrice * selectedRate;
+                                        <li class="list-group-item">
+                                            <p><strong>@Localizer[@detail.Description!]</strong></p>
+                                            @*<p>@Localizer["Price:"] @detail.Price.ToString("C", usCulture) USD</p>*@
+                                            <p>@Localizer["Price:"] @convertedPrice.ToString("C", displayCulture) @selectedCurrency</p>
+                                            <p>@Localizer["Subscription Duration:"] @_duration @Localizer[_unit]</p>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <div class="card-body">
+                                    <p>@Localizer["No details available."]</p>
+                                </div>
+                            }
+                            <div class="card-footer text-center">
+                                <form method="get" asp-controller="IptvStore" asp-action="Index">
+                                    <input type="hidden" name="buttonType" value="buyPlanNow" />
+                                    <input type="hidden" name="planId" value="@plan.Id" />
+                                    <button type="submit" class="btn btn-primary">
+                                        @Localizer["Buy Plan Now"]
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <p>@Localizer["No plans available."]</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+@if (ViewBag.ShowLoginModal ?? false)
+{
+    <!-- Modal -->
+    <div class="modal fade show" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-modal="true" role="dialog" style="display: block;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+                <div class="modal-header bg-primary text-white">
+                    <h3 class="modal-title text-center" id="loginModalLabel">@Localizer["Join Our Community!"]</h3>
+
+                </div>
+                <div class="modal-body">
+                    <h4 class="text-center">@Html.Raw(Localizer["<strong>Register and log in</strong> to access exclusive content, manage your subscriptions, and enjoy a personalized experience."])</h4>
+                    <p class="text-center">@Localizer["By creating an account, you'll be able to review your information and subscription statuses easily."]</p>
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("Index", "IptvStore")" class="btn btn-primary btn-lg">@Localizer["Proceed to Login"]</a>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <a href="@Url.Action("Index", "IptvHome")" class="btn btn-secondary">@Localizer["Cancel"]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+
+}
+
+@section Scripts {
+    <script src="~/lib/aos/aos.js"></script>
+    <script>
+        if (window.AOS === undefined) { window.AOS = { init: function () { } }; }
+    </script>
+    <script src="~/_content/MvcApp.Module.IPTV/js/effects.min.js"></script>
+}

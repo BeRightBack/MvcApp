@@ -1,0 +1,69 @@
+@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Products";
+    ViewBag.CurrentPage = "Store";
+}
+
+<h1>Products</h1>
+
+<div class="mb-3">
+    <a asp-action="CreateProduct" class="btn btn-primary"><i class="fa fa-plus"></i> Create Product</a>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa fa-dashboard"></i> Dashboard</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Active</th>
+                <th>Featured</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@(product.ImageUrl ?? "/images/no-image.png")" alt="@product.Name" style="width:50px;height:50px;object-fit:cover;" class="rounded">
+                    </td>
+                    <td>@product.Name</td>
+                    <td>@(product.Category?.Name ?? "-")</td>
+                    <td>$@product.Price.ToString("F2")</td>
+                    <td>
+                        <span class="badge @(product.StockQuantity <= 5 ? "bg-danger" : "bg-success")">@product.StockQuantity</span>
+                    </td>
+                    <td>@if (product.IsActive) { <i class="fa fa-check text-success"></i> } else { <i class="fa fa-times text-danger"></i> }</td>
+                    <td>@if (product.IsFeatured) { <i class="fa fa-star text-warning"></i> }</td>
+                    <td>
+                        <a asp-action="EditProduct" asp-route-id="@product.Id" class="btn btn-sm btn-outline-primary"><i class="fa fa-edit"></i></a>
+                        <form asp-action="DeleteProduct" method="post" class="d-inline" onsubmit="return confirm('Delete this product?')">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@product.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (ViewBag.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                    <a asp-action="Products" asp-route-page="@i" class="page-link">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

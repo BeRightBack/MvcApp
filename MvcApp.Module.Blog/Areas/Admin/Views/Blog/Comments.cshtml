@@ -1,0 +1,77 @@
+@model IEnumerable<BlogComment>
+@{
+    ViewData["Title"] = "Blog Comments";
+    var postTitles = ViewBag.PostTitles as Dictionary<int, string> ?? [];
+}
+
+<h1><i class="fa fa-comments"></i> Blog Comments</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Comment</th>
+                    <th>Post</th>
+                    <th>Author</th>
+                    <th>Date</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var comment in Model)
+                {
+                    <tr class="@(!comment.IsApproved ? "table-warning" : "")">
+                        <td style="max-width:300px">
+                            <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@comment.Content</div>
+                        </td>
+                        <td>
+                            @if (postTitles.TryGetValue(comment.PostId, out var title))
+                            {
+                                <small>@title</small>
+                            }
+                        </td>
+                        <td>@(comment.CreatedByUsername ?? comment.GuestName ?? "Anonymous")</td>
+                        <td><small>@comment.CreatedAt.ToString("MMM dd, yyyy HH:mm")</small></td>
+                        <td class="text-center">
+                            @if (comment.IsApproved)
+                            {
+                                <span class="badge bg-success">Approved</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">Pending</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (!comment.IsApproved)
+                            {
+                                <form asp-action="ApproveComment" method="post" style="display:inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@comment.Id" />
+                                    <button type="submit" class="btn btn-sm btn-success" title="Approve"><i class="fa fa-check"></i></button>
+                                </form>
+                            }
+                            <form asp-action="DeleteComment" method="post" style="display:inline"
+                                  onsubmit="return confirm('Delete this comment?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@comment.Id" />
+                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="6" class="text-center text-muted py-4">No comments.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+@using MvcApp.Core.Models
+@inject MvcApp.Core.Abstractions.IModuleManager ModuleManager
+@model IEnumerable<MessageModel>
+@{
+    ViewData["Title"] = $"Chat with {ViewBag.RecipientUsername}";
+    var currentUserId = ViewBag.CurrentUserId as string;
+    var recipientId = ViewBag.RecipientId as string;
+    var recipientUsername = ViewBag.RecipientUsername as string;
+    var currentUsername = ViewBag.CurrentUsername as string;
+    var videoEnabled = await ModuleManager.IsModuleEnabledAsync("Video");
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex align-items-center gap-3">
+            <a asp-action="Index" class="btn btn-sm btn-outline-secondary">&larr; Back</a>
+            <img src="@Url.Action("GetProfilePicture", "Account", new { userId = recipientId })"
+                 onerror="this.onerror=null;this.src='/images/default-user.png';"
+                 alt="" width="32" height="32"
+                 class="rounded-circle border" style="object-fit:cover">
+            <h5 class="mb-0">@recipientUsername</h5>
+            @if (videoEnabled)
+            {
+                <button type="button" id="btnVideoCall" class="btn btn-sm btn-danger ms-auto">
+                    <i class="fa fa-video-camera"></i> Video Call
+                </button>
+            }
+        </div>
+
+        <div class="card-body" id="messageList" style="height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:0.5rem">
+            @foreach (var msg in Model)
+            {
+                var isMine = msg.SenderId == currentUserId;
+                <div class="d-flex @(isMine ? "justify-content-end" : "justify-content-start")">
+                    <div class="p-2 rounded-3 @(isMine ? "bg-primary text-white" : "bg-light")"
+                         style="max-width:70%;word-wrap:break-word">
+                        <small class="d-block @(isMine ? "text-white-50" : "text-muted")" style="font-size:0.7rem">
+                            @msg.MessageSent.ToString("MMM dd HH:mm")
+                        </small>
+                        @msg.Content
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="card-footer">
+            <form id="messageForm" class="d-flex gap-2" autocomplete="off">
+                <input type="hidden" id="recipientId" value="@recipientId" />
+                <input type="text" id="messageInput" class="form-control" placeholder="Type a message..." required />
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+<script>
+    (function () {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chathub")
+            .withAutomaticReconnect()
+            .build();
+
+        const messageList = document.getElementById('messageList');
+        const messageInput = document.getElementById('messageInput');
+        const recipientId = document.getElementById('recipientId').value;
+        const currentUserId = '@currentUserId';
+        const currentUsername = '@currentUsername';
+
+        connection.on('ReceiveMessage', function (senderId, senderUsername, content, timestamp) {
+            const isMine = senderId === currentUserId;
+            const date = new Date(timestamp);
+            const timeStr = date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' }) + ' ' +
+                date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+            const div = document.createElement('div');
+            div.className = 'd-flex ' + (isMine ? 'justify-content-end' : 'justify-content-start');
+            div.innerHTML = '<div class="p-2 rounded-3 ' + (isMine ? 'bg-primary text-white' : 'bg-light') +
+                '" style="max-width:70%;word-wrap:break-word">' +
+                '<small class="d-block ' + (isMine ? 'text-white-50' : 'text-muted') + '" style="font-size:0.7rem">' + timeStr + '</small>' +
+                content + '</div>';
+            messageList.appendChild(div);
+            messageList.scrollTop = messageList.scrollHeight;
+        });
+
+        document.getElementById('messageForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const content = messageInput.value.trim();
+            if (!content) return;
+            connection.invoke('SendPrivateMessage', recipientId, content).catch(function (err) {
+                console.error(err);
+            });
+            messageInput.value = '';
+        });
+
+        connection.start().then(function () {
+            messageList.scrollTop = messageList.scrollHeight;
+        }).catch(function (err) {
+            console.error(err);
+        });
+    })();
+</script>
+
+@if (videoEnabled)
+{
+    <link rel="stylesheet" href="~/_content/MvcApp.Module.Video/css/video.css" />
+    <script src="~/_content/MvcApp.Module.Video/js/video-call.js"></script>
+    <script>
+        window.VideoCall.initialize({
+            recipientId: '@recipientId',
+            recipientUsername: '@recipientUsername',
+            currentUserId: '@currentUserId',
+            currentUsername: '@currentUsername',
+            hubUrl: '/videohub',
+            connectOnLoad: true
+        });
+        document.getElementById('btnVideoCall').addEventListener('click', function () {
+            window.VideoCall.startCall();
+        });
+    </script>
+}

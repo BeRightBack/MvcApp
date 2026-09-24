@@ -1,0 +1,364 @@
+@model MvcApp.Web.Areas.Admin.Models.TemplateNavViewModel
+@{
+    ViewData["Title"] = $"Navigation — {Model.TemplateDisplayName}";
+}
+
+<div class="page-header d-flex flex-wrap align-items-center justify-content-between gap-3">
+    <div>
+        <h1>@Model.TemplateDisplayName — Navigation</h1>
+        <p class="text-muted mb-0">Choose which modules and pages appear in this template's navbar and footer. The two lists are independent. Items whose module is disabled are hidden automatically.</p>
+    </div>
+    <form method="get" asp-action="Index" class="d-inline">
+        <select name="template" class="form-select form-select-sm" onchange="this.form.submit()">
+            @foreach (var t in Model.Templates)
+            {
+                <option value="@t.Name" selected="@(string.Equals(t.Name, Model.Template, StringComparison.OrdinalIgnoreCase))">@t.DisplayName</option>
+            }
+        </select>
+    </form>
+</div>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="alert alert-success py-2">@success</div>
+}
+
+<form method="post" asp-action="Save">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="template" value="@Model.Template" />
+
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <div class="content-card">
+                <div class="card-body">
+                    <h5 class="card-title">Navbar</h5>
+                    <p class="text-muted small mb-3">Links shown in the top navigation bar.</p>
+                    @foreach (var group in Model.NavbarItems.GroupBy(i => i.Group))
+                    {
+                        <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@group.Key</h6>
+                        @foreach (var item in group)
+                        {
+                            if (item.IsAdditional)
+                            {
+                                <div class="d-flex align-items-center gap-2 py-1">
+                                    <input type="hidden" name="navbarCustom.Index" value="@item.Index" />
+                                    <input class="form-check-input mt-0" type="checkbox" name="navbarCustom.Keep" value="@item.Index" checked />
+                                    <span>@item.Label</span>
+                                    <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
+                                    <span class="badge bg-warning text-dark">Custom</span>
+                                    <input type="hidden" name="navbarCustom.Label" value="@item.Label" />
+                                    <input type="hidden" name="navbarCustom.Area" value="@item.Area" />
+                                    <input type="hidden" name="navbarCustom.Controller" value="@item.Controller" />
+                                    <input type="hidden" name="navbarCustom.Action" value="@item.Action" />
+                                    <input type="hidden" name="navbarCustom.Module" value="@item.Module" />
+                                    <input type="hidden" name="navbarCustom.RequiresAuth" value="@(item.RequiresAuth ? "true" : "false")" />
+                                    <input type="hidden" name="navbarCustom.RequiresAdmin" value="@(item.RequiresAdmin ? "true" : "false")" />
+                                    <input type="hidden" name="navbarCustom.RequiresModerator" value="@(item.RequiresModerator ? "true" : "false")" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center gap-2 py-1">
+                                    <input class="form-check-input mt-0" type="checkbox" name="navbar.selected" value="@item.Key" checked="@(item.IsChecked)" />
+                                    <span>@item.Label</span>
+                                    @if (item.Slug != null)
+                                    {
+                                        <span class="text-muted small">/pages/@item.Slug</span>
+                                    }
+                                    @if (item.Module != null)
+                                    {
+                                        if (item.ModuleEnabled == true)
+                                        {
+                                            <span class="badge bg-success">@item.Module</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.Module (disabled)</span>
+                                        }
+                                    }
+                                    @if (item.RequiresAdmin)
+                                    {
+                                        <span class="badge bg-warning text-dark">Admin</span>
+                                    }
+                                    @if (item.RequiresModerator)
+                                    {
+                                        <span class="badge bg-info">Moderator</span>
+                                    }
+                                    @if (item.RequiresAuth)
+                                    {
+                                        <span class="badge bg-info text-dark">Members</span>
+                                    }
+                                </div>
+                            }
+                        }
+                    }
+
+                    <h6 class="text-uppercase mt-4 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">Add custom navbar link</h6>
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <input type="text" name="navbarNewLabel" class="form-control form-control-sm" placeholder="Label" />
+                        </div>
+                        <div class="col-12">
+                            <input type="text" name="navbarNewController" class="form-control form-control-sm" placeholder="Controller (e.g. Home)" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="navbarNewAction" class="form-control form-control-sm" placeholder="Action (e.g. Faq)" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="navbarNewArea" class="form-control form-control-sm" placeholder="Area (optional)" />
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="navbarNewRequiresAdmin" id="navbarNewRequiresAdmin" value="true" />
+                                <label class="form-check-label small" for="navbarNewRequiresAdmin">Admin only</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="content-card">
+                <div class="card-body">
+                    <h5 class="card-title">Footer</h5>
+                    <p class="text-muted small mb-3">Links shown in the site footer, below the social icons.</p>
+                    @foreach (var group in Model.FooterItems.GroupBy(i => i.Group))
+                    {
+                        <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@group.Key</h6>
+                        @foreach (var item in group)
+                        {
+                            if (item.IsAdditional)
+                            {
+                                <div class="d-flex align-items-center gap-2 py-1">
+                                    <input type="hidden" name="footerCustom.Index" value="@item.Index" />
+                                    <input class="form-check-input mt-0" type="checkbox" name="footerCustom.Keep" value="@item.Index" checked />
+                                    <span>@item.Label</span>
+                                    <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
+                                    <span class="badge bg-warning text-dark">Custom</span>
+                                    <input type="hidden" name="footerCustom.Label" value="@item.Label" />
+                                    <input type="hidden" name="footerCustom.Area" value="@item.Area" />
+                                    <input type="hidden" name="footerCustom.Controller" value="@item.Controller" />
+                                    <input type="hidden" name="footerCustom.Action" value="@item.Action" />
+                                    <input type="hidden" name="footerCustom.Module" value="@item.Module" />
+                                    <input type="hidden" name="footerCustom.RequiresAuth" value="@(item.RequiresAuth ? "true" : "false")" />
+                                    <input type="hidden" name="footerCustom.RequiresAdmin" value="@(item.RequiresAdmin ? "true" : "false")" />
+                                    <input type="hidden" name="footerCustom.RequiresModerator" value="@(item.RequiresModerator ? "true" : "false")" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center gap-2 py-1">
+                                    <input class="form-check-input mt-0" type="checkbox" name="footer.selected" value="@item.Key" checked="@(item.IsChecked)" />
+                                    <span>@item.Label</span>
+                                    @if (item.Slug != null)
+                                    {
+                                        <span class="text-muted small">/pages/@item.Slug</span>
+                                    }
+                                    @if (item.Module != null)
+                                    {
+                                        if (item.ModuleEnabled == true)
+                                        {
+                                            <span class="badge bg-success">@item.Module</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.Module (disabled)</span>
+                                        }
+                                    }
+                                    @if (item.RequiresAdmin)
+                                    {
+                                        <span class="badge bg-warning text-dark">Admin</span>
+                                    }
+                                    @if (item.RequiresModerator)
+                                    {
+                                        <span class="badge bg-info">Moderator</span>
+                                    }
+                                    @if (item.RequiresAuth)
+                                    {
+                                        <span class="badge bg-info text-dark">Members</span>
+                                    }
+                                </div>
+                            }
+                        }
+                    }
+
+                    <h6 class="text-uppercase mt-4 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">Add custom footer link</h6>
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <input type="text" name="footerNewLabel" class="form-control form-control-sm" placeholder="Label" />
+                        </div>
+                        <div class="col-12">
+                            <input type="text" name="footerNewController" class="form-control form-control-sm" placeholder="Controller (e.g. Home)" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="footerNewAction" class="form-control form-control-sm" placeholder="Action (e.g. Faq)" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="footerNewArea" class="form-control form-control-sm" placeholder="Area (optional)" />
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="footerNewRequiresAdmin" id="footerNewRequiresAdmin" value="true" />
+                                <label class="form-check-label small" for="footerNewRequiresAdmin">Admin only</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-lg-6">
+            <div class="content-card">
+                <div class="card-body">
+                    <h5 class="card-title">Social Dropdown</h5>
+                    <p class="text-muted small mb-2">Links in the heart icon dropdown. Set the icon class (e.g. <code>bx bx-heart</code>, <code>bx bx-compass</code>, <code>bx bx-grid</code>).</p>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Dropdown icon</label>
+                        <input type="text" name="socialIcon" class="form-control form-control-sm" value="@Model.SocialDropdownIcon" placeholder="bx bx-heart" />
+                    </div>
+                    @foreach (var group in Model.SocialDropdownItems.GroupBy(i => i.Group))
+                    {
+                        <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@group.Key</h6>
+                        @foreach (var item in group)
+                        {
+                            if (item.IsAdditional)
+                            {
+                                <div class="d-flex align-items-center gap-2 py-1">
+                                    <input type="hidden" name="socialCustom.Index" value="@item.Index" />
+                                    <input class="form-check-input mt-0" type="checkbox" name="socialCustom.Keep" value="@item.Index" checked />
+                                    <span>@item.Label</span>
+                                    <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
+                                    <span class="badge bg-warning text-dark">Custom</span>
+                                    <input type="hidden" name="socialCustom.Label" value="@item.Label" />
+                                    <input type="hidden" name="socialCustom.Area" value="@item.Area" />
+                                    <input type="hidden" name="socialCustom.Controller" value="@item.Controller" />
+                                    <input type="hidden" name="socialCustom.Action" value="@item.Action" />
+                                    <input type="hidden" name="socialCustom.Module" value="@item.Module" />
+                                    <input type="hidden" name="socialCustom.RequiresAuth" value="@(item.RequiresAuth ? "true" : "false")" />
+                                    <input type="hidden" name="socialCustom.RequiresAdmin" value="@(item.RequiresAdmin ? "true" : "false")" />
+                                    <input type="hidden" name="socialCustom.RequiresModerator" value="@(item.RequiresModerator ? "true" : "false")" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center gap-2 py-1">
+                                    <input class="form-check-input mt-0" type="checkbox" name="social.selected" value="@item.Key" checked="@(item.IsChecked)" />
+                                    <span>@item.Label</span>
+                                    @if (item.Module != null)
+                                    {
+                                        if (item.ModuleEnabled == true)
+                                        {
+                                            <span class="badge bg-success">@item.Module</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.Module (disabled)</span>
+                                        }
+                                    }
+                                    @if (item.RequiresAuth)
+                                    {
+                                        <span class="badge bg-info text-dark">Members</span>
+                                    }
+                                </div>
+                            }
+                        }
+                    }
+                    <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">Add custom link</h6>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input type="text" name="socialNewLabel" class="form-control form-control-sm" placeholder="Label" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="socialNewController" class="form-control form-control-sm" placeholder="Controller" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="socialNewAction" class="form-control form-control-sm" placeholder="Action" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="socialNewArea" class="form-control form-control-sm" placeholder="Area (optional)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="content-card">
+                <div class="card-body">
+                    <h5 class="card-title">Profile Dropdown</h5>
+                    <p class="text-muted small mb-3">Links in the avatar/profile dropdown. The username header is always shown.</p>
+                    @foreach (var group in Model.ProfileDropdownItems.GroupBy(i => i.Group))
+                    {
+                        <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@group.Key</h6>
+                        @foreach (var item in group)
+                        {
+                            if (item.IsAdditional)
+                            {
+                                <div class="d-flex align-items-center gap-2 py-1">
+                                    <input type="hidden" name="profileCustom.Index" value="@item.Index" />
+                                    <input class="form-check-input mt-0" type="checkbox" name="profileCustom.Keep" value="@item.Index" checked />
+                                    <span>@item.Label</span>
+                                    <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
+                                    <span class="badge bg-warning text-dark">Custom</span>
+                                    <input type="hidden" name="profileCustom.Label" value="@item.Label" />
+                                    <input type="hidden" name="profileCustom.Area" value="@item.Area" />
+                                    <input type="hidden" name="profileCustom.Controller" value="@item.Controller" />
+                                    <input type="hidden" name="profileCustom.Action" value="@item.Action" />
+                                    <input type="hidden" name="profileCustom.Module" value="@item.Module" />
+                                    <input type="hidden" name="profileCustom.RequiresAuth" value="@(item.RequiresAuth ? "true" : "false")" />
+                                    <input type="hidden" name="profileCustom.RequiresAdmin" value="@(item.RequiresAdmin ? "true" : "false")" />
+                                    <input type="hidden" name="profileCustom.RequiresModerator" value="@(item.RequiresModerator ? "true" : "false")" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center gap-2 py-1">
+                                    <input class="form-check-input mt-0" type="checkbox" name="profile.selected" value="@item.Key" checked="@(item.IsChecked)" />
+                                    <span>@item.Label</span>
+                                    @if (item.Module != null)
+                                    {
+                                        if (item.ModuleEnabled == true)
+                                        {
+                                            <span class="badge bg-success">@item.Module</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.Module (disabled)</span>
+                                        }
+                                    }
+                                    @if (item.RequiresAuth)
+                                    {
+                                        <span class="badge bg-info text-dark">Members</span>
+                                    }
+                                </div>
+                            }
+                        }
+                    }
+                    <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">Add custom link</h6>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input type="text" name="profileNewLabel" class="form-control form-control-sm" placeholder="Label" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="profileNewController" class="form-control form-control-sm" placeholder="Controller" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="profileNewAction" class="form-control form-control-sm" placeholder="Action" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="profileNewArea" class="form-control form-control-sm" placeholder="Area (optional)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+        <button type="submit" class="btn btn-primary">Save Navigation</button>
+        <a asp-action="Index" asp-controller="Templates" class="btn btn-outline-secondary">Back</a>
+    </div>
+</form>

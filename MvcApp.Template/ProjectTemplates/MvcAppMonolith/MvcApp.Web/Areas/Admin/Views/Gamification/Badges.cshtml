@@ -1,0 +1,57 @@
+@model List<MvcApp.Core.Badge>
+@{
+    ViewData["Title"] = "Badges";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1">Badges</h4>
+        <small class="text-muted">@Model.Count badges · @ViewBag.TotalAwarded awarded · @ViewBag.TotalUsers users</small>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="card-body p-0">
+        <table class="table table-admin">
+            <thead>
+                <tr>
+                    <th>Badge</th>
+                    <th>Category</th>
+                    <th>Criteria</th>
+                    <th class="text-center">Value</th>
+                    <th class="text-center">Enabled</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var badge in Model)
+                {
+                    <tr>
+                        <td>
+                            <i class='@badge.Icon me-2' style="font-size:1.2rem;color:var(--primary);"></i>
+                            <strong>@badge.Name</strong>
+                            <div class="text-muted small">@badge.Description</div>
+                        </td>
+                        <td><span class="badge bg-secondary">@badge.Category</span></td>
+                        <td><code class="small">@badge.CriteriaType</code></td>
+                        <td class="text-center fw-bold">@badge.CriteriaValue</td>
+                        <td class="text-center">
+                            <form asp-action="ToggleBadge" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@badge.Id" />
+                                <button type="submit" class="btn btn-sm @(badge.IsEnabled ? "btn-success" : "btn-outline-secondary")" style="min-width:70px;">
+                                    @(badge.IsEnabled ? "On" : "Off")
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@badge.Id" class="btn btn-sm btn-outline-primary">
+                                <i class='bx bx-edit'></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

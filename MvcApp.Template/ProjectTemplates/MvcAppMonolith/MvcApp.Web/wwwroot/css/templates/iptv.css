@@ -1,0 +1,260 @@
+/* IPTV UI template - faithful port of the Quebec IPTV public styles (styles.css).
+   The landing page (Views/Home/Index.Iptv.cshtml) and the module home page
+   (IptvHome/Index.cshtml) render a hero (.header) inside the host layout; these
+   rules neutralize the host shell (fixed white navbar, container padding, main
+   clearance) and reproduce the original look: transparent white-link navbar
+   over a 90vh hero with rotating background photos, logo swap on scroll, and
+   the nested <main class="main"> section below the hero. */
+
+html {
+    overflow-x: auto;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+    html::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
+    }
+
+/* Neutralize the host layout shell on hero pages so the hero bleeds to the
+   top edge under the fixed navbar. */
+body:has(.header) .container {
+    padding-top: 0 !important;
+}
+
+body:has(.header) div.container > main.main {
+    padding-top: 0 !important;
+}
+
+/* Navigation Bar (hero pages only) */
+body:has(.header) .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 2001;
+    background-color: transparent !important;
+    box-shadow: none;
+    border-bottom: none;
+    transition: background-color 0.5s ease-in-out;
+}
+
+    body:has(.header) .navbar a {
+        color: #fff;
+    }
+
+body:has(.header) .scrolled.navbar {
+    z-index: 2001;
+    background-color: #fff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    body:has(.header) .scrolled.navbar a {
+        color: #000;
+    }
+
+    body:has(.header) .scrolled.navbar button {
+        color: #000;
+    }
+
+/* Brand: replace the text brand with the Quebec IPTV logo on all IPTV
+   pages; non-hero pages get the dark variant, hero pages override to the
+   white variant below and swap to dark once the navbar scrolls. */
+.navbar-brand {
+    font-size: 0;
+    line-height: 0;
+    width: 150px;
+    height: 40px;
+    padding: 0;
+    background-image: url('/_content/MvcApp.Module.IPTV/Logos/logo-transparent-png.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+body:has(.header) .navbar-brand {
+    font-size: 0;
+    line-height: 0;
+    width: 150px;
+    height: 40px;
+    padding: 0;
+    background-image: url('/_content/MvcApp.Module.IPTV/Logos/logo-transparent-wht.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+body:has(.header) .navbar.scrolled .navbar-brand {
+    background-image: url('/_content/MvcApp.Module.IPTV/Logos/logo-transparent-png.png');
+}
+
+body:has(.header) .navbar-toggler {
+    margin-right: 5px !important;
+}
+
+/* White links over the hero (must beat the host styles2.min.css
+   .nav-link/.text-dark !important rules), switching to black on scroll. */
+body:has(.header) .navbar .nav-link {
+    color: #fff !important;
+    transition: color 0.2s ease;
+}
+
+    body:has(.header) .navbar .nav-link:hover,
+    body:has(.header) .navbar .nav-link:focus {
+        color: #ccc !important;
+    }
+
+body:has(.header) .navbar.scrolled .nav-link {
+    color: #000 !important;
+}
+
+    body:has(.header) .navbar.scrolled .nav-link:hover,
+    body:has(.header) .navbar.scrolled .nav-link:focus {
+        color: #333 !important;
+    }
+
+/* Header / Hero */
+.header {
+    position: relative;
+    height: 90vh;
+    width: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    z-index: 900;
+}
+
+.header-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.header-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.header-subtitle {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.header-sub-subtitle {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.header-background {
+    position: absolute;
+    top: 0;
+    left: -25%;
+    right: -25%;
+    width: 150%;
+    height: calc(90vh + 60px) !important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    transform: scale(1.2);
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.header-background.animated {
+    animation: zoom-in 3s ease-in-out;
+}
+
+@keyframes zoom-in {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+/* The nested <main class="main"> below the hero keeps the original clearance
+   and centered text; non-hero pages are untouched. */
+main.main main.main {
+    padding-top: 180px;
+    text-align: center;
+}
+
+.animate {
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.grow {
+    animation: grow 2s ease-in-out;
+}
+
+@keyframes grow {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+.buy-now {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buy-subscription-now {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.buy-subscription-now a {
+    color: #000 !important;
+    text-decoration: none !important;
+}
+
+    button.buy-subscription-now a:link,
+    button.buy-subscription-now a:visited,
+    button.buy-subscription-now a:hover,
+    button.buy-subscription-now a:active {
+        color: #000 !important;
+        text-decoration: none !important;
+    }
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    transition: opacity 0.5s ease-in-out;
+}
+
+    .background-image.fade-out {
+        opacity: 0;
+    }

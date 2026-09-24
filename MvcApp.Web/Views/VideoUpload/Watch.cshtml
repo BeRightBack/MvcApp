@@ -1,0 +1,79 @@
+@model MvcApp.Core.VideoUpload
+@using MvcApp.Core
+@{
+    ViewData["Title"] = Model.Title;
+    var categoryColors = new Dictionary<VideoCategory, string> {
+        { VideoCategory.General, "secondary" }, { VideoCategory.Fitness, "success" },
+        { VideoCategory.Travel, "info" }, { VideoCategory.Lifestyle, "primary" },
+        { VideoCategory.Dance, "warning" }, { VideoCategory.Music, "danger" },
+        { VideoCategory.Adult, "dark" }, { VideoCategory.Other, "secondary" }
+    };
+    var color = categoryColors.ContainsKey(Model.Category) ? categoryColors[Model.Category] : "secondary";
+    var mins = Model.DurationSeconds / 60;
+    var secs = Model.DurationSeconds % 60;
+    var videoUrl = $"/Videos/{Model.User?.UserName}/{Model.Filename}";
+    var isOwner = User.Identity?.Name == Model.User?.UserName;
+}
+
+<section class="py-4">
+    <div class="container" style="max-width:900px;">
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill mb-4">
+            <i class='bx bx-arrow-back'></i> Back to Videos
+        </a>
+
+        <div class="card border-0 rounded-4 shadow-sm overflow-hidden mb-4">
+            <div class="bg-dark position-relative">
+                <video controls playsinline style="width:100%; max-height:500px; background:#000;"
+                       poster="@(!string.IsNullOrEmpty(Model.ThumbnailFilename) ? $"/Videos/{Model.User?.UserName}/{Model.ThumbnailFilename}" : "")">
+                    <source src="@videoUrl" type="video/@Model.Filename.Split('.').Last()" />
+                    Your browser does not support video playback.
+                </video>
+            </div>
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h3 class="fw-bold mb-0">@Model.Title</h3>
+                    <span class="badge bg-@color">@Model.Category</span>
+                </div>
+
+                <div class="d-flex gap-3 text-muted small mb-3">
+                    <span><i class='bx bx-play'></i> @Model.ViewCount views</span>
+                    <span><i class='bx bx-time'></i> @Model.UploadedAt.ToString("MMM d, yyyy 'at' h:mm tt")</span>
+                    @if (Model.DurationSeconds > 0)
+                    {
+                        <span><i class='bx bx-time-five'></i> @mins:@secs.ToString("D2")</span>
+                    }
+                </div>
+
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width:36px;height:36px;">
+                        <span class="text-white fw-bold" style="font-size:0.8rem;">@(Model.User?.KnownAs?.FirstOrDefault())</span>
+                    </div>
+                    <div>
+                        <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.User?.UserName" class="fw-bold text-dark text-decoration-none">
+                            @Model.User?.KnownAs
+                        </a>
+                        <div class="text-muted small">@@@Model.User?.UserName</div>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <hr />
+                    <p class="text-muted">@Model.Description</p>
+                }
+
+                @if (isOwner)
+                {
+                    <hr />
+                    <form asp-action="Delete" asp-route-id="@Model.Id" method="post"
+                          onsubmit="return confirm('Permanently delete this video?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger rounded-pill btn-sm">
+                            <i class='bx bx-trash'></i> Delete My Video
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</section>

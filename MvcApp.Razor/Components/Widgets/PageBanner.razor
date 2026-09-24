@@ -1,0 +1,38 @@
+@using MvcApp.Core
+@attribute [BlazorPageComponent("Banner", DisplayName = "Banner", Description = "Full-width banner with title, subtitle and action button.", Category = "Layout")]
+<div class="p-5 mb-4 @CssClass rounded-3 text-center">
+    <h1 class="display-5 fw-bold">@Title</h1>
+    @if (!string.IsNullOrWhiteSpace(Subtitle))
+    {
+        <p class="lead mb-4">@Subtitle</p>
+    }
+    @if (!string.IsNullOrWhiteSpace(ButtonText))
+    {
+        <a class="btn @ButtonClass btn-lg" href="@ButtonHref">@ButtonText</a>
+    }
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Your headline here";
+
+    [Parameter] public string? Subtitle { get; set; } = "Supporting text for your banner.";
+
+    [Parameter] public string? ButtonText { get; set; }
+
+    [Parameter] public string ButtonHref { get; set; } = "#";
+
+    [Parameter] public string Theme { get; set; } = "primary";
+
+    private string CssClass => Theme switch
+    {
+        "dark" => "bg-dark text-white",
+        "success" => "bg-success text-white",
+        "danger" => "bg-danger text-white",
+        "warning" => "bg-warning text-dark",
+        "light" => "bg-light text-dark",
+        _ => "bg-primary text-white"
+    };
+
+    private string ButtonClass =>
+        Theme is "light" or "warning" ? "btn-dark" : "btn-light";
+}

@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "FAQ";
+    Layout = "_Layout";
+}
+<section class="py-4">
+    <div class="container">
+        <h1 class="fw-bold mb-4" style="font-family:'Playfair Display',Georgia,serif;">Frequently Asked Questions</h1>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="h1">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c1">
+                        How do I create an account?
+                    </button>
+                </h2>
+                <div id="c1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Click "Register" on the top right, fill in your details, and confirm your email. You'll be ready to go in minutes.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="h2">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+                        I forgot my password. What do I do?
+                    </button>
+                </h2>
+                <div id="c2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Click "Login" then "Forgot your password?" and follow the instructions sent to your email.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="h3">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3">
+                        How do I update my profile?
+                    </button>
+                </h2>
+                <div id="c3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Go to your account settings by clicking your profile picture and selecting "Manage Profile". You can edit your photo, bio, and preferences there.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="h4">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4">
+                        Is my data safe?
+                    </button>
+                </h2>
+                <div id="c4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Yes. We use industry-standard encryption and never share your personal data with third parties without your consent. See our Privacy Policy for details.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="h5">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c5">
+                        How do I delete my account?
+                    </button>
+                </h2>
+                <div id="c5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">Contact us through the Contact page and we will process your deletion request within 48 hours.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

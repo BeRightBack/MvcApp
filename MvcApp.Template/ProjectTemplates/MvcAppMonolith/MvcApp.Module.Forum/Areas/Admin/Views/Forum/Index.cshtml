@@ -1,0 +1,84 @@
+@model IEnumerable<ForumCategory>
+@{
+    ViewData["Title"] = "Manage Forums";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1><i class="fa fa-comments"></i> Manage Forums</h1>
+        <a asp-action="CreateCategory" class="btn btn-primary"><i class="fa fa-plus"></i> New Category</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @foreach (var category in Model)
+    {
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">@category.Name</h5>
+                <div>
+                    <a asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-sm btn-warning">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <form asp-action="DeleteCategory" method="post" style="display:inline"
+                          onsubmit="return confirm('Delete this category and all its forums?');">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@category.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Forum</th>
+                            <th class="text-center">Sort</th>
+                            <th class="text-center">Threads</th>
+                            <th class="text-center">Posts</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var forum in category.Forums.OrderBy(f => f.SortOrder))
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@forum.Name</strong>
+                                    @if (!string.IsNullOrEmpty(forum.Description))
+                                    {
+                                        <br /><small class="text-muted">@forum.Description</small>
+                                    }
+                                </td>
+                                <td class="text-center">@forum.SortOrder</td>
+                                <td class="text-center">@forum.ThreadCount</td>
+                                <td class="text-center">@forum.PostCount</td>
+                                <td class="text-center">
+                                    <a asp-action="EditForum" asp-route-id="@forum.Id" class="btn btn-sm btn-warning">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <form asp-action="DeleteForum" method="post" style="display:inline"
+                                          onsubmit="return confirm('Delete this forum and all its threads?');">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@forum.Id" />
+                                        <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="5">
+                                <a asp-action="CreateForum" asp-route-categoryId="@category.Id" class="btn btn-sm btn-outline-primary">
+                                    <i class="fa fa-plus"></i> Add Forum
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

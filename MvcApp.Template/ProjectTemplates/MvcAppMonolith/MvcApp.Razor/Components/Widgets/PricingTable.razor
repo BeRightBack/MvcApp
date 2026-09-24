@@ -1,0 +1,69 @@
+@using MvcApp.Core
+@attribute [BlazorPageComponent("Pricing", DisplayName = "Pricing table", Description = "Three-tier pricing comparison built in Blazor.", Category = "Layout")]
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h5 class="card-title">@BasicName</h5>
+                <p class="display-6 fw-bold">@BasicPrice</p>
+                <ul class="list-unstyled text-start">
+                    @foreach (var f in SplitFeatures(BasicFeatures))
+                    {
+                        <li><i class="bx bx-check"></i> @f</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center border-primary">
+            <div class="card-header bg-primary text-white fw-bold">@ProName</div>
+            <div class="card-body">
+                <h5 class="card-title">@ProPrice</h5>
+                <ul class="list-unstyled text-start">
+                    @foreach (var f in SplitFeatures(ProFeatures))
+                    {
+                        <li><i class="bx bx-check"></i> @f</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h5 class="card-title">@EnterpriseName</h5>
+                <p class="display-6 fw-bold">@EnterprisePrice</p>
+                <ul class="list-unstyled text-start">
+                    @foreach (var f in SplitFeatures(EnterpriseFeatures))
+                    {
+                        <li><i class="bx bx-check"></i> @f</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string BasicName { get; set; } = "Basic";
+
+    [Parameter] public string BasicPrice { get; set; } = "$9/mo";
+
+    [Parameter] public string BasicFeatures { get; set; } = "1 user; 5 projects; Email support";
+
+    [Parameter] public string ProName { get; set; } = "Pro";
+
+    [Parameter] public string ProPrice { get; set; } = "$29/mo";
+
+    [Parameter] public string ProFeatures { get; set; } = "Unlimited users; Unlimited projects; Priority support";
+
+    [Parameter] public string EnterpriseName { get; set; } = "Enterprise";
+
+    [Parameter] public string EnterprisePrice { get; set; } = "Custom";
+
+    [Parameter] public string EnterpriseFeatures { get; set; } = "Dedicated account manager; SLA; Custom integrations";
+
+    private static IEnumerable<string> SplitFeatures(string? value) =>
+        (value ?? string.Empty).Split(';').Select(f => f.Trim()).Where(f => f.Length > 0);
+}
