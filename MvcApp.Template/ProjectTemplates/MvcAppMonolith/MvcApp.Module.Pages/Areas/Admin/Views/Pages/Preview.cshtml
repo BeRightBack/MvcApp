@@ -1,0 +1,46 @@
+@model ContentPage
+@{
+    Layout = null;
+    var rendered = ViewData["RenderedBody"] as string ?? string.Empty;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview — @Model.Title</title>
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/css/styles2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MvcApp.Web.styles.css" asp-append-version="true" />
+    <style>
+        body { background: #f5f6f8; }
+        .preview-bar {
+            background: #1f2937; color: #fff; padding: .5rem 1rem;
+            display: flex; align-items: center; gap: .75rem;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .preview-bar .badge { background: #3b82f6; }
+        .preview-canvas {
+            max-width: 860px; margin: 2rem auto; background: #fff;
+            border: 1px solid #e5e7eb; border-radius: .5rem; padding: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-bar">
+        <span class="badge rounded-pill">Preview</span>
+        <strong>@Model.Title</strong>
+        <span class="ms-auto text-muted small">Not saved — this is a live render of the current editor content.</span>
+    </div>
+    <div class="preview-canvas">
+        <article class="content-page">
+            <div class="content-page-body">
+                @Html.Raw(rendered)
+            </div>
+        </article>
+    </div>
+</body>
+</html>

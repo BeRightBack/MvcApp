@@ -1,0 +1,11 @@
+﻿@using MvcApp.Core
+@attribute [BlazorPageComponent("Clock", DisplayName = "Server clock", Description = "Shows the server's current time.", Category = "Blazor")]
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Local Server Time</h5>
+        <p class="card-text">
+            <strong>@DateTime.Now.ToString("F")</strong>
+        </p>
+    </div>
+</div>

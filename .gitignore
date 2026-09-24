@@ -1,0 +1,20 @@
+# Build outputs
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Test results
+[Tt]est[Rr]esults/
+
+# Local logs
+*.log
+
+# Note: appsettings.json (secrets) is ignored per-project via MvcApp.Web/.gitignore;
+# don't add a global appsettings.json rule here — the template sources ship one.

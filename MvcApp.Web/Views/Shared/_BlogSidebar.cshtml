@@ -1,0 +1,81 @@
+@{
+    var categories = ViewBag.Categories as IEnumerable<BlogCategory> ?? [];
+    var tags = ViewBag.Tags as IEnumerable<BlogTag> ?? [];
+    var recentPosts = ViewBag.RecentPosts as IEnumerable<BlogPost> ?? [];
+    var archiveMonths = ViewBag.ArchiveMonths as IEnumerable<dynamic>;
+}
+
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="fa fa-search"></i> Search</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="Search" asp-controller="Blog" method="get">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search blog..." />
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (archiveMonths != null)
+{
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="fa fa-archive"></i> Archives</h5>
+        </div>
+        <div class="card-body py-2">
+            <ul class="list-unstyled mb-0">
+                @foreach (dynamic am in archiveMonths)
+                {
+                    <li>
+                        <a asp-action="Archive" asp-route-year="@am.y" asp-route-month="@am.m" class="text-decoration-none">
+                            @(new DateTime((int)am.y, (int)am.m, 1).ToString("MMMM yyyy")) (@am.Count)
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="fa fa-folder"></i> Categories</h5>
+    </div>
+    <div class="card-body py-2">
+        <ul class="list-unstyled mb-0">
+            @foreach (var cat in categories)
+            {
+                <li><a asp-action="Category" asp-route-slug="@cat.Slug" class="text-decoration-none">@cat.Name</a></li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="fa fa-tags"></i> Tags</h5>
+    </div>
+    <div class="card-body py-2">
+        @foreach (var tag in tags)
+        {
+            <a asp-action="Tag" asp-route-slug="@tag.Slug" class="badge bg-secondary text-decoration-none me-1 mb-1">@tag.Name</a>
+        }
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="fa fa-clock-o"></i> Recent Posts</h5>
+    </div>
+    <div class="card-body py-2">
+        <ul class="list-unstyled mb-0">
+            @foreach (var rp in recentPosts)
+            {
+                <li class="mb-1"><a asp-action="Post" asp-route-slug="@rp.Slug" class="text-decoration-none small">@rp.Title</a></li>
+            }
+        </ul>
+    </div>
+</div>

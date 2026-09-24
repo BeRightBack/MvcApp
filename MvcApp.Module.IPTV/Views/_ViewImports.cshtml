@@ -1,0 +1,17 @@
+@using MvcApp.Core
+@using MvcApp.Module.IPTV
+@using MvcApp.Module.IPTV.Models
+@using MvcApp.Module.IPTV.Models.Localization
+@using MvcApp.Module.IPTV.Models.HomeViewModels
+@using MvcApp.Module.IPTV.Models.StoreViewModels
+@using MvcApp.Module.IPTV.Models.SubscriptionViewModels
+@using MvcApp.Module.IPTV.Models.AdminViewModels
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Localization
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@inject SignInManager<UserDetails> SignInManager
+@inject UserManager<UserDetails> UserManager
+@inject IStringLocalizer<SharedResource> Localizer

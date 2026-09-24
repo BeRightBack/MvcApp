@@ -1,0 +1,68 @@
+@{
+    ViewData["Title"] = @Localizer["Setup - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Learn how to set up your Quebec Iptv subscription on any device."];
+    ViewData["Keywords"] = @Localizer["IPTV setup, IPTV installation, IPTV configuration, Smart TV, Android box"];
+}
+
+<div class="container py-5">
+    <h1 class="text-center mb-4">@Localizer["How to Set Up Quebec Iptv"]</h1>
+    <p class="text-center lead mb-5">@Localizer["Follow these simple steps to start watching your favorite channels in minutes."]</p>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <img src="~/_content/MvcApp.Module.IPTV/images/setup/downloader.jpg" class="card-img-top" alt="@Localizer["Step 1"]">
+                <div class="card-body">
+                    <h5 class="card-title">@Localizer["Step 1: Choose a Plan"]</h5>
+                    <p class="card-text">@Localizer["Visit the store and select the subscription plan that suits your needs. Choose from monthly, 3 months, 6 months, or 12 months plans."]</p>
+                    <a asp-controller="IptvStore" asp-action="Index" class="btn btn-primary">@Localizer["Browse Plans"]</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <img src="~/_content/MvcApp.Module.IPTV/images/setup/newsmarters.jpg" class="card-img-top" alt="@Localizer["Step 2"]">
+                <div class="card-body">
+                    <h5 class="card-title">@Localizer["Step 2: Complete Your Payment"]</h5>
+                    <p class="card-text">@Localizer["Pay securely via PayPal, PayPal.Me, Interac e-Transfer, or our free trial option. Your subscription is activated instantly."]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <img src="~/_content/MvcApp.Module.IPTV/images/setup/tivimate.jpg" class="card-img-top" alt="@Localizer["Step 3"]">
+                <div class="card-body">
+                    <h5 class="card-title">@Localizer["Step 3: Download the App"]</h5>
+                    <p class="card-text">@Localizer["Download one of our recommended apps below to start streaming on your favorite device."]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <img src="~/_content/MvcApp.Module.IPTV/images/setup/stb-emu-pro.jpg" class="card-img-top" alt="@Localizer["Step 4"]">
+                <div class="card-body">
+                    <h5 class="card-title">@Localizer["Step 4: Enter Your Credentials"]</h5>
+                    <p class="card-text">@Localizer["Open the app, enter your username and password that were sent to you by email, and start enjoying thousands of channels."]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="text-center mt-5 mb-4">@Localizer["Download Our Apps"]</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-3">
+            <a href="~/_content/MvcApp.Module.IPTV/downloads/stb4k.apk" class="btn btn-success btn-lg w-100">@Localizer["Download STB 4K APK"]</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="~/_content/MvcApp.Module.IPTV/downloads/tivi.apk" class="btn btn-primary btn-lg w-100">@Localizer["Download TiviMate APK"]</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="~/_content/MvcApp.Module.IPTV/downloads/v12.apk" class="btn btn-info btn-lg w-100">@Localizer["Download V12 APK"]</a>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8 text-center">
+            <a href="~/_content/MvcApp.Module.IPTV/channels/FULL_Channel_List.xlsx" class="btn btn-outline-primary btn-lg">@Localizer["Download Full Channel List (Excel)"]</a>
+        </div>
+    </div>
+</div>

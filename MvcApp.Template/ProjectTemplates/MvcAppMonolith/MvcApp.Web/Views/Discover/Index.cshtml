@@ -1,0 +1,195 @@
+@using MvcApp.Core.Pagination
+@using MvcApp.Core.Models
+@using MvcApp.Core
+@model PaginationList<MemberModel>
+@{
+    ViewData["Title"] = "Discover";
+    ViewData["ReturnUrl"] = ViewBag.ReturnUrl;
+    var currentUserId = ViewBag.CurrentUserId as string;
+    var filterGender = string.IsNullOrEmpty((string)ViewBag.SelectedGender) ? "All" : (string)ViewBag.SelectedGender;
+    var superLikesUsed = (int)(ViewBag.SuperLikesUsedToday ?? 0);
+    var superLikeLimit = (int)(ViewBag.SuperLikeLimit ?? 1);
+    var boostActive = (bool)(ViewBag.IsBoostActive ?? false);
+    var boostsUsed = (int)(ViewBag.BoostsUsedToday ?? 0);
+    var boostLimit = (int)(ViewBag.BoostLimit ?? 1);
+    var isAvailable = (bool)(ViewBag.IsAvailable ?? false);
+    var selectedTagIds = (List<int>)(ViewBag.InterestTagIds ?? new List<int>());
+    var allTags = (List<InterestTag>)(ViewBag.AllTags ?? new List<InterestTag>());
+}
+
+<section class="py-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">Discover</h1>
+                <p class="text-muted">Find people who share your vibe</p>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+                <form method="post" asp-controller="Discover" asp-action="ToggleAvailable" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm rounded-pill" style="background:linear-gradient(135deg,@(isAvailable ? "#10b981,#059669" : "#6b7280,#4b5563"));color:#fff;" title="@(isAvailable ? "You're Available Tonight — click to hide" : "Show as Available Tonight")">
+                        <i class='bx @(isAvailable ? "bxs-moon" : "bx-moon")'></i> @(isAvailable ? "Available Tonight" : "Go Available")
+                    </button>
+                </form>
+                <span class="badge rounded-pill px-3 py-2" style="background:linear-gradient(135deg,#fdcb6e22,#e74c6f22);color:#e74c6f;font-size:0.8rem;">
+                    <i class='bx bx-star'></i> Super Likes: @superLikesUsed / @superLikeLimit
+                </span>
+                @if (boostActive)
+                {
+                    <span class="badge rounded-pill px-3 py-2" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:0.8rem;">
+                        <i class='bx bx-bolt'></i> Boost Active!
+                    </span>
+                }
+                else
+                {
+                    <form method="post" asp-controller="SuperLike" asp-action="Boost" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm rounded-pill @(boostsUsed >= boostLimit ? "btn-outline-secondary" : "")" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;" @(boostsUsed >= boostLimit ? "disabled" : "") title="Boost your profile for 30 minutes">
+                            <i class='bx bx-bolt'></i> Boost (@boostsUsed / @boostLimit)
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <form method="get" action="/Discover" class="card border-0 rounded-4 shadow-sm p-4 mb-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold small">Gender</label>
+                    <select name="gender" class="form-select rounded-pill">
+                        <option value="All" selected="@(string.IsNullOrEmpty(ViewBag.SelectedGender))">All</option>
+                        <option value="Male" selected="@(ViewBag.SelectedGender == "Male")">Male</option>
+                        <option value="Female" selected="@(ViewBag.SelectedGender == "Female")">Female</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold small">Min Age</label>
+                    <input type="number" name="minAge" value="@ViewBag.MinAge" class="form-control rounded-pill" min="18" max="85" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold small">Max Age</label>
+                    <input type="number" name="maxAge" value="@ViewBag.MaxAge" class="form-control rounded-pill" min="18" max="85" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold small">Sort By</label>
+                    <select name="orderBy" class="form-select rounded-pill">
+                        <option value="LastActive" selected="@(ViewBag.OrderBy == "LastActive")">Recently Active</option>
+                        <option value="Created" selected="@(ViewBag.OrderBy == "Created")">Newest</option>
+                        <option value="Age" selected="@(ViewBag.OrderBy == "Age")">Age</option>
+                        <option value="Score" selected="@(ViewBag.OrderBy == "Score")">Rating</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold small">City</label>
+                    <input type="text" name="city" value="@ViewBag.City" class="form-control rounded-pill" placeholder="Search by city..." />
+                </div>
+                <div class="col-md-2">
+                    <div class="form-check mt-4">
+                        <input class="form-check-input" type="checkbox" name="hasPhoto" value="true" id="hasPhoto" checked="@(ViewBag.HasPhoto == true)" />
+                        <label class="form-check-label small" for="hasPhoto">Has Photo</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="isOnline" value="true" id="isOnline" checked="@(ViewBag.IsOnline == true)" />
+                        <label class="form-check-label small" for="isOnline">Online Now</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="availableNow" value="true" id="availableNow" checked="@(ViewBag.AvailableNow == true)" />
+                        <label class="form-check-label small" for="availableNow">Available Tonight</label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn rounded-pill" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
+                        <i class='bx bx-filter-alt'></i> Filter
+                    </button>
+                </div>
+            </div>
+
+            @if (allTags.Any())
+            {
+                <div class="mt-3 pt-3 border-top">
+                    <label class="form-label fw-semibold small mb-2"><i class='bx bx-heart-circle'></i> Filter by Interests</label>
+                    <div class="d-flex flex-wrap gap-2" id="tagContainer">
+                        @foreach (var tag in allTags)
+                        {
+                            var isSelected = selectedTagIds.Contains(tag.Id);
+                            <button type="button" data-tag-id="@tag.Id" data-tag-name="@tag.Name"
+                                    class="btn btn-sm rounded-pill border-0 tag-btn @(isSelected ? "tag-selected" : "")"
+                                    style="font-size:0.75rem;padding:4px 12px;transition:all 0.2s;"
+                                    title="@(isSelected ? "Click to remove filter" : "Filter by " + tag.Name)">
+                                @tag.Name
+                                @if (isSelected) { <i class='bx bx-x' style="font-size:0.65rem;margin-left:2px;"></i> }
+                            </button>
+                        }
+                    </div>
+                </div>
+                <script>
+                    (function () {
+                        var container = document.getElementById('tagContainer');
+                        var form = container.closest('form');
+                        container.addEventListener('click', function (e) {
+                            var btn = e.target.closest('.tag-btn');
+                            if (!btn) return;
+                            var tagId = btn.getAttribute('data-tag-id');
+                            var selected = Array.from(form.querySelectorAll('input[name="interestTagIds"]')).map(function(i){ return i.value; });
+                            var idx = selected.indexOf(tagId);
+                            if (idx > -1) {
+                                selected.splice(idx, 1);
+                            } else {
+                                selected.push(tagId);
+                            }
+                            form.querySelectorAll('input[name="interestTagIds"]').forEach(function(i){ i.remove(); });
+                            selected.forEach(function(id) {
+                                var input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'interestTagIds';
+                                input.value = id;
+                                form.appendChild(input);
+                            });
+                            form.submit();
+                        });
+                    })();
+                </script>
+            }
+        </form>
+
+        <!-- Member Cards -->
+        @if (Model.Any())
+        {
+            <div class="row g-4">
+                @foreach (var card in ViewBag.Cards)
+                {
+                    @await Html.PartialAsync("_MemberCard", card, new ViewDataDictionary(ViewData))
+                }
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item @(Model.MetaData.HasPrevious ? "" : "disabled")">
+                            <a class="page-link" href="@Url.Action("Index", "Discover", new { page = Model.MetaData.CurrentPage - 1, gender = filterGender, minAge = ViewBag.MinAge, maxAge = ViewBag.MaxAge, orderBy = ViewBag.OrderBy, hasPhoto = ViewBag.HasPhoto, isOnline = ViewBag.IsOnline, availableNow = ViewBag.AvailableNow, city = ViewBag.City, interestTagIds = selectedTagIds })">Previous</a>
+                        </li>
+                        @for (int i = 1; i <= Model.MetaData.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.MetaData.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", "Discover", new { page = i, gender = filterGender, minAge = ViewBag.MinAge, maxAge = ViewBag.MaxAge, orderBy = ViewBag.OrderBy, hasPhoto = ViewBag.HasPhoto, isOnline = ViewBag.IsOnline, availableNow = ViewBag.AvailableNow, city = ViewBag.City, interestTagIds = selectedTagIds })">@i</a>
+                            </li>
+                        }
+                        <li class="page-item @(Model.MetaData.HasNext ? "" : "disabled")">
+                            <a class="page-link" href="@Url.Action("Index", "Discover", new { page = Model.MetaData.CurrentPage + 1, gender = filterGender, minAge = ViewBag.MinAge, maxAge = ViewBag.MaxAge, orderBy = ViewBag.OrderBy, hasPhoto = ViewBag.HasPhoto, isOnline = ViewBag.IsOnline, availableNow = ViewBag.AvailableNow, city = ViewBag.City, interestTagIds = selectedTagIds })">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class='bx bx-search' style="font-size:4rem; color:#e74c6f;"></i>
+                <h4 class="mt-3">No members found</h4>
+                <p class="text-muted">Try adjusting your filters</p>
+            </div>
+        }
+    </div>
+</section>

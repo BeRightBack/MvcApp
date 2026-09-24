@@ -1,0 +1,26 @@
+﻿@typeparam TEntity
+
+<input type="text" class="form-control" style="max-width:600px" @onkeyup="@KeyEvent" placeholder="Search..." @bind="searchItem" />
+<button class="form-control" style="max-width:300px" @onclick="OnSearchClicked">Search</button>
+
+@code {
+    [Parameter]
+    public List<TEntity>? Items { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private string? searchItem;
+
+    public async Task KeyEvent(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await OnSearch.InvokeAsync(searchItem);
+        }
+    }
+    private async Task OnSearchClicked()
+    {
+        await OnSearch.InvokeAsync(searchItem);
+    }
+}

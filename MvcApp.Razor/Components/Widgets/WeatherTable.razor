@@ -1,0 +1,49 @@
+@using MvcApp.Core
+@attribute [BlazorPageComponent("Weather", DisplayName = "Weather forecast", Description = "Static table of sample weather forecasts.", Category = "Content")]
+<div class="mb-4">
+    <h5 class="mb-3">Weather forecast</h5>
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var f in Forecasts)
+            {
+                <tr>
+                    <td>@f.Date.ToShortDateString()</td>
+                    <td>@f.TemperatureC</td>
+                    <td>@f.TemperatureF</td>
+                    <td>@f.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter] public int Days { get; set; } = 5;
+
+    private record WeatherForecast(DateOnly Date, int TemperatureC, string Summary)
+    {
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+
+    private List<WeatherForecast> Forecasts { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        var startDate = DateOnly.FromDateTime(DateTime.Now);
+        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        var days = Math.Clamp(Days, 1, 14);
+        Forecasts = Enumerable.Range(1, days).Select(i => new WeatherForecast(
+            startDate.AddDays(i),
+            Random.Shared.Next(-20, 55),
+            summaries[Random.Shared.Next(summaries.Length)]
+        )).ToList();
+    }
+}

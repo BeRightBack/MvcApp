@@ -1,0 +1,127 @@
+@model MvcApp.Web.Models.LikesViewModels.LikesIndexViewModel
+@using MvcApp.Core.Models
+@{
+    ViewData["Title"] = "Likes";
+    var predicate = Model.Predicate;
+    var isLiked = predicate.Equals("liked", StringComparison.OrdinalIgnoreCase);
+    var isLikedBy = predicate.Equals("likedby", StringComparison.OrdinalIgnoreCase);
+}
+
+<section class="py-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">Likes</h1>
+                <p class="text-muted mb-0">See who you like and who likes you back</p>
+            </div>
+            <a class="btn rounded-pill btn-outline-secondary" href="/Likes/Blocked">
+                <i class='bx bx-block'></i> Blocked Users
+            </a>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-pills mb-4 gap-2">
+            <li class="nav-item">
+                <a class="nav-link rounded-pill @(isLiked ? "active" : "")"
+                   asp-controller="Likes" asp-action="Index"
+                   asp-route-predicate="liked" asp-route-gender="@Model.Gender" asp-route-orderBy="@Model.OrderBy" asp-route-page="1">
+                    <i class='bx bx-heart me-1'></i> People I Like
+                    <span class="badge rounded-pill ms-1">@Model.LikedCount</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link rounded-pill @(isLikedBy ? "active" : "")"
+                   asp-controller="Likes" asp-action="Index"
+                   asp-route-predicate="likedby" asp-route-gender="@Model.Gender" asp-route-orderBy="@Model.OrderBy" asp-route-page="1">
+                    <i class='bx bxs-heart me-1'></i> Who Likes Me
+                    <span class="badge rounded-pill ms-1">@Model.LikedByCount</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Filters -->
+        <form method="get" action="/Likes" class="card border-0 rounded-4 shadow-sm p-3 mb-4">
+            <input type="hidden" name="predicate" value="@predicate" />
+            <div class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold small mb-1">Gender</label>
+                    <select name="gender" class="form-select rounded-pill">
+                        <option value="All" selected="@(Model.Gender == "All")">All</option>
+                        <option value="Male" selected="@(Model.Gender == "Male")">Male</option>
+                        <option value="Female" selected="@(Model.Gender == "Female")">Female</option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold small mb-1">Sort By</label>
+                    <select name="orderBy" class="form-select rounded-pill">
+                        <option value="LastActive" selected="@(Model.OrderBy == "LastActive")">Recently Active</option>
+                        <option value="Created" selected="@(Model.OrderBy == "Created")">Newest</option>
+                        <option value="Age" selected="@(Model.OrderBy == "Age")">Age</option>
+                        <option value="Name" selected="@(Model.OrderBy == "Name")">Name</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-grid">
+                    <button type="submit" class="btn rounded-pill" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
+                        <i class='bx bx-filter-alt'></i> Apply
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        @if (Model.Members.Any())
+        {
+            <div class="row g-4">
+                @foreach (var card in Model.Cards)
+                {
+                    @await Html.PartialAsync("_MemberCard", card, new ViewDataDictionary(ViewData))
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (Model.Members.MetaData.TotalPages > 1)
+            {
+                <div class="d-flex justify-content-center mt-4">
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item @(Model.Members.MetaData.HasPrevious ? "" : "disabled")">
+                                <a class="page-link" asp-controller="Likes" asp-action="Index"
+                                   asp-route-predicate="@predicate" asp-route-gender="@Model.Gender" asp-route-orderBy="@Model.OrderBy"
+                                   asp-route-page="@(Model.Members.MetaData.CurrentPage - 1)">Previous</a>
+                            </li>
+                            @for (int i = 1; i <= Model.Members.MetaData.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.Members.MetaData.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-controller="Likes" asp-action="Index"
+                                       asp-route-predicate="@predicate" asp-route-gender="@Model.Gender" asp-route-orderBy="@Model.OrderBy"
+                                       asp-route-page="@i">@i</a>
+                                </li>
+                            }
+                            <li class="page-item @(Model.Members.MetaData.HasNext ? "" : "disabled")">
+                                <a class="page-link" asp-controller="Likes" asp-action="Index"
+                                   asp-route-predicate="@predicate" asp-route-gender="@Model.Gender" asp-route-orderBy="@Model.OrderBy"
+                                   asp-route-page="@(Model.Members.MetaData.CurrentPage + 1)">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class='bx @(isLikedBy ? "bxs-heart" : "bx-heart")' style="font-size:4rem; color:#e74c6f;"></i>
+                <h4 class="mt-3">
+                    @(isLikedBy ? "No one has liked you yet" : "You haven't liked anyone yet")
+                </h4>
+                <p class="text-muted">
+                    @(isLikedBy
+                        ? "Complete your profile and be active to get noticed."
+                        : "Discover people and send some likes!")
+                </p>
+                <a asp-controller="Discover" asp-action="Index" class="btn btn-lg rounded-pill px-4" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
+                    <i class='bx bx-search-alt me-2'></i> Discover People
+                </a>
+            </div>
+        }
+    </div>
+</section>

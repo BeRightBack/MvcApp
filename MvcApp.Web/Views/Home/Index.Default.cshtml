@@ -1,0 +1,23 @@
+@using MvcApp.Core.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MvcApp.Core.UserDetails> SignInManager
+@inject UserManager<MvcApp.Core.UserDetails> UserManager
+@{
+    ViewData["Title"] = "Home";
+    var isAuthenticated = SignInManager.IsSignedIn(User);
+}
+<section class="py-5">
+    <div class="container text-center py-5">
+        <h1 class="fw-bold display-3 mb-3">Welcome</h1>
+        <p class="lead text-muted mb-4">A modern platform built for connection and collaboration.</p>
+        @if (!isAuthenticated)
+        {
+            <a asp-page="/Account/Register" class="btn btn-primary btn-lg me-2">Get Started</a>
+            <a asp-page="/Account/Login" class="btn btn-outline-primary btn-lg">Sign In</a>
+        }
+        else
+        {
+            <a asp-controller="Discover" asp-action="Index" class="btn btn-primary btn-lg">Explore</a>
+        }
+    </div>
+</section>

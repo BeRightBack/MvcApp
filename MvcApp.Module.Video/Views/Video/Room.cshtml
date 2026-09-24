@@ -1,0 +1,100 @@
+@model IEnumerable<VideoRoomMessage>
+@{
+    ViewData["Title"] = ViewBag.RoomName;
+    var roomId = ViewBag.RoomId is int rid ? rid : 0;
+    var roomName = ViewBag.RoomName as string;
+    var maxSpots = ViewBag.MaxSpots is int ms ? ms : 10;
+    var currentUserId = ViewBag.CurrentUserId as string;
+    var currentUsername = ViewBag.CurrentUsername as string;
+}
+
+<link rel="stylesheet" href="~/_content/MvcApp.Module.Video/css/video.css?v=2" />
+
+<div class="container-fluid mt-3 px-3">
+    <div class="d-flex align-items-center gap-3 mb-2">
+        <a asp-action="Index" class="btn btn-sm btn-outline-secondary">&larr; Rooms</a>
+        <h5 class="mb-0"># @roomName</h5>
+        <span class="badge bg-danger ms-auto" id="liveBadge">LIVE</span>
+        <span class="text-muted small" id="viewerCount">0 watching</span>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="video-grid" id="videoGrid">
+                @for (var i = 0; i < maxSpots; i++)
+                {
+                    <div class="video-slot" id="slot-@i" data-slot-index="@i">
+                        <video id="video-@i" autoplay playsinline muted></video>
+                        <div class="slot-placeholder">
+                            <span class="fa fa-video-camera"></span>
+                            <span class="slot-label">Slot @(i + 1)</span>
+                        </div>
+                        <button type="button" class="claim-btn btn btn-sm btn-danger">Go Live Here</button>
+                        <div class="occupant-bar d-none">
+                            <span class="live-dot"></span>
+                            <strong class="occupant-name"></strong>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-3" id="controlBar">
+                <button type="button" id="btnMic" class="btn btn-outline-secondary btn-sm" disabled>
+                    <span class="mic-on">Mute Mic</span><span class="mic-off d-none">Unmute Mic</span>
+                </button>
+                <button type="button" id="btnCam" class="btn btn-outline-secondary btn-sm" disabled>
+                    <span class="cam-on">Stop Camera</span><span class="cam-off d-none">Start Camera</span>
+                </button>
+                <button type="button" id="btnScreen" class="btn btn-outline-secondary btn-sm" disabled>Share Screen</button>
+                <button type="button" id="btnLeave" class="btn btn-danger btn-sm d-none">Stop Streaming</button>
+            </div>
+            <div class="text-muted small mt-2" id="liveStatus">Click a spot to go live. No camera? You can still broadcast audio or join as a viewer.</div>
+
+            <div class="card mt-3">
+                <div class="card-header">Text chat</div>
+                <div class="card-body" id="chatList" style="height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:0.4rem">
+                    @foreach (var msg in Model)
+                    {
+                        var isMine = msg.SenderId == currentUserId;
+                        <div class="d-flex @(isMine ? "justify-content-end" : "justify-content-start")">
+                            <div class="p-2 rounded-3 @(isMine ? "bg-primary text-white" : "bg-light")" style="max-width:85%;word-wrap:break-word">
+                                <small class="d-block @(isMine ? "text-white-50" : "text-muted")" style="font-size:0.7rem"><strong>@msg.SenderUsername</strong> &middot; @msg.MessageSent.ToString("MMM dd HH:mm")</small>
+                                @msg.Content
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <form id="chatForm" class="d-flex gap-2" autocomplete="off">
+                        <input type="text" id="chatInput" class="form-control" placeholder="Message the room…" required />
+                        <button type="submit" class="btn btn-danger">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>In this room</span>
+                    <span class="badge bg-danger" id="inRoomCount">0 in room</span>
+                </div>
+                <ul class="list-group list-group-flush" id="participantList" style="max-height:200px;overflow-y:auto">
+                    <li class="list-group-item text-muted">Loading participants…</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+<script>
+    window.VideoRoomConfig = {
+        roomId: @roomId,
+        maxSpots: @maxSpots,
+        currentUserId: '@currentUserId',
+        currentUsername: '@currentUsername',
+        hubUrl: '/videohub'
+    };
+</script>
+<script src="~/_content/MvcApp.Module.Video/js/video-room.js?v=2" defer></script>

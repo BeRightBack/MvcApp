@@ -1,0 +1,74 @@
+@model List<MvcApp.Core.ShoppingCartItem>
+@{
+    ViewData["Title"] = @Localizer["Cart - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Review your selected subscription plans before checkout."];
+    var total = Model.Sum(i => (i.SubscriptionDetail?.Price ?? 0) * i.Quantity);
+}
+
+<div class="container py-5">
+    <h1 class="mb-4">@Localizer["Your Cart"]</h1>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info text-center py-5">
+            <i class="fa fa-shopping-cart fa-3x mb-3"></i>
+            <h4>@Localizer["Your cart is empty"]</h4>
+            <p>@Localizer["Browse our plans and add a subscription to get started."]</p>
+            <a asp-controller="IptvStore" asp-action="Index" class="btn btn-primary">@Localizer["Browse Plans"]</a>
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>@Localizer["Plan"]</th>
+                                <th>@Localizer["Detail"]</th>
+                                <th>@Localizer["Price"]</th>
+                                <th>@Localizer["Quantity"]</th>
+                                <th>@Localizer["Subtotal"]</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.SubscriptionPlan?.Name</td>
+                                    <td>@item.SubscriptionDetail?.Description</td>
+                                    <td>$@item.SubscriptionDetail?.Price</td>
+                                    <td>@item.Quantity</td>
+                                    <td>$@((item.SubscriptionDetail?.Price ?? 0) * item.Quantity)</td>
+                                    <td>
+                                        <form asp-controller="IptvCart" asp-action="RemoveFromCart" method="post">
+                                            <input type="hidden" name="subscriptionPlanId" value="@item.SubscriptionPlanId" />
+                                            <input type="hidden" name="subscriptionDetailId" value="@item.SubscriptionDetailId" />
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="4" class="text-end">@Localizer["Total"]:</th>
+                                <th>$@total</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="text-end mt-3">
+                    <a asp-controller="IptvCart" asp-action="Checkout" class="btn btn-success btn-lg">
+                        <i class="fa fa-credit-card me-2"></i>@Localizer["Proceed to Checkout"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,127 @@
+@model IEnumerable<MvcApp.Core.InterestTag>
+@{
+    ViewData["Title"] = "Interest Tags";
+    var category = ViewBag.Category as string;
+    var search = ViewBag.Search as string ?? "";
+    var categories = Enum.GetValues<MvcApp.Core.InterestCategory>();
+}
+
+<section class="py-4">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold"><i class='bx bx-tag'></i> Interest Tags</h2>
+                <p class="text-muted mb-0">
+                    Manage curated tags shown on member profiles &amp; discover filters
+                    <span class="badge bg-primary ms-2">@ViewBag.TotalCount total</span>
+                    <span class="badge bg-info ms-1">@ViewBag.UserCount user selections</span>
+                </p>
+            </div>
+            <a asp-action="Create" class="btn btn-primary rounded-pill">
+                <i class='bx bx-plus'></i> Add Tag
+            </a>
+        </div>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Message"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <form method="get" class="row g-2 mb-4">
+            <div class="col-auto">
+                <select name="category" class="form-select form-select-sm">
+                    <option value="">All Categories</option>
+                    @foreach (var c in categories)
+                    {
+                        <option value="@c" selected="@(category == c.ToString())">@c</option>
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="Search tags..." />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill">Filter</button>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary rounded-pill">Clear</a>
+            </div>
+        </form>
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class='bx bx-tag' style="font-size:4rem; color:#6c757d;"></i>
+                <h4 class="mt-3">No tags found</h4>
+                <p class="text-muted">Add interest tags that users can select for their profiles.</p>
+                <a asp-action="Create" class="btn btn-primary rounded-pill">Create First Tag</a>
+            </div>
+        }
+        else
+        {
+            var tagGroups = Model.GroupBy(t => t.Category).OrderBy(g => g.Key);
+            var categoryColors = new Dictionary<MvcApp.Core.InterestCategory, string> {
+                { MvcApp.Core.InterestCategory.Interest, "primary" },
+                { MvcApp.Core.InterestCategory.Fantasy, "danger" },
+                { MvcApp.Core.InterestCategory.Hobby, "success" },
+                { MvcApp.Core.InterestCategory.Lifestyle, "info" },
+                { MvcApp.Core.InterestCategory.Kink, "warning" }
+            };
+
+            @foreach (var group in tagGroups)
+            {
+                var color = categoryColors.ContainsKey(group.Key) ? categoryColors[group.Key] : "secondary";
+                <div class="mb-4">
+                    <h5 class="mb-3">
+                        <span class="badge bg-@color bg-opacity-10 text-@color me-2" style="font-size:0.9rem;">@group.Key</span>
+                        <small class="text-muted">@group.Count() tag(s)</small>
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:50px;">ID</th>
+                                    <th>Name</th>
+                                    <th style="width:120px;">Category</th>
+                                    <th style="width:80px;">Curated</th>
+                                    <th style="width:140px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var tag in group.OrderBy(t => t.Name))
+                                {
+                                    <tr>
+                                        <td class="text-muted">#@tag.Id</td>
+                                        <td>
+                                            <span class="badge bg-@color bg-opacity-10 text-@color">@tag.Name</span>
+                                        </td>
+                                        <td class="text-muted small">@tag.Category</td>
+                                        <td>
+                                            @if (tag.IsCurated)
+                                            {
+                                                <i class='bx bx-check-circle text-success'></i>
+                                            }
+                                            else
+                                            {
+                                                <i class='bx bx-circle text-muted'></i>
+                                            }
+                                        </td>
+                                        <td class="text-end">
+                                            <a asp-action="Edit" asp-route-id="@tag.Id" class="btn btn-sm btn-outline-primary rounded-pill">
+                                                <i class='bx bx-edit'></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@tag.Id" class="btn btn-sm btn-outline-danger rounded-pill">
+                                                <i class='bx bx-trash'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>

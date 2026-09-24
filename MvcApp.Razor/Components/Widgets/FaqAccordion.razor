@@ -1,0 +1,45 @@
+@using MvcApp.Core
+@attribute [BlazorPageComponent("Faq", DisplayName = "FAQ accordion", Description = "Collapsible Q&A accordion built in Blazor.", Category = "Components")]
+<div class="accordion mb-4" id="@AccordionId">
+    @{ var i = 0; }
+    @foreach (var q in Questions)
+    {
+        var target = AccordionId + "-" + i;
+        var show = i == 0 ? " show" : "";
+        var collapsed = i == 0 ? "" : " collapsed";
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button@(collapsed)" type="button" data-bs-toggle="collapse" data-bs-target="#@target">@q.Question</button>
+            </h2>
+            <div id="@target" class="accordion-collapse collapse@(show)" data-bs-parent="#@AccordionId">
+                <div class="accordion-body">@q.Answer</div>
+            </div>
+        </div>
+        i++;
+    }
+</div>
+
+@code {
+    [Parameter] public string Q1 { get; set; } = "What is this about?";
+
+    [Parameter] public string A1 { get; set; } = "A short answer to the first question.";
+
+    [Parameter] public string Q2 { get; set; } = "How do I get started?";
+
+    [Parameter] public string A2 { get; set; } = "A short answer to the second question.";
+
+    [Parameter] public string Q3 { get; set; } = "Where can I learn more?";
+
+    [Parameter] public string A3 { get; set; } = "A short answer to the third question.";
+
+    private sealed record FaqItem(string Question, string Answer);
+
+    private List<FaqItem> Questions => new()
+    {
+        new(Q1, A1),
+        new(Q2, A2),
+        new(Q3, A3)
+    };
+
+    private string AccordionId => "faq-" + Guid.NewGuid().ToString("N")[..8];
+}

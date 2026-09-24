@@ -1,0 +1,485 @@
+/* Utility app-shell — Blazor-style fixed sidebar design.
+   Replaces the former Business CMS portal look. */
+
+:root {
+    --template-primary: #1b6ec2;
+    --template-primary-dark: #14508f;
+    --template-primary-light: #e7f0fb;
+    --template-secondary: #5b6b7b;
+    --template-accent: #3a0647;
+    --template-bg: #f5f7fa;
+    --template-bg-alt: #ffffff;
+    --template-text: #333333;
+    --template-text-light: #6c757d;
+    --template-heading: #172033;
+    --template-border: #d6d5d5;
+    --template-font: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    --template-font-heading: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --template-radius: 0.375rem;
+    --template-radius-sm: 0.25rem;
+    --template-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    --template-shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.08);
+    --template-transition: 0.2s ease;
+    --template-gradient: linear-gradient(180deg, #052767 0%, #3a0647 70%);
+}
+
+body {
+    font-family: var(--template-font);
+    color: var(--template-text);
+    background: var(--template-bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--template-font-heading);
+    color: var(--template-heading);
+    font-weight: 600;
+}
+
+a {
+    color: var(--template-primary);
+    text-decoration: none;
+}
+a:hover {
+    color: var(--template-primary-dark);
+    text-decoration: underline;
+}
+
+/* ============================================================
+   Utility app shell: fixed sidebar + content column
+   ============================================================ */
+
+.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.sidebar {
+    position: relative;
+    background-image: var(--template-gradient);
+    color: #fff;
+    transition: margin-left 0.22s ease;
+}
+
+/* ------------------------------------------------------------
+   Neutralize global shared rules (styles2.min.css) that fight the
+   app shell: it forces `.navbar { position:absolute; height:60px }`,
+   `.nav-link { color:#000 !important }`, `.navbar-nav { margin-left:auto }`
+   and `.navbar-brand { font-size:1.5rem }` on every page. The Business
+   template re-asserts its own shell so those rules cannot override it.
+   ------------------------------------------------------------ */
+.sidebar .top-row.navbar {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: 3.5rem !important;
+    z-index: auto !important;
+    padding-left: 1rem !important;
+}
+.sidebar .nav-link,
+.sidebar .navbar-nav .nav-link {
+    color: #fff !important;
+}
+.sidebar .navbar-nav {
+    margin-left: 0 !important;
+}
+.sidebar .nav-item {
+    margin-right: 0 !important;
+}
+.sidebar .top-row .navbar-brand {
+    font-size: 1.15rem !important;
+    font-weight: 600 !important;
+}
+.sidebar .top-row .navbar-brand img {
+    width: auto !important;
+    height: 28px !important;
+}
+.sidebar .navbar-toggler {
+    margin-right: 0 !important;
+}
+
+.top-row {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid var(--template-border);
+}
+
+/* Sidebar brand row */
+.sidebar .top-row {
+    background-image: var(--template-gradient);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+.sidebar .top-row .navbar-brand,
+.sidebar .top-row a {
+    color: #fff;
+}
+.sidebar .top-row .navbar-brand:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Cart badge on the dark sidebar */
+.sidebar .cart-badge {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+    background-color: transparent;
+}
+.sidebar .cart-badge:hover,
+.sidebar .cart-badge:focus {
+    color: #052767;
+    background-color: #fff;
+    border-color: #fff;
+}
+
+/* Navigation toggle (checkbox), mobile only */
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Collapsed nav on narrow screens */
+.nav-scrollable {
+    display: none;
+}
+.navbar-toggler:checked ~ .nav-scrollable {
+    display: block;
+}
+
+/* Sidebar nav links */
+.sidebar .nav-item {
+    font-size: 0.9rem;
+    padding: 0.15rem 0;
+}
+.sidebar .nav-item:first-of-type {
+    padding-top: 0.5rem;
+}
+.sidebar .nav-item:last-of-type {
+    padding-bottom: 0.5rem;
+}
+.sidebar .nav-link,
+.sidebar .navbar-nav .nav-link {
+    color: #fff;
+    border-radius: 4px;
+    height: 2.6rem;
+    display: flex;
+    align-items: center;
+    line-height: 2.6rem;
+    padding: 0 0.5rem;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active,
+.sidebar .navbar-nav .nav-link:hover,
+.sidebar .navbar-nav .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* _LoginPartial renders a ul.navbar-nav inside the sidebar */
+.sidebar .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+}
+.sidebar .navbar-nav .nav-item {
+    padding: 0.15rem 0.5rem;
+}
+.sidebar .text-dark,
+.sidebar .btn-link {
+    color: #fff !important;
+}
+
+.sidebar-divider {
+    margin: 0.5rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    opacity: 1;
+}
+
+/* Content column */
+.page main {
+    flex: 1;
+    min-width: 0;
+}
+.page .top-row:not(.auth) {
+    display: none;
+}
+.content {
+    padding-bottom: 2rem;
+}
+
+/* Sidebar collapse toggle (main top-row, desktop) */
+.sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--template-text-light);
+    font-size: 1.4rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--template-radius-sm);
+    margin-right: 0.25rem;
+}
+.sidebar-toggle:hover {
+    color: var(--template-primary);
+    background-color: rgba(27, 110, 194, 0.08);
+}
+
+/* Currency + language controls sit side-by-side in the top-row */
+.page main .top-row .navbar-nav {
+    flex-direction: row !important;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+    margin-left: 0 !important;
+}
+.page main .top-row .navbar-nav .nav-item {
+    margin-right: 0 !important;
+}
+.page main .top-row .navbar-nav form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+.page main .top-row .navbar-nav .locale-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.page main .top-row .navbar-nav .locale-control i {
+    font-size: 1.1rem;
+    color: var(--template-text-light);
+}
+.page main .top-row .navbar-nav .form-control {
+    display: inline-block;
+    width: auto;
+    height: 2rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Center ad banners rendered inside the Business shell (content + footer) */
+.content .ad-zone,
+footer .ad-zone {
+    text-align: center;
+}
+.content .ad-zone .ad-banner,
+footer .ad-zone .ad-banner {
+    display: inline-block;
+}
+.content .ad-zone .ad-banner img,
+footer .ad-zone .ad-banner img {
+    display: inline-block !important;
+}
+
+/* Dashboard home page */
+.dashboard-header {
+    background-image: var(--template-gradient);
+    border-radius: var(--template-radius);
+    padding: 2.25rem 2rem;
+    color: #fff;
+    box-shadow: var(--template-shadow-hover);
+    position: relative;
+    overflow: hidden;
+}
+.dashboard-header::after {
+    content: "";
+    position: absolute;
+    top: -70px;
+    right: -50px;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+}
+.dashboard-header h1 {
+    color: #fff;
+}
+.dashboard-header .btn {
+    border-radius: 50rem;
+}
+.dashboard-header .btn-light:hover {
+    color: var(--template-primary-dark);
+}
+
+.stat-card {
+    position: relative;
+    border: none;
+    border-left: 4px solid var(--template-primary);
+    border-radius: var(--template-radius);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    height: 100%;
+}
+.stat-card .stat-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.6rem;
+    opacity: 0.18;
+    color: var(--template-heading);
+}
+.stat-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+    font-family: var(--template-font-heading);
+    color: var(--template-heading);
+    line-height: 1.1;
+}
+.stat-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--template-text-light);
+}
+
+.feature-card {
+    height: 100%;
+    transition: transform var(--template-transition), box-shadow var(--template-transition);
+}
+.feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--template-shadow-hover);
+}
+.feature-card .feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--template-radius);
+    background: var(--template-primary-light);
+    color: var(--template-primary);
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+.feature-card h6 {
+    font-weight: 600;
+}
+
+.cta-band {
+    background-image: var(--template-gradient);
+    border-radius: var(--template-radius);
+    color: #fff;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+.cta-band h4 {
+    color: #fff;
+    font-weight: 700;
+}
+.cta-band .btn {
+    border-radius: 50rem;
+}
+
+/* ============================================================
+   Desktop
+   ============================================================ */
+@media (min-width: 641px) {
+    .page {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        flex-shrink: 0;
+    }
+
+    .top-row {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .navbar-toggler {
+        display: none;
+    }
+
+    .nav-scrollable {
+        display: block;
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+
+    .page .top-row:not(.auth) {
+        display: flex;
+    }
+
+    .page main .top-row:not(.auth) {
+        justify-content: flex-end;
+    }
+
+    /* Collapsible sidebar (desktop only) */
+    .page.sidebar-collapsed .sidebar {
+        margin-left: -250px;
+    }
+}
+
+/* ============================================================
+   Shared component polish
+   ============================================================ */
+.card {
+    border: none;
+    border-radius: var(--template-radius);
+    box-shadow: var(--template-shadow);
+    background: var(--template-bg-alt);
+    transition: box-shadow var(--template-transition);
+}
+.card:hover {
+    box-shadow: var(--template-shadow-hover);
+}
+
+.btn {
+    border-radius: var(--template-radius-sm);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+.btn-primary {
+    background: var(--template-primary);
+    border: none;
+    color: #fff;
+}
+.btn-primary:hover {
+    background: var(--template-primary-dark);
+    box-shadow: 0 4px 12px rgba(27, 110, 194, 0.3);
+}
+
+.form-control {
+    border-radius: var(--template-radius-sm);
+    border: 1px solid var(--template-border);
+    font-size: 0.875rem;
+}
+.form-control:focus {
+    border-color: var(--template-primary);
+    box-shadow: 0 0 0 3px rgba(27, 110, 194, 0.08);
+}
+
+.badge {
+    border-radius: var(--template-radius-sm);
+    font-weight: 500;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+}
+
+.alert {
+    border-radius: var(--template-radius-sm);
+    border: none;
+}
+
+/* Footer keeps the light app shell (layout-override.css) */
+footer {
+    font-size: 0.85rem;
+}

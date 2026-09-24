@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /language/
+Disallow: /localization/
+Disallow: /location/
+Disallow: /plan/
+Disallow: /roleadmin/
+Disallow: /role/
+Disallow: /subscription/
+Disallow: /user/
+Disallow: /cgi-bin/
+Allow: /
+Sitemap: https://quebeciptv.org/Sitemap

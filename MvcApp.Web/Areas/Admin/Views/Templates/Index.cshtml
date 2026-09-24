@@ -1,0 +1,61 @@
+@using MvcApp.Core.Abstractions
+@model List<UiTemplateInfo>
+@{
+    ViewData["Title"] = "UI Templates";
+    var active = ViewBag.ActiveTemplate as string;
+    var landingEnabled = ViewBag.LandingEnabled as Dictionary<string, bool>;
+}
+
+<h1 class="mb-4">UI Templates</h1>
+<p class="text-muted">Choose how your site looks. Templates change colors, fonts, and visual style. A landing page advertises the template's purpose; when disabled, the site shows the generic home page.</p>
+
+<div class="row g-4">
+    @foreach (var template in Model)
+    {
+        var isActive = string.Equals(template.Name, active, StringComparison.OrdinalIgnoreCase);
+        var landing = landingEnabled != null && landingEnabled.TryGetValue(template.Name, out var l) && l;
+        <div class="col-md-6 col-lg-4">
+            <div class="card @(isActive ? "border-primary" : "")">
+                <div class="card-body text-center p-4">
+                    @if (isActive)
+                    {
+                        <span class="badge bg-success mb-2">Active</span>
+                    }
+                    <h5 class="card-title">@template.DisplayName</h5>
+                    <p class="card-text text-muted small">@template.Description</p>
+                    <div class="border rounded p-3 mb-3" style="height:120px; display:flex; align-items:center; justify-content:center; background:var(--template-bg-alt, #f8f9fc)">
+                        <span style="font-size:2.5rem">
+                            @switch (template.Name)
+                            {
+                                case "Default": <text>&#x1F3E0;</text> break;
+                                case "Dating":  <text>&#x2764;&#xFE0F;</text> break;
+                                case "IPTV":    <text>&#x1F4FA;</text> break;
+                                default:        <text>&#x1F3A8;</text> break;
+                            }
+                        </span>
+                    </div>
+                    @if (!isActive)
+                    {
+                        <form asp-action="SetActive" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="name" value="@template.Name" />
+                            <button type="submit" class="btn btn-primary">Activate</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-outline-success" disabled>Active</button>
+                    }
+                    <form asp-action="SetLanding" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="name" value="@template.Name" />
+                        <input type="hidden" name="enabled" value="@(landing ? "false" : "true")" />
+                        <button type="submit" class="btn @(landing ? "btn-outline-warning" : "btn-outline-secondary")">@(landing ? "Landing On" : "Landing Off")</button>
+                    </form>
+                    <a asp-action="Index" asp-controller="TemplateNav" asp-route-template="@template.Name"
+                       class="btn btn-outline-info">Navigation</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,36 @@
+@model Order
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="text-center py-5">
+    <i class="fa fa-check-circle text-success fa-5x mb-3"></i>
+    <h1>Order Placed Successfully!</h1>
+    <p class="lead">Thank you for your order.</p>
+    <p><strong>Order #: @Model.Id</strong></p>
+    <p>Order Date: @Model.OrderDate.ToString("yyyy-MM-dd HH:mm")</p>
+    <p><strong>Total: $@Model.TotalAmount.ToString("F2")</strong></p>
+    <hr />
+    <h5>Items</h5>
+    <table class="table table-bordered mx-auto" style="max-width:600px;">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Quantity</td>
+                    <td>$@item.UnitPrice.ToString("F2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Orders" class="btn btn-primary mt-3"><i class="fa fa-list"></i> View My Orders</a>
+    <a asp-action="Index" class="btn btn-outline-primary mt-3"><i class="fa fa-shopping-bag"></i> Continue Shopping</a>
+</div>

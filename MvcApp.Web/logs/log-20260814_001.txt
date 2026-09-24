@@ -1,0 +1,172 @@
+2026-08-14 22:41:11.081 -04:00 [INF] dev env
+2026-08-14 22:41:17.000 -04:00 [INF] Starting role seeding...
+2026-08-14 22:41:17.058 -04:00 [INF] Role Admin already exists
+2026-08-14 22:41:17.064 -04:00 [INF] Role Moderator already exists
+2026-08-14 22:41:17.067 -04:00 [INF] Role seeding completed.
+2026-08-14 22:41:17.071 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-08-14 22:41:17.331 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-08-14 22:41:17.431 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-08-14 22:41:17.441 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-08-14 22:41:17.528 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-08-14 22:41:17.690 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-08-14 22:41:17.724 -04:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://127.0.0.1:9001: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.EndpointsStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2026-08-14 22:41:17.880 -04:00 [FTL] Application start-up failed 1
+System.IO.IOException: Failed to bind to address http://127.0.0.1:9001: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.EndpointsStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp\MvcApp.Web\Program.cs:line 315
+2026-08-14 22:41:17.984 -04:00 [FTL] Application start-up failed 2
+System.IO.IOException: Failed to bind to address http://127.0.0.1:9001: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.EndpointsStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp\MvcApp.Web\Program.cs:line 315
+2026-08-14 22:42:55.933 -04:00 [INF] dev env
+2026-08-14 22:43:00.665 -04:00 [INF] Starting role seeding...
+2026-08-14 22:43:00.722 -04:00 [INF] Role Admin already exists
+2026-08-14 22:43:00.731 -04:00 [INF] Role Moderator already exists
+2026-08-14 22:43:00.733 -04:00 [INF] Role seeding completed.
+2026-08-14 22:43:00.736 -04:00 [INF] Checking for admin user: admin@frenzyzone.com
+2026-08-14 22:43:00.964 -04:00 [INF] Admin user already exists: admin@frenzyzone.com
+2026-08-14 22:43:01.084 -04:00 [INF] Test users already exist. Skipping test user seeding.
+2026-08-14 22:43:01.095 -04:00 [INF] Likes and messages already exist. Skipping.
+2026-08-14 22:43:01.173 -04:00 [INF] Subscription Status Updater Service is starting.
+2026-08-14 22:43:01.355 -04:00 [WRN] Overriding address(es) 'http://localhost:9001'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2026-08-14 22:43:02.249 -04:00 [WRN] Failed to determine the https port for redirect.
+2026-08-14 22:43:03.973 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 29.0649 ms
+2026-08-14 22:43:04.001 -04:00 [INF] HTTP GET / responded 200 in 1761.8080 ms
+2026-08-14 22:43:04.124 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 27.6753 ms
+2026-08-14 22:43:04.191 -04:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2026-08-14 22:43:04.192 -04:00 [INF] HTTP POST /notificationhub/negotiate responded 401 in 33.3408 ms
+2026-08-14 22:43:05.991 -04:00 [INF] AuthenticationScheme: Identity.External signed out.
+2026-08-14 22:43:06.289 -04:00 [INF] HTTP GET /Account/Login responded 200 in 392.4814 ms
+2026-08-14 22:43:06.310 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 6.5089 ms
+2026-08-14 22:43:06.316 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 11.4480 ms
+2026-08-14 22:43:06.332 -04:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2026-08-14 22:43:06.334 -04:00 [INF] HTTP POST /notificationhub/negotiate responded 401 in 3.7264 ms
+2026-08-14 22:43:09.012 -04:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-08-14 22:43:09.015 -04:00 [INF] User admin logged in.
+2026-08-14 22:43:09.021 -04:00 [INF] HTTP POST /Account/Login responded 302 in 300.8911 ms
+2026-08-14 22:43:09.346 -04:00 [INF] HTTP GET / responded 200 in 314.5476 ms
+2026-08-14 22:43:09.367 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 5.2985 ms
+2026-08-14 22:43:09.368 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 8.0225 ms
+2026-08-14 22:43:09.416 -04:00 [INF] HTTP POST /notificationhub/negotiate responded 200 in 14.6449 ms
+2026-08-14 22:43:09.422 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 62.7249 ms
+2026-08-14 22:43:14.761 -04:00 [INF] HTTP GET /Admin responded 200 in 263.4792 ms
+2026-08-14 22:43:14.798 -04:00 [INF] HTTP GET /notificationhub responded 101 in 5375.8691 ms
+2026-08-14 22:43:14.812 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 30.4687 ms
+2026-08-14 22:43:17.729 -04:00 [INF] HTTP GET /Admin/Bans responded 200 in 145.1964 ms
+2026-08-14 22:43:17.777 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 31.4194 ms
+2026-08-14 22:43:25.636 -04:00 [INF] HTTP GET /Admin/Role responded 200 in 105.7136 ms
+2026-08-14 22:43:25.684 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 32.6529 ms
+2026-08-14 22:43:26.964 -04:00 [INF] HTTP GET /Admin/Role/Edit/70d0b364-c0c4-4fae-b5c5-a999b2d9ac18 responded 200 in 85.9176 ms
+2026-08-14 22:43:27.004 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 26.0905 ms
+2026-08-14 22:43:32.180 -04:00 [INF] HTTP GET /Admin/Role responded 200 in 50.6610 ms
+2026-08-14 22:43:32.231 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 36.1495 ms
+2026-08-14 22:43:34.094 -04:00 [INF] HTTP GET /Admin/Role/Edit/cee42275-45bb-417c-80bb-5ae6469e8836 responded 200 in 44.8976 ms
+2026-08-14 22:43:34.136 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 25.5861 ms
+2026-08-14 22:43:36.198 -04:00 [INF] HTTP GET /Admin/Role responded 200 in 50.4709 ms
+2026-08-14 22:43:36.243 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 30.6705 ms
+2026-08-14 22:43:39.636 -04:00 [INF] HTTP GET /Admin/RoleAdmin responded 200 in 368.3903 ms
+2026-08-14 22:43:39.676 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 25.3302 ms
+2026-08-14 22:44:01.705 -04:00 [INF] HTTP GET /Admin/Pages responded 200 in 105.4577 ms
+2026-08-14 22:44:01.769 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 43.5997 ms
+2026-08-14 22:44:07.135 -04:00 [INF] HTTP GET / responded 200 in 155.9740 ms
+2026-08-14 22:44:07.155 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 4.0393 ms
+2026-08-14 22:44:07.167 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.2327 ms
+2026-08-14 22:44:07.209 -04:00 [INF] HTTP POST /notificationhub/negotiate responded 200 in 5.7164 ms
+2026-08-14 22:44:07.210 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 58.3772 ms
+2026-08-14 22:44:11.350 -04:00 [INF] HTTP GET /Messages responded 200 in 606.9268 ms
+2026-08-14 22:44:11.361 -04:00 [INF] HTTP GET /notificationhub responded 101 in 4129.9167 ms
+2026-08-14 22:44:11.369 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.2281 ms
+2026-08-14 22:44:11.395 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 29.4969 ms
+2026-08-14 22:44:11.397 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 31.2022 ms
+2026-08-14 22:44:11.399 -04:00 [INF] HTTP POST /notificationhub/negotiate responded 200 in 3.6891 ms
+2026-08-14 22:44:13.080 -04:00 [INF] HTTP GET /Video responded 200 in 244.9158 ms
+2026-08-14 22:44:13.091 -04:00 [INF] HTTP GET /notificationhub responded 101 in 1685.2744 ms
+2026-08-14 22:44:13.104 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 5.0933 ms
+2026-08-14 22:44:13.104 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 4.3914 ms
+2026-08-14 22:44:13.126 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 27.4032 ms
+2026-08-14 22:44:13.155 -04:00 [INF] HTTP POST /notificationhub/negotiate responded 200 in 4.5172 ms
+2026-08-14 22:44:14.121 -04:00 [INF] HTTP GET /Chat/Rooms responded 200 in 205.0193 ms
+2026-08-14 22:44:14.131 -04:00 [INF] HTTP GET /notificationhub responded 101 in 957.6584 ms
+2026-08-14 22:44:14.140 -04:00 [INF] HTTP GET /lib/bootstrap-icons/css/bootstrap-icons.min.css responded 404 in 3.2283 ms
+2026-08-14 22:44:14.141 -04:00 [INF] HTTP GET /_framework/blazor.server.js responded 404 in 3.5731 ms
+2026-08-14 22:44:14.167 -04:00 [INF] HTTP GET /Account/GetProfilePicture responded 200 in 29.7005 ms
+2026-08-14 22:44:14.174 -04:00 [INF] HTTP POST /notificationhub/negotiate responded 200 in 3.8790 ms
+2026-08-14 22:44:20.307 -04:00 [INF] HTTP POST /ads/impression/6 responded 200 in 118.4200 ms
+2026-08-14 22:44:26.210 -04:00 [INF] HTTP POST /ads/impression/10 responded 200 in 28.0177 ms
+2026-08-14 22:44:28.642 -04:00 [INF] HTTP GET /notificationhub responded 101 in 14451.3449 ms

@@ -1,0 +1,324 @@
+@model ProjectDetailsViewModel
+@{
+    ViewData["Title"] = "Project Details";
+    var totalTasks = Model.Project.ToDoTasks.Count;
+    var completedTasks = Model.Project.ToDoTasks.Count(t => t.Status == ToDoTaskStatus.Completed);
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Utility">Projects</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Project.Name</li>
+                </ol>
+            </nav>
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>@Model.Project.Name</h1>
+                <div>
+                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addTaskModal" title="Add a new task to this project">
+                        <span class="bi bi-plus-circle"></span> New Task
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editProjectModal" data-id="@Model.Project.Id" data-name="@Model.Project.Name" data-description="@Model.Project.Description" title="Edit project details">
+                        <span class="bi bi-pencil"></span> Edit Project
+                    </button>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Project.Description))
+            {
+                <p class="lead">@Model.Project.Description</p>
+            }
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Project Information</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="small text-muted">Created:</div>
+                            <div>@Model.Project.CreatedAt.ToString("MMM dd, yyyy")</div>
+                        </div>
+                        @if (Model.Project.UpdatedAt.HasValue)
+                        {
+                            <div class="col-md-4">
+                                <div class="small text-muted">Last Updated:</div>
+                                <div>@Model.Project.UpdatedAt.Value.ToString("MMM dd, yyyy")</div>
+                            </div>
+                        }
+                        <div class="col-md-4">
+                            <div class="small text-muted">Tasks:</div>
+                            <div>@totalTasks (@completedTasks completed)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Tasks</h2>
+                <div class="btn-group">
+                    <a asp-action="ProjectDetails" asp-route-id="@Model.Project.Id" asp-route-filter="all" class="btn btn-outline-secondary @(Model.Filter == "all" ? "active" : "")" title="Show all tasks">All</a>
+                    <a asp-action="ProjectDetails" asp-route-id="@Model.Project.Id" asp-route-filter="active" class="btn btn-outline-secondary @(Model.Filter == "active" ? "active" : "")" title="Show active tasks">Active</a>
+                    <a asp-action="ProjectDetails" asp-route-id="@Model.Project.Id" asp-route-filter="completed" class="btn btn-outline-secondary @(Model.Filter == "completed" ? "active" : "")" title="Show completed tasks">Completed</a>
+                </div>
+            </div>
+
+            @if (Model.Tasks.Any())
+            {
+                <div style="position: static">
+                    @foreach (var task in Model.Tasks)
+                    {
+                        <div class="card mb-2 task-card @UtilityDisplay.PriorityCardClass(task.Priority)" style="cursor: pointer" onclick="location.href='@Url.Action(nameof(UtilityController.TaskDetails), new { id = task.Id })'" title="Click to view task details">
+                            <div class="card-body p-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="me-2">
+                                        <h6 class="mb-1 text-truncate" style="max-width: 200px">@task.Title</h6>
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge @UtilityDisplay.StatusBadgeClass(task.Status) me-2">@UtilityDisplay.StatusText(task.Status)</span>
+                                            @if (task.DueDate.HasValue)
+                                            {
+                                                <small class="text-muted d-flex align-items-center"><i class="bi bi-calendar me-1"></i><span>@task.DueDate.Value.ToShortDateString()</span></small>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <form method="post" asp-action="ChangeTaskStatus" asp-route-id="@task.Id" class="d-inline me-2">
+                                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" title="Change task status">
+                                                @foreach (var s in Enum.GetValues<ToDoTaskStatus>())
+                                                {
+                                                    <option value="@s" selected="@(s == task.Status)">@UtilityDisplay.StatusText(s)</option>
+                                                }
+                                            </select>
+                                        </form>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editTaskModal"
+                                                    data-id="@task.Id" data-title="@task.Title" data-description="@task.Description"
+                                                    data-status="@task.Status" data-priority="@task.Priority" data-duedate="@(task.DueDate.HasValue ? task.DueDate.Value.ToString("yyyy-MM-dd") : "")"
+                                                    title="Edit task"><i class="bi bi-pencil"></i></button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteTaskModal"
+                                                    data-id="@task.Id" data-title="@task.Title"
+                                                    title="Delete task"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    @if (totalTasks == 0)
+                    {
+                        <p>No tasks in this project yet. Click "New Task" to add one!</p>
+                    }
+                    else
+                    {
+                        <p>No tasks match the current filter.</p>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Edit Project modal -->
+<div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="EditProject" method="post">
+                <input type="hidden" id="editProjectId" name="Id" value="0" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editProjectName" class="form-label">Project Name</label>
+                        <input id="editProjectName" name="Name" class="form-control" required maxlength="100" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProjectDescription" class="form-label">Description</label>
+                        <textarea id="editProjectDescription" name="Description" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Task modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="CreateTask" asp-route-projectId="@Model.Project.Id" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="taskTitle" class="form-label">Task Title</label>
+                        <input id="taskTitle" name="Title" class="form-control" required maxlength="200" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskDescription" class="form-label">Description</label>
+                        <textarea id="taskDescription" name="Description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskDueDate" class="form-label">Due Date</label>
+                        <input id="taskDueDate" name="DueDate" type="date" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskPriority" class="form-label">Priority</label>
+                        <select id="taskPriority" name="Priority" class="form-select">
+                            <option value="0">Low</option>
+                            <option value="1">Medium</option>
+                            <option value="2">High</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="Status" value="0" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Task modal (filled by JS) -->
+<div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="EditTask" method="post">
+                <input type="hidden" id="editTaskId" name="Id" value="0" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editTaskTitle" class="form-label">Task Title</label>
+                        <input id="editTaskTitle" name="Title" class="form-control" required maxlength="200" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTaskDescription" class="form-label">Description</label>
+                        <textarea id="editTaskDescription" name="Description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTaskStatus" class="form-label">Status</label>
+                        <select id="editTaskStatus" name="Status" class="form-select">
+                            @foreach (var s in Enum.GetValues<ToDoTaskStatus>())
+                            {
+                                <option value="@s">@UtilityDisplay.StatusText(s)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTaskPriority" class="form-label">Priority</label>
+                        <select id="editTaskPriority" name="Priority" class="form-select">
+                            <option value="0">Low</option>
+                            <option value="1">Medium</option>
+                            <option value="2">High</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTaskDueDate" class="form-label">Due Date</label>
+                        <input id="editTaskDueDate" name="DueDate" type="date" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Task confirm modal -->
+<div class="modal fade" id="deleteTaskModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="DeleteTask" method="post">
+                <input type="hidden" id="deleteTaskId" name="id" value="0" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the task "<strong id="deleteTaskTitle"></strong>"?</p>
+                    <p class="text-danger">This will delete all subtasks within this task.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('[data-bs-target="#editTaskModal"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.getElementById('editTaskId').value = btn.dataset.id;
+            document.getElementById('editTaskTitle').value = btn.dataset.title;
+            document.getElementById('editTaskDescription').value = btn.dataset.description || '';
+            document.getElementById('editTaskStatus').value = btn.dataset.status || '0';
+            document.getElementById('editTaskPriority').value = btn.dataset.priority || '0';
+            document.getElementById('editTaskDueDate').value = btn.dataset.duedate || '';
+        });
+    });
+    document.querySelectorAll('[data-bs-target="#deleteTaskModal"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.getElementById('deleteTaskId').value = btn.dataset.id;
+            document.getElementById('deleteTaskTitle').textContent = btn.dataset.title;
+        });
+    });
+    document.querySelectorAll('[data-bs-target="#editProjectModal"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.getElementById('editProjectId').value = btn.dataset.id;
+            document.getElementById('editProjectName').value = btn.dataset.name;
+            document.getElementById('editProjectDescription').value = btn.dataset.description || '';
+        });
+    });
+</script>
+
+<style>
+    .task-card {
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        border-left-width: 4px;
+    }
+
+    .task-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .priority-high {
+        border-left-color: #dc3545;
+    }
+
+    .priority-medium {
+        border-left-color: #fd7e14;
+    }
+
+    .priority-low {
+        border-left-color: #0dcaf0;
+    }
+</style>

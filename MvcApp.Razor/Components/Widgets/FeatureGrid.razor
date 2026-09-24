@@ -1,0 +1,51 @@
+@using MvcApp.Core
+@attribute [BlazorPageComponent("Features", DisplayName = "Feature grid", Description = "Grid of icon feature cards built in Blazor.", Category = "Content")]
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="@F1Icon" style="font-size:2.5rem;color:var(--bs-primary)"></i>
+                <h5 class="card-title mt-2">@F1Title</h5>
+                <p class="card-text">@F1Text</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="@F2Icon" style="font-size:2.5rem;color:var(--bs-primary)"></i>
+                <h5 class="card-title mt-2">@F2Title</h5>
+                <p class="card-text">@F2Text</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="@F3Icon" style="font-size:2.5rem;color:var(--bs-primary)"></i>
+                <h5 class="card-title mt-2">@F3Title</h5>
+                <p class="card-text">@F3Text</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string F1Icon { get; set; } = "bx bx-bolt";
+
+    [Parameter] public string F1Title { get; set; } = "Lightning fast";
+
+    [Parameter] public string F1Text { get; set; } = "Describe the first key benefit of your product or service.";
+
+    [Parameter] public string F2Icon { get; set; } = "bx bx-shield-alt-2";
+
+    [Parameter] public string F2Title { get; set; } = "Secure by default";
+
+    [Parameter] public string F2Text { get; set; } = "Describe the second key benefit of your product or service.";
+
+    [Parameter] public string F3Icon { get; set; } = "bx bx-support";
+
+    [Parameter] public string F3Title { get; set; } = "24/7 support";
+
+    [Parameter] public string F3Text { get; set; } = "Describe the third key benefit of your product or service.";
+}

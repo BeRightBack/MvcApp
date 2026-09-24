@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = @Localizer["Interac Payment - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Complete your Interac e-Transfer payment."];
+}
+
+<div class="container py-5">
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-body text-center p-5">
+            <i class="fa fa-money fa-4x text-success mb-4"></i>
+            <h2>@Localizer["Interac e-Transfer Payment"]</h2>
+            <p class="lead">@Localizer["Send an Interac e-Transfer using the instructions below."]</p>
+            <div class="alert alert-info text-start">
+                <p>@ViewBag.Instructions</p>
+            </div>
+            <p class="text-muted">@Localizer["After sending your payment, click the verification button to activate your subscription."]</p>
+            <form asp-controller="IptvCart" asp-action="VerifyInteractPayment" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)" method="post">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fa fa-check me-2"></i>@Localizer["I Have Sent the Payment - Activate My Subscription"]
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

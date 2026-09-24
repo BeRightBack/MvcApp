@@ -1,0 +1,159 @@
+footer.footer {
+    position: relative !important;
+    bottom: auto !important;
+    background: #f8f9fa !important;
+    color: #212529 !important;
+    white-space: normal !important;
+    line-height: 1.5 !important;
+}
+
+footer.footer h5 {
+    color: #212529 !important;
+}
+
+footer.footer p {
+    color: #6c757d !important;
+}
+
+footer.footer a,
+footer.footer a:link,
+footer.footer a:visited {
+    color: #000 !important;
+}
+
+footer.footer a:hover {
+    color: #000 !important;
+    text-decoration: underline !important;
+}
+
+/* Cart badge count: keep the number large and legible regardless of the
+   active template's .badge styling (Luxury shrinks badges to 0.6rem with
+   uppercase tracking and a gold color, which makes the count unreadable
+   on the red pill). */
+.navbar .cart-badge .badge {
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #fff;
+}
+
+/* Locale controls — keep inline even in collapsed nav */
+.locale-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+.locale-control select.form-control {
+    display: inline-block;
+    width: auto;
+    height: 2rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+.navbar-nav:has(.locale-control) {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-nav:has(.locale-control) .nav-item {
+    width: auto !important;
+}
+
+/* ─── Navbar — template-adaptive ─── */
+/* Each template defines its own .navbar a { color: ... !important } which
+   beats styles2.min.css's .nav-link { color:#000 !important } (0,1,1 > 0,1,0).
+   We only add layout helpers here — NO color overrides on .nav-link. */
+.navbar .nav-link {
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+.navbar .navbar-toggler {
+    border-color: var(--template-border, rgba(0,0,0,0.1));
+}
+
+/* ─── Dropdown contrast — always visible regardless of template ─── */
+/* Problem: dropdowns render INSIDE .navbar in the DOM. Dark templates
+   (dating, luxury) set .navbar a { color: #fff !important } and
+   .navbar li may inherit white text. We need !important on EVERYTHING
+   inside .dropdown-menu to guarantee dark-on-white readability. */
+.dropdown-menu {
+    background: #fff !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important;
+    padding: 0.375rem;
+    animation: dropdownFade 0.15s ease;
+}
+/* Blanket color reset — every element inside the menu gets dark text */
+.dropdown-menu,
+.dropdown-menu li,
+.dropdown-menu .dropdown-item,
+.dropdown-menu .dropdown-header,
+.dropdown-menu .form-label,
+.dropdown-menu span,
+.dropdown-menu div,
+.dropdown-menu button {
+    color: #333 !important;
+}
+.dropdown-menu .dropdown-item,
+.dropdown-menu a.dropdown-item {
+    border-radius: 0.375rem;
+    padding: 0.45rem 0.75rem;
+    transition: background 0.15s, color 0.15s;
+}
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus,
+.dropdown-menu a.dropdown-item:hover,
+.dropdown-menu a.dropdown-item:focus {
+    background: rgba(78,115,223,0.08) !important;
+    color: #1a1a2e !important;
+}
+.dropdown-menu .dropdown-item i {
+    color: #6c757d !important;
+}
+.dropdown-menu .dropdown-header,
+.dropdown-menu .dropdown-header strong,
+.dropdown-menu .dropdown-header.fw-bold {
+    color: #212529 !important;
+    font-weight: 700 !important;
+}
+.dropdown-menu .dropdown-divider {
+    border-color: rgba(0,0,0,0.1) !important;
+}
+/* Native <select> inside dropdown-menu — override any template white-on-white */
+.dropdown-menu select.form-select {
+    background-color: #fff !important;
+    color: #333 !important;
+    border-color: #dee2e6 !important;
+}
+/* Form labels inside locale dropdown */
+.dropdown-menu .form-label {
+    color: #212529 !important;
+}
+@keyframes dropdownFade {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Cart badge inherits from navbar context */
+.navbar .cart-badge {
+    color: inherit;
+    border-color: transparent;
+}
+
+/* Icon-only nav-links (notification bell, cart, globe) — no padding/margin bloat */
+.navbar .nav-link.py-1 {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+}
+/* Bootstrap .nav-link sets padding: 0.5rem 1rem — override for compact icons */
+.navbar .nav-link.px-2 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}

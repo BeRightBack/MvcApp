@@ -1,0 +1,105 @@
+@model List<MvcApp.Core.PointTransaction>
+@{
+    ViewData["Title"] = "My Points";
+    var totalPoints = (int)ViewBag.TotalPoints;
+    var level = (int)ViewBag.Level;
+    var allBadges = (List<MvcApp.Core.Badge>)ViewBag.AllBadges;
+    var earnedBadgeIds = (HashSet<int>)ViewBag.EarnedBadgeIds;
+}
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="content-card text-center p-4">
+            <div class="display-4 fw-bold" style="color:var(--template-primary);">@totalPoints</div>
+            <div class="text-muted">Total Points</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="content-card text-center p-4">
+            <div class="display-4 fw-bold" style="color:var(--template-heading);">Level @level</div>
+            <div class="text-muted">Current Level</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="content-card text-center p-4">
+            <div class="display-4 fw-bold" style="color:var(--template-heading);">@earnedBadgeIds.Count / @allBadges.Count</div>
+            <div class="text-muted">Badges Earned</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-lg-7">
+        <div class="content-card">
+            <div class="card-body">
+                <h5 class="card-title">Points History</h5>
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Reason</th>
+                                    <th class="text-end">Points</th>
+                                    <th class="text-end">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var tx in Model)
+                                {
+                                    <tr>
+                                        <td>@tx.Reason</td>
+                                        <td class="text-end"><span class="badge bg-success">+@tx.Points</span></td>
+                                        <td class="text-end text-muted small">@tx.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No points earned yet. Start interacting to earn points!</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="content-card">
+            <div class="card-body">
+                <h5 class="card-title">How to Earn Points</h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="py-2 border-bottom d-flex justify-content-between">
+                        <span>Complete your profile</span>
+                        <span class="badge bg-success">+50</span>
+                    </li>
+                    <li class="py-2 border-bottom d-flex justify-content-between">
+                        <span>Upload a photo</span>
+                        <span class="badge bg-success">+10</span>
+                    </li>
+                    <li class="py-2 border-bottom d-flex justify-content-between">
+                        <span>Send a message</span>
+                        <span class="badge bg-success">+5</span>
+                    </li>
+                    <li class="py-2 border-bottom d-flex justify-content-between">
+                        <span>Get a match</span>
+                        <span class="badge bg-success">+20</span>
+                    </li>
+                    <li class="py-2 border-bottom d-flex justify-content-between">
+                        <span>Get verified</span>
+                        <span class="badge bg-success">+100</span>
+                    </li>
+                    <li class="py-2 border-bottom d-flex justify-content-between">
+                        <span>RSVP to an event</span>
+                        <span class="badge bg-success">+15</span>
+                    </li>
+                    <li class="py-2 d-flex justify-content-between">
+                        <span>Daily login</span>
+                        <span class="badge bg-success">+5</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

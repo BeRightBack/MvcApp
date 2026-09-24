@@ -1,0 +1,190 @@
+﻿@page
+@using MvcApp.Identity.Pages.Account.Manage
+@model IndexModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="mb-3 text-center">
+                <img src="@Url.Action("GetProfilePicture", "Account", new { userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value })"
+                     onerror="this.onerror=null;this.src='/images/default-user.png';"
+                     alt="Profile" width="120" height="120"
+                     class="rounded-circle border" style="object-fit:cover" id="profilePreview" />
+                <div class="mt-2">
+                    <input asp-for="Input.ProfilePictureFile" type="file" accept="image/*" class="form-control form-control-sm"
+                           onchange="document.getElementById('profilePreview').src = URL.createObjectURL(this.files[0])" />
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" placeholder="First name" />
+                <label asp-for="Input.FirstName" class="form-label"></label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" placeholder="Last name" />
+                <label asp-for="Input.LastName" class="form-label"></label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Username" class="form-control" placeholder="Username" />
+                <label asp-for="Input.Username" class="form-label"></label>
+                <span class="text-muted small">@Model.UserNameChangeLimitMessage</span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Phone number" />
+                <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <h5 class="mb-3">Additional Info</h5>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.KnownAs" class="form-control" placeholder="Display name" />
+                <label asp-for="Input.KnownAs" class="form-label"></label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea asp-for="Input.Introduction" class="form-control" placeholder="About you" style="height:100px"></textarea>
+                <label asp-for="Input.Introduction" class="form-label"></label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea asp-for="Input.LookingFor" class="form-control" placeholder="What are you looking for?" style="height:80px"></textarea>
+                <label asp-for="Input.LookingFor" class="form-label"></label>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <select asp-for="Input.Gender" class="form-control">
+                            <option value="">Select...</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <label asp-for="Input.Gender" class="form-label"></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.DateOfBirth" type="date" class="form-control" />
+                        <label asp-for="Input.DateOfBirth" class="form-label"></label>
+                        <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.City" class="form-control" placeholder="City" />
+                        <label asp-for="Input.City" class="form-label"></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Country" class="form-control" placeholder="Country" />
+                        <label asp-for="Input.Country" class="form-label"></label>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <h5 class="mb-3"><i class='bx bx-purchase-tag'></i> Interests</h5>
+            <p class="text-muted small mb-3">Select tags that describe you. These help others find you on Discover.</p>
+            @{
+                var groupedTags = Model.AvailableTags.GroupBy(t => t.Category).OrderBy(g => g.Key);
+                var categoryColors = new Dictionary<int, string> {
+                    { 0, "primary" }, { 1, "danger" }, { 2, "success" }, { 3, "info" }, { 4, "warning" }
+                };
+                var categoryNames = new Dictionary<int, string> {
+                    { 0, "Interests" }, { 1, "Fantasies" }, { 2, "Hobbies" }, { 3, "Lifestyle" }, { 4, "Kinks" }
+                };
+            }
+            @foreach (var group in groupedTags)
+            {
+                var color = categoryColors.ContainsKey((int)group.Key) ? categoryColors[(int)group.Key] : "secondary";
+                var catName = categoryNames.ContainsKey((int)group.Key) ? categoryNames[(int)group.Key] : group.Key.ToString();
+                <div class="mb-3">
+                    <h6 class="fw-semibold text-@color small text-uppercase">@catName</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var tag in group.OrderBy(t => t.Name))
+                        {
+                            var isChecked = Model.Input.InterestTagIds.Contains(tag.Id);
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="Input.InterestTagIds" value="@tag.Id"
+                                       id="tag_@tag.Id" checked="@(isChecked ? "checked" : null)" />
+                                <label class="form-check-label badge @(isChecked ? $"bg-{color}" : "bg-light text-dark")"
+                                       for="tag_@tag.Id" style="cursor:pointer;">
+                                    @tag.Name
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <hr />
+            <h5 class="mb-3">Privacy</h5>
+
+            <div class="form-check form-switch mb-3">
+                <input asp-for="Input.IsIncognito" class="form-check-input" role="switch" id="incognitoSwitch" />
+                <label class="form-check-label" for="incognitoSwitch">
+                    <i class='bx bx-hide'></i> Incognito Mode
+                </label>
+                <div class="form-text">When enabled, your profile won't appear in the Discover feed. You can still browse and message others.</div>
+            </div>
+
+            <hr />
+            <h5 class="mb-3"><i class='bx bx-message-rounded-dots'></i> Messaging Privacy</h5>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Who can send you messages?</label>
+                <div class="d-flex flex-column gap-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Input.MessagingPermission" value="0"
+                               id="mp_everyone" checked="@(Model.Input.MessagingPermission == MvcApp.Core.MessagingPermission.Everyone ? "checked" : null)" />
+                        <label class="form-check-label" for="mp_everyone">
+                            <i class='bx bx-globe'></i> Everyone
+                            <span class="text-muted small d-block">Any matched user can message you</span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Input.MessagingPermission" value="1"
+                               id="mp_matches" checked="@(Model.Input.MessagingPermission == MvcApp.Core.MessagingPermission.MatchesOnly ? "checked" : null)" />
+                        <label class="form-check-label" for="mp_matches">
+                            <i class='bx bx-heart'></i> Matches Only
+                            <span class="text-muted small d-block">Only mutual matches can message you</span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Input.MessagingPermission" value="2"
+                               id="mp_vip" checked="@(Model.Input.MessagingPermission == MvcApp.Core.MessagingPermission.VipOnly ? "checked" : null)" />
+                        <label class="form-check-label" for="mp_vip">
+                            <i class='bx bx-crown text-warning'></i> VIP Only
+                            <span class="text-muted small d-block">Only verified VIP members can message you</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

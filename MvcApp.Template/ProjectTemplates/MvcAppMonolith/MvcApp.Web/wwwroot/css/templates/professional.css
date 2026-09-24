@@ -1,0 +1,128 @@
+/* Professional — clean corporate look for business/professional networking */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;600;700&display=swap');
+
+:root {
+    --template-primary: #0a66c2;
+    --template-primary-dark: #004182;
+    --template-primary-light: #e8f0fe;
+    --template-secondary: #057642;
+    --template-accent: #f5a623;
+    --template-bg: #f3f5f7;
+    --template-bg-alt: #ffffff;
+    --template-text: #2c3e50;
+    --template-text-light: #8a96a2;
+    --template-heading: #1a1f2e;
+    --template-border: #dce3e8;
+    --template-font: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --template-font-heading: 'IBM Plex Serif', Georgia, serif;
+    --template-radius: 0.5rem;
+    --template-radius-sm: 0.25rem;
+    --template-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    --template-shadow-hover: 0 8px 24px rgba(0,0,0,0.1);
+    --template-transition: 0.2s ease;
+    --template-gradient: linear-gradient(135deg, #0a66c2 0%, #057642 100%);
+}
+
+body {
+    font-family: var(--template-font);
+    color: var(--template-text);
+    background: var(--template-bg);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--template-font-heading);
+    color: var(--template-heading);
+    font-weight: 600;
+}
+
+.header, .navbar {
+    background: #fff !important;
+    border-bottom: 1px solid var(--template-border);
+}
+
+.navbar a, .navbar-brand {
+    color: var(--template-heading) !important;
+}
+.navbar .nav-link.text-dark { color: var(--template-text) !important; }
+.navbar .nav-link.text-dark:hover { color: var(--template-primary) !important; }
+
+.card {
+    border: 1px solid var(--template-border);
+    border-radius: var(--template-radius);
+    box-shadow: var(--template-shadow);
+    background: var(--template-bg-alt);
+    transition: box-shadow var(--template-transition), transform var(--template-transition);
+}
+.card:hover {
+    box-shadow: var(--template-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.btn {
+    border-radius: 50px;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.85rem;
+    transition: all var(--template-transition);
+}
+
+.btn-primary {
+    background: var(--template-primary);
+    border: none;
+    color: #fff;
+}
+.btn-primary:hover {
+    background: var(--template-primary-dark);
+    box-shadow: 0 4px 12px rgba(10,102,194,0.3);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--template-primary);
+    color: var(--template-primary);
+}
+.btn-outline-primary:hover {
+    background: var(--template-primary);
+    color: #fff;
+}
+
+.form-control {
+    border-radius: 50px;
+    border: 1px solid var(--template-border);
+}
+.form-control:focus {
+    border-color: var(--template-primary);
+    box-shadow: 0 0 0 3px rgba(10,102,194,0.08);
+}
+
+a { color: var(--template-primary); }
+a:hover { color: var(--template-primary-dark); }
+
+.table { border-radius: var(--template-radius-sm); overflow: hidden; }
+.table thead {
+    background: var(--template-primary-light);
+    color: var(--template-primary-dark);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.bg-primary { background: var(--template-gradient) !important; }
+.text-primary { color: var(--template-primary) !important; }
+.text-muted { color: var(--template-text-light) !important; }
+
+.badge {
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.75rem;
+}
+
+footer {
+    background: var(--template-heading);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85rem;
+}
+footer a { color: rgba(255,255,255,0.7); }
+footer a:hover { color: #fff; }

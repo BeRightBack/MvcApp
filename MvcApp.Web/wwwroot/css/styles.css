@@ -1,0 +1,250 @@
+html {
+    overflow-x: auto;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+    html::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
+    }
+
+    html.scrolled {
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+
+/* Navigation Bar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 2001;
+    background-color: transparent !important;
+    transition: background-color 0.5s ease-in-out;
+}
+
+    .navbar a {
+        color: white;
+    }
+
+.scrolled.navbar {
+    z-index: 2001;
+    background-color: white !important;
+}
+
+    .scrolled.navbar a {
+        color: black;
+    }
+
+    .scrolled.navbar button {
+        color: black;
+    }
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+    .navbar-brand img {
+        width: 150px;
+        height: auto;
+        transition: opacity 0.5s;
+    }
+
+        .navbar-brand img.scrolled {
+            opacity: 0;
+        }
+
+            .navbar-brand img.scrolled + img {
+                opacity: 1;
+            }
+
+.navbar-toggler {
+    margin-right: 5px !important;
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+.nav-item {
+    margin-right: 20px;
+}
+
+.nav-link {
+    color: white;
+    transition: color 0.2s ease;
+}
+
+    .nav-link:hover {
+        color: #ccc;
+    }
+
+.nav-link:focus  {
+    color: #ccc; /* dark color for white background */
+}
+
+.navbar.scrolled .nav-link:focus {
+    color: #333 !important; /* pale color for dark background */
+}
+
+/* Header */
+.header {
+    position: relative;
+    height: 90vh;
+    width: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 900;
+}
+
+.header-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.header-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.header-subtitle {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.header-sub-subtitle {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.header-background {
+    position: absolute;
+    top: 0;
+    left: -25%;
+    right: -25%;
+    width: 150%;
+    height: calc(90vh + 60px)!important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    transform: scale(1.2);
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.main {
+    padding-top: 180px;
+    text-align: center;
+}
+
+.animate {
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.scrolled {
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* add a high z-index to make sure the navbar is on top of other elements */
+}
+
+.grow {
+    animation: grow 2s ease-in-out;
+}
+
+@keyframes grow {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+.scrolled + .header {
+    height: 100vh;
+    margin-top: -60px; /* assuming the navbar height is 60px */
+}
+
+.header-background.animated {
+    animation: zoom-in 3s ease-in-out;
+}
+
+@keyframes zoom-in {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+
+.buy-now {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buy-subscription-now {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/*a:visited {
+    color: #000 !important;
+  }*/
+button.buy-subscription-now a {
+    color: #000 !important;
+    text-decoration: none !important;
+}
+
+    button.buy-subscription-now a:link,
+    button.buy-subscription-now a:visited,
+    button.buy-subscription-now a:hover,
+    button.buy-subscription-now a:active {
+        color: #000 !important;
+        text-decoration: none !important;
+    }
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    transition: opacity 0.5s ease-in-out;
+}
+
+    .background-image.fade-out {
+        opacity: 0;
+    }

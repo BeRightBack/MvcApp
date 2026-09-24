@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = "Store Dashboard";
+    ViewBag.CurrentPage = "Store";
+}
+
+<h1>Store Dashboard</h1>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag.TotalProducts</h5>
+                <p class="card-text">Products</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag.TotalOrders</h5>
+                <p class="card-text">Orders</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag.PendingOrders</h5>
+                <p class="card-text">Pending</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag.LowStockProducts</h5>
+                <p class="card-text">Low Stock</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5 class="card-title text-primary">$@ViewBag.TotalRevenue.ToString("F2")</h5>
+                <p class="card-text text-muted">Total Revenue</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <a asp-action="Products" class="btn btn-primary"><i class="fa fa-cube"></i> Manage Products</a>
+        <a asp-action="Categories" class="btn btn-outline-primary"><i class="fa fa-folder"></i> Manage Categories</a>
+        <a asp-action="Orders" class="btn btn-outline-primary"><i class="fa fa-truck"></i> Manage Orders</a>
+    </div>
+</div>
+
+<h3>Recent Orders</h3>
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Order #</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in ViewBag.RecentOrders as IEnumerable<Order>)
+            {
+                <tr>
+                    <td>#@order.Id</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>$@order.TotalAmount.ToString("F2")</td>
+                    <td><span class="badge bg-secondary">@order.Status</span></td>
+                    <td><a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary"><i class="fa fa-eye"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

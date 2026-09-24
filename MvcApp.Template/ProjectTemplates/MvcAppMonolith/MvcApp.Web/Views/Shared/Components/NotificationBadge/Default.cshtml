@@ -1,0 +1,8 @@
+@model int
+<a class="nav-link py-1 px-2" asp-controller="Notifications" asp-action="Index" title="Notifications">
+    <i class='bx bx-bell' style="font-size:1.2rem;"></i>
+    @if (Model > 0)
+    {
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge-count" style="font-size:0.65rem;">@Model</span>
+    }
+</a>

@@ -1,0 +1,113 @@
+@model List<MvcApp.Core.SubscriptionPlan>
+@{
+    ViewData["Title"] = "Go VIP";
+    var isVip = (bool)ViewBag.IsVip;
+    var user = (MvcApp.Core.UserDetails)ViewBag.CurrentUser;
+    var activeSub = ViewBag.ActiveSubscription as MvcApp.Core.Subscription;
+    var currencySymbol = (string)ViewBag.CurrencySymbol;
+    var currencyCode = (string)ViewBag.CurrencyCode;
+    var rate = (decimal)ViewBag.CurrencyRate;
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success d-flex align-items-center gap-2 mb-4">
+        <i class='bx bx-check-circle'></i> @TempData["Message"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger d-flex align-items-center gap-2 mb-4">
+        <i class='bx bx-error'></i> @TempData["Error"]
+    </div>
+}
+
+@if (isVip)
+{
+    <div class="alert d-flex align-items-center gap-3 p-4 mb-4" style="background:linear-gradient(135deg,#f59e0b22,#f59e0b11);border:1px solid #f59e0b44;border-radius:12px;">
+        <i class='bx bx-crown' style="font-size:2rem;color:#f59e0b;"></i>
+        <div>
+            <div class="fw-bold" style="color:#b45309;">You're a VIP member!</div>
+            @if (activeSub != null)
+            {
+                <div class="text-muted small">Your <strong>@activeSub.SubscriptionPlan?.Name</strong> plan is active until @activeSub.EndDate.ToString("MMMM dd, yyyy")</div>
+            }
+            else
+            {
+                <div class="text-muted small">Your VIP status is active until @user.PremiumExpiryDate.ToString("MMMM dd, yyyy")</div>
+            }
+        </div>
+        <a asp-action="MySubscription" class="btn btn-sm btn-outline-warning ms-auto">View Details</a>
+    </div>
+}
+
+<div class="text-center mb-5">
+    <h2 style="color:var(--template-heading);">Go VIP</h2>
+    <p class="text-muted" style="max-width:500px;margin:0 auto;">
+        Unlock premium features, get priority visibility, and connect with more people.
+    </p>
+</div>
+
+<div class="row g-4 justify-content-center">
+    @foreach (var plan in Model.OrderBy(p => p.SubscriptionDetails.FirstOrDefault()?.Price ?? 0))
+    {
+        var detail = plan.SubscriptionDetails.FirstOrDefault();
+        var usdPrice = detail?.Price ?? 0;
+        var months = detail?.DurationInMonths ?? 1;
+        var convertedPrice = usdPrice * rate;
+        var convertedMonthly = months > 1 ? convertedPrice / months : convertedPrice;
+        var isPopular = plan.Name == "Premium";
+
+        <div class="col-md-4 col-lg-3">
+            <div class="content-card h-100 d-flex flex-column @(isPopular ? "border-warning" : "")" style="@(isPopular ? "border:2px solid #f59e0b;" : "")">
+                @if (isPopular)
+                {
+                    <div class="text-center py-1" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">
+                        Most Popular
+                    </div>
+                }
+                <div class="card-body text-center d-flex flex-column">
+                    <h5 class="fw-bold mb-1" style="color:var(--template-heading);">@plan.Name</h5>
+                    <p class="text-muted small mb-3">@plan.DescriptionShort</p>
+
+                    <div class="mb-3">
+                        <span class="fw-bold" style="font-size:2.2rem;color:var(--template-primary);">@currencySymbol@convertedPrice.ToString("F2")</span>
+                        <span class="text-muted small"> / @months mo</span>
+                    </div>
+
+                    @if (months > 1)
+                    {
+                        <div class="text-muted small mb-3">
+                            That's just <strong>@currencySymbol@convertedMonthly.ToString("F2")/mo</strong>
+                        </div>
+                    }
+
+                    <p class="text-muted small flex-grow-1">@plan.Description</p>
+
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>VIP Crown Badge</li>
+                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>Priority in Search</li>
+                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>See Who Liked You</li>
+                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>Unlimited Messaging</li>
+                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>Advanced Filters</li>
+                    </ul>
+
+                    <form asp-action="Checkout" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="planId" value="@plan.Id" />
+                        <button type="submit" class="btn w-100 fw-semibold" style="background:var(--template-primary);color:#fff;border:none;padding:0.75rem;">
+                            <i class='bx bx-lock-alt me-1'></i>Subscribe with PayPal
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="text-center mt-4">
+    <small class="text-muted">
+        <i class='bx bx-shield-quarter me-1'></i>
+        Secure payment via PayPal · Cancel anytime · No hidden fees
+    </small>
+</div>

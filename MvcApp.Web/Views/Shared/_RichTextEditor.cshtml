@@ -1,0 +1,127 @@
+@{
+    var name = ViewData["RteName"] as string ?? "content";
+    var height = ViewData["RteHeight"] as int? ?? 400;
+    var value = ViewData["RteValue"] as string ?? "";
+    var id = "rte-" + Guid.NewGuid().ToString("N");
+}
+
+<div class="rich-text-editor" id="@id-container">
+    <input type="hidden" name="@name" id="@id-hidden" value="@value" />
+    <div class="rte-toolbar btn-toolbar mb-1" role="toolbar" style="flex-wrap:wrap;gap:2px">
+        <div class="btn-group btn-group-sm me-1">
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('bold')" title="Bold"><b>B</b></button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('italic')" title="Italic"><i>I</i></button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('underline')" title="Underline"><u>U</u></button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+        </div>
+        <div class="btn-group btn-group-sm me-1">
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','h1')" title="Heading 1">H1</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','h2')" title="Heading 2">H2</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','h3')" title="Heading 3">H3</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','p')" title="Paragraph">P</button>
+        </div>
+        <div class="btn-group btn-group-sm me-1">
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('insertUnorderedList')" title="Bullet List">&#8226;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('insertOrderedList')" title="Numbered List">1.</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('blockquote')" title="Blockquote">&ldquo;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('insertHorizontalRule')" title="Horizontal Rule">&mdash;</button>
+        </div>
+        <div class="btn-group btn-group-sm me-1">
+            <button type="button" class="btn btn-outline-secondary" onclick="rteLink()" title="Insert Link">&#128279;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteImage()" title="Insert Image">&#128247;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','pre')" title="Code Block">&lt;/&gt;</button>
+        </div>
+        <div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-outline-secondary" onclick="rtePreview('@id')" title="Toggle Preview">&#128065;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteClearFormatting()" title="Clear Formatting">&#9887;</button>
+        </div>
+    </div>
+    <div id="@id-editor" class="rte-editor form-control" contenteditable="true"
+         style="min-height:@(height)px;overflow-y:auto;font-family:sans-serif;font-size:14px;line-height:1.6"
+         oninput="rteSync('@id')">@Html.Raw(value)</div>
+    <div id="@id-preview" class="rte-preview form-control mt-1" style="min-height:@(height)px;overflow-y:auto;display:none;font-family:sans-serif;font-size:14px;line-height:1.6;background:#f8f9fa;padding:8px;border:1px solid #ccc"></div>
+    <small class="text-muted">HTML editor with basic formatting. Use toolbar buttons or keyboard shortcuts.</small>
+</div>
+
+<script>
+    function rteCmd(cmd, val) {
+        var editor = document.activeElement;
+        if (editor && editor.classList.contains('rte-editor')) {
+            document.execCommand(cmd, false, val || null);
+            editor.focus();
+            var id = editor.id.replace('-editor', '');
+            rteSync(id);
+        } else {
+            // Find the nearest editor to the toolbar
+            var toolbar = event && event.target ? event.target.closest('.rte-toolbar') : null;
+            if (toolbar) {
+                var container = toolbar.closest('.rich-text-editor');
+                if (container) {
+                    var editorEl = container.querySelector('.rte-editor');
+                    if (editorEl) {
+                        editorEl.focus();
+                        document.execCommand(cmd, false, val || null);
+                        var id = editorEl.id.replace('-editor', '');
+                        rteSync(id);
+                    }
+                }
+            }
+        }
+    }
+
+    function rteSync(id) {
+        var editor = document.getElementById(id + '-editor');
+        var hidden = document.getElementById(id + '-hidden');
+        if (editor && hidden) {
+            hidden.value = editor.innerHTML;
+        }
+    }
+
+    function rtePreview(id) {
+        var editor = document.getElementById(id + '-editor');
+        var preview = document.getElementById(id + '-preview');
+        if (preview.style.display === 'none') {
+            preview.innerHTML = editor.innerHTML;
+            preview.style.display = 'block';
+            editor.style.display = 'none';
+        } else {
+            preview.style.display = 'none';
+            editor.style.display = 'block';
+        }
+    }
+
+    function rteLink() {
+        var url = prompt('Enter URL:', 'https://');
+        if (url && url.trim()) {
+            document.execCommand('createLink', false, url.trim());
+        }
+    }
+
+    function rteImage() {
+        var url = prompt('Enter image URL:', 'https://');
+        if (url && url.trim()) {
+            document.execCommand('insertImage', false, url.trim());
+        }
+    }
+
+    function rteClearFormatting() {
+        var sel = window.getSelection();
+        if (sel.rangeCount > 0) {
+            var range = sel.getRangeAt(0);
+            if (!range.collapsed) {
+                document.execCommand('removeFormat', false, null);
+            }
+        }
+    }
+
+    // Sync before form submit
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.rich-text-editor').forEach(function(container) {
+            var editor = container.querySelector('.rte-editor');
+            if (editor) {
+                var id = editor.id.replace('-editor', '');
+                rteSync(id);
+            }
+        });
+    });
+</script>

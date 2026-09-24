@@ -1,0 +1,47 @@
+@{
+    var forum = ViewBag.Forum as Forum;
+    ViewData["Title"] = "New Thread";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Forums</a></li>
+            <li class="breadcrumb-item"><a asp-action="Forum" asp-route-id="@forum?.Id">@forum?.Name</a></li>
+            <li class="breadcrumb-item active">New Thread</li>
+        </ol>
+    </nav>
+
+    <h1><i class="fa fa-plus-circle"></i> Create New Thread</h1>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger" asp-validation-summary="All"></div>
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="CreateThread" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="forumId" value="@forum?.Id" />
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Title</label>
+                    <input type="text" name="title" class="form-control" required maxlength="200"
+                           placeholder="Enter a descriptive title..." />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Content</label>
+                    @{ ViewData["RteName"] = "content"; ViewData["RteHeight"] = 400; }
+                    <partial name="_RichTextEditor" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-paper-plane"></i> Create Thread
+                </button>
+                <a asp-action="Forum" asp-route-id="@forum?.Id" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

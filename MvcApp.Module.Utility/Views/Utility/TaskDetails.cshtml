@@ -1,0 +1,220 @@
+@model TaskDetailsViewModel
+@{
+    ViewData["Title"] = "Task Details";
+    var task = Model.Task;
+}
+
+<div class="container-fluid py-3">
+    <div class="mb-4">
+        <div class="d-flex align-items-center mb-2">
+            <a asp-action="ProjectDetails" asp-route-id="@task.ProjectId" class="btn btn-sm btn-outline-secondary me-3" title="Return to project"><i class="bi bi-arrow-left"></i> Back to Project</a>
+            <span class="badge @UtilityDisplay.StatusBadgeClass(task.Status)">@UtilityDisplay.StatusText(task.Status)</span>
+        </div>
+        <h1 class="display-6 fw-bold mb-0">@task.Title</h1>
+        <div class="d-flex align-items-center mt-2">
+            <span class="me-3" title="Due date"><i class="bi bi-clock"></i> @(task.DueDate.HasValue ? "Due " + task.DueDate.Value.ToShortDateString() : "No due date")</span>
+            <span title="Priority level"><i class="bi bi-flag"></i> @UtilityDisplay.PriorityText(task.Priority) Priority</span>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Description</h5>
+                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                            data-bs-toggle="modal" data-bs-target="#editTaskModal"
+                            data-id="@task.Id" data-title="@task.Title" data-description="@task.Description"
+                            data-status="@task.Status" data-priority="@task.Priority" data-duedate="@(task.DueDate.HasValue ? task.DueDate.Value.ToString("yyyy-MM-dd") : "")"
+                            title="Edit task details"><i class="bi bi-pencil"></i> Edit</button>
+                </div>
+                <div class="card-body">
+                    @if (string.IsNullOrWhiteSpace(task.Description))
+                    {
+                        <p class="text-muted fst-italic">No description provided</p>
+                    }
+                    else
+                    {
+                        <p>@task.Description</p>
+                    }
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Subtasks</h5>
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addSubtaskModal" title="Add a new subtask"><i class="bi bi-plus-circle"></i> Add Subtask</button>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Subtasks.Any())
+                    {
+                        <p class="text-muted text-center py-3">No subtasks yet</p>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var subtask in Model.Subtasks)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                    <form method="post" asp-action="ToggleSubtask" asp-route-id="@task.Id" asp-route-subtaskId="@subtask.Id" class="form-check mb-0">
+                                        <input class="form-check-input" type="checkbox" checked="@subtask.IsCompleted" onchange="this.form.submit()" />
+                                        <label class="form-check-label @(subtask.IsCompleted ? "text-decoration-line-through text-muted" : "")">@subtask.Title</label>
+                                    </form>
+                                    <form method="post" asp-action="DeleteSubtask" asp-route-id="@task.Id" asp-route-subtaskId="@subtask.Id" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete subtask"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header"><h5 class="mb-0">Status</h5></div>
+                <div class="card-body">
+                    <form method="post" asp-action="ChangeTaskStatus" asp-route-id="@task.Id">
+                        <select name="status" class="form-select mb-3" aria-label="Change task status" onchange="this.form.submit()">
+                            @foreach (var s in Enum.GetValues<ToDoTaskStatus>())
+                            {
+                                <option value="@s" selected="@(s == task.Status)">@UtilityDisplay.StatusText(s)</option>
+                            }
+                        </select>
+                    </form>
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTaskModal" data-id="@task.Id" data-title="@task.Title" title="Delete this task"><i class="bi bi-trash"></i> Delete Task</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header"><h5 class="mb-0">Task Info</h5></div>
+                <div class="card-body">
+                    <p class="mb-2"><small><strong>Created:</strong> @task.CreatedAt.ToString("MMM d, yyyy")</small></p>
+                    @if (task.CompletedAt.HasValue)
+                    {
+                        <p class="mb-0"><small><strong>Completed:</strong> @task.CompletedAt.Value.ToString("MMM d, yyyy")</small></p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Task modal -->
+<div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="EditTask" method="post">
+                <input type="hidden" id="editTaskId" name="Id" value="0" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editTaskTitle" class="form-label">Task Title</label>
+                        <input id="editTaskTitle" name="Title" class="form-control" required maxlength="200" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTaskDescription" class="form-label">Description</label>
+                        <textarea id="editTaskDescription" name="Description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTaskStatus" class="form-label">Status</label>
+                        <select id="editTaskStatus" name="Status" class="form-select">
+                            @foreach (var s in Enum.GetValues<ToDoTaskStatus>())
+                            {
+                                <option value="@s">@UtilityDisplay.StatusText(s)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTaskPriority" class="form-label">Priority</label>
+                        <select id="editTaskPriority" name="Priority" class="form-select">
+                            <option value="0">Low</option>
+                            <option value="1">Medium</option>
+                            <option value="2">High</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTaskDueDate" class="form-label">Due Date</label>
+                        <input id="editTaskDueDate" name="DueDate" type="date" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Subtask modal -->
+<div class="modal fade" id="addSubtaskModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="CreateSubtask" asp-route-id="@task.Id" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Subtask</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="subtaskTitle" class="form-label">Subtask Title</label>
+                        <input id="subtaskTitle" name="Title" class="form-control" required maxlength="200" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Task confirm modal -->
+<div class="modal fade" id="deleteTaskModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="DeleteTask" method="post">
+                <input type="hidden" id="deleteTaskId" name="id" value="0" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the task "<strong id="deleteTaskTitle"></strong>"?</p>
+                    <p class="text-danger">This will delete all subtasks within this task.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('[data-bs-target="#editTaskModal"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.getElementById('editTaskId').value = btn.dataset.id;
+            document.getElementById('editTaskTitle').value = btn.dataset.title;
+            document.getElementById('editTaskDescription').value = btn.dataset.description || '';
+            document.getElementById('editTaskStatus').value = btn.dataset.status || '0';
+            document.getElementById('editTaskPriority').value = btn.dataset.priority || '0';
+            document.getElementById('editTaskDueDate').value = btn.dataset.duedate || '';
+        });
+    });
+    document.querySelectorAll('[data-bs-target="#deleteTaskModal"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.getElementById('deleteTaskId').value = btn.dataset.id;
+            document.getElementById('deleteTaskTitle').textContent = btn.dataset.title;
+        });
+    });
+</script>

@@ -1,0 +1,12 @@
+@model List<MvcApp.Web.Components.CartBadge>
+
+@foreach (var badge in Model)
+{
+    <a class="cart-badge nav-link py-1 px-2 position-relative text-decoration-none" asp-area="" asp-controller="@badge.Controller" asp-action="@badge.Action" title="@badge.Label" style="font-size:1.1rem;">
+        <i class="fa fa-shopping-cart"></i>
+        @if (badge.Count > 0)
+        {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem;">@badge.Count</span>
+        }
+    </a>
+}

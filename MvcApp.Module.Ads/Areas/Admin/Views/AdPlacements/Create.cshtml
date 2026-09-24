@@ -1,0 +1,114 @@
+@model MvcApp.Module.Ads.Entities.AdPlacement
+@{
+    ViewData["Title"] = ViewData["Action"]?.ToString() == "Create" ? "Create Placement" : "Edit Placement";
+    Layout = "_AdminLayout";
+    var zones = ViewBag.Zones as SelectList;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4><i class="bx bx-map-pin"></i> @ViewData["Title"]</h4>
+    <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary"><i class="bx bx-arrow-back"></i> Back</a>
+</div>
+
+<form asp-action="@ViewData["Action"]" method="post" class="card">
+    <div class="card-body">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CreatedAt" />
+        <input type="hidden" asp-for="UpdatedAt" />
+
+        <div class="row mb-3">
+            <label asp-for="ZoneId" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <select asp-for="ZoneId" class="form-select" asp-items="zones" disabled="@(ViewData["Action"]?.ToString() == "Edit")"></select>
+                <span asp-validation-for="ZoneId" class="text-danger"></span>
+                @if (ViewData["Action"]?.ToString() == "Edit")
+                {
+                    <input type="hidden" asp-for="ZoneId" />
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="PageSlug" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <input asp-for="PageSlug" class="form-control" placeholder="*" value="@Model.PageSlug" maxlength="250" />
+                <span asp-validation-for="PageSlug" class="text-danger"></span>
+                <div class="form-text">Page slug this applies to. Use <code>*</code> for all pages. Examples: <code>about</code>, <code>blog/my-post</code>, <code>*</code>.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="IsExclusion" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <div class="form-check form-switch">
+                    <input asp-for="IsExclusion" class="form-check-input" id="isExclusion" />
+                    <label class="form-check-label" for="isExclusion">Exclude zone from this page</label>
+                </div>
+                <div class="form-text">If checked, the zone is hidden on the specified page(s). If unchecked, this is an override with custom settings.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3" id="overrideFields">
+            <label asp-for="MaxBannersOverride" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="MaxBannersOverride" type="number" min="0" class="form-control" />
+                <span asp-validation-for="MaxBannersOverride" class="text-danger"></span>
+                <div class="form-text">Override max banners for this page. Empty = use zone default.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3" id="overrideFields2">
+            <label asp-for="CssClassOverride" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="CssClassOverride" class="form-control" placeholder="ad-zone custom-class" maxlength="200" />
+                <span asp-validation-for="CssClassOverride" class="text-danger"></span>
+                <div class="form-text">Override CSS class for zone container on this page.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3" id="overrideFields3">
+            <label asp-for="WrapperTemplateOverride" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="WrapperTemplateOverride" class="form-control" placeholder="<div class="ad-item">{0}</div>" maxlength="500" />
+                <span asp-validation-for="WrapperTemplateOverride" class="text-danger"></span>
+                <div class="form-text">Override banner wrapper template. Use <code>{0}</code> for banner HTML.</div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="DisplayOrder" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="DisplayOrder" type="number" class="form-control" />
+                <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label asp-for="IsActive" class="col-sm-2 col-form-label fw-bold"></label>
+            <div class="col-sm-10">
+                <div class="form-check form-switch">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label class="form-check-label" asp-for="IsActive">Active</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary"><i class="bx bx-save"></i> Save</button>
+        <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        const exclusionCheck = document.getElementById('isExclusion');
+        const overrideFields = document.querySelectorAll('#overrideFields, #overrideFields2, #overrideFields3');
+
+        function toggleOverrides() {
+            overrideFields.forEach(f => f.style.display = exclusionCheck.checked ? 'none' : '');
+        }
+
+        exclusionCheck?.addEventListener('change', toggleOverrides);
+        toggleOverrides();
+    </script>
+}

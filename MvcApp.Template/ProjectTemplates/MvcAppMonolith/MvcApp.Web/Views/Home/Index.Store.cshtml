@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MvcApp.Core.UserDetails> SignInManager
+@inject UserManager<MvcApp.Core.UserDetails> UserManager
+@{
+    ViewData["Title"] = "Store";
+    var isAuthenticated = SignInManager.IsSignedIn(User);
+}
+<section class="hero-section position-relative overflow-hidden" style="background:linear-gradient(135deg,#1e3a8a,#3b82f6,#7c3aed); min-height:70vh;">
+    <div class="container position-relative py-5" style="z-index:2;">
+        <div class="row min-vh-70 align-items-center">
+            <div class="col-lg-6 text-white py-5">
+                <h1 class="fw-bold mb-3" style="font-family:var(--template-font-heading); font-size:3rem;">Discover Great Products</h1>
+                <p class="lead mb-4" style="color:rgba(255,255,255,0.8);">Quality items at unbeatable prices. Fast shipping, easy returns.</p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="btn btn-light btn-lg px-4 fw-semibold rounded-pill" style="color:#1e3a8a;">Shop Now</a>
+                    <a href="#" class="btn btn-outline-light btn-lg px-4 rounded-pill">Browse Categories</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center d-none d-lg-block">
+                <div class="row g-3">
+                    <div class="col-6"><div class="card border-0 shadow-lg p-4 text-center"><i class='bx bx-box' style="font-size:3rem;color:#3b82f6;"></i><h6 class="mt-2">Free Shipping</h6></div></div>
+                    <div class="col-6 mt-4"><div class="card border-0 shadow-lg p-4 text-center"><i class='bx bx-shield' style="font-size:3rem;color:#3b82f6;"></i><h6 class="mt-2">Secure Payment</h6></div></div>
+                    <div class="col-6"><div class="card border-0 shadow-lg p-4 text-center"><i class='bx bx-undo' style="font-size:3rem;color:#3b82f6;"></i><h6 class="mt-2">Easy Returns</h6></div></div>
+                    <div class="col-6 mt-4"><div class="card border-0 shadow-lg p-4 text-center"><i class='bx bx-support' style="font-size:3rem;color:#3b82f6;"></i><h6 class="mt-2">24/7 Support</h6></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-5 bg-light">
+    <div class="container text-center py-4">
+        <h2 class="fw-bold mb-4">Featured Categories</h2>
+        <div class="row g-4">
+            <div class="col-md-3"><div class="card border-0 shadow-sm p-4 h-100"><i class='bx bx-laptop' style="font-size:2.5rem;color:#3b82f6;"></i><h6 class="mt-2 fw-bold">Electronics</h6></div></div>
+            <div class="col-md-3"><div class="card border-0 shadow-sm p-4 h-100"><i class='bx bx-tshirt' style="font-size:2.5rem;color:#3b82f6;"></i><h6 class="mt-2 fw-bold">Fashion</h6></div></div>
+            <div class="col-md-3"><div class="card border-0 shadow-sm p-4 h-100"><i class='bx bx-home' style="font-size:2.5rem;color:#3b82f6;"></i><h6 class="mt-2 fw-bold">Home & Garden</h6></div></div>
+            <div class="col-md-3"><div class="card border-0 shadow-sm p-4 h-100"><i class='bx bx-game' style="font-size:2.5rem;color:#3b82f6;"></i><h6 class="mt-2 fw-bold">Toys & Games</h6></div></div>
+        </div>
+    </div>
+</section>

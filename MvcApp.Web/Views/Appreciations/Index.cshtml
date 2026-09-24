@@ -1,0 +1,65 @@
+@{
+    ViewData["Title"] = "Rate Member";
+    var targetUserId = ViewBag.TargetUserId as string;
+    var targetUserName = ViewBag.TargetUserName as string;
+    var existingValue = (int)ViewBag.ExistingValue;
+    var avgScore = (double)ViewBag.AverageScore;
+    var total = (int)ViewBag.TotalAppreciations;
+}
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card border-0 rounded-4 shadow-sm p-4 text-center">
+                    <i class='bx bx-star' style="font-size:4rem; color:#fdcb6e;"></i>
+                    <h3 class="fw-bold mt-3">Rate @targetUserName</h3>
+
+                    @if (total > 0)
+                    {
+                        <div class="mb-3">
+                            <div class="fs-1 fw-bold" style="color:#e74c6f;">@avgScore.ToString("F1")</div>
+                            <div class="text-muted small">Average from @total rating@(total != 1 ? "s" : "")</div>
+                        </div>
+                    }
+
+                    <div class="rating-stars mb-4">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <button class="btn btn-lg star-btn @(i <= existingValue ? "text-warning" : "text-muted")"
+                                    data-value="@i" style="font-size:2rem; border:none; background:none;"
+                                    onclick="rate(@i)">
+                                <i class='bx bxs-star'></i>
+                            </button>
+                        }
+                    </div>
+                    <p class="text-muted small">Click a star to rate (1-5)</p>
+
+                    <a asp-controller="Discover" asp-action="Index" class="btn btn-outline-secondary rounded-pill mt-3">
+                        <i class='bx bx-arrow-back me-1'></i> Back to Discover
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        function rate(value) {
+            fetch('@Url.Action("Rate", "Appreciations")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value },
+                body: new URLSearchParams({ userId: '@targetUserId', value: value.toString() })
+            }).then(r => r.json()).then(d => {
+                if (d.success) {
+                    document.querySelectorAll('.star-btn').forEach((btn, idx) => {
+                        btn.classList.toggle('text-warning', idx < value);
+                        btn.classList.toggle('text-muted', idx >= value);
+                    });
+                }
+                alert(d.message);
+            });
+        }
+    </script>
+}

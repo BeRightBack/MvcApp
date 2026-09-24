@@ -1,0 +1,125 @@
+@model List<MvcApp.Core.UserBan>
+@{
+    ViewData["Title"] = "Bans & Moderation";
+    var activeCount = (int?)ViewBag.ActiveBanCount ?? 0;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1>Bans &amp; Moderation</h1>
+    <span class="badge bg-danger">@activeCount active</span>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="content-card mb-4">
+    <div class="card-body">
+        <h5 class="mb-3"><i class='bx bxs-user-x'></i> Ban a user</h5>
+        <form asp-action="Ban" method="post" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Username or email</label>
+                <input type="text" name="username" class="form-control" required placeholder="username or email" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Reason</label>
+                <input type="text" name="reason" class="form-control" required placeholder="Why is this user being banned?" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Duration</label>
+                <select name="durationHours" class="form-select">
+                    <option value="1">1 hour</option>
+                    <option value="6">6 hours</option>
+                    <option value="12">12 hours</option>
+                    <option value="24">1 day</option>
+                    <option value="72">3 days</option>
+                    <option value="168">1 week</option>
+                    <option value="720">30 days</option>
+                    <option value="2160">90 days</option>
+                    <option value="-1">Indefinitely</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-danger w-100"><i class='bx bx-shield-x'></i> Ban</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-admin">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Reason</th>
+                        <th>Banned By</th>
+                        <th>Banned At</th>
+                        <th>Expires</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var now = DateTime.UtcNow;
+                    }
+                    @foreach (var ban in Model)
+                    {
+                        var active = !ban.RevokedAt.HasValue && (!ban.BannedUntil.HasValue || ban.BannedUntil > now);
+                        <tr>
+                            <td>
+                                <strong>@(ban.User?.UserName ?? ban.UserId)</strong>
+                            </td>
+                            <td class="small text-muted" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@ban.Reason</td>
+                            <td class="small text-muted">@(ban.BannedBy?.UserName ?? ban.BannedById)</td>
+                            <td class="text-nowrap small">@ban.BannedAt.ToString("MMM dd HH:mm")</td>
+                            <td class="text-nowrap small">@(ban.BannedUntil?.ToString("MMM dd yyyy HH:mm") ?? "—")</td>
+                            <td>
+                                @if (active)
+                                {
+                                    <span class="badge bg-danger">Active</span>
+                                }
+                                else if (ban.RevokedAt.HasValue)
+                                {
+                                    <span class="badge bg-secondary">Revoked</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Expired</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                @if (active)
+                                {
+                                    <form asp-action="Revoke" method="post" class="d-inline" onsubmit="return confirm('Revoke this ban?');">
+                                        <input type="hidden" name="id" value="@ban.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-success"><i class='bx bx-shield'></i> Revoke</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">No bans yet.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+@model List<MvcApp.Core.LeaderboardEntry>
+@{
+    ViewData["Title"] = "Leaderboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1">Leaderboard</h4>
+        <small class="text-muted">@ViewBag.ActiveUsers active users · @ViewBag.TotalPointsInSystem total points earned</small>
+    </div>
+    <a asp-action="Badges" class="btn btn-outline-secondary btn-sm">
+        <i class='bx bx-arrow-back me-1'></i>Back
+    </a>
+</div>
+
+<div class="content-card">
+    <div class="card-body p-0">
+        <table class="table table-admin">
+            <thead>
+                <tr>
+                    <th style="width:60px;" class="text-center">#</th>
+                    <th>User</th>
+                    <th class="text-center">Badges</th>
+                    <th class="text-center">Verified</th>
+                    <th class="text-end">Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var rank = 0; }
+                @foreach (var u in Model)
+                {
+                    rank++;
+                    var medal = rank switch { 1 => "🥇", 2 => "🥈", 3 => "🥉", _ => rank.ToString() };
+                    <tr>
+                        <td class="text-center fw-bold">@medal</td>
+                        <td>
+                            <strong>@(u.KnownAs ?? u.UserName)</strong>
+                            <div class="text-muted small">@u.UserName</div>
+                        </td>
+                        <td class="text-center"><i class='bx bx-badge me-1' style="color:var(--primary);"></i>@u.BadgeCount</td>
+                        <td class="text-center">
+                            @if (u.IsVerified)
+                            {
+                                <i class='bx bx-check-shield text-success'></i>
+                            }
+                        </td>
+                        <td class="text-end fw-bold" style="color:var(--primary);">@u.TotalPoints.ToString("N0")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

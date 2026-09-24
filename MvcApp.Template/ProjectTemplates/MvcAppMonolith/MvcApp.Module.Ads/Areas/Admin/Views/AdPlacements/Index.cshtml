@@ -1,0 +1,111 @@
+@model IEnumerable<MvcApp.Module.Ads.Entities.AdPlacement>
+@{
+    ViewData["Title"] = "Ad Placements";
+    Layout = "_AdminLayout";
+    var selectedZoneId = ViewBag.SelectedZoneId as int?;
+    var zones = ViewBag.Zones as SelectList;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4><i class="bx bx-map-pin"></i> Ad Placements</h4>
+    <div>
+        <form asp-action="Index" method="get" class="d-inline">
+            <select name="zoneId" class="form-select form-select-sm d-inline-block w-auto" onchange="this.form.submit()">
+                <option value="">-- Select Zone --</option>
+                @foreach (var item in zones ?? Enumerable.Empty<SelectListItem>())
+                {
+                    <option value="@item.Value" selected="@(item.Value == selectedZoneId?.ToString())">@item.Text</option>
+                }
+            </select>
+        </form>
+        @if (selectedZoneId.HasValue)
+        {
+            <a asp-action="Create" asp-route-zoneId="@selectedZoneId" class="btn btn-primary btn-sm ms-2"><i class="bx bx-plus"></i> New Placement</a>
+        }
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!selectedZoneId.HasValue)
+{
+    <div class="alert alert-info">Select a zone to manage its page placements.</div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Page</th>
+                            <th>Type</th>
+                            <th>Max Banners</th>
+                            <th>CSS Override</th>
+                            <th>Wrapper Override</th>
+                            <th>Order</th>
+                            <th>Active</th>
+                            <th style="width: 120px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var placement in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (placement.PageSlug == "*")
+                                    {
+                                        <code class="text-primary">* (all pages)</code>
+                                    }
+                                    else
+                                    {
+                                        <code>@placement.PageSlug</code>
+                                    }
+                                </td>
+                                <td>
+                                    @if (placement.IsExclusion)
+                                    {
+                                        <span class="badge bg-danger"><i class="bx bx-x-circle"></i> Exclude</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success"><i class="bx bx-check-circle"></i> Override</span>
+                                    }
+                                </td>
+                                <td>@(placement.MaxBannersOverride?.ToString() ?? "zone default")</td>
+                                <td><code class="small">@placement.CssClassOverride</code></td>
+                                <td><code class="small">@placement.WrapperTemplateOverride</code></td>
+                                <td>@placement.DisplayOrder</td>
+                                <td>
+                                    @if (placement.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Edit" asp-route-id="@placement.Id" class="btn btn-outline-primary" title="Edit"><i class="bx bx-edit"></i></a>
+                                        <form asp-action="Delete" asp-route-id="@placement.Id" asp-route-zoneId="@placement.ZoneId" method="post" style="display:inline" onsubmit="return confirm('Delete this placement?');">
+                                            <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bx bx-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

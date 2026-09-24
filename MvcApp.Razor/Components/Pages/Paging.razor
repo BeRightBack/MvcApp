@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Components
+
+<nav>
+    <ul class="pagination">
+        @for (var i = 1; i <= PageCount; i++)
+        {
+            var index = i;  // To capture the variable in the loop
+                            <li class="page-item @(CurrentPage == i ? "active" : "")">
+                                <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(index)">@i</button>
+                            </li>
+        }
+    </ul>
+</nav>
+
+@code {
+    [Parameter]
+    public int TotalItemCount { get; set; }
+
+    [Parameter]
+    public int ItemsPerPage { get; set; } = 10;
+
+    [Parameter]
+    public int CurrentPage { get; set; } = 1;
+
+    [Parameter]
+    public EventCallback<int> OnPageChanged { get; set; }
+
+    private int PageCount => (int)Math.Ceiling((double)TotalItemCount / ItemsPerPage);
+}

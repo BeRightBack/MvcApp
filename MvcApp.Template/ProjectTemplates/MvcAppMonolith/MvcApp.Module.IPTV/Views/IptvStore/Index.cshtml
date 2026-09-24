@@ -1,0 +1,117 @@
+@model MvcApp.Module.IPTV.Models.StoreViewModels.StoreViewModel
+@{
+    ViewData["Title"] = @Localizer["Store - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Choose from our subscription plans and start watching thousands of channels today."];
+    ViewData["Keywords"] = @Localizer["IPTV store, IPTV plans, subscribe IPTV, IPTV Quebec"];
+    var selectedPlan = ViewBag.SelectedPlan as MvcApp.Core.SubscriptionPlan;
+    var cartItemCount = ViewBag.CartItemCount ?? Model.CartItemCount;
+    var userId = ViewBag.UserId as Guid?;
+}
+
+<div class="container py-5">
+    <h1 class="text-center mb-2">@Localizer["Choose Your Plan"]</h1>
+    <p class="text-center text-muted mb-4">@Localizer["Select a plan and add it to your cart."]</p>
+
+    <partial name="_IptvStatusMessage" />
+
+    @if ((int)cartItemCount > 0)
+    {
+        <div class="alert alert-info d-flex justify-content-between align-items-center">
+            <span>
+                <i class="fa fa-shopping-cart me-2"></i>
+                @Localizer["Your cart has"] <strong>@cartItemCount</strong> @Localizer["item(s)"]
+            </span>
+            <a asp-controller="IptvCart" asp-action="Index" class="btn btn-primary btn-sm">@Localizer["View Cart"]</a>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">@Localizer["Plans"]</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    @foreach (var plan in Model.SubscriptionPlans)
+                    {
+                        <a asp-controller="IptvStore" asp-action="Index" asp-route-planId="@plan.Id"
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center @(selectedPlan?.Id == plan.Id ? "active" : "")">
+                            <span>@plan.Name</span>
+                            @if (plan.SubscriptionDetails.Count > 0)
+                            {
+                                var firstDetail = plan.SubscriptionDetails.OrderBy(d => d.Price).First();
+                                <span class="badge @(selectedPlan?.Id == plan.Id ? "bg-light text-primary" : "bg-primary")">$@firstDetail.Price</span>
+                            }
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            @if (selectedPlan != null)
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h3 class="mb-1">@selectedPlan.Name</h3>
+                                <p class="text-muted mb-0">@Localizer[@selectedPlan.DescriptionShort ?? ""]</p>
+                            </div>
+                            @if (selectedPlan.SubscriptionDetails.Count > 0)
+                            {
+                                var firstDetail = selectedPlan.SubscriptionDetails.OrderBy(d => d.Price).First();
+                                <div class="text-end">
+                                    <h2 class="text-primary mb-0">$@firstDetail.Price</h2>
+                                    <span class="text-muted">@firstDetail.DurationInMonths @Localizer["month(s)"]</span>
+                                </div>
+                            }
+                        </div>
+                        <p>@Localizer[@selectedPlan.Description ?? ""]</p>
+                        <h5>@Localizer["Features"]</h5>
+                        <ul class="list-unstyled">
+                            @foreach (var detail in selectedPlan.SubscriptionDetails)
+                            {
+                                <li><i class="fa fa-check text-success me-2"></i>@detail.Description</li>
+                            }
+                        </ul>
+                        <form asp-controller="IptvCart" asp-action="AddToCart" method="post" class="d-inline">
+                            <input type="hidden" name="subscriptionPlanId" value="@selectedPlan.Id" />
+                            <input type="hidden" name="subscriptionDetailId" value="@(selectedPlan.SubscriptionDetails.FirstOrDefault()?.Id)" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fa fa-shopping-cart me-2"></i>@Localizer["Add to Cart"]
+                            </button>
+                        </form>
+                        <a asp-controller="IptvHome" asp-action="Setup" class="btn btn-outline-primary btn-lg">@Localizer["How to Set Up"]</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="fa fa-info-circle me-2"></i>
+                    @Localizer["Select a plan from the list to see its details."]
+                </div>
+            }
+
+            <div class="row">
+                @foreach (var plan in Model.SubscriptionPlans)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <h5>@plan.Name</h5>
+                                @if (plan.SubscriptionDetails.Count > 0)
+                                {
+                                    var firstDetail = plan.SubscriptionDetails.OrderBy(d => d.Price).First();
+                                    <h3 class="text-primary">$@firstDetail.Price</h3>
+                                    <span class="text-muted">@firstDetail.DurationInMonths @Localizer["month(s)"]</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

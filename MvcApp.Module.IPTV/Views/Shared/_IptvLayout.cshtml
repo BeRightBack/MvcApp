@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="@ViewData["Description"]" />
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <meta property="og:title" content="@ViewData["Title"]" />
+    <meta property="og:description" content="@ViewData["Description"]" />
+    <meta property="og:image" content="@Url.Content("~/_content/MvcApp.Module.IPTV/images/og-image.jpg")" />
+    <meta property="og:url" content="https://quebeciptv.org/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@ViewData["Title"]" />
+    <meta name="twitter:description" content="@ViewData["Description"]" />
+    <meta name="twitter:image" content="@Url.Content("~/_content/MvcApp.Module.IPTV/images/twitter-image.jpg")" />
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "Organization",
+      "name": "Quebec Iptv",
+      "url": "https://www.quebeciptv.org",
+      "logo": "https://www.quebeciptv.org/Logos/logo-png.png",
+      "sameAs": [
+        "https://www.facebook.com/yourprofile",
+        "https://www.twitter.com/yourprofile",
+        "https://www.instagram.com/yourprofile"
+      ]
+    }
+    </script>
+    <title>@ViewData["Title"] - Home TV</title>
+    <link rel="canonical" href="https://quebeciptv.org@(Context.Request.Path)" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/_content/MvcApp.Module.IPTV/css/styles2.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="IptvHome" asp-action="Index">
+                    <img src="~/_content/MvcApp.Module.IPTV/Logos/logo-transparent-png.png" alt="Quebec Iptv Logo" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="IptvStore" asp-action="Index">@Localizer["Store"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="IptvHome" asp-action="Setup">@Localizer["Setup"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="IptvHome" asp-action="Channels">@Localizer["Channel List"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Faq">@Localizer["FAQ"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Contact">@Localizer["Contact"]</a>
+                        </li>
+                    </ul>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDashboardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">@Localizer["Dashboard"]</a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDashboardDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="IptvAdmin" asp-action="Index">IPTV Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Main Admin Panel</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+                    <partial name="_IptvLocalPartial" />
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        var defaultImage = Url.Content("~/_content/MvcApp.Module.IPTV/images/default-user.png");
+                        <div class="header_img">
+                            <img src="@Url.Action("GetProfilePicture", "Account", new { userId })"
+                                 onerror="this.onerror=null;this.src='@defaultImage';" alt="User Image" width="25" height="25">
+                        </div>
+                    }
+                    <partial name="_IptvLoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container" style="padding-top: 80px;">
+        <main role="main" class="main pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <hr />
+    <footer class="footer bg-light text-dark py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>@Localizer["About Us"]</h5>
+                <p>@Localizer["Quebec Iptv offers the best IPTV service with a wide range of channels and VOD content."]</p>
+            </div>
+            <div class="col-md-4">
+                <h5>@Localizer["Quick Links"]</h5>
+                <ul class="list-unstyled">
+                    <li><a class="nav-link" asp-controller="IptvHome" asp-action="Index">@Localizer["Home"]</a></li>
+                    <li><a class="nav-link" asp-controller="Home" asp-action="Faq">@Localizer["FAQ"]</a></li>
+                    <li><a class="nav-link" asp-controller="Home" asp-action="Contact">@Localizer["Contact"]</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a class="nav-link" asp-controller="IptvAdmin" asp-action="Index">@Localizer["IPTV Dashboard"]</a></li>
+                        <li><a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">@Localizer["Main Admin Panel"]</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>@Localizer["Follow Us"]</h5>
+                <ul class="list-unstyled">
+                    <li><a href="https://www.facebook.com/yourprofile" target="_blank"><i class="fa fa-facebook"></i> Facebook</a></li>
+                    <li><a href="https://www.twitter.com/yourprofile" target="_blank"><i class="fa fa-twitter"></i> Twitter</a></li>
+                    <li><a href="https://www.instagram.com/yourprofile" target="_blank"><i class="fa fa-instagram"></i> Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col text-center">
+                &copy; @DateTime.Now.Year - Quebec Iptv - <a asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Styles", required: false)
+</body>
+</html>

@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Test Page";
+}
+<div class="mb-4">
+    <p>Welcome — this page includes a test Blazor component from the RCL.</p>
+
+    <component type="typeof(MvcApp.Razor.Components.Pages.RichTextEditor)" render-mode="ServerPrerendered" />
+    <component type="typeof(MvcApp.Razor.Components.Pages.Weather)" render-mode="ServerPrerendered" />
+    <component type="typeof(MvcApp.Razor.Components.Pages.Counter)" render-mode="ServerPrerendered" />
+    <component type="typeof(MvcApp.Razor.Components.Pages.LocalTime)" render-mode="ServerPrerendered" />
+</div>

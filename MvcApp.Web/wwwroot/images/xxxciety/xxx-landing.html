@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1920px; background: #050505; color: #f5f0e8; font-family: 'Segoe UI', Arial, sans-serif; }
+  .serif { font-family: Georgia, 'Times New Roman', serif; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; padding: 26px 90px; border-bottom: 1px solid #1d0a0a; }
+  nav .brand { display: flex; align-items: center; }
+  nav .brand img { width: 58px; height: 58px; }
+  nav .brand .w { font-family: Georgia, serif; font-size: 34px; margin-left: 14px; }
+  nav .brand .w .x { font-weight: 700; background: linear-gradient(180deg,#ff6b81,#ba181b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  nav .links { margin-left: auto; display: flex; gap: 42px; align-items: center; font-size: 16px; color: #cbbfa8; }
+  nav .links a { color: #cbbfa8; text-decoration: none; letter-spacing: 1px; }
+  nav .join { padding: 12px 32px; border-radius: 999px; background: linear-gradient(90deg,#e5383b,#8d0801); color: #fff !important; font-weight: 700; }
+  nav .age { border: 2px solid rgba(255,107,129,.7); color: #ff6b81; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
+
+  /* HERO */
+  .hero { position: relative; display: flex; align-items: center; padding: 90px 90px 70px; overflow: hidden; }
+  .hero .glow { position: absolute; width: 900px; height: 900px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(186,24,27,.32) 0%, rgba(186,24,27,0) 70%); right: -150px; top: -250px; }
+  .hero .glow2 { position: absolute; width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,129,.12) 0%, rgba(255,107,129,0) 70%); left: -150px; bottom: -250px; }
+  .hero .text { width: 52%; z-index: 2; }
+  .hero .kicker { font-size: 15px; letter-spacing: 8px; text-transform: uppercase; color: #b9a98f; }
+  .hero h1 { font-family: Georgia, serif; font-size: 84px; line-height: 1.08; font-weight: 400; margin: 26px 0; }
+  .hero h1 em { font-style: italic; background: linear-gradient(180deg,#ff6b81,#e5383b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.sub { font-size: 22px; color: #cbbfa8; line-height: 1.55; max-width: 640px; }
+  .hero .signup { display: flex; margin-top: 40px; max-width: 640px; }
+  .hero .signup input { flex: 1; padding: 18px 26px; font-size: 17px; background: #12080a; border: 1px solid #3d0a0a; color: #f5f0e8; border-radius: 999px 0 0 999px; outline: none; }
+  .hero .signup .btn { padding: 18px 42px; font-size: 17px; font-weight: 700; border-radius: 0 999px 999px 0; background: linear-gradient(90deg,#e5383b,#8d0801); color: #fff; border: none; }
+  .hero .note { margin-top: 16px; font-size: 13.5px; color: #8d8570; letter-spacing: 1px; }
+  .hero .art { position: absolute; right: 60px; top: 20px; z-index: 1; }
+  .stats { display: flex; gap: 90px; padding: 50px 90px 70px; border-bottom: 1px solid #1d0a0a; }
+  .stats .stat .n { font-family: Georgia, serif; font-size: 46px; color: #ff6b81; }
+  .stats .stat .l { font-size: 14px; letter-spacing: 3px; text-transform: uppercase; color: #8d8570; margin-top: 6px; }
+
+  /* FEATURES */
+  .features { padding: 100px 90px; text-align: center; }
+  .features .kicker { font-size: 14px; letter-spacing: 8px; text-transform: uppercase; color: #b9a98f; }
+  .features h2 { font-family: Georgia, serif; font-size: 52px; font-weight: 400; margin: 18px 0 70px; }
+  .cards { display: flex; gap: 40px; }
+  .card { flex: 1; background: #0d0709; border: 1px solid #2a0d0d; border-radius: 18px; padding: 54px 40px; text-align: center; }
+  .card .ic { width: 84px; height: 84px; margin: 0 auto 30px; border-radius: 50%; border: 2px solid #e5383b; display: flex; align-items: center; justify-content: center; }
+  .card h3 { font-family: Georgia, serif; font-size: 28px; font-weight: 400; margin-bottom: 16px; }
+  .card p { font-size: 16.5px; color: #b0a58f; line-height: 1.6; }
+
+  /* STEPS */
+  .steps { padding: 90px 90px 110px; background: #0a0507; border-top: 1px solid #1d0a0a; }
+  .steps h2 { font-family: Georgia, serif; font-size: 44px; font-weight: 400; text-align: center; margin-bottom: 70px; }
+  .step-row { display: flex; gap: 60px; }
+  .step { flex: 1; display: flex; gap: 24px; }
+  .step .num { font-family: Georgia, serif; font-size: 64px; color: transparent; -webkit-text-stroke: 1.5px #e5383b; line-height: 1; }
+  .step h4 { font-family: Georgia, serif; font-size: 24px; font-weight: 400; margin-bottom: 10px; }
+  .step p { font-size: 15.5px; color: #b0a58f; line-height: 1.6; }
+
+  /* CTA BAND */
+  .band { position: relative; text-align: center; padding: 120px 90px; overflow: hidden; }
+  .band .glow3 { position: absolute; width: 1000px; height: 600px; border-radius: 50%; left: 50%; top: -200px; transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(186,24,27,.3) 0%, rgba(186,24,27,0) 70%); }
+  .band h2 { font-family: Georgia, serif; font-size: 60px; font-weight: 400; margin-bottom: 24px; position: relative; }
+  .band p { font-size: 20px; color: #cbbfa8; margin-bottom: 40px; position: relative; }
+  .band .btn { display: inline-block; padding: 20px 66px; border-radius: 999px; background: linear-gradient(90deg,#e5383b,#8d0801); color: #fff; font-size: 20px; font-weight: 700; position: relative; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid #1d0a0a; padding: 50px 90px; display: flex; align-items: center; font-size: 14px; color: #8d8570; }
+  footer .flinks { margin-left: auto; display: flex; gap: 30px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <img src="xxx-logo-icon.png" alt="XXXciety logo" />
+    <div class="w"><span class="x">XXX</span>ciety</div>
+  </div>
+  <div class="links">
+    <a href="#">About</a>
+    <a href="#">Safety</a>
+    <a href="#">Stories</a>
+    <a href="#">Sign In</a>
+    <a href="#" class="join">Join Free</a>
+    <div class="age">18+</div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="glow"></div><div class="glow2"></div>
+  <div class="text">
+    <div class="kicker">Luxury adults-only dating</div>
+    <h1>Where desire<br/>finds its <em>match</em>.</h1>
+    <p class="sub">XXXciety is a private club for adults who know exactly what they want. Verified members, absolute discretion, and connections that start with chemistry — not small talk.</p>
+    <div class="signup">
+      <input type="text" placeholder="Your email address" />
+      <div class="btn">Join Free</div>
+    </div>
+    <div class="note">STRICTLY 18+ &nbsp;&bull;&nbsp; VERIFIED MEMBERS ONLY &nbsp;&bull;&nbsp; YOUR PRIVACY, GUARANTEED</div>
+  </div>
+  <div class="art">
+    <img src="xxx-art-preview.png" width="640" style="opacity:.95" />
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="n">2.4M+</div><div class="l">Members worldwide</div></div>
+  <div class="stat"><div class="n">100%</div><div class="l">Photo-verified profiles</div></div>
+  <div class="stat"><div class="n">96</div><div class="l">Countries</div></div>
+  <div class="stat"><div class="n">0</div><div class="l">Data sold. Ever.</div></div>
+</div>
+
+<div class="features">
+  <div class="kicker">Why XXXciety</div>
+  <h2>Seduction, with standards.</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="ic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ff6b81" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg></div>
+      <h3>Verified &amp; Real</h3>
+      <p>Every member passes photo verification and a human review. No bots, no catfish — only real adults, exactly as pictured.</p>
+    </div>
+    <div class="card">
+      <div class="ic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ff6b81" stroke-width="1.8"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.6"/></svg></div>
+      <h3>Private by Design</h3>
+      <p>Blurred-photo controls, invisible mode, and end-to-end encrypted messages. What happens on XXXciety stays on XXXciety.</p>
+    </div>
+    <div class="card">
+      <div class="ic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ff6b81" stroke-width="1.8"><path d="M12 21C7 16.5 3 13 3 8.8 3 6 5 4 7.5 4c1.7 0 3.3.9 4.5 2.6C13.2 4.9 14.8 4 16.5 4 19 4 21 6 21 8.8c0 4.2-4 7.7-9 12.2z"/></svg></div>
+      <h3>Curated Matches</h3>
+      <p>Desire is personal. Our matching learns your tastes and intentions — and introduces you to people who share them.</p>
+    </div>
+  </div>
+</div>
+
+<div class="steps">
+  <h2>Three steps to your next rendezvous.</h2>
+  <div class="step-row">
+    <div class="step">
+      <div class="num">01</div>
+      <div><h4>Create your allure</h4><p>A profile that says what you want — elegantly. Verify once, and the red velvet rope lifts.</p></div>
+    </div>
+    <div class="step">
+      <div class="num">02</div>
+      <div><h4>Match on chemistry</h4><p>Browse curated profiles or let desire find you. Flirt, chat, exchange — at your pace, on your terms.</p></div>
+    </div>
+    <div class="step">
+      <div class="num">03</div>
+      <div><h4>Meet in the real world</h4><p>When the spark is mutual, take it offline. Our members don't waste time — they make memories.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="band">
+  <div class="glow3"></div>
+  <h2>Your secret is safe.<br/>Your desires aren't.</h2>
+  <p>Join 2.4 million adults who chose passion without compromise.</p>
+  <div class="btn">Enter XXXciety</div>
+</div>
+
+<footer>
+  <div>&copy; 2026 XXXciety.com &nbsp;&bull;&nbsp; Strictly 18+ &nbsp;&bull;&nbsp; All members verified adults</div>
+  <div class="flinks"><span>Privacy</span><span>Terms</span><span>Safety</span><span>Contact</span></div>
+</footer>
+
+</body>
+</html>

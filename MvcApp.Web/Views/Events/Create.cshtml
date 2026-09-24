@@ -1,0 +1,81 @@
+@model MvcApp.Core.Event
+@using MvcApp.Core
+@{
+    ViewData["Title"] = "Create Event";
+    var categories = ViewBag.Categories as List<EventCategory> ?? [];
+}
+
+<section class="py-4">
+    <div class="container">
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill mb-4">
+            <i class='bx bx-arrow-back'></i> Back to Events
+        </a>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card border-0 rounded-4 shadow-sm p-4">
+                    <h3 class="fw-bold mb-4"><i class='bx bx-calendar-plus'></i> Create Event</h3>
+
+                    <form asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Title *</label>
+                            <input asp-for="Title" class="form-control rounded-pill" placeholder="What's the event?" required />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Tell people what this event is about..."></textarea>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Date & Time *</label>
+                                <input asp-for="EventDate" type="datetime-local" class="form-control rounded-pill" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Category</label>
+                                <select name="categoryId" class="form-select rounded-pill">
+                                    <option value="">Select category...</option>
+                                    @foreach (var cat in categories)
+                                    {
+                                        <option value="@cat.Id">@cat.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">City *</label>
+                                <input asp-for="City" class="form-control rounded-pill" placeholder="City" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Country *</label>
+                                <input asp-for="Country" class="form-control rounded-pill" placeholder="Country" required />
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Image URL</label>
+                                <input asp-for="ImageUrl" class="form-control rounded-pill" placeholder="https://..." />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Max Attendees</label>
+                                <input asp-for="MaxAttendees" type="number" class="form-control rounded-pill" min="0" placeholder="0 = unlimited" />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn w-100 btn-lg rounded-pill" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
+                            <i class='bx bx-check'></i> Create Event
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

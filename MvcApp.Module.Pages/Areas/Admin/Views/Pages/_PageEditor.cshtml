@@ -1,0 +1,398 @@
+@using System.Text.Json
+@using MvcApp.Core
+@using MvcApp.Module.Pages.Services
+@{
+    var name = ViewData["PageEditorName"] as string ?? "body";
+    var value = ViewData["PageEditorValue"] as string ?? "";
+    var height = ViewData["PageEditorHeight"] as int? ?? 500;
+    var editorId = "pageEditor-" + Guid.NewGuid().ToString("N");
+    var hiddenId = editorId + "-hidden";
+    var sourceId = editorId + "-source";
+    var visualId = editorId + "-visual";
+    var snippets = (ViewBag.PageSnippets as List<ContentPageSnippet> ?? new List<ContentPageSnippet>())
+        .OrderBy(s => s.Category).ThenBy(s => s.Name).ToList();
+    var components = ViewBag.PageComponents as List<PageComponentInfo> ?? PageComponentCatalog.Items;
+    var snippetsJson = JsonSerializer.Serialize(snippets.Select(s => new { s.Id, s.Name, s.Description, s.Category, s.Content }));
+    var componentsJson = JsonSerializer.Serialize(components.Select(c => new { c.Name, c.Syntax, c.Description }));
+    var blazorComponents = ViewBag.PageBlazorComponents as IReadOnlyList<BlazorComponentInfo> ?? new List<BlazorComponentInfo>();
+    var blazorJson = JsonSerializer.Serialize(blazorComponents.Select(b => new { b.Name, b.DisplayName, b.Description, b.Category }));
+}
+
+<div class="page-editor" id="@editorId">
+    <div class="d-flex align-items-center gap-2 mb-2">
+        <ul class="nav nav-pills nav-sm mb-0">
+            <li class="nav-item">
+                <button type="button" class="nav-link active pe-tab" data-mode="visual">Visual</button>
+            </li>
+            <li class="nav-item">
+                <button type="button" class="nav-link pe-tab" data-mode="source">Source</button>
+            </li>
+        </ul>
+        <div class="ms-auto d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="peOpenLibrary('@editorId')">
+                <i class="fa fa-cubes"></i> Snippets &amp; Components
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="pePreview('@editorId')">
+                <i class="fa fa-eye"></i> Preview
+            </button>
+        </div>
+    </div>
+
+    <input type="hidden" name="@name" id="@hiddenId" value="@value" />
+
+    <!-- Visual (rich text) editor -->
+    <div class="pe-visual-wrap" data-editor="@editorId">
+        <div class="rte-toolbar btn-toolbar mb-1" role="toolbar" style="flex-wrap:wrap;gap:2px">
+            <div class="btn-group btn-group-sm me-1">
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','bold')" title="Bold"><b>B</b></button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','italic')" title="Italic"><i>I</i></button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','underline')" title="Underline"><u>U</u></button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','strikeThrough')" title="Strikethrough"><s>S</s></button>
+            </div>
+            <div class="btn-group btn-group-sm me-1">
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','h1')" title="Heading 1">H1</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','h2')" title="Heading 2">H2</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','h3')" title="Heading 3">H3</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','p')" title="Paragraph">P</button>
+            </div>
+            <div class="btn-group btn-group-sm me-1">
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','insertUnorderedList')" title="Bullet List">&#8226;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','insertOrderedList')" title="Numbered List">1.</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','blockquote')" title="Blockquote">&ldquo;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','insertHorizontalRule')" title="Horizontal Rule">&mdash;</button>
+            </div>
+            <div class="btn-group btn-group-sm me-1">
+                <button type="button" class="btn btn-outline-secondary" onclick="peLink('@editorId')" title="Insert Link">&#128279;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peImage('@editorId')" title="Insert Image">&#128247;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCode('@editorId')" title="Code Block">&lt;/&gt;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','removeFormat')" title="Clear Formatting">&#9887;</button>
+            </div>
+        </div>
+        <div id="@visualId" class="pe-visual rte-editor form-control" contenteditable="true"
+             style="min-height:@(height)px;overflow-y:auto;font-family:sans-serif;font-size:14px;line-height:1.6"
+             oninput="peSyncVisual('@editorId')"></div>
+    </div>
+
+    <!-- Source (Razor) editor -->
+    <div class="pe-source-wrap" data-editor="@editorId" style="display:none">
+        <textarea id="@sourceId" class="form-control font-monospace" style="min-height:@(height)px"
+                  spellcheck="false">@value</textarea>
+        <div class="form-text">Razor source mode. Use <code>@@Model.Title</code>, <code>@@if</code>, <code>@@foreach</code> and component helpers. HTML is output as-is.</div>
+    </div>
+
+    <div id="@(editorId)-warn" class="alert alert-warning mt-2 mb-0" style="display:none">
+        This page body contains Razor code. Visual mode is best for plain HTML; switch to <strong>Source</strong> to edit Razor expressions.
+    </div>
+</div>
+
+<!-- Library drawer (snippets + components) -->
+<div class="modal fade" id="@(editorId)-library" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h6 class="modal-title">Snippets &amp; Components</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item"><button type="button" class="nav-link active pe-lib-tab" data-mode="snippets">Snippets</button></li>
+                    <li class="nav-item"><button type="button" class="nav-link pe-lib-tab" data-mode="components">Components</button></li>
+                    <li class="nav-item"><button type="button" class="nav-link pe-lib-tab" data-mode="blazor">Blazor</button></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active pe-lib-pane" data-mode="snippets" id="@(editorId)-tab-snippets">
+                        @if (!snippets.Any())
+                        {
+                            <p class="text-muted">No snippets yet. Add them in Admin &rarr; Pages &rarr; Snippets.</p>
+                        }
+                        @foreach (var group in snippets.GroupBy(s => s.Category))
+                        {
+                            <h6 class="text-uppercase text-muted small mt-2 mb-1">@group.Key</h6>
+                            @foreach (var s in group)
+                            {
+                                <div class="d-flex align-items-center justify-content-between border-bottom py-1">
+                                    <div>
+                                        <strong>@s.Name</strong>
+                                        @if (!string.IsNullOrWhiteSpace(s.Description))
+                                        {
+                                            <br /><small class="text-muted">@s.Description</small>
+                                        }
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary pe-snippet-insert ms-2"
+                                            onclick="peInsertSnippet('@editorId','@s.Id')">Insert</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="tab-pane fade pe-lib-pane" data-mode="components" id="@(editorId)-tab-components">
+                        @foreach (var c in components)
+                        {
+                            <div class="d-flex align-items-center justify-content-between border-bottom py-1">
+                                <div>
+                                    <strong>@c.Name</strong>
+                                    <br /><code class="small">@c.Syntax</code>
+                                    <br /><small class="text-muted">@c.Description</small>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-primary pe-component-insert ms-2"
+                                        onclick="peInsertComponent('@editorId','@c.Name')">Insert</button>
+                            </div>
+                        }
+                    </div>
+                    <div class="tab-pane fade pe-lib-pane" data-mode="blazor" id="@(editorId)-tab-blazor">
+                        @if (!blazorComponents.Any())
+                        {
+                            <p class="text-muted">
+                                No Blazor widgets registered yet. Add a component with the
+                                <code>[BlazorPageComponent]</code> attribute and register its assembly in
+                                <code>Program.cs</code>.
+                            </p>
+                        }
+                        @foreach (var b in blazorComponents)
+                        {
+                            <div class="d-flex align-items-center justify-content-between border-bottom py-1">
+                                <div>
+                                    <strong>@b.DisplayName</strong>
+                                    @if (!string.IsNullOrWhiteSpace(b.Description))
+                                    {
+                                        <br /><small class="text-muted">@b.Description</small>
+                                    }
+                                    <br /><code class="small">@@Blazor("@b.Name")</code>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-primary pe-blazor-insert ms-2"
+                                        onclick="peInsertBlazor('@editorId','@b.Name')">Insert</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Preview target -->
+<iframe id="@(editorId)-preview" style="display:none"></iframe>
+
+<script>
+    (function () {
+        var sid = '@editorId';
+        window['peSnippets_' + sid] = @Html.Raw(snippetsJson);
+        window['peComponents_' + sid] = @Html.Raw(componentsJson);
+        window['peBlazor_' + sid] = @Html.Raw(blazorJson);
+
+        function getEditors() {
+            return {
+                hidden: document.getElementById(sid + '-hidden'),
+                source: document.getElementById(sid + '-source'),
+                visual: document.getElementById(sid + '-visual')
+            };
+        }
+
+        // Initialise visual from the source value on first switch
+        var visualInit = false;
+        function ensureVisual() {
+            var e = getEditors();
+            if (!visualInit) {
+                e.visual.innerHTML = e.hidden.value;
+                visualInit = true;
+            }
+        }
+
+        window['peSetMode_' + sid] = function (mode) {
+            var e = getEditors();
+            var wrap = document.querySelector('.page-editor[id="' + sid + '"]');
+            var visualWrap = wrap.querySelector('.pe-visual-wrap');
+            var sourceWrap = wrap.querySelector('.pe-source-wrap');
+            var tabs = wrap.querySelectorAll('.pe-tab');
+            var sourceActive = sourceWrap.style.display !== 'none';
+
+            // Sync the currently active editor into the hidden field before switching
+            if (sourceActive) {
+                e.hidden.value = e.source.value;
+            } else {
+                peSyncVisual(sid);
+            }
+
+            if (mode === 'visual') {
+                e.visual.innerHTML = e.hidden.value;
+                visualWrap.style.display = '';
+                sourceWrap.style.display = 'none';
+            } else {
+                e.source.value = e.hidden.value;
+                visualWrap.style.display = 'none';
+                sourceWrap.style.display = '';
+            }
+            tabs.forEach(function (t) {
+                t.classList.toggle('active', t.getAttribute('data-mode') === mode);
+            });
+            updateRazorWarning();
+        };
+
+        window['peCmd_' + sid] = function (cmd, val) {
+            ensureVisual();
+            var visual = getEditors().visual;
+            visual.focus();
+            document.execCommand(cmd, false, val || null);
+            peSyncVisual(sid);
+        };
+
+        window['peLink_' + sid] = function () {
+            var url = prompt('Enter URL:', 'https://');
+            if (url && url.trim()) { peCmd(sid, 'createLink', url.trim()); }
+        };
+        window['peImage_' + sid] = function () {
+            var url = prompt('Enter image URL:', 'https://');
+            if (url && url.trim()) { peCmd(sid, 'insertImage', url.trim()); }
+        };
+        window['peCode_' + sid] = function () {
+            var sel = window.getSelection();
+            if (sel && sel.rangeCount > 0) {
+                var range = sel.getRangeAt(0);
+                var pre = document.createElement('pre');
+                var code = document.createElement('code');
+                pre.appendChild(code);
+                range.surroundContents(pre);
+            }
+            peSyncVisual(sid);
+        };
+
+        window['peSyncVisual_' + sid] = function () {
+            getEditors().hidden.value = getEditors().visual.innerHTML;
+        };
+
+        function insertIntoActive(html) {
+            var wrap = document.querySelector('.page-editor[id="' + sid + '"]');
+            var sourceWrap = wrap.querySelector('.pe-source-wrap');
+            if (sourceWrap.style.display !== 'none') {
+                var ta = getEditors().source;
+                var start = ta.selectionStart, end = ta.selectionEnd;
+                var before = ta.value.slice(0, start);
+                var after = ta.value.slice(end);
+                ta.value = before + html + after;
+                ta.selectionStart = ta.selectionEnd = start + html.length;
+                ta.focus();
+                getEditors().hidden.value = ta.value;
+            } else {
+                ensureVisual();
+                var visual = getEditors().visual;
+                visual.focus();
+                document.execCommand('insertHTML', false, html);
+                peSyncVisual(sid);
+            }
+            updateRazorWarning();
+        }
+
+        window['peInsertSnippet_' + sid] = function (id) {
+            var arr = window['peSnippets_' + sid];
+            var s = arr.find(function (x) { return String(x.Id) === String(id); });
+            if (s) insertIntoActive(s.Content);
+        };
+        window['peInsertComponent_' + sid] = function (name) {
+            var arr = window['peComponents_' + sid];
+            var c = arr.find(function (x) { return x.Name === name; });
+            if (c) insertIntoActive('@@' + c.Syntax);
+        };
+
+        window['peInsertBlazor_' + sid] = function (name) {
+            var arr = window['peBlazor_' + sid];
+            var b = arr.find(function (x) { return x.Name === name; });
+            if (b) insertIntoActive('@@Blazor("' + b.Name + '")');
+        };
+
+        function updateRazorWarning() {
+            var wrap = document.querySelector('.page-editor[id="' + sid + '"]');
+            var warn = document.getElementById(sid + '-warn');
+            var raw = getEditors().hidden.value;
+            var hasRazor = /@@[A-Za-z]/.test(raw);
+            warn.style.display = hasRazor ? '' : 'none';
+        }
+
+        window['pePreview_' + sid] = function () {
+            var e = getEditors();
+            // Make sure the active editor's content is in the hidden field
+            var wrap = document.querySelector('.page-editor[id="' + sid + '"]');
+            if (wrap.querySelector('.pe-source-wrap').style.display !== 'none') {
+                e.hidden.value = e.source.value;
+            } else {
+                peSyncVisual(sid);
+            }
+            // POST the body to the Preview action in a new tab
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Admin/Pages/Preview';
+            form.target = '_blank';
+            var token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                var t = document.createElement('input');
+                t.type = 'hidden'; t.name = token.name; t.value = token.value;
+                form.appendChild(t);
+            }
+            var body = document.createElement('textarea');
+            body.name = 'body'; body.value = e.hidden.value;
+            form.appendChild(body);
+            var slug = document.querySelector('input[name="slug"]');
+            if (slug) {
+                var s = document.createElement('input');
+                s.type = 'hidden'; s.name = 'slug'; s.value = slug.value;
+                form.appendChild(s);
+            }
+            document.body.appendChild(form);
+            form.submit();
+            form.remove();
+        };
+
+        // Wire tab buttons
+        document.querySelectorAll('.page-editor[id="' + sid + '"] .pe-tab').forEach(function (btn) {
+            btn.addEventListener('click', function () { window['peSetMode_' + sid](btn.getAttribute('data-mode')); });
+        });
+
+        // Wire library tabs (manual fallback so Components always shows)
+        var libTabs = document.querySelectorAll('.page-editor[id="' + sid + '"] ~ .modal .pe-lib-tab');
+        libTabs.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var mode = btn.getAttribute('data-mode');
+                libTabs.forEach(function (b) { b.classList.toggle('active', b === btn); });
+                document.querySelectorAll('.page-editor[id="' + sid + '"] ~ .modal .pe-lib-pane').forEach(function (p) {
+                    p.classList.toggle('active', p.getAttribute('data-mode') === mode);
+                    p.classList.toggle('show', p.getAttribute('data-mode') === mode);
+                });
+            });
+        });
+
+        // Initial load: populate the visual editor with the existing content
+        ensureVisual();
+
+        // On submit, sync the active editor (visual or source) into the hidden body field
+        var form = document.querySelector('.page-editor[id="' + sid + '"]').closest('form');
+        if (form) {
+            form.addEventListener('submit', function () {
+                var sourceWrap = document.querySelector('.page-editor[id="' + sid + '"] .pe-source-wrap');
+                var e = getEditors();
+                if (sourceWrap.style.display !== 'none') {
+                    e.hidden.value = e.source.value;
+                } else {
+                    peSyncVisual(sid);
+                }
+            });
+        }
+    })();
+
+    function peOpenLibrary(editorId) {
+        var modalEl = document.getElementById(editorId + '-library');
+        if (window.bootstrap && bootstrap.Modal) {
+            bootstrap.Modal.getOrCreateInstance(modalEl).show();
+        } else {
+            modalEl.classList.add('show');
+            modalEl.style.display = 'block';
+        }
+    }
+    function peCmd(editorId, cmd, val) { var f = window['peCmd_' + editorId]; if (f) f(cmd, val); }
+    function peLink(editorId) { var f = window['peLink_' + editorId]; if (f) f(); }
+    function peImage(editorId) { var f = window['peImage_' + editorId]; if (f) f(); }
+    function peCode(editorId) { var f = window['peCode_' + editorId]; if (f) f(); }
+    function pePreview(editorId) { var f = window['pePreview_' + editorId]; if (f) f(); }
+    function peInsertSnippet(editorId, id) { var f = window['peInsertSnippet_' + editorId]; if (f) f(id); }
+    function peInsertComponent(editorId, name) { var f = window['peInsertComponent_' + editorId]; if (f) f(name); }
+    function peInsertBlazor(editorId, name) { var f = window['peInsertBlazor_' + editorId]; if (f) f(name); }
+    function peSyncVisual(editorId) { var f = window['peSyncVisual_' + editorId]; if (f) f(); }
+    function peSetMode(editorId, mode) { var f = window['peSetMode_' + editorId]; if (f) f(mode); }
+</script>

@@ -1,0 +1,22 @@
+<Solution>
+  <Project Path="MvcApp.Common/MvcApp.Common.csproj" Id="f311770f-47b5-487d-8894-4524a06272cc" />
+  <Project Path="MvcApp.Core/MvcApp.Core.csproj" Id="9ad16297-4512-4a42-846e-302f51f2a3c9" />
+  <Project Path="MvcApp.Identity/MvcApp.Identity.csproj" Id="01a274a6-16fd-4b1a-9a0d-d674bdf5a29b" />
+  <Project Path="MvcApp.Infrastructure/MvcApp.Infrastructure.csproj" Id="24572961-ddf8-4dd3-929c-78ffef6c7bab" />
+  <Project Path="MvcApp.Localization/MvcApp.Localization.csproj" Id="d198fca8-b5de-4944-921a-c2732a35adff" />
+  <Project Path="MvcApp.Module.Ads/MvcApp.Module.Ads.csproj" Id="a1b2c3d4-e5f6-7890-abcd-ef1234567890" />
+  <Project Path="MvcApp.Module.Blog/MvcApp.Module.Blog.csproj" Id="b1c2d3e4-f5a6-7890-bcde-fa1234567890" />
+  <Project Path="MvcApp.Module.Chat/MvcApp.Module.Chat.csproj" Id="c1d2e3f4-a5b6-7890-cdef-ab1234567890" />
+  <Project Path="MvcApp.Module.Forum/MvcApp.Module.Forum.csproj" Id="d1e2f3a4-b5c6-7890-defa-bc1234567890" />
+  <Project Path="MvcApp.Module.Messages/MvcApp.Module.Messages.csproj" Id="e1f2a3b4-c5d6-7890-efab-cd1234567890" />
+  <Project Path="MvcApp.Module.IPTV/MvcApp.Module.IPTV.csproj" Id="f1a2b3c4-d5e6-7890-fabc-de1234567890" />
+  <Project Path="MvcApp.Module.Pages/MvcApp.Module.Pages.csproj" Id="a2b3c4d5-e6f7-8901-abcd-ef2345678901" />
+  <Project Path="MvcApp.Module.Shared/MvcApp.Module.Shared.csproj" Id="b2c3d4e5-f6a7-8901-bcde-fa2345678901" />
+  <Project Path="MvcApp.Module.Store/MvcApp.Module.Store.csproj" Id="c2d3e4f5-a6b7-8901-cdef-ab2345678901" />
+  <Project Path="MvcApp.Module.Utility/MvcApp.Module.Utility.csproj" Id="e4f5a6b7-89d0-1234-efab-cd4567890124" />
+  <Project Path="MvcApp.Module.Video/MvcApp.Module.Video.csproj" Id="d3e4f5a6-c7d8-9012-defa-bc3456789013" />
+  <Project Path="MvcApp.Razor/MvcApp.Razor.csproj" Id="1fbbb15e-2ebc-447f-9be9-44985f272376" />
+  <Project Path="MvcApp.Services/MvcApp.Services.csproj" Id="6e3c087a-e04e-430f-bee1-3ed4e29ae221" />
+  <Project Path="MvcApp.Tests/MvcApp.Tests.csproj" Id="a7b8c9d0-e1f2-3045-a6b7-c8d9e0f1a2b3" />
+  <Project Path="MvcApp.Web/MvcApp.Web.csproj" Id="d3e4f5a6-b7c8-9012-cdef-ab3456789012" />
+</Solution>

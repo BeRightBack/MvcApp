@@ -1,0 +1,32 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MvcApp.Core.UserDetails> SignInManager
+@inject UserManager<MvcApp.Core.UserDetails> UserManager
+@{
+    ViewData["Title"] = "Home";
+    var isAuthenticated = SignInManager.IsSignedIn(User);
+}
+<section style="min-height:80vh; background:radial-gradient(ellipse at center, #1a1a3e 0%, #0a0a12 100%); display:flex; align-items:center;">
+    <div class="container text-center py-5">
+        <h1 class="fw-bold mb-3" style="font-family:var(--template-font-heading); font-size:3.5rem; text-transform:uppercase; letter-spacing:4px;">
+            <span style="color:var(--template-primary); text-shadow:0 0 40px rgba(0,245,255,0.5);">Level Up</span>
+            <span style="color:#fff;">Your Community</span>
+        </h1>
+        <p class="lead mb-4" style="color:var(--template-text);">Join the arena. Compete, chat, and conquer with fellow gamers worldwide.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            @if (!isAuthenticated)
+            {
+                <a asp-page="/Account/Register" class="btn btn-primary btn-lg px-5">Join the Server</a>
+                <a asp-page="/Account/Login" class="btn btn-outline-primary btn-lg px-4">Login</a>
+            }
+            else
+            {
+                <a asp-controller="Discover" asp-action="Index" class="btn btn-primary btn-lg px-5">Find Players</a>
+            }
+        </div>
+        <div class="mt-5 d-flex justify-content-center gap-5 text-center">
+            <div><span class="fw-bold fs-2" style="color:var(--template-primary);">2.4K</span><br /><span style="color:var(--template-text-light);">Online Now</span></div>
+            <div><span class="fw-bold fs-2" style="color:var(--template-primary);">15K+</span><br /><span style="color:var(--template-text-light);">Members</span></div>
+            <div><span class="fw-bold fs-2" style="color:var(--template-primary);">8</span><br /><span style="color:var(--template-text-light);">Game Servers</span></div>
+        </div>
+    </div>
+</section>

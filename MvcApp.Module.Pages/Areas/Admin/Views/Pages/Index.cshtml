@@ -1,0 +1,74 @@
+@model IEnumerable<ContentPage>
+@{
+    ViewData["Title"] = "Manage Pages";
+    var pages = Model.ToList();
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1><i class="fa fa-file-text-o"></i> Manage Pages</h1>
+        <a asp-action="Create" class="btn btn-primary"><i class="fa fa-plus"></i> New Page</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Title</th>
+                        <th>Slug</th>
+                        <th class="text-center">Status</th>
+                        <th>Author</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pg in pages)
+                    {
+                        <tr>
+                            <td><strong>@pg.Title</strong></td>
+                            <td><small class="text-muted">/pages/@pg.Slug</small></td>
+                            <td class="text-center">
+                                @if (pg.IsPublished)
+                                {
+                                    <span class="badge bg-success">Published</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">Draft</span>
+                                }
+                            </td>
+                            <td>@pg.CreatedByUsername</td>
+                            <td>@pg.CreatedAt.ToString("MMM dd, yyyy")</td>
+                            <td>@(pg.UpdatedAt?.ToString("MMM dd, yyyy") ?? "—")</td>
+                            <td class="text-center">
+                                <a asp-action="Edit" asp-route-id="@pg.Id" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i></a>
+                                <form asp-action="Delete" method="post" style="display:inline"
+                                      onsubmit="return confirm('Delete this page permanently?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@pg.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    @if (!pages.Any())
+                    {
+                        <tr><td colspan="7" class="text-center text-muted py-4">No pages yet.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

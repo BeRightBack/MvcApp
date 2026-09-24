@@ -1,0 +1,102 @@
+@page
+@using MvcApp.Identity.Pages.Account
+@model CompleteProfileModel
+@{
+    ViewData["Title"] = "Complete Your Profile";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">Complete Your Profile</h2>
+        <p class="text-muted mb-4">Please fill in your details to get started.</p>
+
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+            <div class="mb-3 text-center">
+                <img src="/images/default-user.png"
+                     alt="Profile" width="140" height="140"
+                     class="rounded-circle border" style="object-fit:cover" id="profilePreview" />
+                <div class="mt-2">
+                    <input asp-for="Input.ProfilePictureFile" type="file" accept="image/*" class="form-control form-control-sm"
+                           onchange="document.getElementById('profilePreview').src = URL.createObjectURL(this.files[0])" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.FirstName" class="form-control" placeholder="First name" />
+                        <label asp-for="Input.FirstName"></label>
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.LastName" class="form-control" placeholder="Last name" />
+                        <label asp-for="Input.LastName"></label>
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.KnownAs" class="form-control" placeholder="Display name" />
+                <label asp-for="Input.KnownAs"></label>
+                <span asp-validation-for="Input.KnownAs" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea asp-for="Input.Introduction" class="form-control" placeholder="Tell us about yourself" style="height:100px"></textarea>
+                <label asp-for="Input.Introduction"></label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea asp-for="Input.LookingFor" class="form-control" placeholder="What are you looking for?" style="height:80px"></textarea>
+                <label asp-for="Input.LookingFor"></label>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <select asp-for="Input.Gender" class="form-control">
+                            <option value="">Select...</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <label asp-for="Input.Gender"></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.DateOfBirth" type="date" class="form-control" />
+                        <label asp-for="Input.DateOfBirth"></label>
+                        <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.City" class="form-control" placeholder="City" />
+                        <label asp-for="Input.City"></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Country" class="form-control" placeholder="Country" />
+                        <label asp-for="Input.Country"></label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100">Save & Continue</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,147 @@
+@model IEnumerable<MvcApp.Core.Photo>
+@using MvcApp.Core
+@{
+    ViewData["Title"] = "My Gallery";
+    var username = ViewBag.Username as string;
+    var pendingCount = (int)ViewBag.PendingCount;
+}
+
+<section class="py-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">My Gallery</h1>
+                <p class="text-muted mb-0">Manage your photos</p>
+            </div>
+            <a asp-controller="Discover" asp-action="Index" class="btn btn-outline-secondary rounded-pill">
+                <i class='bx bx-arrow-back'></i> Back to Discover
+            </a>
+        </div>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Message"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @if (pendingCount > 0)
+        {
+            <div class="alert alert-warning">
+                <i class='bx bx-error'></i> You have @pendingCount photo(s) pending admin approval.
+            </div>
+        }
+
+        <!-- Upload Form -->
+        <div class="card border-0 rounded-4 shadow-sm p-4 mb-4">
+            <h5 class="fw-bold mb-3"><i class='bx bx-cloud-upload'></i> Upload Photo</h5>
+            <form asp-action="Upload" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label fw-semibold small">Photo File</label>
+                        <input type="file" name="file" accept="image/jpeg,image/png,image/gif,image/webp" class="form-control rounded-pill" required />
+                        <div class="form-text">JPEG, PNG, GIF, or WebP. Max 10MB.</div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">Privacy</label>
+                        <select name="privacy" class="form-select rounded-pill">
+                            <option value="Public">Public</option>
+                            <option value="MembersOnly">Members Only</option>
+                            <option value="ExplicitUnlocked">Explicit (Unlocked)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="submit" class="btn rounded-pill" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
+                            <i class='bx bx-upload'></i> Upload
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Photos Grid -->
+        @if (Model.Any())
+        {
+            <div class="row g-3">
+                @foreach (var photo in Model)
+                {
+                    <div class="col-md-3">
+                        <div class="card border-0 rounded-4 overflow-hidden shadow-sm h-100">
+                            <div class="position-relative" style="height:250px;">
+                                <img src="/Photos/@username/@photo.Filename"
+                                     class="w-100 h-100" style="object-fit:cover;"
+                                     onerror="this.onerror=null;this.src='/images/default-user.png';"
+                                     alt="Photo #@photo.Id">
+                                <span class="position-absolute top-0 start-0 m-2 badge @(photo.IsMain ? "bg-primary" : "bg-secondary")">
+                                    @(photo.IsMain ? "Main" : "Gallery")
+                                </span>
+                                <span class="position-absolute top-0 end-0 m-2 badge @(photo.IsApproved ? "bg-success" : "bg-warning text-dark")">
+                                    @(photo.IsApproved ? "Approved" : "Pending")
+                                </span>
+                                <span class="position-absolute bottom-0 start-0 m-2 badge bg-dark bg-opacity-75">
+                                    @switch (photo.PrivacyLevel)
+                                    {
+                                        case PrivacyLevel.Public:
+                                            <text><i class='bx bx-globe'></i> Public</text>
+                                            break;
+                                        case PrivacyLevel.MembersOnly:
+                                            <text><i class='bx bx-group'></i> Members Only</text>
+                                            break;
+                                        case PrivacyLevel.ExplicitUnlocked:
+                                            <text><i class='bx bx-lock-open'></i> Explicit</text>
+                                            break;
+                                    }
+                                </span>
+                            </div>
+                            <div class="card-body p-3">
+                                <div class="d-flex gap-1 flex-wrap">
+                                    @if (!photo.IsMain)
+                                    {
+                                        <form asp-action="SetMain" asp-route-id="@photo.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill" title="Set as main photo">
+                                                <i class='bx bx-star'></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    <form asp-action="SetPrivacy" asp-route-id="@photo.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <select name="privacy" onchange="this.form.submit()" class="form-select form-select-sm rounded-pill" style="width:auto;">
+                                            <option value="Public" selected="@(photo.PrivacyLevel == PrivacyLevel.Public)">Public</option>
+                                            <option value="MembersOnly" selected="@(photo.PrivacyLevel == PrivacyLevel.MembersOnly)">Members</option>
+                                            <option value="ExplicitUnlocked" selected="@(photo.PrivacyLevel == PrivacyLevel.ExplicitUnlocked)">Explicit</option>
+                                        </select>
+                                    </form>
+                                    <form asp-action="Delete" asp-route-id="@photo.Id" method="post" class="d-inline"
+                                          onsubmit="return confirm('Delete this photo?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill" title="Delete">
+                                            <i class='bx bx-trash'></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class='bx bx-image' style="font-size:4rem; color:#e74c6f;"></i>
+                <h4 class="mt-3">No photos yet</h4>
+                <p class="text-muted">Upload your first photo to get started!</p>
+            </div>
+        }
+    </div>
+</section>

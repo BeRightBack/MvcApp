@@ -1,0 +1,127 @@
+@model VisitorStatisticsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    int maxPageLinks = 5; // Maximum number of page links to display
+    int startPage = Math.Max(1, Model.VisitsPerDay.PageIndex - maxPageLinks / 2);
+    int endPage = Math.Min(Model.VisitsPerDay.TotalPages, startPage + maxPageLinks - 1);
+}
+
+<h2>Visitor Statistics</h2>
+
+<p>Total Visits: @Model.TotalVisits</p>
+<p>Unique Visitors: @Model.UniqueVisitors</p>
+
+<h3>Visits Per Day</h3>
+<form method="get">
+    <input type="text" name="visitsSearchString" value="@Model.VisitsSearchString" placeholder="Search by date" />
+    <input type="submit" value="Search" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Visits</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var visit in Model.VisitsPerDay)
+        {
+            <tr>
+                <td>@visit.Date.ToShortDateString()</td>
+                <td>@visit.Count</td>
+                <td>
+                    <form method="post" asp-action="DeleteVisits">
+                        <input type="hidden" name="date" value="@visit.Date.ToString("yyyy-MM-dd")" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item @(Model.VisitsPerDay.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-visitsPageNumber="@(Model.VisitsPerDay.PageIndex - 1)"
+                   asp-route-visitsSearchString="@Model.VisitsSearchString">Previous</a>
+            </li>
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == Model.VisitsPerDay.PageIndex ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-visitsPageNumber="@i"
+                       asp-route-visitsSearchString="@Model.VisitsSearchString">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.VisitsPerDay.HasNextPage ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-visitsPageNumber="@(Model.VisitsPerDay.PageIndex + 1)"
+                   asp-route-visitsSearchString="@Model.VisitsSearchString">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<h3>Visitor Locations</h3>
+<form method="get">
+    <input type="text" name="locationsSearchString" value="@Model.LocationsSearchString" placeholder="Search by date" />
+    <input type="submit" value="Search" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Country</th>
+            <th>Region</th>
+            <th>City</th>
+            <th>Count</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var location in Model.VisitorLocations!)
+        {
+            <tr>
+                <td>@location.Date.ToShortDateString()</td>
+                <td>@location.Country</td>
+                <td>@location.Region</td>
+                <td>@location.City</td>
+                <td>@location.Count</td>
+                <td>
+                    <form method="post" asp-action="DeleteLocations">
+                        <input type="hidden" name="date" value="@location.Date.ToString("yyyy-MM-dd")" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item @(Model.VisitorLocations.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-locationsPageNumber="@(Model.VisitorLocations.PageIndex - 1)"
+                   asp-route-locationsSearchString="@Model.LocationsSearchString">Previous</a>
+            </li>
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == Model.VisitorLocations.PageIndex ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-locationsPageNumber="@i"
+                       asp-route-locationsSearchString="@Model.LocationsSearchString">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.VisitorLocations.HasNextPage ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-locationsPageNumber="@(Model.VisitorLocations.PageIndex + 1)"
+                   asp-route-locationsSearchString="@Model.LocationsSearchString">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>

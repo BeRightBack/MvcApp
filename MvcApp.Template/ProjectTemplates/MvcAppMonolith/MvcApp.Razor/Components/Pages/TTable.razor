@@ -1,0 +1,208 @@
+﻿@using System.Reflection
+@using MvcApp.Razor.Components.Pages.Tools.Pagination
+@typeparam TEntity
+@typeparam TModel
+
+<input type="text" @oninput="SearchTable" placeholder="Search..." />
+
+@if (filtered is not null && filtered.Count > 0)
+{
+    <div class="container-fluid">
+        <table class="table table-sm table-bordered table-striped ">
+            <thead>
+                <tr>
+                    @if (models is not null)
+                    {
+                        @foreach (var model in models)
+                        {
+                            <th scope="col" @onclick="() => SortTable(model?.ToString()!)">@model</th>
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var _entity in GetPage())
+                {
+                    <tr>
+                        @if (models is not null)
+                        {
+                            @foreach (var _model in models)
+                            {
+                                <td class="align-middle">
+                                    @GetCellValue(_entity, _model?.ToString()!)
+                                </td>
+                            }
+                        }
+                        <td class="align-middle">
+                            <button type="button" class="btn btn-sm btn-info">Update</button>
+                        </td>
+                        <td class="align-middle">
+                            <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                @if (totalPages > 1 && GetPage().Any())
+                {
+                    <Pagination TotalPages="@(totalPages != 0 ? totalPages : 1)"
+                                PageIndex="@State!.PageIndex"
+                                Radius="3"
+                                OnSelectedPage="@SelectedPage">
+                    </Pagination>
+                }
+            </tfoot>
+        </table>
+    </div>
+}
+else
+{
+    <span>
+        Loading entities...
+    </span>
+}
+
+@code {
+    [Parameter] public List<TEntity>? entities { get; set; }
+    [Parameter] public List<TModel>? models { get; set; }
+
+    [CascadingParameter] PageIndexStateProvider? State { get; set; }
+
+    private int itemsPerPage = 15;
+    private int totalPages = 1;
+
+    private string currentSortColumn = "";
+    private bool sortAscending = true;
+    private string searchString = "";
+    private List<TEntity>? filtered;
+    private Dictionary<string, PropertyInfo> propertyCache = new();
+
+    protected override void OnInitialized()
+    {
+        State ??= new PageIndexStateProvider();
+        State.PageIndex = 1;
+    }
+
+    protected override void OnParametersSet()
+    {
+        // Gracefully handle async population of 'entities'
+        if (entities is null)
+        {
+            filtered = new List<TEntity>();
+            totalPages = 1;
+            State ??= new PageIndexStateProvider();
+            State.PageIndex = 1;
+            return;
+        }
+
+        filtered = entities.ToList();
+        totalPages = Math.Max(1, (int)Math.Ceiling((double)filtered.Count / itemsPerPage));
+
+        State ??= new PageIndexStateProvider();
+        State.PageIndex = Math.Clamp(State.PageIndex, 1, totalPages);
+    }
+
+    private void SelectedPage(int selectedPageIndex)
+    {
+        State ??= new PageIndexStateProvider();
+        State.PageIndex = Math.Clamp(selectedPageIndex, 1, Math.Max(1, totalPages));
+    }
+
+    private IEnumerable<TEntity> GetPage()
+    {
+        if (filtered is null || filtered.Count == 0)
+            return Enumerable.Empty<TEntity>();
+
+        State ??= new PageIndexStateProvider();
+        var skipCount = itemsPerPage * (State.PageIndex - 1);
+        return filtered.Skip(skipCount).Take(itemsPerPage).ToList();
+    }
+
+    private void SortTable(string column)
+    {
+        if (string.IsNullOrWhiteSpace(column) || filtered is null) return;
+
+        if (column == currentSortColumn)
+        {
+            sortAscending = !sortAscending;
+        }
+        else
+        {
+            currentSortColumn = column;
+            sortAscending = true;
+        }
+
+        var propertyInfo = GetPropertyInfo(currentSortColumn);
+        if (propertyInfo is null) return;
+
+        filtered = sortAscending
+            ? filtered.OrderBy(e => propertyInfo.GetValue(e, null)).ToList()
+            : filtered.OrderByDescending(e => propertyInfo.GetValue(e, null)).ToList();
+    }
+
+    private void SearchTable(ChangeEventArgs e)
+    {
+        searchString = e.Value?.ToString() ?? string.Empty;
+
+        if (entities is null)
+        {
+            filtered = new List<TEntity>();
+            totalPages = 1;
+            State!.PageIndex = 1;
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(searchString))
+        {
+            filtered = entities.ToList();
+        }
+        else
+        {
+            filtered = entities
+                .Where(item => GetPropertyInfos(item)
+                    .Where(p => p.PropertyType == typeof(string))
+                    .Select(p => p.GetValue(item) as string)
+                    .Any(value => !string.IsNullOrEmpty(value) &&
+                                  value.Contains(searchString, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+        }
+
+        totalPages = Math.Max(1, (int)Math.Ceiling((double)filtered.Count / itemsPerPage));
+        State!.PageIndex = 1;
+    }
+
+    private PropertyInfo? GetPropertyInfo(string propertyName)
+    {
+        if (string.IsNullOrWhiteSpace(propertyName)) return null;
+
+        if (!propertyCache.TryGetValue(propertyName, out var propertyInfo))
+        {
+            propertyInfo = typeof(TEntity).GetProperty(propertyName);
+            if (propertyInfo != null)
+            {
+                propertyCache[propertyName] = propertyInfo;
+            }
+        }
+
+        return propertyInfo;
+    }
+
+    private IEnumerable<PropertyInfo> GetPropertyInfos(TEntity entity)
+    {
+        var type = entity!.GetType();
+        foreach (var property in type.GetProperties())
+        {
+            var propertyInfo = GetPropertyInfo(property.Name);
+            if (propertyInfo != null)
+            {
+                yield return propertyInfo;
+            }
+        }
+    }
+
+    private object? GetCellValue(TEntity entity, string column)
+    {
+        var pi = GetPropertyInfo(column);
+        return pi?.GetValue(entity, null);
+    }
+}

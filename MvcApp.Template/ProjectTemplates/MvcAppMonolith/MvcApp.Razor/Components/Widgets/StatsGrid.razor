@@ -1,0 +1,26 @@
+@using MvcApp.Core
+@attribute [BlazorPageComponent("StatsGrid", DisplayName = "Stats grid", Description = "Row of statistics with values and labels.", Category = "Content")]
+<div class="row text-center g-4">
+    <div class="col-md-3"><div class="display-5 fw-bold text-primary">@Value1</div><p class="text-muted mb-0">@Label1</p></div>
+    <div class="col-md-3"><div class="display-5 fw-bold text-primary">@Value2</div><p class="text-muted mb-0">@Label2</p></div>
+    <div class="col-md-3"><div class="display-5 fw-bold text-primary">@Value3</div><p class="text-muted mb-0">@Label3</p></div>
+    <div class="col-md-3"><div class="display-5 fw-bold text-primary">@Value4</div><p class="text-muted mb-0">@Label4</p></div>
+</div>
+
+@code {
+    [Parameter] public string Value1 { get; set; } = "1.2k";
+
+    [Parameter] public string Label1 { get; set; } = "Members";
+
+    [Parameter] public string Value2 { get; set; } = "340";
+
+    [Parameter] public string Label2 { get; set; } = "Projects";
+
+    [Parameter] public string Value3 { get; set; } = "99%";
+
+    [Parameter] public string Label3 { get; set; } = "Uptime";
+
+    [Parameter] public string Value4 { get; set; } = "24/7";
+
+    [Parameter] public string Label4 { get; set; } = "Support";
+}

@@ -1,0 +1,66 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    var userName = User.Identity != null && User.Identity.IsAuthenticated ? User.Identity.Name : null;
+}
+<section class="dashboard-header mb-4">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3 position-relative">
+        <div>
+            <h1 class="fw-bold mb-1">@Localizer["Welcome"]@(userName != null ? $", {userName}" : "")</h1>
+            <p class="lead mb-0" style="opacity: .85; color: #fff;">@Localizer["Manage your content, users, and analytics from one central dashboard."]</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-light btn-sm" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                <i class="bx bx-grid-alt me-1"></i>@Localizer["Open Dashboard"]
+            </a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="btn btn-outline-light btn-sm" asp-area="Admin" asp-controller="User" asp-action="Index">
+                    <i class="bx bx-user-plus me-1"></i>@Localizer["Manage Users"]
+                </a>
+            }
+        </div>
+    </div>
+</section>
+<div class="container">
+    @await Component.InvokeAsync("DashboardStats")
+
+    <h5 class="fw-bold mb-3">@Localizer["What's Included"]</h5>
+    <div class="row g-4 mb-4">
+        <div class="col-md-3 col-6">
+            <div class="card feature-card p-4">
+                <span class="feature-icon"><i class="bx bx-edit"></i></span>
+                <h6>@Localizer["Content Management"]</h6>
+                <p class="text-muted small mb-0">@Localizer["Create and organize pages, posts, and snippets with ease."]</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card feature-card p-4">
+                <span class="feature-icon"><i class="bx bx-shield"></i></span>
+                <h6>@Localizer["Roles & Permissions"]</h6>
+                <p class="text-muted small mb-0">@Localizer["Manage members and permissions from a single place."]</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card feature-card p-4">
+                <span class="feature-icon"><i class="bx bx-line-chart"></i></span>
+                <h6>@Localizer["Analytics Ready"]</h6>
+                <p class="text-muted small mb-0">@Localizer["Track visitors, engagement, and conversions as you grow."]</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card feature-card p-4">
+                <span class="feature-icon"><i class="bx bx-lock-alt"></i></span>
+                <h6>@Localizer["Secure by Default"]</h6>
+                <p class="text-muted small mb-0">@Localizer["Built on ASP.NET Core Identity with best-practice security."]</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-band text-center mb-4">
+        <h4 class="mb-2">@Localizer["Ready to grow your business?"]</h4>
+        <p class="mb-3" style="opacity: .85;">@Localizer["Explore the admin dashboard to configure your site, users, and modules."]</p>
+        <a class="btn btn-light" asp-area="Admin" asp-controller="Home" asp-action="Index">
+            <i class="bx bx-rocket me-1"></i>@Localizer["Get Started"]
+        </a>
+    </div>
+</div>

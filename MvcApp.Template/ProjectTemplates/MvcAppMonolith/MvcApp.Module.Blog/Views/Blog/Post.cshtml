@@ -1,0 +1,123 @@
+@model BlogPost
+@{
+    ViewData["Title"] = Model.Title;
+    var comments = ViewBag.Comments as IEnumerable<BlogComment> ?? [];
+    var currentUserId = ViewBag.CurrentUserId as string;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Blog</a></li>
+                    @if (Model.Category != null)
+                    {
+                        <li class="breadcrumb-item"><a asp-action="Category" asp-route-slug="@Model.Category.Slug">@Model.Category.Name</a></li>
+                    }
+                    <li class="breadcrumb-item active">@Model.Title</li>
+                </ol>
+            </nav>
+
+            <article>
+                @if (!string.IsNullOrEmpty(Model.FeaturedImagePath))
+                {
+                    <img src="@Model.FeaturedImagePath" class="img-fluid mb-4 rounded" alt="@Model.Title" style="max-height:400px;width:100%;object-fit:cover">
+                }
+
+                <h1>@Model.Title</h1>
+                <div class="text-muted mb-4">
+                    <small>
+                        <i class="fa fa-user"></i> @Model.CreatedByUsername
+                        <i class="fa fa-calendar ms-2"></i> @(Model.PublishedAt?.ToString("MMM dd, yyyy") ?? Model.CreatedAt.ToString("MMM dd, yyyy"))
+                        <i class="fa fa-eye ms-2"></i> @Model.ViewCount
+                    </small>
+                </div>
+
+                @if (Model.PostTags != null && Model.PostTags.Any())
+                {
+                    <div class="mb-3">
+                        @foreach (var pt in Model.PostTags.Where(pt => pt.Tag != null))
+                        {
+                            <a asp-action="Tag" asp-route-slug="@pt.Tag!.Slug" class="badge bg-secondary text-decoration-none me-1">@pt.Tag!.Name</a>
+                        }
+                    </div>
+                }
+
+                <div class="blog-post-content">
+                    @Html.Raw(Model.Content)
+                </div>
+            </article>
+
+            <hr />
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success"]</div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+
+            <section class="mt-4">
+                <h3><i class="fa fa-comments"></i> Comments (@comments.Count())</h3>
+
+                @if (!comments.Any())
+                {
+                    <p class="text-muted">No comments yet.</p>
+                }
+
+                @foreach (var comment in comments)
+                {
+                    <div class="card mb-2">
+                        <div class="card-body py-2">
+                            <div class="d-flex justify-content-between">
+                                <strong>@(comment.CreatedByUsername ?? comment.GuestName ?? "Anonymous")</strong>
+                                <small class="text-muted">@comment.CreatedAt.ToString("MMM dd, yyyy HH:mm")</small>
+                            </div>
+                            <p class="mb-0 mt-1">@comment.Content</p>
+                            @if (comment.CreatedById == currentUserId || User.IsInRole("Admin"))
+                            {
+                                <form asp-action="DeleteComment" method="post" style="display:inline"
+                                      onsubmit="return confirm('Delete this comment?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@comment.Id" />
+                                    <button type="submit" class="btn btn-sm btn-link text-danger p-0">Delete</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5>Leave a Comment</h5>
+                        <form asp-action="AddComment" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="postId" value="@Model.Id" />
+                            @if (!User.Identity?.IsAuthenticated == true)
+                            {
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <input type="text" name="guestName" class="form-control" placeholder="Your Name" />
+                                    </div>
+                                    <div class="col">
+                                        <input type="email" name="guestEmail" class="form-control" placeholder="Your Email" />
+                                    </div>
+                                </div>
+                            }
+                            <div class="mb-2">
+                                <textarea name="content" class="form-control" rows="4" placeholder="Write your comment..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-paper-plane"></i> Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-4">
+            @await Html.PartialAsync("_BlogSidebar")
+        </div>
+    </div>
+</div>

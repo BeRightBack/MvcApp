@@ -1,0 +1,124 @@
+2026-08-03 00:10:45.881 -04:00 [INF] dev env
+2026-08-03 00:12:13.466 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 174
+2026-08-03 00:14:47.810 -04:00 [INF] dev env
+2026-08-03 00:19:58.373 -04:00 [INF] dev env
+2026-08-03 00:23:32.920 -04:00 [INF] dev env
+2026-08-03 00:26:48.778 -04:00 [INF] dev env
+2026-08-03 00:30:21.553 -04:00 [INF] dev env
+2026-08-03 00:48:47.554 -04:00 [INF] dev env
+2026-08-03 01:02:09.861 -04:00 [INF] dev env
+2026-08-03 01:04:00.454 -04:00 [INF] dev env
+2026-08-03 01:08:39.509 -04:00 [INF] dev env
+2026-08-03 01:24:57.846 -04:00 [INF] dev env
+2026-08-03 01:29:07.863 -04:00 [INF] dev env
+2026-08-03 01:33:11.423 -04:00 [INF] dev env
+2026-08-03 01:39:20.356 -04:00 [INF] dev env
+2026-08-03 01:41:48.441 -04:00 [INF] dev env
+2026-08-03 01:43:35.951 -04:00 [INF] dev env
+2026-08-03 01:45:01.709 -04:00 [INF] dev env
+2026-08-03 01:51:26.485 -04:00 [INF] dev env
+2026-08-03 01:54:55.166 -04:00 [INF] dev env
+2026-08-03 09:39:02.785 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 174
+2026-08-03 09:39:42.651 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 174
+2026-08-03 09:41:08.386 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 174
+2026-08-03 09:41:54.410 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 174
+2026-08-03 09:42:54.999 -04:00 [INF] dev env
+2026-08-03 09:45:56.556 -04:00 [INF] dev env
+2026-08-03 10:46:55.401 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 173
+2026-08-03 10:48:24.305 -04:00 [INF] dev env
+2026-08-03 11:39:19.554 -04:00 [INF] dev env
+2026-08-03 11:41:14.523 -04:00 [INF] dev env
+2026-08-03 11:52:36.870 -04:00 [INF] dev env
+2026-08-03 11:58:40.792 -04:00 [INF] dev env
+2026-08-03 11:59:43.937 -04:00 [INF] dev env
+2026-08-03 12:29:25.639 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 173
+2026-08-03 12:33:39.090 -04:00 [INF] dev env
+2026-08-03 13:07:29.097 -04:00 [INF] dev env
+2026-08-03 13:16:46.412 -04:00 [INF] dev env
+2026-08-03 13:21:26.095 -04:00 [INF] dev env
+2026-08-03 13:44:29.618 -04:00 [INF] dev env
+2026-08-03 13:57:46.327 -04:00 [INF] dev env
+2026-08-03 14:34:42.612 -04:00 [INF] dev env
+2026-08-03 14:39:11.862 -04:00 [INF] dev env
+2026-08-03 14:41:49.007 -04:00 [INF] dev env
+2026-08-03 15:08:49.782 -04:00 [INF] dev env
+2026-08-03 20:19:37.008 -04:00 [INF] dev env
+2026-08-03 21:19:12.157 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 177
+2026-08-03 21:20:06.863 -04:00 [FTL] Application start-up failed 2
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\Administrator\Documents\Apps\MvcApp_refactored\MvcApp.Web\Program.cs:line 177
+2026-08-03 21:23:43.633 -04:00 [INF] dev env
+2026-08-03 21:29:27.084 -04:00 [INF] dev env
+2026-08-03 21:36:44.785 -04:00 [INF] dev env
+2026-08-03 22:03:01.130 -04:00 [INF] dev env
+2026-08-03 22:15:36.587 -04:00 [INF] dev env

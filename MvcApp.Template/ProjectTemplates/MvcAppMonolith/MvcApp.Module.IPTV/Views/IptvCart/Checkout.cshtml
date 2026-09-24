@@ -1,0 +1,185 @@
+@model MvcApp.Module.IPTV.Models.StoreViewModels.CheckoutViewModel
+@{
+    ViewData["Title"] = @Localizer["Checkout - Quebec Iptv"];
+    ViewData["Description"] = @Localizer["Complete your subscription purchase."];
+    var total = Model.CartItems != null ? Model.CartItems.Sum(i => (i.SubscriptionDetail?.Price ?? 0) * i.Quantity) : 0;
+    var currency = Model.Currency ?? Model.SelectedCurrency ?? "USD";
+}
+
+<div class="container py-5">
+    <h1 class="mb-4">@Localizer["Checkout"]</h1>
+
+    <partial name="_IptvStatusMessage" />
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">@Localizer["Your Items"]</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th>@Localizer["Plan"]</th>
+                                <th>@Localizer["Detail"]</th>
+                                <th class="text-end">@Localizer["Price"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.CartItems != null)
+                            {
+                                @foreach (var item in Model.CartItems)
+                                {
+                                    <tr>
+                                        <td>@item.SubscriptionPlan?.Name</td>
+                                        <td>@item.SubscriptionDetail?.Description</td>
+                                        <td class="text-end">$@item.SubscriptionDetail?.Price</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2" class="text-end">@Localizer["Total"]:</th>
+                                <th class="text-end">$@total</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">@Localizer["Your Information"]</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">@Localizer["Email"]</label>
+                            <input id="customerEmail" class="form-control" value="@Model.Email" placeholder="@Localizer["Enter your email"]" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">@Localizer["Device Type"]</label>
+                            <select id="deviceType" class="form-select">
+                                <option value="SmartTV" selected="@(Model.DeviceType == "SmartTV")">@Localizer["Smart TV"]</option>
+                                <option value="Android" selected="@(Model.DeviceType == "Android")">@Localizer["Android Device"]</option>
+                                <option value="iOS" selected="@(Model.DeviceType == "iOS")">@Localizer["iOS Device"]</option>
+                                <option value="PC" selected="@(Model.DeviceType == "PC")">@Localizer["PC / Mac"]</option>
+                                <option value="MagBox" selected="@(Model.DeviceType == "MagBox")">@Localizer["Mag Box"]</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">@Localizer["Account Type"]</label>
+                            <select id="accountType" class="form-select">
+                                <option value="sub">@Localizer["Subscription (XTC)"]</option>
+                                <option value="line">@Localizer["Line (M3U)"]</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">@Localizer["MAC Address (optional)"]</label>
+                            <input id="macAddress" class="form-control" placeholder="00:1A:2B:3C:4D:5E" value="@Model.MacAddress" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">@Localizer["Currency"]</label>
+                            <select id="currency" class="form-select">
+                                <option value="USD" selected="@(currency == "USD")">USD ($)</option>
+                                <option value="CAD" selected="@(currency == "CAD")">CAD (C$)</option>
+                                <option value="EUR" selected="@(currency == "EUR")">EUR (€)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">@Localizer["Verification Code"]</label>
+                            <div class="input-group">
+                                <input asp-for="VerificationCode" class="form-control" id="verificationCode" required />
+                                <button type="button" class="btn btn-outline-secondary" id="generateCaptchaBtn">@Localizer["Get Code"]</button>
+                            </div>
+                            <span asp-validation-for="VerificationCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card mb-4 sticky-top" style="top: 90px;">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">@Localizer["Payment Method"]</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input payment-method" type="radio" name="paymentMethod" value="paypal" id="paypal" checked />
+                        <label class="form-check-label" for="paypal">
+                            <i class="fa fa-paypal text-primary me-2"></i>@Localizer["PayPal"]
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input payment-method" type="radio" name="paymentMethod" value="paypalme" id="paypalme" />
+                        <label class="form-check-label" for="paypalme">
+                            <i class="fa fa-paypal text-primary me-2"></i>@Localizer["PayPal.Me"]
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input payment-method" type="radio" name="paymentMethod" value="interac" id="interac" />
+                        <label class="form-check-label" for="interac">
+                            <i class="fa fa-money text-success me-2"></i>@Localizer["Interac e-Transfer"]
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input payment-method" type="radio" name="paymentMethod" value="free" id="free" />
+                        <label class="form-check-label" for="free">
+                            <i class="fa fa-gift text-warning me-2"></i>@Localizer["Free Trial"]
+                        </label>
+                    </div>
+
+                    <hr />
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>@Localizer["Total"]:</span>
+                        <h4 class="mb-0 text-primary">$@total</h4>
+                    </div>
+                    <button type="button" id="processPaymentBtn" class="btn btn-success btn-lg w-100">
+                        <i class="fa fa-lock me-2"></i>@Localizer["Complete Purchase"]
+                    </button>
+                    <p class="text-muted text-center mt-2 mb-0 small">
+                        <i class="fa fa-shield me-1"></i>@Localizer["Secure payment via PayPal or Interac"]
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="processPaymentForm" asp-controller="IptvCart" asp-action="ProcessPayment" method="post">
+    <input type="hidden" name="PaymentMethod" id="formPaymentMethod" />
+    <input type="hidden" name="Email" id="formEmail" />
+    <input type="hidden" name="DeviceType" id="formDeviceType" />
+    <input type="hidden" name="AccountType" id="formAccountType" />
+    <input type="hidden" name="Currency" id="formCurrency" />
+    <input type="hidden" name="MacAddress" id="formMacAddress" />
+    <input type="hidden" name="VerificationCode" id="formVerificationCode" />
+</form>
+
+@section Scripts {
+    <script>
+        $("#generateCaptchaBtn").on("click", function () {
+            window.open('@Url.Action("GenerateCaptcha", "IptvHome")', "_blank", "width=300,height=100");
+        });
+
+        $("#processPaymentBtn").on("click", function () {
+            var method = $(".payment-method:checked").val();
+            $("#formPaymentMethod").val(method);
+            $("#formEmail").val($("#customerEmail").val());
+            $("#formDeviceType").val($("#deviceType").val());
+            $("#formAccountType").val($("#accountType").val());
+            $("#formCurrency").val($("#currency").val());
+            $("#formMacAddress").val($("#macAddress").val());
+            $("#formVerificationCode").val($("#verificationCode").val());
+            $("#processPaymentForm").submit();
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

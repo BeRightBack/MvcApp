@@ -1,0 +1,245 @@
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.video-slot {
+    aspect-ratio: 4 / 3;
+    background: #16171a;
+    border: 2px dashed #444;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s;
+}
+
+.video-slot.slot-occupied {
+    border-style: solid;
+    border-color: #dc3545;
+}
+
+.video-slot.slot-mine {
+    border-color: #0d6efd;
+}
+
+.video-slot video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.video-slot video.vc-playing {
+    opacity: 1;
+}
+
+.slot-placeholder {
+    color: #6c757d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 1.6rem;
+}
+
+.slot-placeholder .slot-label {
+    font-size: 0.75rem;
+    color: #9aa0a6;
+}
+
+.claim-btn {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    white-space: nowrap;
+}
+
+.occupant-bar {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    z-index: 4;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #dc3545;
+    animation: vc-pulse 1.2s infinite;
+}
+
+@keyframes vc-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* ----- 1-on-1 call overlay (used on Messages page) ----- */
+
+.vc-call-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #fff;
+}
+
+.vc-remote-frame {
+    position: relative;
+    width: min(70vw, 800px);
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.vc-remote-frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vc-local-frame {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    width: 200px;
+    aspect-ratio: 4 / 3;
+    background: #111;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.vc-local-frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vc-call-status {
+    margin-top: 18px;
+    font-size: 1.1rem;
+}
+
+.vc-controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.vc-controls .vc-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.vc-controls .vc-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.vc-controls .vc-btn.vc-off {
+    background: #dc3545;
+}
+
+.vc-controls .vc-btn.vc-hangup {
+    background: #dc3545;
+    width: 64px;
+    height: 64px;
+}
+
+.vc-incoming-card {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    z-index: 2001;
+    width: 300px;
+    background: #fff;
+    color: #212529;
+    border-radius: 14px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    text-align: center;
+}
+
+.vc-incoming-card .vc-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #dc3545;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin: 0 auto 10px;
+}
+
+.vc-incoming-card .vc-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 14px;
+}
+
+.vc-actions .vc-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.3rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.vc-actions .vc-accept {
+    background: #198754;
+}
+
+.vc-actions .vc-decline {
+    background: #dc3545;
+}
+
+.vc-ring {
+    animation: vc-pulse 1s infinite;
+}
+
+.vc-avatar-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+}

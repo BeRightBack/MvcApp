@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>MvcApp.Template</RootNamespace>
+    <AssemblyName>MvcApp.Template</AssemblyName>
+    <Nullable>enable</Nullable>
+    <LangVersion>14</LangVersion>
+
+    <VSSDKBuildToolsAutoSetup>true</VSSDKBuildToolsAutoSetup>
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
+    <CreateVsixContainer>true</CreateVsixContainer>
+    <DeployExtension>false</DeployExtension>
+    <TargetName>MvcApp.Template</TargetName>
+    <TargetVsixContainer>bin\Release\MvcApp.Template.vsix</TargetVsixContainer>
+    <DefaultItemExcludes>$(DefaultItemExcludes);ProjectTemplates\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="source.extension.vsixmanifest" />
+    <Content Include="ProjectTemplates\**\*" Exclude="ProjectTemplates\**\obj\**;ProjectTemplates\**\bin\**">
+      <IncludeInVsix>true</IncludeInVsix>
+    </Content>
+    <Content Include="..\..\TemplateProject\Wizard\TemplateWizard\TemplateWizard\bin\Release\net472\TemplateWizard.dll" Link="TemplateWizard.dll">
+      <IncludeInVsix>true</IncludeInVsix>
+    </Content>
+    <Content Include="..\..\TemplateProject\Wizard\TemplateWizard\TemplateWizard\bin\Release\net472\TemplateWizard.dll" Link="ProjectTemplates\MvcAppMonolith\TemplateWizard.dll">
+      <IncludeInVsix>true</IncludeInVsix>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectCapability Include="CreateVsixContainer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.14.40265" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="18.8.739" />
+  </ItemGroup>
+
+</Project>

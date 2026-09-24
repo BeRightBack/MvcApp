@@ -1,0 +1,45 @@
+@using MvcApp.Core.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MvcApp.Core.UserDetails> SignInManager
+@inject UserManager<MvcApp.Core.UserDetails> UserManager
+@{
+    ViewData["Title"] = "Home";
+    var isAuthenticated = SignInManager.IsSignedIn(User);
+    var members = ViewBag.FeaturedMembers as List<MemberModel> ?? [];
+}
+<section class="py-5" style="background:linear-gradient(135deg,#f3f5f7 0%,#e8f0fe 100%);">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="fw-bold mb-3" style="font-family:var(--template-font-heading); font-size:2.5rem;">Grow Your Network</h1>
+                <p class="lead text-muted mb-4">Connect with professionals in your field, share insights, and advance your career.</p>
+                @if (!isAuthenticated)
+                {
+                    <a asp-page="/Account/Register" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">Join Now</a>
+                    <a asp-page="/Account/Login" class="btn btn-outline-primary rounded-pill px-4 py-2 ms-2">Sign In</a>
+                }
+                else
+                {
+                    <a asp-controller="Discover" asp-action="Index" class="btn btn-primary rounded-pill px-4 py-2">Find Connections</a>
+                }
+            </div>
+            <div class="col-lg-6 d-none d-lg-block text-center">
+                <i class='bx bx-group' style="font-size:10rem;color:var(--template-primary-light);"></i>
+            </div>
+        </div>
+    </div>
+</section>
+@if (members.Any())
+{
+    <section class="py-5">
+        <div class="container">
+            <h3 class="fw-bold mb-4">Featured Professionals</h3>
+            <div class="row g-3">
+                @foreach (var m in members.Take(4))
+                {
+                    <div class="col-md-3"><div class="card border-0 p-3 text-center h-100"><img src="@m.MainPhotoUrl" class="rounded-circle mx-auto mb-2" style="width:70px;height:70px;object-fit:cover;" onerror="this.src='/images/default-user.png';"><h6 class="fw-bold mb-0">@m.KnownAs</h6><small class="text-muted">@m.City</small></div></div>
+                }
+            </div>
+        </div>
+    </section>
+}

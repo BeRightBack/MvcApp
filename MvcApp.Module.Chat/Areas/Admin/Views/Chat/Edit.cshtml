@@ -1,0 +1,32 @@
+@model ChatRoom
+@{
+    ViewData["Title"] = "Edit Chat Room";
+}
+
+<div class="container-fluid">
+    <h1>Edit Chat Room</h1>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger" asp-validation-summary="ModelOnly"></div>
+    }
+
+    <div class="card" style="max-width: 640px;">
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="mb-3">
+                    <label class="form-label">Room Name</label>
+                    <input type="text" name="name" value="@Model.Name" class="form-control" required maxlength="100" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description (optional)</label>
+                    <textarea name="description" class="form-control" rows="3" maxlength="500">@Model.Description</textarea>
+                </div>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

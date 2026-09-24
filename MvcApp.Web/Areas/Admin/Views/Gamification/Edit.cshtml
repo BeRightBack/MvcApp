@@ -1,0 +1,89 @@
+@model MvcApp.Core.Badge
+@{
+    ViewData["Title"] = "Edit Badge";
+    var categories = (BadgeCategory[])ViewBag.Categories;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4>Edit Badge — @Model.Name</h4>
+    <a asp-action="Badges" class="btn btn-outline-secondary btn-sm">
+        <i class='bx bx-arrow-back me-1'></i>Back
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="content-card">
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Name</label>
+                        <input name="Name" value="@Model.Name" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Description</label>
+                        <input name="Description" value="@Model.Description" class="form-control" />
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Icon (Boxicons class)</label>
+                            <input name="Icon" value="@Model.Icon" class="form-control" placeholder="bx bx-trophy" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Category</label>
+                            <select name="Category" class="form-select">
+                                @foreach (var cat in categories)
+                                {
+                                    <option value="@cat" selected="@(cat == Model.Category)">@cat</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Criteria Type</label>
+                            <input name="CriteriaType" value="@Model.CriteriaType" class="form-control" placeholder="TotalPoints" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Criteria Value</label>
+                            <input name="CriteriaValue" value="@Model.CriteriaValue" type="number" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Sort Order</label>
+                            <input name="SortOrder" value="@Model.SortOrder" type="number" class="form-control" />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class='bx bx-save me-1'></i>Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="content-card">
+            <div class="card-body">
+                <h6 class="card-title">Preview</h6>
+                <div class="text-center p-3">
+                    <i class='@Model.Icon' style="font-size:2.5rem;color:var(--primary);"></i>
+                    <div class="fw-bold mt-2">@Model.Name</div>
+                    <div class="text-muted small">@Model.Description</div>
+                </div>
+                <hr>
+                <small class="text-muted">
+                    <strong>Criteria:</strong> @Model.CriteriaType ≥ @Model.CriteriaValue<br>
+                    <strong>Category:</strong> @Model.Category<br>
+                    <strong>Sort:</strong> @Model.SortOrder
+                </small>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+﻿@using System.Security.Claims
+@using MvcApp.Web.Models.HomeViewModels
+@model ContactViewModel
+@{
+    Layout = "_Layout";
+}
+<h2><strong>@Localizer["Contact Us"]</strong></h2>
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <address>
+            Broadway<br />
+            New York, NY 10024-2175<br />
+            <abbr title="Phone">P:</abbr>
+            212.202.8953 @Localizer["TEXT Only"]
+        </address>
+
+        <address>
+            <strong>@Localizer["Support:"]</strong> <a href="mailto:Support@quebeciptv.org">Support@quebeciptv.org</a><br />
+            <strong>@Localizer["Marketing:"]</strong> <a href="mailto:Marketing@quebeciptv.org">Marketing@quebeciptv.org</a>
+        </address>
+    </div>
+    <div class="col-md-6">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            @if (ViewData["Success"] != null)
+            {
+                <div class="alert alert-success">@ViewData["Success"]</div>
+            }
+            @if (ViewData["Error"] != null)
+            {
+                <div class="alert alert-danger">@ViewData["Error"]</div>
+            }
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Name" class="form-control" autocomplete="name" aria-required="true" placeholder="name"/>
+                <label asp-for="Name" class="form-label"></label>                
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Email" value="@User.FindFirst(ClaimTypes.Email)?.Value" />
+            @* <div class="form-floating mb-3">
+                <input asp-for="Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="Email" class="form-label"></label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div> *@
+            <div class="form-floating mb-3">
+                <input asp-for="Subject" class="form-control" autocomplete="off" aria-required="true" placeholder="subject"/>
+                <label asp-for="Subject" class="form-label"></label>                
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea cols="40" rows="4" asp-for="Message" class="form-control" autocomplete="off" aria-required="true" placeholder="message"></textarea>
+                <label asp-for="Message" class="form-label"></label>                
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+             <br />
+             <div class="form-floating mb-3">
+                 <input asp-for="CaptchaCode" class="form-control" aria-required="true" placeholder="Enter captcha code" />
+                 <label asp-for="CaptchaCode">Enter Captcha code</label>
+                 <span asp-validation-for="CaptchaCode" class="text-danger"></span>
+                 <div class="captcha-container">
+                     <img id="captchaImage" src="@Url.Action("GenerateCaptcha", "Base")" alt="Captcha" class="captcha-image" />
+                     <button type="button" id="refreshCaptcha" class="btn btn-sm btn-secondary">
+                         <i class="fas fa-sync-alt"></i> Refresh
+                     </button>
+                 </div>
+
+             </div>
+            <br />
+            <div>
+                <a asp-controller="Home" asp-action="Contact" class="btn btn-default">@Localizer["Cancel"]</a>
+                <input type="submit" value=@Localizer["Send Message"] class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function() {
+            $('#refreshCaptcha').click(function(e) {
+                e.preventDefault();
+                $('#captchaImage').attr('src', '@Url.Action("GenerateCaptcha", "Base")?' + new Date().getTime());
+            });
+        });
+    </script>
+}

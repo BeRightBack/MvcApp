@@ -1,0 +1,59 @@
+@model IEnumerable<BlogPost>
+@{
+    var query = ViewBag.SearchQuery as string;
+    ViewData["Title"] = $"Search: {query}";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Blog</a></li>
+                    <li class="breadcrumb-item active">Search</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4"><i class="fa fa-search"></i> Search Results for "@query"</h1>
+
+            <form asp-action="Search" method="get" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" value="@query" placeholder="Search blog..." />
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
+                </div>
+            </form>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">No results found for "@query".</div>
+            }
+
+            @foreach (var post in Model)
+            {
+                <article class="card mb-3">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <a asp-action="Post" asp-route-slug="@post.Slug" class="text-decoration-none">@post.Title</a>
+                        </h3>
+                        <div class="text-muted mb-2">
+                            <small>
+                                <i class="fa fa-user"></i> @post.CreatedByUsername
+                                <i class="fa fa-calendar ms-2"></i> @(post.PublishedAt?.ToString("MMM dd, yyyy") ?? post.CreatedAt.ToString("MMM dd, yyyy"))
+                            </small>
+                        </div>
+                        @if (!string.IsNullOrEmpty(post.Excerpt))
+                        {
+                            <p>@post.Excerpt</p>
+                        }
+                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">Read More</a>
+                    </div>
+                </article>
+            }
+
+            @await Html.PartialAsync("_BlogPagination")
+        </div>
+        <div class="col-lg-4">
+            @await Html.PartialAsync("_BlogSidebar")
+        </div>
+    </div>
+</div>

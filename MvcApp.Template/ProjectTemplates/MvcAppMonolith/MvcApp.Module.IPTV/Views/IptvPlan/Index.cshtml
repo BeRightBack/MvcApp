@@ -1,0 +1,55 @@
+@model List<MvcApp.Module.IPTV.Models.SubscriptionViewModels.SubscriptionPlanViewModel>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = @Localizer["Subscription Plans - Admin"];
+}
+
+<partial name="_IptvStatusMessage" />
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>@Localizer["Subscription Plans"]</h2>
+    <a asp-controller="IptvPlan" asp-action="Create" class="btn btn-success">
+        <i class="fa fa-plus me-2"></i>@Localizer["Create Plan"]
+    </a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">@Localizer["No plans found. Create your first plan."]</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var plan in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@plan.Name</h5>
+                        <p class="card-text text-muted">@plan.DescriptionShort</p>
+                        <p class="card-text">@plan.Description</p>
+                        <h6>@Localizer["Details"]</h6>
+                        <ul class="list-unstyled">
+                            @foreach (var detail in plan.SubscriptionDetails)
+                            {
+                                <li>
+                                    <i class="fa fa-check text-success me-1"></i>
+                                    @detail.Description - <strong>@detail.Price.ToString("C", new System.Globalization.CultureInfo("en-US"))</strong>
+                                    (@detail.DurationInMonths @(detail.DurationInMonths == 1 ? @Localizer["month"] : @Localizer["months"]))
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white d-flex justify-content-between">
+                        <a asp-controller="IptvPlan" asp-action="Edit" asp-route-id="@plan.Id" class="btn btn-sm btn-primary">
+                            <i class="fa fa-pencil me-1"></i>@Localizer["Edit"]
+                        </a>
+                        <a asp-controller="IptvPlan" asp-action="Delete" asp-route-id="@plan.Id" class="btn btn-sm btn-danger">
+                            <i class="fa fa-trash me-1"></i>@Localizer["Delete"]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

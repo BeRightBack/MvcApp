@@ -1,0 +1,202 @@
+﻿@using MvcApp.Core.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<MvcApp.Core.UserDetails> SignInManager
+@inject UserManager<MvcApp.Core.UserDetails> UserManager
+@{
+    ViewData["Title"] = "Home";
+    var members = ViewBag.FeaturedMembers as List<MemberModel> ?? [];
+    var isAuthenticated = SignInManager.IsSignedIn(User);
+}
+
+<!-- Hero Section -->
+<section class="position-relative overflow-hidden" style="min-height:85vh; background:linear-gradient(135deg, #1a0a1e 0%, #2d1b2e 30%, #4a2a3a 60%, #6b3a5a 100%);">
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22><path fill=%22rgba(231,76,111,0.08)%22 d=%22M0,160L48,181.3C96,203,192,245,288,240C384,235,480,181,576,176C672,171,768,213,864,218.7C960,224,1056,192,1152,165.3C1248,139,1344,117,1392,106.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22/%3E%3C/svg%3E') no-repeat bottom; background-size:cover;"></div>
+
+    <div class="container position-relative" style="z-index:2;">
+        <div class="row min-vh-100 align-items-center">
+            <div class="col-lg-6 text-white py-5">
+                <span class="badge bg-danger bg-opacity-75 px-3 py-2 mb-3 rounded-pill" style="font-size:0.9rem;">
+                    <i class='bx bxs-heart me-1'></i> Find Your Perfect Match
+                </span>
+                <h1 class="display-3 fw-bold mb-4" style="font-family:'Playfair Display',Georgia,serif; line-height:1.2; color:#fff;">
+                    Where <span style="color:#ffd700; text-shadow:0 0 30px rgba(255,215,0,0.5);">Sparks</span> Fly &amp; Connections Bloom
+                </h1>
+                <p class="lead mb-4" style="color:rgba(255,255,255,0.75); font-size:1.25rem;">
+                    Join thousands of singles looking for genuine relationships. Your next great love story starts here.
+                </p>
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    @if (!isAuthenticated)
+                    {
+                        <a asp-page="/Account/Register" class="btn btn-lg rounded-pill px-5 py-3 fw-semibold" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff; box-shadow:0 8px 30px rgba(231,76,111,0.4);">
+                            <i class='bx bx-heart me-2'></i>Join Free
+                        </a>
+                        <a asp-page="/Account/Login" class="btn btn-lg rounded-pill px-4 py-3 fw-semibold" style="border:2px solid rgba(255,255,255,0.3); color:#fff;">
+                            Sign In
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Discover" asp-action="Index" class="btn btn-lg rounded-pill px-5 py-3 fw-semibold" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff; box-shadow:0 8px 30px rgba(231,76,111,0.4);">
+                            <i class='bx bx-search-alt me-2'></i>Discover People
+                        </a>
+                    }
+                </div>
+                <div class="d-flex gap-4 text-center">
+                    <div><span class="fw-bold fs-3">10K+</span><br /><small style="color:rgba(255,255,255,0.6);">Active Members</small></div>
+                    <div><span class="fw-bold fs-3">2K+</span><br /><small style="color:rgba(255,255,255,0.6);">Matches Made</small></div>
+                    <div><span class="fw-bold fs-3">98%</span><br /><small style="color:rgba(255,255,255,0.6);">Satisfaction</small></div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block text-center">
+                <div class="position-relative d-inline-block">
+                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background:radial-gradient(circle, rgba(231,76,111,0.2) 0%, transparent 70%);"></div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="card border-0 rounded-4 overflow-hidden shadow-lg" style="transform:rotate(-3deg);">
+                                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=400&fit=crop" class="card-img-top" style="height:280px; object-fit:cover;" alt="Member">
+                            </div>
+                        </div>
+                        <div class="col-6 mt-5">
+                            <div class="card border-0 rounded-4 overflow-hidden shadow-lg" style="transform:rotate(3deg);">
+                                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&h=400&fit=crop" class="card-img-top" style="height:280px; object-fit:cover;" alt="Member">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card border-0 rounded-4 overflow-hidden shadow-lg" style="transform:rotate(-2deg);">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=250&fit=crop" class="card-img-top" style="height:200px; object-fit:cover;" alt="Member">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card border-0 rounded-4 overflow-hidden shadow-lg" style="transform:rotate(2deg);">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=250&fit=crop" class="card-img-top" style="height:200px; object-fit:cover;" alt="Member">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card border-0 rounded-4 overflow-hidden shadow-lg" style="transform:rotate(-1deg);">
+                                <img src="https://images.unsplash.com/photo-1463453091185-61582044d556?w=200&h=250&fit=crop" class="card-img-top" style="height:200px; object-fit:cover;" alt="Member">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5" style="background:var(--template-bg-alt, #fef9fb);">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif; font-size:2.5rem;">Why You'll Love It Here</h2>
+            <p class="text-muted fs-5">Designed for meaningful connections</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 rounded-4 p-4 h-100 shadow-sm text-center">
+                    <div class="mb-3"><i class='bx bx-heart-circle' style="font-size:3rem; color:#e74c6f;"></i></div>
+                    <h5 class="fw-bold">Smart Matching</h5>
+                    <p class="text-muted mb-0">Our algorithm finds people who share your interests, values, and vibe.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 rounded-4 p-4 h-100 shadow-sm text-center">
+                    <div class="mb-3"><i class='bx bx-shield' style="font-size:3rem; color:#6c5ce7;"></i></div>
+                    <h5 class="fw-bold">Safe &amp; Secure</h5>
+                    <p class="text-muted mb-0">Your privacy matters. Verified profiles and reporting keep you safe.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 rounded-4 p-4 h-100 shadow-sm text-center">
+                    <div class="mb-3"><i class='bx bx-message-dots' style="font-size:3rem; color:#fdcb6e;"></i></div>
+                    <h5 class="fw-bold">Real Conversations</h5>
+                    <p class="text-muted mb-0">Chat, laugh, and connect with people who are genuinely interested.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Members -->
+@if (members.Any())
+{
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif; font-size:2rem;">Featured Members</h2>
+                    <p class="text-muted">Meet some amazing people</p>
+                </div>
+                @if (isAuthenticated)
+                {
+                    <a asp-controller="Discover" asp-action="Index" class="btn btn-outline-primary rounded-pill px-4">View All</a>
+                }
+            </div>
+            <div class="row g-4">
+                @foreach (var member in members.Take(6))
+                {
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card border-0 rounded-4 overflow-hidden shadow-sm text-center h-100">
+                            <div style="height:180px; overflow:hidden;">
+                                <img src="@member.MainPhotoUrl" class="w-100 h-100" style="object-fit:cover;" 
+                                     onerror="this.onerror=null;this.src='/images/default-user.png';" alt="@member.KnownAs">
+                            </div>
+                            <div class="card-body p-3">
+                                <h6 class="fw-bold mb-0">@member.KnownAs, @member.Age</h6>
+                                <small class="text-muted">@member.City</small>
+                                @if (isAuthenticated)
+                                {
+                                    <div class="mt-2">
+                                        <button class="btn btn-sm rounded-pill" style="background:#fce4ec; color:#e74c6f;" onclick="likeUser('@member.Id')">
+                                            <i class='bx bx-heart'></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- CTA Section -->
+<section class="py-5" style="background:linear-gradient(135deg, #2d1b2e, #4a2a3a);">
+    <div class="container text-center py-5">
+        <h2 class="text-white fw-bold mb-3" style="font-family:'Playfair Display',Georgia,serif; font-size:2.5rem;">Ready to Find Your Spark?</h2>
+        <p class="text-white-50 mb-4 fs-5">Join thousands of singles who've already found love.</p>
+        @if (!isAuthenticated)
+        {
+            <a asp-page="/Account/Register" class="btn btn-lg rounded-pill px-5 py-3 fw-semibold" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff; box-shadow:0 8px 30px rgba(231,76,111,0.4);">
+                <i class='bx bx-heart me-2'></i>Create Your Free Profile
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Discover" asp-action="Index" class="btn btn-lg rounded-pill px-5 py-3 fw-semibold" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff; box-shadow:0 8px 30px rgba(231,76,111,0.4);">
+                <i class='bx bx-search-alt me-2'></i>Start Discovering
+            </a>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        function likeUser(userId) {
+            fetch('@Url.Action("Like", "Likes")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value },
+                body: JSON.stringify({ likedUserId: userId })
+            }).then(r => r.json()).then(d => {
+                if (d.success) showToast(d.message);
+            });
+        }
+        function showToast(msg) {
+            const t = document.createElement('div');
+            t.className = 'toast align-items-center text-bg-primary border-0 show position-fixed bottom-0 end-0 m-3';
+            t.innerHTML = '<div class="d-flex"><div class="toast-body">' + msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>';
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+    </script>
+}

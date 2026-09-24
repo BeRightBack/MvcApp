@@ -1,0 +1,27 @@
+[
+  {
+    "outputFileName": "wwwroot/css/styles.min.css",
+    "inputFiles": [ "wwwroot/css/styles.css" ],
+    "minify": { "enabled": true }
+  },
+  {
+    "outputFileName": "wwwroot/css/styles2.min.css",
+    "inputFiles": [ "wwwroot/css/styles2.css" ],
+    "minify": { "enabled": true }
+  },
+  {
+    "outputFileName": "wwwroot/js/effects.min.js",
+    "inputFiles": [ "wwwroot/js/effects.js" ],
+    "minify": { "enabled": true }
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [ "wwwroot/js/site.js" ],
+    "minify": { "enabled": true }
+  },
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [ "wwwroot/css/site.css" ],
+    "minify": { "enabled": true }
+  }
+]
