@@ -158,9 +158,29 @@ When a module is deselected at generation, ALL of these must hold:
      (`-From 20260806200416_AddUtilityEntities`) applied to the remote: `Identity_db`
      67 tables / 31 history rows, `Localisation_db` 3 tables / 1 history row — verified via
      information_schema. Production mode on the remote: clean start, HTTP 200, DB-backed
-     pages render (no seeding). Development mode on the remote: same lock crash at
-     Program.cs:384 (background seeding) — app still serves 200; remote must run
-     Production. Source build 0E/10W; tests 13/13.
+     pages render (no seeding). Source build 0E/10W; tests 13/13.
+  4. **Development seeding on MariaDB FIXED 2026-09-25** (commit `7a925eb`, pushed
+     `71ef7e8..7a925eb`): the 7 seed steps in Program.cs called `MigrateAsync()`
+     unconditionally → MariaDB lock crash → NOTHING seeded → remote had 0 users / 0
+     SystemSettings / 0 Languages → login impossible ("i cant login"). New
+     `EnsureMigratedAsync(db)` helper (mirrors `Seeder.cs:51` pending-guard) only calls
+     `MigrateAsync()` when `GetPendingMigrationsAsync()` returns any; all 7 seed steps
+     (SeedLanguageAsync/Settings/Forum/Blog/PageSnippets/EventCategories/InterestTags)
+     use it. VERIFIED live on the remote (own instance, port 9001, then freed):
+     Development seeding COMPLETED — "Background seeding completed.", remote rows =
+     27 users / 26 SystemSettings / 5 Languages / 2 Roles; `POST /Account/Login`
+     (Mulva / Passw0rd123!!) → 302 + "User Mulva logged in."; wrong password → 200
+     re-render (auth correctly fails). Template Program.cs got the identical change →
+     VSIX 1.0.49.
+  5. **Template CSS sync — dropdown contrast (2026-09-25):** template tree's
+     `layout-override.css` ended at line 98 WITHOUT the "Dropdown contrast" block (source
+     has it lines 81–138, and `_Layout.cshtml:41` loads layout-override.css LAST, after
+     template CSS). Pre-existing template sync gap — the fix is in source since the
+     initial commit, never ported ("contrast on templates wrong, that was fixed long
+     ago"). Overwrote template copy with the source file — SHA-256 identical (159 lines,
+     dropdown block present). VSIX 1.0.49 built 0W/0E, payload verified (manifest 1.0.49,
+     `EnsureMigratedAsync` in Program.cs, dropdown block in css). NOT installed — user
+     defers VS install.
 - SiteNav.* rows are created only by the admin saving nav in the editor; code (NavDefaults)
   is the source of truth until then — do NOT reintroduce SiteNav seeding (it freezes
   defaults and leaves them stale). Data migrations deleting stale rows must be no-ops on
@@ -182,8 +202,10 @@ When a module is deselected at generation, ALL of these must hold:
   (same for `-c LocalizationDbContext`) then apply via `mysql.exe -e "source <file>.sql"`
   (creds via `$env:MYSQL_PWD`). Verified 2026-09-25: remote `Identity_db` = 67 tables /
   31 history rows, `Localisation_db` = 3 tables / 1 history row. Development mode on the
-  remote is still broken by the same unconditional lock (background seeding Fatals at
-  Program.cs:384) — the remote runs Production only. `launchSettings.json` forces
+  remote now WORKS on a fully-migrated MariaDB — all seed-step `MigrateAsync()` calls are
+  guarded by a pending-check (2026-09-25, see watchlist item 4; verified live: seeding
+  completed, login POST 302). A schema-less MariaDB still needs scripted migrations first.
+  `launchSettings.json` forces
   `ASPNETCORE_ENVIRONMENT=Development` — to run Production locally use
   `dotnet run --no-launch-profile`. (Migrations/seed need MySQL — see Databases.)
 - **Likes/messages seeder bug — FIXED + PORTED 2026-09-23:**
