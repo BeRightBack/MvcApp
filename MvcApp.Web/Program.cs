@@ -375,13 +375,25 @@ finally
 }
 
 
+// Migrate only when there are pending migrations. On MariaDB the Oracle provider
+// takes GET_LOCK(-1) unconditionally inside MigrateAsync (MariaDB returns NULL, which
+// crashes as InvalidCastException), so when the schema is already applied (remote
+// deploy path uses scripted migrations) we must skip the call entirely.
+static async Task EnsureMigratedAsync(DbContext db)
+{
+    if ((await db.Database.GetPendingMigrationsAsync()).Any())
+    {
+        await db.Database.MigrateAsync();
+    }
+}
+
 static async Task SeedLanguageAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<LocalizationDbContext>();
 
     // Apply migrations to create/update the database
-    await context.Database.MigrateAsync();
+    await EnsureMigratedAsync(context);
 
     var service = scope.ServiceProvider.GetRequiredService<SeedLanguage>();
     await service.EnsureSeedLanguageAsync();
@@ -391,7 +403,7 @@ static async Task SeedSettingsAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await db.Database.MigrateAsync();
+    await EnsureMigratedAsync(db);
     await SettingsSeeder.SeedAsync(db);
 }
 
@@ -414,7 +426,7 @@ static async Task SeedForumAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await db.Database.MigrateAsync();
+    await EnsureMigratedAsync(db);
 
     if (await db.ForumCategories.AnyAsync()) return;
 
@@ -440,7 +452,7 @@ static async Task SeedBlogAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await db.Database.MigrateAsync();
+    await EnsureMigratedAsync(db);
 
     if (await db.BlogCategories.AnyAsync()) return;
 
@@ -463,7 +475,7 @@ static async Task SeedPageSnippetsAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await db.Database.MigrateAsync();
+    await EnsureMigratedAsync(db);
 
     if (await db.ContentPageSnippets.AnyAsync()) return;
 
@@ -483,7 +495,7 @@ static async Task SeedEventCategoriesAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await db.Database.MigrateAsync();
+    await EnsureMigratedAsync(db);
 
     if (await db.EventCategories.AnyAsync()) return;
 
@@ -506,7 +518,7 @@ static async Task SeedInterestTagsAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await db.Database.MigrateAsync();
+    await EnsureMigratedAsync(db);
 
     if (await db.InterestTags.AnyAsync()) return;
 
