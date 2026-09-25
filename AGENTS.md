@@ -137,16 +137,55 @@ When a module is deselected at generation, ALL of these must hold:
 ## Known pitfalls / watch list
 - EF warnings `Model[10632] No instantiatable types ... Blog/Chat/Forum/Store` are benign
   (configs were moved to Infrastructure).
+- **MariaDB migration lock + raw-SQL semicolons (FIXED + VERIFIED 2026-09-25):**
+  1. Oracle MySql.EntityFrameworkCore's `MySQLHistoryRepository.AcquireDatabaseLock` runs
+     `SELECT GET_LOCK('__EFMigrationsLock',-1)` and casts to `Int64`; MariaDB (11.8.6,
+     remote) returns NULL for negative timeouts → `InvalidCastException` on ANY
+     `MigrateAsync`/`Update-Database`, even with nothing pending. Root cause verified by
+     DLL string-scan + provider source. `dotnet ef database update` therefore can NEVER
+     work against the remote; use `dotnet ef migrations script` (no lock involved) + apply
+     via `mysql.exe -e "source <file>.sql"`. Pomelo keeps the lock but uses a positive 72h
+     timeout (would work on MariaDB) — not needed, provider swap not done.
+  2. `migrationBuilder.Sql("...")` calls WITHOUT a trailing `;` break script generation:
+     Oracle's script generator appends no batch terminator inside `START TRANSACTION`, so
+     the raw DELETE swallowed the following history INSERT → ERROR 1064 at mysql.exe line
+     1081. Exactly three existed: `20260810010252_RemoveStaleSiteNavSnapshots.cs:13` and
+     the two Member-role DELETEs in `20260815000205_AddUserBans.cs:66-67` — all three now
+     end with `;` (source + template copy of RemoveStaleSiteNavSnapshots; AddUserBans is
+     source-only, template stops at RemoveStaleSiteNavSnapshots = 18 of 31 migrations).
+     Any NEW migration with raw SQL must terminate it with `;`.
+  3. After the fix, the full script grew exactly +3 bytes; continuation script
+     (`-From 20260806200416_AddUtilityEntities`) applied to the remote: `Identity_db`
+     67 tables / 31 history rows, `Localisation_db` 3 tables / 1 history row — verified via
+     information_schema. Production mode on the remote: clean start, HTTP 200, DB-backed
+     pages render (no seeding). Development mode on the remote: same lock crash at
+     Program.cs:384 (background seeding) — app still serves 200; remote must run
+     Production. Source build 0E/10W; tests 13/13.
 - SiteNav.* rows are created only by the admin saving nav in the editor; code (NavDefaults)
   is the source of truth until then — do NOT reintroduce SiteNav seeding (it freezes
   defaults and leaves them stale). Data migrations deleting stale rows must be no-ops on
   fresh DBs.
 - **Production mode never seeds:** `Program.cs` runs `SeedLanguageAsync`/`SeedSettingsAsync`/
   `SeedChatRoomsAsync`/`app.SeedData()` ONLY in `IsDevelopment()` — Production just runs.
-  Before running a generated app in Production, apply migrations for BOTH contexts manually:
-  `dotnet ef database update -c UserDbContext` AND
-  `dotnet ef database update -c LocalizationDbContext`. Otherwise you get 500s and empty
-  `SystemSettings`. (Migrations/seed need MySQL — see Databases.)
+  Before running a generated app in Production, apply migrations for BOTH contexts manually.
+  On **local MySQL 8.0.46** that works via `dotnet ef database update -c UserDbContext` AND
+  `dotnet ef database update -c LocalizationDbContext` (context name is
+  `LocalizationDbContext`, NOT `LocalisationDbContext`). On **remote MariaDB
+  (mysql.xtrasvr.com) `dotnet ef database update` can NEVER work** — the Oracle provider
+  runs `SELECT GET_LOCK('__EFMigrationsLock',-1)` and casts the result to `Int64`; MariaDB
+  returns NULL for a negative timeout (verified: `-1`→NULL, `10`→1) → every
+  `MigrateAsync`/`Update-Database` dies with `InvalidCastException: DBNull→Int64` at
+  `MySQLHistoryRepository.AcquireDatabaseLock`, even on a fully-migrated DB (the migrator
+  takes the lock UNCONDITIONALLY before the pending-migration check). Use script generation
+  instead (no lock involved): `dotnet ef migrations script --project
+  MvcApp.Infrastructure --startup-project MvcApp.Web -c UserDbContext --output <file>.sql`
+  (same for `-c LocalizationDbContext`) then apply via `mysql.exe -e "source <file>.sql"`
+  (creds via `$env:MYSQL_PWD`). Verified 2026-09-25: remote `Identity_db` = 67 tables /
+  31 history rows, `Localisation_db` = 3 tables / 1 history row. Development mode on the
+  remote is still broken by the same unconditional lock (background seeding Fatals at
+  Program.cs:384) — the remote runs Production only. `launchSettings.json` forces
+  `ASPNETCORE_ENVIRONMENT=Development` — to run Production locally use
+  `dotnet run --no-launch-profile`. (Migrations/seed need MySQL — see Databases.)
 - **Likes/messages seeder bug — FIXED + PORTED 2026-09-23:**
   `SeedLikesAndMessagesAsync` (MvcApp.Identity\Seeder.cs) re-added the same composite-key
   `UserLike` before SaveChanges → tracking conflict, seeding silently failed on every

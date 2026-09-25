@@ -63,8 +63,8 @@ namespace MvcApp.Infrastructure.Migrations
 
             // Remove the unused "Member" role: it was assigned to every confirmed user but
             // never referenced anywhere (no [Authorize(Roles="Member")], no IsInRole checks).
-            migrationBuilder.Sql("DELETE FROM UserRoles WHERE RoleId IN (SELECT Id FROM Role WHERE Name = 'Member')");
-            migrationBuilder.Sql("DELETE FROM Role WHERE Name = 'Member'");
+            migrationBuilder.Sql("DELETE FROM UserRoles WHERE RoleId IN (SELECT Id FROM Role WHERE Name = 'Member');");
+            migrationBuilder.Sql("DELETE FROM Role WHERE Name = 'Member';");
         }
 
         /// <inheritdoc />
