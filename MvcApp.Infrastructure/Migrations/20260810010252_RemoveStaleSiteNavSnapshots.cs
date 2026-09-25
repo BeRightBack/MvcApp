@@ -10,7 +10,7 @@ namespace MvcApp.Infrastructure.Migrations
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.Sql("DELETE FROM SystemSettings WHERE `Key` LIKE 'SiteNav.%'");
+        migrationBuilder.Sql("DELETE FROM SystemSettings WHERE `Key` LIKE 'SiteNav.%';");
     }
 
     /// <inheritdoc />
