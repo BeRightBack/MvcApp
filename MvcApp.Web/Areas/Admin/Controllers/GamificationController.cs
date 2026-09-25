@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MvcApp.Common.Filters;
 using MvcApp.Core;
 using MvcApp.Infrastructure;
 
@@ -8,6 +9,7 @@ namespace MvcApp.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Authorize(Roles = "Admin")]
+[ModuleEnabledFilter("Gamification")]
 public class GamificationController(UserDbContext db) : Controller
 {
     public async Task<IActionResult> Badges()

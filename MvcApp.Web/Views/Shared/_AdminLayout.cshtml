@@ -169,10 +169,13 @@
                 <span class="nav-label">User Reports</span>
             </a>
 
-            <a asp-area="Admin" asp-controller="Gamification" asp-action="Badges" class="nav-item">
-                <i class='bx bx-trophy'></i>
-                <span class="nav-label">Gamification</span>
-            </a>
+            @if (await ModuleManager.IsModuleEnabledAsync("Gamification"))
+            {
+                <a asp-area="Admin" asp-controller="Gamification" asp-action="Badges" class="nav-item">
+                    <i class='bx bx-trophy'></i>
+                    <span class="nav-label">Gamification</span>
+                </a>
+            }
 
             @if (await ModuleManager.IsModuleEnabledAsync("Video"))
             {
