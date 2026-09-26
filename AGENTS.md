@@ -306,10 +306,11 @@ When a module is deselected at generation, ALL of these must hold:
   - `Controllers\EventsController.cs` / `GamificationController.cs`: added
     `[ModuleEnabledFilter("Events")]` / `[ModuleEnabledFilter("Gamification")]`
     (+`using MvcApp.Common.Filters;`) — `SettingsSeeder` seeds `Module.Events.Enabled`/
-    `Module.Gamification.Enabled` but nothing consumed them. Source-only: the VSIX template
-    has NO Events/Gamification controllers, no nav entries, and does NOT seed these settings
-    — do NOT add the feature to the template. Verified: anonymous 302 (Authorize challenge),
-    logged-in Mulva → 200.
+    `Module.Gamification.Enabled` but nothing consumed them. Verified: anonymous 302
+    (Authorize challenge), logged-in Mulva → 200. NOTE: this feature was SOURCE-ONLY until
+    2026-09-26 — the full-parity template port (see below) added Events + Gamification to
+    the live VSIX tree (controllers, nav, settings, migrations) so the two trees are now
+    in sync on this feature.
   - Documented no-change decisions: `Template.Default.LandingEnabled` is an intended no-op
     (both branches of `HomeController.Index` resolve to `Index.Default` for the Default
     template); placeholder `Encryption:Key` and dev `Branding` values are config-only,
@@ -352,6 +353,38 @@ When a module is deselected at generation, ALL of these must hold:
   (newest Release artifact 2026-08-10); the older "1.0.40 built 2026-08-13" note remains
   unconfirmed on disk — trust 1.0.39 until the installed-VS copy says otherwise.
 - The stale copy at `E:\Apps\MvcApp\MvcApp.Template` must NOT be edited.
+- **Full-parity template port 2026-09-26 (VSIX 1.0.50):** the live VSIX tree
+  (`E:\Apps\MvcApp.Templates\MvcApp.Templates\MvcApp.Templates.VSIX\ProjectTemplates\MvcApp\`)
+  was brought to full parity with this source app. 226 files ported from source (tokenized:
+  every `MvcApp` occurrence → `$ext_safeprojectname$`, including string literals) — all
+  missing features restored: Events, Gamification, Members, Gallery, Matches, SuperLike,
+  VIP (VipController/VipPayPalService + SeedVipPlans), VideoUpload, Notifications
+  (NotificationHub + badge), Report, Verification (SecureVerificationService),
+  moderation admin (Bans: BansController/Admin area), InterestTags, email queue
+  (EmailQueueHostedService), plus Observers count = full feature parity. Hand-merges:
+  - `UserDbContext.cs`: source content + template's own-assembly ending
+    (`ApplyConfigurationsFromAssembly(typeof(UserDbContext).Assembly)` BEFORE the
+    `ModuleConfigurationRegistry.Assemblies` loop) so the 23 relocated module configs +
+    5 feature configs (Event/InterestTag/Report/VerificationRequest/VideoUpload) apply —
+    required because the template relocates module configs into Infrastructure.
+  - `Program.cs`: source wiring merged into guarded template structure (AddHttpClient
+    VipPayPalService FQN, AddHealthChecks DatabaseHealthCheck, AddRateLimiter "auth" policy,
+    AddResponseCompression, AddSerilog/UseSerilogRequestLogging, BannedUserMiddleware,
+    MapHub NotificationHub "/notificationhub", MapHealthChecks "/health", background
+    Task.Run seeding with all seed steps incl. SeedEventCategories/SeedInterestTags/
+    SeedGamification/SeedVipPlans + app.SeedData(), EnsureMigratedAsync pending-guard).
+  - `SettingsSeeder.cs`: live's 10 guarded module rows + 2 UNGUARDED
+    `Module.Events.Enabled`/`Module.Gamification.Enabled` rows (Events/Gamification are
+    always-on features, not wizard-deselectable).
+  - `Seeder.cs` (Identity): dropped `"Member"` role (roleNames = Admin/Moderator) — parity
+    with source.
+  - 160 `<ProjectItem>` entries added across 12 `.vstemplate` files for all new files.
+  Verification: detokenized in-place build of the live tree → **0E/10W** (= source
+  baseline); VSIX 1.0.50 built 0W/0E; payload verified (manifest version, all feature
+  files present, 25 photos upgraded 800×800, no stray raw `MvcApp` in shipped
+  .cs/.cshtml/.razor/.json, all 20 vstemplates parse). **Port ④ (photo upgrade) included:**
+  the 25 non-Mulva test-user photos upgraded 128×128 → 800×800 (filenames preserved, same
+  content as source — hash-identical after copy). VS install still deferred by user.
 - Working log: `%TEMP%\opencode\summary.md` — update it after each major block of work
   (sessions start with fresh memory; it is also wiped on reboot, so graduate durable facts
   into this file).
