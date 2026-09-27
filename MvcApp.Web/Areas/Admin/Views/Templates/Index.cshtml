@@ -23,16 +23,10 @@
                     }
                     <h5 class="card-title">@template.DisplayName</h5>
                     <p class="card-text text-muted small">@template.Description</p>
-                    <div class="border rounded p-3 mb-3" style="height:120px; display:flex; align-items:center; justify-content:center; background:var(--template-bg-alt, #f8f9fc)">
-                        <span style="font-size:2.5rem">
-                            @switch (template.Name)
-                            {
-                                case "Default": <text>&#x1F3E0;</text> break;
-                                case "Dating":  <text>&#x2764;&#xFE0F;</text> break;
-                                case "IPTV":    <text>&#x1F4FA;</text> break;
-                                default:        <text>&#x1F3A8;</text> break;
-                            }
-                        </span>
+                    <div class="border rounded overflow-hidden mb-3 position-relative" style="height:120px; background:var(--template-bg-alt, #f8f9fc)">
+                        <img src="@template.Thumbnail" alt="@template.DisplayName" class="w-100 h-100" style="object-fit:cover;"
+                             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+                        <span class="w-100 h-100 align-items-center justify-content-center" style="font-size:2.5rem; display:none;">&#x1F3A8;</span>
                     </div>
                     @if (!isActive)
                     {

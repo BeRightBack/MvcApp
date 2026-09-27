@@ -56,7 +56,7 @@ public class VipController(
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Checkout(int planId)
+    public async Task<IActionResult> Checkout(int planId, int detailId)
     {
         var user = await userManager.GetUserAsync(User);
         if (user == null) return Challenge();
@@ -66,10 +66,10 @@ public class VipController(
             .FirstOrDefaultAsync(p => p.Id == planId);
         if (plan == null) return NotFound();
 
-        var detail = plan.SubscriptionDetails.FirstOrDefault();
-        if (detail == null) return BadRequest("Plan has no pricing detail.");
+        var detail = plan.SubscriptionDetails.FirstOrDefault(d => d.Id == detailId);
+        if (detail == null) return BadRequest("Plan has no such pricing detail.");
 
-        var returnUrl = Url.Action(nameof(PaymentSuccess), "Vip", new { planId }, Request.Scheme)!;
+        var returnUrl = Url.Action(nameof(PaymentSuccess), "Vip", new { planId, detailId }, Request.Scheme)!;
         var cancelUrl = Url.Action(nameof(Index), "Vip", null, Request.Scheme)!;
 
         try
@@ -84,7 +84,7 @@ public class VipController(
         }
     }
 
-    public async Task<IActionResult> PaymentSuccess(int planId, string token, string? PayerID)
+    public async Task<IActionResult> PaymentSuccess(int planId, int detailId, string token, string? PayerID)
     {
         var user = await userManager.GetUserAsync(User);
         if (user == null) return Challenge();
@@ -94,8 +94,8 @@ public class VipController(
             .FirstOrDefaultAsync(p => p.Id == planId);
         if (plan == null) return NotFound();
 
-        var detail = plan.SubscriptionDetails.FirstOrDefault();
-        if (detail == null) return BadRequest("Plan has no pricing detail.");
+        var detail = plan.SubscriptionDetails.FirstOrDefault(d => d.Id == detailId);
+        if (detail == null) return BadRequest("Plan has no such pricing detail.");
 
         try
         {

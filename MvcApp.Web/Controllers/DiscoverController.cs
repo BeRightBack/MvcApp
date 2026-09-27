@@ -66,7 +66,7 @@ namespace MvcApp.Web.Controllers
 
             var cards = members.Select(m => new MemberCardViewModel
             {
-                Member = EntityMapper.MapToLikedMemberModel(m, likedIds.Contains(m.Id), false, superLikedIds.Contains(m.Id), boostedIds.Contains(m.Id), !currentUser.IsVip),
+                Member = EntityMapper.MapToLikedMemberModel(m, likedIds.Contains(m.Id), false, superLikedIds.Contains(m.Id), boostedIds.Contains(m.Id), false),
                 ModalId = $"discover-modal-{m.Id}",
                 ShowLikeButton = true,
                 ShowMessageButton = true,

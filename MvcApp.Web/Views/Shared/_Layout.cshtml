@@ -4,7 +4,8 @@
 @inject MvcApp.Core.Abstractions.INavService NavService
 @{
     var activeTemplate = await TemplateService.GetActiveTemplateAsync();
-    var templateCss = activeTemplate == "Default" ? null : $"~/css/templates/{activeTemplate.ToLowerInvariant()}.css";
+    var templateCss = (await TemplateService.GetAvailableTemplatesAsync())
+        .FirstOrDefault(t => t.Name.Equals(activeTemplate, StringComparison.OrdinalIgnoreCase))?.CssPath;
     var siteName = await Branding.GetSiteNameAsync();
     var logoUrl = await Branding.GetLogoUrlAsync();
 }
@@ -136,11 +137,29 @@ else
 
                 <div class="navbar-collapse collapse d-sm-inline-flex order-sm-1">
                     <ul class="navbar-nav me-auto">
-                        @foreach (var item in await NavService.GetNavItemsAsync())
+                        @foreach (var group in NavGrouping.Group(await NavService.GetNavItemsAsync()))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link px-2 px-lg-3" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a>
-                            </li>
+                            if (group.Label == null)
+                            {
+                                var item = group.Items[0];
+                                <li class="nav-item">
+                                    <a class="nav-link px-2 px-lg-3" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle px-2 px-lg-3" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Localizer[group.Label]</a>
+                                    <ul class="dropdown-menu">
+                                        @foreach (var item in group.Items)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>
@@ -157,7 +176,7 @@ else
     </div>
 }
     <hr />
-    <footer class="footer bg-light text-dark py-4">
+    <footer class="footer py-4">
     <div class="container">
         @if (activeTemplate == "Business")
         {
