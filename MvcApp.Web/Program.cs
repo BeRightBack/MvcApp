@@ -581,39 +581,52 @@ static async Task SeedVipPlansAsync(WebApplication app)
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
     if (await db.SubscriptionPlans.AnyAsync()) return;
 
-    var basic = new SubscriptionPlan
+    var plans = new[]
     {
-        Name = "Basic",
-        DescriptionShort = "1 Month VIP",
-        Description = "Unlock messaging permissions and VIP badge for 1 month",
-        SubscriptionDetails =
-        [
-            new() { Price = 9.99m, Description = "1 Month VIP Access", DurationInMonths = 1 }
-        ]
+        new SubscriptionPlan
+        {
+            Name = "Basic",
+            DescriptionShort = "Essential VIP",
+            Description = "The essential VIP upgrade - crown badge and photo reveals.",
+            Features = "VIP Crown Badge on your profile\nSee Who Liked You - photos revealed",
+            SubscriptionDetails =
+            [
+                new() { Price = 9.99m, Description = "1 Month Service", DurationInMonths = 1 },
+                new() { Price = 26.97m, Description = "3 Month Service, save 10%", DurationInMonths = 3 },
+                new() { Price = 47.95m, Description = "6 Month Service, save 20%", DurationInMonths = 6 },
+                new() { Price = 83.92m, Description = "12 Month Service, save 30%", DurationInMonths = 12 }
+            ]
+        },
+        new SubscriptionPlan
+        {
+            Name = "Premium",
+            DescriptionShort = "Most Popular",
+            Description = "Best value - extra Super Likes, VIP chat rooms, and photo reveals.",
+            Features = "Everything in Basic\n5 Super Likes per day\nAccess to VIP-only chat rooms",
+            SubscriptionDetails =
+            [
+                new() { Price = 14.99m, Description = "1 Month Service", DurationInMonths = 1 },
+                new() { Price = 40.47m, Description = "3 Month Service, save 10%", DurationInMonths = 3 },
+                new() { Price = 71.95m, Description = "6 Month Service, save 20%", DurationInMonths = 6 },
+                new() { Price = 125.92m, Description = "12 Month Service, save 30%", DurationInMonths = 12 }
+            ]
+        },
+        new SubscriptionPlan
+        {
+            Name = "Platinum",
+            DescriptionShort = "Ultimate VIP",
+            Description = "The complete VIP experience with additional boosts for maximum visibility.",
+            Features = "Everything in Premium\n2 Search Boosts per day",
+            SubscriptionDetails =
+            [
+                new() { Price = 19.99m, Description = "1 Month Service", DurationInMonths = 1 },
+                new() { Price = 53.97m, Description = "3 Month Service, save 10%", DurationInMonths = 3 },
+                new() { Price = 95.95m, Description = "6 Month Service, save 20%", DurationInMonths = 6 },
+                new() { Price = 167.92m, Description = "12 Month Service, save 30%", DurationInMonths = 12 }
+            ]
+        }
     };
 
-    var premium = new SubscriptionPlan
-    {
-        Name = "Premium",
-        DescriptionShort = "3 Months VIP",
-        Description = "Best value — 3 months of full VIP access with priority support",
-        SubscriptionDetails =
-        [
-            new() { Price = 24.99m, Description = "3 Month VIP Access", DurationInMonths = 3 }
-        ]
-    };
-
-    var platinum = new SubscriptionPlan
-    {
-        Name = "Platinum",
-        DescriptionShort = "6 Months VIP",
-        Description = "Ultimate plan — 6 months of VIP with all premium features",
-        SubscriptionDetails =
-        [
-            new() { Price = 39.99m, Description = "6 Month VIP Access", DurationInMonths = 6 }
-        ]
-    };
-
-    db.SubscriptionPlans.AddRange(basic, premium, platinum);
+    db.SubscriptionPlans.AddRange(plans);
     await db.SaveChangesAsync();
 }

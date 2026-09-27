@@ -84,8 +84,34 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
   created with capital letters can become invisible/orphaned while the app looks for the
   lowercased name and fails with `Unknown database ...`. Diagnose with `SHOW DATABASES`.
 
+## Remote MariaDB (mysql.xtrasvr.com / svr1.xtrasvr.com) — FIXED + VERIFIED 2026-09-26
+- `mysql.xtrasvr.com` and `svr1.xtrasvr.com` are the same box (149.56.102.60, Debian 13, ISPConfig,
+  OVH). MariaDB runs there and the source app's gitignored `appsettings.json` points its
+  ConnectionStrings at it (uid `swan3344`, DBs `Identity_db`/`Localisation_db`).
+- **2026-09-26 fix:** access was killed by a raw runtime iptables rule `DROP tcp dpt:3306 !lo`
+  sitting at INPUT position 1, ABOVE the ufw chains — ufw already had `3306/tcp ALLOW`
+  (persisted in `/etc/ufw/user.rules`), but the raw rule overrode it (host firewall, NOT a
+  provider firewall: mariadbd was listening on 0.0.0.0:3306 all along). Fix was
+  `iptables -D INPUT 1`. Nothing re-adds it: no `iptables-persistent`/`/etc/iptables`, no
+  cron/rc.local/systemd, survived a full ISPConfig `server.sh` minute cycle. If 3306 ever
+  dies again, check `iptables -L INPUT -n | grep 3306` on the server first.
+- **Secondaries discovered same day (both fixed):** (a) client IP 45.44.236.68 had no PTR record and
+  MariaDB resolves client hostnames per new connection (default config) → every fresh connect stalled
+  ~8-10s in reverse-DNS; fixed by adding `45.44.236.68 client-45-44-236-68.xtrasvr.com` to the server's
+  `/etc/hosts`. (b) page latency ~7.4s is NOT server-side: pooled queries are ~26-37ms warm
+  (`Threads_created` delta 0, `Queries` +209 per home page) — the page fires ~209 sequential DB
+  round-trips at ~35ms WAN RTT (nav per-item module checks etc.); on localhost it'd be ~200ms. Code-level
+  caching (settings/nav/module flags) would fix it if ever needed; login and pages DO work against the
+  remote now.
+- SSH: `ssh root@svr1.xtrasvr.com` (root password is user-held, not on this machine). MySQL root shell
+  on the server needs its own password; `swan3344` (the app user) has `GRANT ALL ON *.* WITH GRANT
+  OPTION` including `mysql.*` — usable for server-side MySQL inspections instead of root.
+- The app's Serilog `Logs` sink writes to its OWN `Server=localhost;Database=MvcApp_logs` (local MySQL
+  8.0.46), not to the remote — local `MvcApp_logs` must exist or log writes fail silently (does not
+  block requests).
+
 ## Key settings (SystemSettings table: Key, Value, Description, Group, UpdatedAt, UpdatedBy)
-- `SiteTemplate` = active template (currently `Default`; exact template Name, compared
+- `SiteTemplate` = active template (currently `Luxury` — verified live 2026-09-27; exact template Name, compared
   OrdinalIgnoreCase).
 - `Module.*.Enabled` = module toggles (Ads, Blog, Chat, Forum, Iptv, Messages, Pages, Store,
   Utility, Video). Modules deselected at generation time have NO `Module.<X>.Enabled` row and
@@ -388,3 +414,61 @@ When a module is deselected at generation, ALL of these must hold:
 - Working log: `%TEMP%\opencode\summary.md` — update it after each major block of work
   (sessions start with fresh memory; it is also wiped on reboot, so graduate durable facts
   into this file).
+- **Plans / Discover blur / admin template thumbnails (2026-09-27, source app only, not
+  ported/not committed — user confirmation pending):**
+  - **VIP plans = feature tiers, each with its full 1/3/6/12-month duration ladder
+    (old-project model).** `SubscriptionPlan.Features` (newline-separated `string?` —
+    source-only migration `20260927105307_AddSubscriptionPlanFeatures`, single
+    AddColumn, applied to remote → 32nd `__EFMigrationsHistory` row) + multi-detail
+    restructure mirroring `E:\Apps\IptvWebProject`: a PLAN is a tier (what you get),
+    months are options INSIDE every plan — never the tier definition. NOTE: the 3 old
+    single-duration prices (Premium 24.99/3mo, Platinum 39.99/6mo) were RESTATED to
+    clean tier rates (tune in `SeedVipPlansAsync`):
+    Basic "Essential VIP" 9.99/26.97/47.95/83.92, Premium "Most Popular"
+    14.99/40.47/71.95/125.92, Platinum "Ultimate VIP" 19.99/53.97/95.95/167.92
+    (1/3/6/12 mo; save 10/20/30% on 3/6/12 — exact math, all 12 rows in the seeder +
+    live DB via idempotent UPDATE/INSERT). Feature lists = ONLY code-verified VIP
+    gates (crown badge, Likes-you photo reveal, SuperLikes 5 vs 1/day, ChatHub
+    `VipOnly` rooms, 2 vs 1 boosts/day); the unbacked old bullets (Priority in
+    Search / Unlimited Messaging / Advanced Filters) were dropped. CAVEAT: backend
+    still grants EVERY VIP feature to ANY tier (binary `IsVip` via
+    `PremiumExpiryDate`; no tier column) — tier lists are honest SUBSETS; per-tier
+    enforcement (tier column + checkpoints) is a possible follow-up if the user
+    wants it. `Views/Vip/Index.cshtml` = per-card duration pills (Bootstrap
+    btn-check) + price/per-month/hidden-detailId updating via inline JS;
+    `VipController.Checkout`/`PaymentSuccess` now take `detailId` (were
+    FirstOrDefault).
+  - **IPTV store aligned to the same model** (shares the SAME
+    `SubscriptionPlans`/`SubscriptionDetails` tables; `Module.Iptv.Enabled=true` in
+    live DB): `IptvStore/Index.cshtml` now lists every duration with its OWN Add to
+    Cart (posts `subscriptionDetailId` — was FirstOrDefault) under "Durations &
+    Pricing" (+ the missing `@Html.AntiForgeryToken()` — latent 400, same class of
+    bug as the Contact fix), a "from $cheapest" header, and sidebar badges switched
+    to `bg-light text-primary` (luxury.css `.bg-primary` gradient made `bg-primary`
+    badges gold-on-gold illegible — pre-existing). IPTV cart/checkout already handled
+    detailId; IPTV home page already listed all durations. `SubscriptionService`
+    FirstOrDefault helpers are dead code (no callers) — untouched. Test cart row
+    added during verification was deleted.
+  - **Discover blur removed for browsing.** `DiscoverController.Index` now passes
+    `isPhotoBlurred: false` (was `!currentUser.IsVip` on EVERY card — you can't like a
+    photo you can't see). The intended VIP reveal gate REMAINS only on the Likes "who
+    liked you" list (`LikesController.cs` blurs when `predicate == "liked" && !IsVip` =
+    the "See Who Liked You" upsell). Also recorded: the login form field name is
+    `Input.Username` (label says "Username or email"; NOT `Input.UsernameOrEmail`).
+  - **Admin → UI Templates shows REAL thumbnails instead of emoji.** Generated
+    `wwwroot/images/templates/{name}-thumb.png` for all 11 templates (640×221, navbar+hero
+    crop of the real per-template audit screenshots via puppeteer canvas from
+    `%TEMP%\opencode\puppet\tpl-*.png`); `Areas/Admin/Views/Templates/Index.cshtml` renders
+    `UiTemplateInfo.Thumbnail` (`<img>` + hidden 🎨 fallback span shown only onerror) —
+    replaces the 3-emoji switch where 8 of 11 templates shared 🎨.
+  Verified live on port 9001 (then freed): all 11 `*-thumb.png` → HTTP 200, naturalWidth
+  640, no broken/emoji placeholders (vision); /Vip = 3 cards × 4 duration pills
+  (1/3/6/12 mo, save 10/20/30%, distinct feature lists, Most Popular banner) and the
+  price/per-month/hidden-detailId update on pill click (DOM + vision, $47.95/6mo =
+  "That's just $7.99/mo"); /iptv-store = 4 durations per plan each with its own Add to
+  Cart → adding Premium 6mo put "6 Month Service, save 20% · $71.95" in the cart
+  (DOM + OCR + end-to-end cart POST), sidebar badges legible after `bg-light` fix;
+  /Discover as non-VIP George = 21 cards, 12 sampled imgs `filter:none`, 0 "Like to
+  reveal" overlays (DOM + vision, sharp photos). Build 0E; tests 13/13. Screenshots:
+  `E:\Pictures\Screenshots\MvcApp-fixed3-{admin-templates,vip-plans,vip-durations,
+  iptv-store-durations,iptv-cart,discover}.png`.

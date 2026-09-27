@@ -40,7 +40,7 @@
                             @if (plan.SubscriptionDetails.Count > 0)
                             {
                                 var firstDetail = plan.SubscriptionDetails.OrderBy(d => d.Price).First();
-                                <span class="badge @(selectedPlan?.Id == plan.Id ? "bg-light text-primary" : "bg-primary")">$@firstDetail.Price</span>
+                                <span class="badge bg-light text-primary">$@firstDetail.Price</span>
                             }
                         </a>
                     }
@@ -59,29 +59,36 @@
                             </div>
                             @if (selectedPlan.SubscriptionDetails.Count > 0)
                             {
-                                var firstDetail = selectedPlan.SubscriptionDetails.OrderBy(d => d.Price).First();
+                                var cheapestDetail = selectedPlan.SubscriptionDetails.OrderBy(d => d.Price).First();
                                 <div class="text-end">
-                                    <h2 class="text-primary mb-0">$@firstDetail.Price</h2>
-                                    <span class="text-muted">@firstDetail.DurationInMonths @Localizer["month(s)"]</span>
+                                    <div class="text-muted small">@Localizer["from"]</div>
+                                    <h2 class="text-primary mb-0">$@cheapestDetail.Price</h2>
+                                    <span class="text-muted">@cheapestDetail.DurationInMonths @Localizer["month(s)"]</span>
                                 </div>
                             }
                         </div>
                         <p>@Localizer[@selectedPlan.Description ?? ""]</p>
-                        <h5>@Localizer["Features"]</h5>
-                        <ul class="list-unstyled">
-                            @foreach (var detail in selectedPlan.SubscriptionDetails)
+                        <h5>@Localizer["Durations & Pricing"]</h5>
+                        <ul class="list-unstyled mb-3">
+                            @foreach (var detail in selectedPlan.SubscriptionDetails.OrderBy(d => d.DurationInMonths))
                             {
-                                <li><i class="fa fa-check text-success me-2"></i>@detail.Description</li>
+                                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                    <span>@detail.Description</span>
+                                    <span class="d-flex align-items-center gap-2">
+                                        <strong class="text-primary">$@detail.Price</strong>
+                                        <form asp-controller="IptvCart" asp-action="AddToCart" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="subscriptionPlanId" value="@selectedPlan.Id" />
+                                            <input type="hidden" name="subscriptionDetailId" value="@detail.Id" />
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="fa fa-shopping-cart me-1"></i>@Localizer["Add to Cart"]
+                                            </button>
+                                        </form>
+                                    </span>
+                                </li>
                             }
                         </ul>
-                        <form asp-controller="IptvCart" asp-action="AddToCart" method="post" class="d-inline">
-                            <input type="hidden" name="subscriptionPlanId" value="@selectedPlan.Id" />
-                            <input type="hidden" name="subscriptionDetailId" value="@(selectedPlan.SubscriptionDetails.FirstOrDefault()?.Id)" />
-                            <input type="hidden" name="quantity" value="1" />
-                            <button type="submit" class="btn btn-success btn-lg">
-                                <i class="fa fa-shopping-cart me-2"></i>@Localizer["Add to Cart"]
-                            </button>
-                        </form>
                         <a asp-controller="IptvHome" asp-action="Setup" class="btn btn-outline-primary btn-lg">@Localizer["How to Set Up"]</a>
                     </div>
                 </div>

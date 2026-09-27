@@ -1,4 +1,5 @@
 @model List<MvcApp.Core.SubscriptionPlan>
+@using System.Globalization
 @{
     ViewData["Title"] = "Go VIP";
     var isVip = (bool)ViewBag.IsVip;
@@ -49,14 +50,14 @@
 </div>
 
 <div class="row g-4 justify-content-center">
-    @foreach (var plan in Model.OrderBy(p => p.SubscriptionDetails.FirstOrDefault()?.Price ?? 0))
+    @foreach (var plan in Model.OrderBy(p => p.Id))
     {
-        var detail = plan.SubscriptionDetails.FirstOrDefault();
-        var usdPrice = detail?.Price ?? 0;
-        var months = detail?.DurationInMonths ?? 1;
-        var convertedPrice = usdPrice * rate;
-        var convertedMonthly = months > 1 ? convertedPrice / months : convertedPrice;
         var isPopular = plan.Name == "Premium";
+        var details = plan.SubscriptionDetails.OrderBy(d => d.DurationInMonths).ToList();
+        var firstDetail = details.FirstOrDefault();
+        var baseMonthly = details.FirstOrDefault(d => d.DurationInMonths == 1)?.Price ?? firstDetail?.Price ?? 0;
+        var convertedPrice = (firstDetail?.Price ?? 0) * rate;
+        var convertedMonthly = firstDetail is { DurationInMonths: > 1 } df ? convertedPrice / df.DurationInMonths : convertedPrice;
 
         <div class="col-md-4 col-lg-3">
             <div class="content-card h-100 d-flex flex-column @(isPopular ? "border-warning" : "")" style="@(isPopular ? "border:2px solid #f59e0b;" : "")">
@@ -68,33 +69,60 @@
                 }
                 <div class="card-body text-center d-flex flex-column">
                     <h5 class="fw-bold mb-1" style="color:var(--template-heading);">@plan.Name</h5>
-                    <p class="text-muted small mb-3">@plan.DescriptionShort</p>
+                    <p class="text-muted small mb-2">@plan.DescriptionShort</p>
 
-                    <div class="mb-3">
-                        <span class="fw-bold" style="font-size:2.2rem;color:var(--template-primary);">@currencySymbol@convertedPrice.ToString("F2")</span>
-                        <span class="text-muted small"> / @months mo</span>
+                    <div class="mb-1">
+                        <span class="fw-bold" style="font-size:1.9rem;color:var(--template-primary);" data-price-display="@plan.Id">@currencySymbol@convertedPrice.ToString("F2")</span>
+                        <span class="text-muted small" data-unit-display="@plan.Id">/ @(firstDetail?.DurationInMonths ?? 1) mo</span>
+                    </div>
+                    <div class="text-muted small mb-3" data-permonth-display="@plan.Id">
+                        @if (firstDetail is { DurationInMonths: > 1 })
+                        {
+                            <text>That's just <strong>@currencySymbol@convertedMonthly.ToString("F2")/mo</strong></text>
+                        }
                     </div>
 
-                    @if (months > 1)
-                    {
-                        <div class="text-muted small mb-3">
-                            That's just <strong>@currencySymbol@convertedMonthly.ToString("F2")/mo</strong>
-                        </div>
-                    }
+                    <div class="d-flex flex-wrap justify-content-center gap-2 mb-3" data-duration-group="@plan.Id">
+                        @foreach (var d in details)
+                        {
+                            var save = 0;
+                            if (baseMonthly > 0 && d.DurationInMonths > 1)
+                            {
+                                var gross = baseMonthly * d.DurationInMonths;
+                                save = (int)Math.Round((gross - d.Price) / gross * 100);
+                            }
+                            <div class="text-center">
+                                <input type="radio" class="btn-check" name="duration_@plan.Id" id="dur-@plan.Id-@d.Id"
+                                       value="@d.Id" autocomplete="off" data-duration-value="@d.DurationInMonths"
+                                       data-plan-id="@plan.Id" data-price="@d.Price.ToString(CultureInfo.InvariantCulture)"
+                                       data-months="@d.DurationInMonths" @(d.Id == firstDetail?.Id ? "checked" : "") />
+                                <label class="btn btn-sm btn-outline-secondary px-3" style="border-radius:999px;" for="dur-@plan.Id-@d.Id">@d.DurationInMonths mo</label>
+                                @if (save > 0)
+                                {
+                                    <div class="small text-success fw-semibold lh-1 mt-1">-@save%</div>
+                                }
+                                else
+                                {
+                                    <div class="small lh-1 mt-1" style="visibility:hidden;">&nbsp;</div>
+                                }
+                            </div>
+                        }
+                    </div>
 
-                    <p class="text-muted small flex-grow-1">@plan.Description</p>
+                    <p class="text-muted small">@plan.Description</p>
 
                     <ul class="list-unstyled text-start mb-4">
-                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>VIP Crown Badge</li>
-                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>Priority in Search</li>
-                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>See Who Liked You</li>
-                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>Unlimited Messaging</li>
-                        <li class="py-1"><i class='bx bx-check text-success me-2'></i>Advanced Filters</li>
+                        @foreach (var feature in (plan.Features ?? string.Empty)
+                            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                        {
+                            <li class="py-1"><i class='bx bx-check text-success me-2'></i>@feature</li>
+                        }
                     </ul>
 
-                    <form asp-action="Checkout" method="post">
+                    <form asp-action="Checkout" method="post" class="mt-auto">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="planId" value="@plan.Id" />
+                        <input type="hidden" name="detailId" data-detail-field="@plan.Id" value="@(firstDetail?.Id)" />
                         <button type="submit" class="btn w-100 fw-semibold" style="background:var(--template-primary);color:#fff;border:none;padding:0.75rem;">
                             <i class='bx bx-lock-alt me-1'></i>Subscribe with PayPal
                         </button>
@@ -111,3 +139,28 @@
         Secure payment via PayPal · Cancel anytime · No hidden fees
     </small>
 </div>
+
+<script>
+    (function () {
+        var rate = @rate.ToString(CultureInfo.InvariantCulture);
+        var symbol = '@Html.Raw(currencySymbol)';
+        function format(v) { return symbol + v.toFixed(2); }
+        function update(input) {
+            var pid = input.getAttribute('data-plan-id');
+            var price = parseFloat(input.getAttribute('data-price')) * rate;
+            var months = parseInt(input.getAttribute('data-months'), 10);
+            var display = document.querySelector('[data-price-display="' + pid + '"]');
+            var unit = document.querySelector('[data-unit-display="' + pid + '"]');
+            var per = document.querySelector('[data-permonth-display="' + pid + '"]');
+            var field = document.querySelector('[data-detail-field="' + pid + '"]');
+            display.textContent = format(price);
+            unit.textContent = months > 1 ? '/ ' + months + ' mo' : '/ month';
+            per.innerHTML = months > 1 ? 'That\u2019s just <strong>' + format(price / months) + '/mo</strong>' : '';
+            field.value = input.value;
+        }
+        document.querySelectorAll('input[data-duration-value]').forEach(function (input) {
+            if (input.checked) update(input);
+            input.addEventListener('change', function () { update(input); });
+        });
+    })();
+</script>

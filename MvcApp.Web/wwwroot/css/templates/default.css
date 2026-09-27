@@ -17,6 +17,33 @@
     --template-transition: 0.2s ease-in-out;
 }
 
+/* Default navbar — light surface with dark text. Default has no dark hero
+   image, so the shared .navbar a { color:#fff } (styles2.min.css) makes the
+   brand and the Sign In button invisible on the white page; this template
+   restores its own dark-on-light navbar. */
+.navbar {
+    background-color: var(--template-bg, #ffffff) !important;
+}
+.navbar a,
+.navbar .navbar-brand,
+.navbar .navbar-brand:hover {
+    color: var(--template-heading, #2e2f3e) !important;
+}
+.navbar .nav-link,
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: var(--template-text, #5a5c69) !important;
+}
+.navbar .btn-outline-secondary {
+    color: var(--template-heading, #2e2f3e) !important;
+    border-color: var(--template-text-light, #858796) !important;
+}
+.navbar .btn-outline-secondary:hover {
+    color: #ffffff !important;
+    background-color: var(--template-secondary, #858796) !important;
+    border-color: var(--template-secondary, #858796) !important;
+}
+
 body {
     font-family: var(--template-font);
     color: var(--template-text);
