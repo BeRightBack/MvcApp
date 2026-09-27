@@ -472,3 +472,7 @@ When a module is deselected at generation, ALL of these must hold:
   reveal" overlays (DOM + vision, sharp photos). Build 0E; tests 13/13. Screenshots:
   `E:\Pictures\Screenshots\MvcApp-fixed3-{admin-templates,vip-plans,vip-durations,
   iptv-store-durations,iptv-cart,discover}.png`.
+  **STATUS (2026-09-27): committed `f833034` + pushed to origin/main; ported to the live
+  VSIX tree as **1.0.51** (detokenized build 0E/10W, VSIX Release 0W/0E, payload verified —
+  incl. the Default-navbar / NavGrouping / layout-override prior-session work). NOT
+  installed — user defers VS install.**
