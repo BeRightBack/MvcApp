@@ -33,6 +33,7 @@ namespace MvcApp.Infrastructure
 
             services.AddScoped<IAuditService, AuditService>();
             services.AddScoped<ISettingsService, SettingsService>();
+            services.AddSingleton<SettingsCache>();
             services.AddScoped<IBanService, BanService>();
             services.AddScoped<IGamificationService, GamificationService>();
             services.AddScoped<ISuperLikeService, SuperLikeService>();
