@@ -15,7 +15,15 @@ namespace MvcApp.Identity
 {
     public static class Seeder
     {
-        public static void SeedData(this IApplicationBuilder app) => SeedStoreAsync(app).GetAwaiter().GetResult();
+        public static void SeedData(this IApplicationBuilder app) => SeedStoreAsync(app, true).GetAwaiter().GetResult();
+
+        /// <summary>
+        /// Seeds the data a site cannot run without (roles, the administrator) and,
+        /// when <paramref name="includeDemoData"/> is set, the sample content used
+        /// while developing.
+        /// </summary>
+        public static void SeedData(this IApplicationBuilder app, bool includeDemoData) =>
+            SeedStoreAsync(app, includeDemoData).GetAwaiter().GetResult();
 
         private static byte[] GetDefaultProfilePicture()
         {
@@ -34,7 +42,7 @@ namespace MvcApp.Identity
             }
         }
 
-        private static async Task SeedStoreAsync(IApplicationBuilder app)
+        private static async Task SeedStoreAsync(IApplicationBuilder app, bool includeDemoData)
         {
             using var scope = app.ApplicationServices.CreateScope();
 
@@ -61,10 +69,21 @@ namespace MvcApp.Identity
                 throw;
             }
 
+            // Bootstrap: a site with no roles and no administrator cannot be used at all,
+            // so this runs in every environment.
             await SeedRolesAsync(roleManager, logger);
             await SeedAdminUserAsync(config, userManager, logger);
-            await SeedTestUsersAsync(userManager, logger, context);
-            await SeedLikesAndMessagesAsync(context, logger);
+
+            // Demo content: only for development or when explicitly requested.
+            if (includeDemoData)
+            {
+                await SeedTestUsersAsync(userManager, logger, context);
+                await SeedLikesAndMessagesAsync(context, logger);
+            }
+            else
+            {
+                logger.LogInformation("Demo data seeding skipped (Seeding:IncludeDemoData is off).");
+            }
         }
 
         private static async Task SeedRolesAsync(RoleManager<UserRole> roleManager, ILogger logger)
