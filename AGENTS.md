@@ -162,8 +162,39 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
     property assigned per request by `LocalizationMiddleware`, so concurrent requests with
     different cultures can cross-contaminate `[LocalizedDisplayName]`. Worth fixing via
     `IHttpContextAccessor` or an ambient scope before it bites.
-  - **Remaining localization work:** ~208 files still to convert, in batches
-    (public shell + Members/Discover/Gallery next, then the rest).
+  - **Front end fully localized 2026-09-28 (commit `da5b4fd`): 1900 strings across 214 views
+    and components** — public views, admin area, all module views, Identity pages, `.razor`.
+    The reason 218 files were hardcoded was structural, not effort: **only IPTV had an
+    `IStringLocalizer` injection in `_ViewImports`, and 8 of the 10 modules did not reference
+    `MvcApp.Localization` at all**, so their views could not localize even in principle (Ads
+    and Pages referenced the project but had no injection). All 10 modules + `MvcApp.Razor`
+    are now wired. If a new module is added, it needs the project reference AND the
+    `_ViewImports` inject or its views silently render hardcoded English.
+  - **Razor HTML-encodes a `LocalizedString` value** (measured, not assumed): a key containing
+    an entity like `&mdash;` renders as that literal text, and DeepL would translate the
+    entity characters too. Decode entities to their Unicode characters in the key (`—`
+    encodes to itself and displays fine). Keep a node's leading/trailing whitespace OUTSIDE
+    the call — adjacent nodes are often separated only by a space, and trimming it into the
+    key glued words together (`WhereSparksFly`).
+  - **A/B verification method for view changes** (used for the localization commit, worth
+    reusing): `git stash push --pathspec-from-file=<the view files>`, capture each page's
+    `document.body.innerText` in English, `git stash pop`, capture again, diff word by word.
+    Stashing is atomic, so unlike copy/restore there is no way to compare HEAD with HEAD and
+    get a false pass — an earlier copy/restore harness silently did exactly that and produced
+    a meaningless "all identical". Note identical English output CANNOT prove the edits are
+    live (edited code renders the same English by design) — liveness comes from a French
+    capture. **Non-deterministic pages: `/Admin` (live counters), `/Admin/SystemLogs` (live log
+    rows), `/Home/Test` (random weather)** — they differ between two runs of the same build,
+    so exclude them from text diffs.
+  - **Self-translate is the mechanism and was preserved throughout** (user: "the self translate
+    is the key feature to keep, be very careful not to break it"). Progress after the
+    localization commit: 824 translations, **0 rate-limit events, 0 failures**, distinct keys
+    212 → 377. The queue is fed by page visits, so a site becomes translated as it is browsed;
+    pre-translating everything would need a crawl of every page (~4k DeepL calls).
+  - **`SiteTemplate` is `Dating`, not `Luxury`** (corrected 2026-09-28 by reading the live DB
+    row; the earlier "Luxury" note was stale). The active home view is therefore
+    `Views/Home/Index.Dating.cshtml` — check the setting before touching a template's landing
+    page. All 11 templates are localized regardless.
 - SSH: `ssh root@svr1.xtrasvr.com` (root password is user-held, not on this machine). MySQL root shell
   on the server needs its own password; `swan3344` (the app user) has `GRANT ALL ON *.* WITH GRANT
   OPTION` including `mysql.*` — usable for server-side MySQL inspections instead of root.
@@ -173,8 +204,9 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
   the sink now persists rows there (file logging under `MvcApp.Web\logs\` also stays on).
 
 ## Key settings (SystemSettings table: Key, Value, Description, Group, UpdatedAt, UpdatedBy)
-- `SiteTemplate` = active template (currently `Luxury` — verified live 2026-09-27; exact template Name, compared
-  OrdinalIgnoreCase).
+- `SiteTemplate` = active template (currently **`Dating`** — read from the live DB 2026-09-28;
+  the earlier "Luxury" note was stale. Exact template Name, compared OrdinalIgnoreCase). The
+  active landing view follows it, so `/` renders `Views/Home/Index.Dating.cshtml`.
 - `Module.*.Enabled` = module toggles (Ads, Blog, Chat, Forum, Iptv, Messages, Pages, Store,
   Utility, Video). Modules deselected at generation time have NO `Module.<X>.Enabled` row and
   are hidden from the admin Modules list (`ModuleManager.GetAllModulesAsync` skips modules
