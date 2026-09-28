@@ -429,6 +429,16 @@ When a module is deselected at generation, ALL of these must hold:
   and uses `ConfigOrDefault` instead of `??` (which never fires on an empty string). Verified
   with the mismatch deliberately in place: 0 errors, config restored byte-for-byte after the
   test. The admin in the remote DB is `UserName=admin`, `Email=admin@frenzyzone.com`.
+  **EF multiple-collection warning fixed (2026-09-28, VSIX 1.0.55):** the
+  `MultipleCollectionIncludeWarning` came from `MemberRepository.GetMembersAsync:91` via
+  `HomeController.Index:83` (home page, once per request) - found by temporarily throwing
+  that EF event to read the stack, then reverting. Loads `Photos` + `UserInterestTags`, both
+  genuinely used by `MapToMemberModel`, so neither Include is droppable; now
+  `.AsNoTracking().AsSplitQuery()`. **Measured neutral** (6501-7697 ms before, 6364-7696 ms
+  after) - the home page is bound by ~209 sequential round-trips at ~35ms WAN RTT, so this
+  removes the growth risk, not today's latency. HTML byte-identical apart from antiforgery
+  tokens; warning 1 -> 0 per page. NOTE: EF command logging is invisible in the logs because
+  `Program.cs` has `MinimumLevel.Override("Microsoft", LogEventLevel.Warning)`.
 
 ## Coding conventions
 - No code comments unless asked.
