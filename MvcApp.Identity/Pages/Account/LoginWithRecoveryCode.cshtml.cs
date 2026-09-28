@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using MvcApp.Core;
 using System.ComponentModel.DataAnnotations;
+using MvcApp.Localization.Custom;
 
 namespace MvcApp.Identity.Pages.Account
 {
@@ -53,7 +54,7 @@ namespace MvcApp.Identity.Pages.Account
             [BindProperty]
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Recovery Code")]
+            [LocalizedDisplayName("Recovery Code")]
             public string RecoveryCode { get; set; }
         }
 

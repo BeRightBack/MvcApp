@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -10,6 +10,7 @@ using MvcApp.Core;
 using MvcApp.Services;
 using MvcApp.Core.Abstractions;
 using System.ComponentModel.DataAnnotations;
+using MvcApp.Localization.Custom;
 using System.Text;
 using System.Text.Encodings.Web;
 
@@ -69,7 +70,7 @@ namespace MvcApp.Identity.Pages.Account.Manage
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "New email")]
+            [LocalizedDisplayName("New email")]
             public string NewEmail { get; set; }
         }
 

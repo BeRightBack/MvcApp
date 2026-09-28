@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using MvcApp.Core;
 using System.ComponentModel.DataAnnotations;
+using MvcApp.Localization.Custom;
 using System.Globalization;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -78,7 +79,7 @@ namespace MvcApp.Identity.Pages.Account.Manage
             [Required]
             [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Text)]
-            [Display(Name = "Verification Code")]
+            [LocalizedDisplayName("Verification Code")]
             public string Code { get; set; }
         }
 
