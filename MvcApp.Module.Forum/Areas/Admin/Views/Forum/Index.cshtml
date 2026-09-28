@@ -5,8 +5,8 @@
 
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1><i class="fa fa-comments"></i> Manage Forums</h1>
-        <a asp-action="CreateCategory" class="btn btn-primary"><i class="fa fa-plus"></i> New Category</a>
+        <h1><i class="fa fa-comments"></i> @Localizer["Manage Forums"]</h1>
+        <a asp-action="CreateCategory" class="btn btn-primary"><i class="fa fa-plus"></i> @Localizer["New Category"]</a>
     </div>
 
     @if (TempData["Success"] != null)
@@ -35,11 +35,11 @@
                 <table class="table table-hover mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Forum</th>
-                            <th class="text-center">Sort</th>
-                            <th class="text-center">Threads</th>
-                            <th class="text-center">Posts</th>
-                            <th class="text-center">Actions</th>
+                            <th>@Localizer["Forum"]</th>
+                            <th class="text-center">@Localizer["Sort"]</th>
+                            <th class="text-center">@Localizer["Threads"]</th>
+                            <th class="text-center">@Localizer["Posts"]</th>
+                            <th class="text-center">@Localizer["Actions"]</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,7 +72,7 @@
                         <tr>
                             <td colspan="5">
                                 <a asp-action="CreateForum" asp-route-categoryId="@category.Id" class="btn btn-sm btn-outline-primary">
-                                    <i class="fa fa-plus"></i> Add Forum
+                                    <i class="fa fa-plus"></i> @Localizer["Add Forum"]
                                 </a>
                             </td>
                         </tr>

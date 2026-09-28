@@ -1,7 +1,7 @@
 ﻿@typeparam TEntity
 
 <input type="text" class="form-control" style="max-width:600px" @onkeyup="@KeyEvent" placeholder="Search..." @bind="searchItem" />
-<button class="form-control" style="max-width:300px" @onclick="OnSearchClicked">Search</button>
+<button class="form-control" style="max-width:300px" @onclick="OnSearchClicked">@Localizer["Search"]</button>
 
 @code {
     [Parameter]

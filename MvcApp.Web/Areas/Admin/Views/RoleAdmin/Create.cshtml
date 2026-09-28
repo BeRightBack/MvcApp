@@ -5,7 +5,7 @@
     ViewData["Title"] = "Roles";
 }
 
-<div class="bg-primary m-1 p-1"><h4>Create Role</h4></div>
+<div class="bg-primary m-1 p-1"><h4>@Localizer["Create Role"]</h4></div>
 
 <div asp-validation-summary="All" class="text-danger"></div>
 <div class="row">
@@ -13,7 +13,7 @@
         <form method="get" asp-action="Create">
             <div class="form-group">
                 <input type="text" name="searchQuery" value="@ViewData["SearchQuery"]" class="form-control" placeholder="Search users..." />
-                <button type="submit" class="btn btn-primary mt-2">Search</button>
+                <button type="submit" class="btn btn-primary mt-2">@Localizer["Search"]</button>
             </div>
         </form>
         <form asp-action="Create" method="post">
@@ -27,11 +27,11 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <h6 class="bg-info p-1 text-white">Add Users to Role</h6>
+            <h6 class="bg-info p-1 text-white">@Localizer["Add Users to Role"]</h6>
             <table class="table table-bordered table-sm">
                 @if (Model.NonMembers.Count() == 0)
                 {
-                    <tr><td colspan="2">No Users Available</td></tr>
+                    <tr><td colspan="2">@Localizer["No Users Available"]</td></tr>
                 }
                 else
                 {
@@ -48,7 +48,7 @@
             </table>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <a asp-action="Index" class="btn btn-secondary">@Localizer["Cancel"]</a>
             </div>
         </form>
         <nav aria-label="Page navigation">

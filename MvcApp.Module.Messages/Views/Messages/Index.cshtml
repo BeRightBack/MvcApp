@@ -18,9 +18,9 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">
-                            <i class='bx bxs-heart text-danger'></i> Suggested matches
+                            <i class='bx bxs-heart text-danger'></i> @Localizer["Suggested matches"]
                         </h4>
-                        <a asp-controller="Matches" asp-action="Index" class="btn btn-sm btn-outline-primary rounded-pill">View all</a>
+                        <a asp-controller="Matches" asp-action="Index" class="btn btn-sm btn-outline-primary rounded-pill">@Localizer["View all"]</a>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
@@ -34,7 +34,7 @@
                                         <small class="text-muted">
                                             @if (m.LastActive.IsOnline())
                                             {
-                                                <span class="online-text">Online now</span>
+                                                <span class="online-text">@Localizer["Online now"]</span>
                                             }
                                             else
                                             {
@@ -42,7 +42,7 @@
                                             }
                                         </small>
                                         <a class="btn btn-sm rounded-pill btn-outline-primary mt-2" href="/Messages/Chat/@m.Id">
-                                            <i class='bx bx-message-rounded-dots'></i> Say hi
+                                            <i class='bx bx-message-rounded-dots'></i> @Localizer["Say hi"]
                                         </a>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Conversations</h4>
+                    <h4 class="mb-0">@Localizer["Conversations"]</h4>
                 </div>
                 <div class="card-body p-0">
                     @if (Model.Conversations.Any())
@@ -96,17 +96,17 @@
                     {
                         <div class="text-center py-5">
                             <i class='bx bx-chat' style="font-size:3rem; color:#e74c6f;"></i>
-                            <h5 class="mt-3">No conversations yet</h5>
-                            <p class="text-muted">Match with someone to start chatting.</p>
+                            <h5 class="mt-3">@Localizer["No conversations yet"]</h5>
+                            <p class="text-muted">@Localizer["Match with someone to start chatting."]</p>
                             <a asp-controller="Discover" asp-action="Index" class="btn btn-primary rounded-pill">
-                                <i class='bx bx-compass'></i> Browse Discover
+                                <i class='bx bx-compass'></i> @Localizer["Browse Discover"]
                             </a>
                         </div>
                     }
                     else
                     {
                         <div class="text-center py-4">
-                            <p class="text-muted mb-0">Send a message to one of your suggested matches above.</p>
+                            <p class="text-muted mb-0">@Localizer["Send a message to one of your suggested matches above."]</p>
                         </div>
                     }
                 </div>

@@ -6,7 +6,7 @@
 
 
 <div>
-    <h4>Role</h4>
+    <h4>@Localizer["Role"]</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -24,6 +24,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a> |
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">@Localizer["Edit"]</a> |
+    <a asp-action="Index" class="btn btn-secondary">@Localizer["Back to List"]</a>
 </div>

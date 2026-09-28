@@ -3,14 +3,14 @@
     ViewBag.CurrentPage = "Store";
 }
 
-<h1>Store Dashboard</h1>
+<h1>@Localizer["Store Dashboard"]</h1>
 
 <div class="row mb-4">
     <div class="col-md-3">
         <div class="card text-white bg-primary">
             <div class="card-body">
                 <h5 class="card-title">@ViewBag.TotalProducts</h5>
-                <p class="card-text">Products</p>
+                <p class="card-text">@Localizer["Products"]</p>
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
         <div class="card text-white bg-success">
             <div class="card-body">
                 <h5 class="card-title">@ViewBag.TotalOrders</h5>
-                <p class="card-text">Orders</p>
+                <p class="card-text">@Localizer["Orders"]</p>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
         <div class="card text-white bg-warning">
             <div class="card-body">
                 <h5 class="card-title">@ViewBag.PendingOrders</h5>
-                <p class="card-text">Pending</p>
+                <p class="card-text">@Localizer["Pending"]</p>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
         <div class="card text-white bg-danger">
             <div class="card-body">
                 <h5 class="card-title">@ViewBag.LowStockProducts</h5>
-                <p class="card-text">Low Stock</p>
+                <p class="card-text">@Localizer["Low Stock"]</p>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
         <div class="card bg-light">
             <div class="card-body">
                 <h5 class="card-title text-primary">$@ViewBag.TotalRevenue.ToString("F2")</h5>
-                <p class="card-text text-muted">Total Revenue</p>
+                <p class="card-text text-muted">@Localizer["Total Revenue"]</p>
             </div>
         </div>
     </div>
@@ -53,21 +53,21 @@
 
 <div class="row mb-3">
     <div class="col-12">
-        <a asp-action="Products" class="btn btn-primary"><i class="fa fa-cube"></i> Manage Products</a>
-        <a asp-action="Categories" class="btn btn-outline-primary"><i class="fa fa-folder"></i> Manage Categories</a>
-        <a asp-action="Orders" class="btn btn-outline-primary"><i class="fa fa-truck"></i> Manage Orders</a>
+        <a asp-action="Products" class="btn btn-primary"><i class="fa fa-cube"></i> @Localizer["Manage Products"]</a>
+        <a asp-action="Categories" class="btn btn-outline-primary"><i class="fa fa-folder"></i> @Localizer["Manage Categories"]</a>
+        <a asp-action="Orders" class="btn btn-outline-primary"><i class="fa fa-truck"></i> @Localizer["Manage Orders"]</a>
     </div>
 </div>
 
-<h3>Recent Orders</h3>
+<h3>@Localizer["Recent Orders"]</h3>
 <div class="table-responsive">
     <table class="table table-sm">
         <thead>
             <tr>
-                <th>Order #</th>
-                <th>Date</th>
-                <th>Total</th>
-                <th>Status</th>
+                <th>@Localizer["Order #"]</th>
+                <th>@Localizer["Date"]</th>
+                <th>@Localizer["Total"]</th>
+                <th>@Localizer["Status"]</th>
                 <th></th>
             </tr>
         </thead>

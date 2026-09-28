@@ -6,7 +6,7 @@
 <div class="page-header d-flex flex-wrap align-items-center justify-content-between gap-3">
     <div>
         <h1>@Model.TemplateDisplayName — Navigation</h1>
-        <p class="text-muted mb-0">Choose which modules and pages appear in this template's navbar and footer. The two lists are independent. Items whose module is disabled are hidden automatically.</p>
+        <p class="text-muted mb-0">@Localizer["Choose which modules and pages appear in this template's navbar and footer. The two lists are independent. Items whose module is disabled are hidden automatically."]</p>
     </div>
     <form method="get" asp-action="Index" class="d-inline">
         <select name="template" class="form-select form-select-sm" onchange="this.form.submit()">
@@ -31,8 +31,8 @@
         <div class="col-lg-6">
             <div class="content-card">
                 <div class="card-body">
-                    <h5 class="card-title">Navbar</h5>
-                    <p class="text-muted small mb-3">Links shown in the top navigation bar.</p>
+                    <h5 class="card-title">@Localizer["Navbar"]</h5>
+                    <p class="text-muted small mb-3">@Localizer["Links shown in the top navigation bar."]</p>
                     @foreach (var group in Model.NavbarItems.GroupBy(i => i.Group))
                     {
                         <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@group.Key</h6>
@@ -45,7 +45,7 @@
                                     <input class="form-check-input mt-0" type="checkbox" name="navbarCustom.Keep" value="@item.Index" checked />
                                     <span>@item.Label</span>
                                     <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
-                                    <span class="badge bg-warning text-dark">Custom</span>
+                                    <span class="badge bg-warning text-dark">@Localizer["Custom"]</span>
                                     <input type="hidden" name="navbarCustom.Label" value="@item.Label" />
                                     <input type="hidden" name="navbarCustom.Area" value="@item.Area" />
                                     <input type="hidden" name="navbarCustom.Controller" value="@item.Controller" />
@@ -78,22 +78,22 @@
                                     }
                                     @if (item.RequiresAdmin)
                                     {
-                                        <span class="badge bg-warning text-dark">Admin</span>
+                                        <span class="badge bg-warning text-dark">@Localizer["Admin"]</span>
                                     }
                                     @if (item.RequiresModerator)
                                     {
-                                        <span class="badge bg-info">Moderator</span>
+                                        <span class="badge bg-info">@Localizer["Moderator"]</span>
                                     }
                                     @if (item.RequiresAuth)
                                     {
-                                        <span class="badge bg-info text-dark">Members</span>
+                                        <span class="badge bg-info text-dark">@Localizer["Members"]</span>
                                     }
                                 </div>
                             }
                         }
                     }
 
-                    <h6 class="text-uppercase mt-4 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">Add custom navbar link</h6>
+                    <h6 class="text-uppercase mt-4 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@Localizer["Add custom navbar link"]</h6>
                     <div class="row g-2">
                         <div class="col-12">
                             <input type="text" name="navbarNewLabel" class="form-control form-control-sm" placeholder="Label" />
@@ -110,7 +110,7 @@
                         <div class="col-12">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="navbarNewRequiresAdmin" id="navbarNewRequiresAdmin" value="true" />
-                                <label class="form-check-label small" for="navbarNewRequiresAdmin">Admin only</label>
+                                <label class="form-check-label small" for="navbarNewRequiresAdmin">@Localizer["Admin only"]</label>
                             </div>
                         </div>
                     </div>
@@ -121,8 +121,8 @@
         <div class="col-lg-6">
             <div class="content-card">
                 <div class="card-body">
-                    <h5 class="card-title">Footer</h5>
-                    <p class="text-muted small mb-3">Links shown in the site footer, below the social icons.</p>
+                    <h5 class="card-title">@Localizer["Footer"]</h5>
+                    <p class="text-muted small mb-3">@Localizer["Links shown in the site footer, below the social icons."]</p>
                     @foreach (var group in Model.FooterItems.GroupBy(i => i.Group))
                     {
                         <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@group.Key</h6>
@@ -135,7 +135,7 @@
                                     <input class="form-check-input mt-0" type="checkbox" name="footerCustom.Keep" value="@item.Index" checked />
                                     <span>@item.Label</span>
                                     <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
-                                    <span class="badge bg-warning text-dark">Custom</span>
+                                    <span class="badge bg-warning text-dark">@Localizer["Custom"]</span>
                                     <input type="hidden" name="footerCustom.Label" value="@item.Label" />
                                     <input type="hidden" name="footerCustom.Area" value="@item.Area" />
                                     <input type="hidden" name="footerCustom.Controller" value="@item.Controller" />
@@ -168,22 +168,22 @@
                                     }
                                     @if (item.RequiresAdmin)
                                     {
-                                        <span class="badge bg-warning text-dark">Admin</span>
+                                        <span class="badge bg-warning text-dark">@Localizer["Admin"]</span>
                                     }
                                     @if (item.RequiresModerator)
                                     {
-                                        <span class="badge bg-info">Moderator</span>
+                                        <span class="badge bg-info">@Localizer["Moderator"]</span>
                                     }
                                     @if (item.RequiresAuth)
                                     {
-                                        <span class="badge bg-info text-dark">Members</span>
+                                        <span class="badge bg-info text-dark">@Localizer["Members"]</span>
                                     }
                                 </div>
                             }
                         }
                     }
 
-                    <h6 class="text-uppercase mt-4 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">Add custom footer link</h6>
+                    <h6 class="text-uppercase mt-4 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@Localizer["Add custom footer link"]</h6>
                     <div class="row g-2">
                         <div class="col-12">
                             <input type="text" name="footerNewLabel" class="form-control form-control-sm" placeholder="Label" />
@@ -200,7 +200,7 @@
                         <div class="col-12">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="footerNewRequiresAdmin" id="footerNewRequiresAdmin" value="true" />
-                                <label class="form-check-label small" for="footerNewRequiresAdmin">Admin only</label>
+                                <label class="form-check-label small" for="footerNewRequiresAdmin">@Localizer["Admin only"]</label>
                             </div>
                         </div>
                     </div>
@@ -213,10 +213,10 @@
         <div class="col-lg-6">
             <div class="content-card">
                 <div class="card-body">
-                    <h5 class="card-title">Social Dropdown</h5>
-                    <p class="text-muted small mb-2">Links in the heart icon dropdown. Set the icon class (e.g. <code>bx bx-heart</code>, <code>bx bx-compass</code>, <code>bx bx-grid</code>).</p>
+                    <h5 class="card-title">@Localizer["Social Dropdown"]</h5>
+                    <p class="text-muted small mb-2">Links in the heart icon dropdown. Set the icon class (e.g. <code>@Localizer["bx bx-heart"]</code>, <code>@Localizer["bx bx-compass"]</code>, <code>@Localizer["bx bx-grid"]</code>).</p>
                     <div class="mb-3">
-                        <label class="form-label small fw-semibold">Dropdown icon</label>
+                        <label class="form-label small fw-semibold">@Localizer["Dropdown icon"]</label>
                         <input type="text" name="socialIcon" class="form-control form-control-sm" value="@Model.SocialDropdownIcon" placeholder="bx bx-heart" />
                     </div>
                     @foreach (var group in Model.SocialDropdownItems.GroupBy(i => i.Group))
@@ -231,7 +231,7 @@
                                     <input class="form-check-input mt-0" type="checkbox" name="socialCustom.Keep" value="@item.Index" checked />
                                     <span>@item.Label</span>
                                     <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
-                                    <span class="badge bg-warning text-dark">Custom</span>
+                                    <span class="badge bg-warning text-dark">@Localizer["Custom"]</span>
                                     <input type="hidden" name="socialCustom.Label" value="@item.Label" />
                                     <input type="hidden" name="socialCustom.Area" value="@item.Area" />
                                     <input type="hidden" name="socialCustom.Controller" value="@item.Controller" />
@@ -260,13 +260,13 @@
                                     }
                                     @if (item.RequiresAuth)
                                     {
-                                        <span class="badge bg-info text-dark">Members</span>
+                                        <span class="badge bg-info text-dark">@Localizer["Members"]</span>
                                     }
                                 </div>
                             }
                         }
                     }
-                    <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">Add custom link</h6>
+                    <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@Localizer["Add custom link"]</h6>
                     <div class="row g-2">
                         <div class="col-6">
                             <input type="text" name="socialNewLabel" class="form-control form-control-sm" placeholder="Label" />
@@ -288,8 +288,8 @@
         <div class="col-lg-6">
             <div class="content-card">
                 <div class="card-body">
-                    <h5 class="card-title">Profile Dropdown</h5>
-                    <p class="text-muted small mb-3">Links in the avatar/profile dropdown. The username header is always shown.</p>
+                    <h5 class="card-title">@Localizer["Profile Dropdown"]</h5>
+                    <p class="text-muted small mb-3">@Localizer["Links in the avatar/profile dropdown. The username header is always shown."]</p>
                     @foreach (var group in Model.ProfileDropdownItems.GroupBy(i => i.Group))
                     {
                         <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@group.Key</h6>
@@ -302,7 +302,7 @@
                                     <input class="form-check-input mt-0" type="checkbox" name="profileCustom.Keep" value="@item.Index" checked />
                                     <span>@item.Label</span>
                                     <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
-                                    <span class="badge bg-warning text-dark">Custom</span>
+                                    <span class="badge bg-warning text-dark">@Localizer["Custom"]</span>
                                     <input type="hidden" name="profileCustom.Label" value="@item.Label" />
                                     <input type="hidden" name="profileCustom.Area" value="@item.Area" />
                                     <input type="hidden" name="profileCustom.Controller" value="@item.Controller" />
@@ -331,13 +331,13 @@
                                     }
                                     @if (item.RequiresAuth)
                                     {
-                                        <span class="badge bg-info text-dark">Members</span>
+                                        <span class="badge bg-info text-dark">@Localizer["Members"]</span>
                                     }
                                 </div>
                             }
                         }
                     }
-                    <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">Add custom link</h6>
+                    <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@Localizer["Add custom link"]</h6>
                     <div class="row g-2">
                         <div class="col-6">
                             <input type="text" name="profileNewLabel" class="form-control form-control-sm" placeholder="Label" />
@@ -358,7 +358,7 @@
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-3">
-        <button type="submit" class="btn btn-primary">Save Navigation</button>
-        <a asp-action="Index" asp-controller="Templates" class="btn btn-outline-secondary">Back</a>
+        <button type="submit" class="btn btn-primary">@Localizer["Save Navigation"]</button>
+        <a asp-action="Index" asp-controller="Templates" class="btn btn-outline-secondary">@Localizer["Back"]</a>
     </div>
 </form>

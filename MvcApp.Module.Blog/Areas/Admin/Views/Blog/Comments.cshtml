@@ -4,7 +4,7 @@
     var postTitles = ViewBag.PostTitles as Dictionary<int, string> ?? [];
 }
 
-<h1><i class="fa fa-comments"></i> Blog Comments</h1>
+<h1><i class="fa fa-comments"></i> @Localizer["Blog Comments"]</h1>
 
 @if (TempData["Success"] != null)
 {
@@ -16,12 +16,12 @@
         <table class="table table-hover mb-0">
             <thead class="table-light">
                 <tr>
-                    <th>Comment</th>
-                    <th>Post</th>
-                    <th>Author</th>
-                    <th>Date</th>
-                    <th class="text-center">Status</th>
-                    <th class="text-center">Actions</th>
+                    <th>@Localizer["Comment"]</th>
+                    <th>@Localizer["Post"]</th>
+                    <th>@Localizer["Author"]</th>
+                    <th>@Localizer["Date"]</th>
+                    <th class="text-center">@Localizer["Status"]</th>
+                    <th class="text-center">@Localizer["Actions"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,11 +42,11 @@
                         <td class="text-center">
                             @if (comment.IsApproved)
                             {
-                                <span class="badge bg-success">Approved</span>
+                                <span class="badge bg-success">@Localizer["Approved"]</span>
                             }
                             else
                             {
-                                <span class="badge bg-warning">Pending</span>
+                                <span class="badge bg-warning">@Localizer["Pending"]</span>
                             }
                         </td>
                         <td class="text-center">
@@ -69,7 +69,7 @@
                 }
                 @if (!Model.Any())
                 {
-                    <tr><td colspan="6" class="text-center text-muted py-4">No comments.</td></tr>
+                    <tr><td colspan="6" class="text-center text-muted py-4">@Localizer["No comments."]</td></tr>
                 }
             </tbody>
         </table>

@@ -48,7 +48,7 @@
             </div>
 
             <hr />
-            <h5 class="mb-3">Additional Info</h5>
+            <h5 class="mb-3">@Localizer["Additional Info"]</h5>
 
             <div class="form-floating mb-3">
                 <input asp-for="Input.KnownAs" class="form-control" placeholder="Display name" />
@@ -69,10 +69,10 @@
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
                         <select asp-for="Input.Gender" class="form-control">
-                            <option value="">Select...</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
+                            <option value="">@Localizer["Select..."]</option>
+                            <option value="Male">@Localizer["Male"]</option>
+                            <option value="Female">@Localizer["Female"]</option>
+                            <option value="Other">@Localizer["Other"]</option>
                         </select>
                         <label asp-for="Input.Gender" class="form-label"></label>
                     </div>
@@ -102,8 +102,8 @@
             </div>
 
             <hr />
-            <h5 class="mb-3"><i class='bx bx-purchase-tag'></i> Interests</h5>
-            <p class="text-muted small mb-3">Select tags that describe you. These help others find you on Discover.</p>
+            <h5 class="mb-3"><i class='bx bx-purchase-tag'></i> @Localizer["Interests"]</h5>
+            <p class="text-muted small mb-3">@Localizer["Select tags that describe you. These help others find you on Discover."]</p>
             @{
                 var groupedTags = Model.AvailableTags.GroupBy(t => t.Category).OrderBy(g => g.Key);
                 var categoryColors = new Dictionary<int, string> {
@@ -137,50 +137,50 @@
             }
 
             <hr />
-            <h5 class="mb-3">Privacy</h5>
+            <h5 class="mb-3">@Localizer["Privacy"]</h5>
 
             <div class="form-check form-switch mb-3">
                 <input asp-for="Input.IsIncognito" class="form-check-input" role="switch" id="incognitoSwitch" />
                 <label class="form-check-label" for="incognitoSwitch">
-                    <i class='bx bx-hide'></i> Incognito Mode
+                    <i class='bx bx-hide'></i> @Localizer["Incognito Mode"]
                 </label>
-                <div class="form-text">When enabled, your profile won't appear in the Discover feed. You can still browse and message others.</div>
+                <div class="form-text">@Localizer["When enabled, your profile won't appear in the Discover feed. You can still browse and message others."]</div>
             </div>
 
             <hr />
-            <h5 class="mb-3"><i class='bx bx-message-rounded-dots'></i> Messaging Privacy</h5>
+            <h5 class="mb-3"><i class='bx bx-message-rounded-dots'></i> @Localizer["Messaging Privacy"]</h5>
 
             <div class="mb-3">
-                <label class="form-label fw-semibold">Who can send you messages?</label>
+                <label class="form-label fw-semibold">@Localizer["Who can send you messages?"]</label>
                 <div class="d-flex flex-column gap-2">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="Input.MessagingPermission" value="0"
                                id="mp_everyone" checked="@(Model.Input.MessagingPermission == MvcApp.Core.MessagingPermission.Everyone ? "checked" : null)" />
                         <label class="form-check-label" for="mp_everyone">
-                            <i class='bx bx-globe'></i> Everyone
-                            <span class="text-muted small d-block">Any matched user can message you</span>
+                            <i class='bx bx-globe'></i> @Localizer["Everyone"]
+                            <span class="text-muted small d-block">@Localizer["Any matched user can message you"]</span>
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="Input.MessagingPermission" value="1"
                                id="mp_matches" checked="@(Model.Input.MessagingPermission == MvcApp.Core.MessagingPermission.MatchesOnly ? "checked" : null)" />
                         <label class="form-check-label" for="mp_matches">
-                            <i class='bx bx-heart'></i> Matches Only
-                            <span class="text-muted small d-block">Only mutual matches can message you</span>
+                            <i class='bx bx-heart'></i> @Localizer["Matches Only"]
+                            <span class="text-muted small d-block">@Localizer["Only mutual matches can message you"]</span>
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="Input.MessagingPermission" value="2"
                                id="mp_vip" checked="@(Model.Input.MessagingPermission == MvcApp.Core.MessagingPermission.VipOnly ? "checked" : null)" />
                         <label class="form-check-label" for="mp_vip">
-                            <i class='bx bx-crown text-warning'></i> VIP Only
-                            <span class="text-muted small d-block">Only verified VIP members can message you</span>
+                            <i class='bx bx-crown text-warning'></i> @Localizer["VIP Only"]
+                            <span class="text-muted small d-block">@Localizer["Only verified VIP members can message you"]</span>
                         </label>
                     </div>
                 </div>
             </div>
 
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">@Localizer["Save"]</button>
         </form>
     </div>
 </div>

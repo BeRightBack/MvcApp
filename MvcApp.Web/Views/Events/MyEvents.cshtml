@@ -9,15 +9,15 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">My Events</h1>
-                <p class="text-muted">Events you're attending and organizing</p>
+                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">@Localizer["My Events"]</h1>
+                <p class="text-muted">@Localizer["Events you're attending and organizing"]</p>
             </div>
             <a asp-action="Create" class="btn rounded-pill" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
-                <i class='bx bx-plus'></i> Create Event
+                <i class='bx bx-plus'></i> @Localizer["Create Event"]
             </a>
         </div>
 
-        <h4 class="fw-bold mb-3"><i class='bx bx-check-circle text-success'></i> Attending</h4>
+        <h4 class="fw-bold mb-3"><i class='bx bx-check-circle text-success'></i> @Localizer["Attending"]</h4>
         @if (attending.Any())
         {
             <div class="row g-3 mb-5">
@@ -48,11 +48,11 @@
         else
         {
             <div class="text-center py-3 mb-5">
-                <p class="text-muted">You're not attending any events yet.</p>
+                <p class="text-muted">@Localizer["You're not attending any events yet."]</p>
             </div>
         }
 
-        <h4 class="fw-bold mb-3"><i class='bx bx-edit text-primary'></i> Created by You</h4>
+        <h4 class="fw-bold mb-3"><i class='bx bx-edit text-primary'></i> @Localizer["Created by You"]</h4>
         @if (created.Any())
         {
             <div class="row g-3">
@@ -86,7 +86,7 @@
         else
         {
             <div class="text-center py-3">
-                <p class="text-muted">You haven't created any events yet.</p>
+                <p class="text-muted">@Localizer["You haven't created any events yet."]</p>
             </div>
         }
     </div>

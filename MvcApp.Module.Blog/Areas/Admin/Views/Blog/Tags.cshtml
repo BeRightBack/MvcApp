@@ -3,7 +3,7 @@
     ViewData["Title"] = "Blog Tags";
 }
 
-<h1><i class="fa fa-tags"></i> Blog Tags</h1>
+<h1><i class="fa fa-tags"></i> @Localizer["Blog Tags"]</h1>
 
 @if (TempData["Success"] != null)
 {
@@ -17,14 +17,14 @@
 <div class="row">
     <div class="col-md-4">
         <div class="card mb-4">
-            <div class="card-header bg-dark text-white"><strong>New Tag</strong></div>
+            <div class="card-header bg-dark text-white"><strong>@Localizer["New Tag"]</strong></div>
             <div class="card-body">
                 <form asp-action="CreateTag" method="post">
                     @Html.AntiForgeryToken()
                     <div class="mb-2">
                         <input type="text" name="name" class="form-control" placeholder="Tag name" required />
                     </div>
-                    <button type="submit" class="btn btn-primary btn-sm">Add Tag</button>
+                    <button type="submit" class="btn btn-primary btn-sm">@Localizer["Add Tag"]</button>
                 </form>
             </div>
         </div>
@@ -35,9 +35,9 @@
                 <table class="table table-hover mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Name</th>
-                            <th>Slug</th>
-                            <th class="text-center">Actions</th>
+                            <th>@Localizer["Name"]</th>
+                            <th>@Localizer["Slug"]</th>
+                            <th class="text-center">@Localizer["Actions"]</th>
                         </tr>
                     </thead>
                     <tbody>

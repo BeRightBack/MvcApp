@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-lg-8">
-            <h1 class="mb-4"><i class="fa fa-pencil-square-o"></i> Blog</h1>
+            <h1 class="mb-4"><i class="fa fa-pencil-square-o"></i> @Localizer["Blog"]</h1>
 
             @if (TempData["Success"] != null)
             {
@@ -15,7 +15,7 @@
 
             @if (!Model.Any())
             {
-                <div class="alert alert-info">No posts yet. Check back soon!</div>
+                <div class="alert alert-info">@Localizer["No posts yet. Check back soon!"]</div>
             }
 
             @foreach (var post in Model)
@@ -50,7 +50,7 @@
                         {
                             <div class="card-text">@Html.Raw(post.Content.Length > 500 ? post.Content[..500] + "..." : post.Content)</div>
                         }
-                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">Read More</a>
+                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">@Localizer["Read More"]</a>
                     </div>
                 </article>
             }

@@ -7,11 +7,11 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4><i class="bx bx-map-pin"></i> Ad Placements</h4>
+    <h4><i class="bx bx-map-pin"></i> @Localizer["Ad Placements"]</h4>
     <div>
         <form asp-action="Index" method="get" class="d-inline">
             <select name="zoneId" class="form-select form-select-sm d-inline-block w-auto" onchange="this.form.submit()">
-                <option value="">-- Select Zone --</option>
+                <option value="">@Localizer["-- Select Zone --"]</option>
                 @foreach (var item in zones ?? Enumerable.Empty<SelectListItem>())
                 {
                     <option value="@item.Value" selected="@(item.Value == selectedZoneId?.ToString())">@item.Text</option>
@@ -20,7 +20,7 @@
         </form>
         @if (selectedZoneId.HasValue)
         {
-            <a asp-action="Create" asp-route-zoneId="@selectedZoneId" class="btn btn-primary btn-sm ms-2"><i class="bx bx-plus"></i> New Placement</a>
+            <a asp-action="Create" asp-route-zoneId="@selectedZoneId" class="btn btn-primary btn-sm ms-2"><i class="bx bx-plus"></i> @Localizer["New Placement"]</a>
         }
     </div>
 </div>
@@ -35,7 +35,7 @@
 
 @if (!selectedZoneId.HasValue)
 {
-    <div class="alert alert-info">Select a zone to manage its page placements.</div>
+    <div class="alert alert-info">@Localizer["Select a zone to manage its page placements."]</div>
 }
 else
 {
@@ -45,14 +45,14 @@ else
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Page</th>
-                            <th>Type</th>
-                            <th>Max Banners</th>
-                            <th>CSS Override</th>
-                            <th>Wrapper Override</th>
-                            <th>Order</th>
-                            <th>Active</th>
-                            <th style="width: 120px">Actions</th>
+                            <th>@Localizer["Page"]</th>
+                            <th>@Localizer["Type"]</th>
+                            <th>@Localizer["Max Banners"]</th>
+                            <th>@Localizer["CSS Override"]</th>
+                            <th>@Localizer["Wrapper Override"]</th>
+                            <th>@Localizer["Order"]</th>
+                            <th>@Localizer["Active"]</th>
+                            <th style="width: 120px">@Localizer["Actions"]</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,11 +72,11 @@ else
                                 <td>
                                     @if (placement.IsExclusion)
                                     {
-                                        <span class="badge bg-danger"><i class="bx bx-x-circle"></i> Exclude</span>
+                                        <span class="badge bg-danger"><i class="bx bx-x-circle"></i> @Localizer["Exclude"]</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-success"><i class="bx bx-check-circle"></i> Override</span>
+                                        <span class="badge bg-success"><i class="bx bx-check-circle"></i> @Localizer["Override"]</span>
                                     }
                                 </td>
                                 <td>@(placement.MaxBannersOverride?.ToString() ?? "zone default")</td>
@@ -86,11 +86,11 @@ else
                                 <td>
                                     @if (placement.IsActive)
                                     {
-                                        <span class="badge bg-success">Active</span>
+                                        <span class="badge bg-success">@Localizer["Active"]</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary">Inactive</span>
+                                        <span class="badge bg-secondary">@Localizer["Inactive"]</span>
                                     }
                                 </td>
                                 <td>

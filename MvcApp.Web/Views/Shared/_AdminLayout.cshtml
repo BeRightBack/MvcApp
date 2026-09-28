@@ -20,31 +20,31 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <i class='bx bx-layer logo-icon'></i>
-            <span class="logo-text">Admin Panel</span>
+            <span class="logo-text">@Localizer["Admin Panel"]</span>
         </div>
 
         <nav class="sidebar-nav">
-            <div class="nav-section">Main</div>
+            <div class="nav-section">@Localizer["Main"]</div>
             <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-item">
                 <i class='bx bx-home'></i>
-                <span class="nav-label">Home Page</span>
+                <span class="nav-label">@Localizer["Home Page"]</span>
             </a>
             <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="nav-item">
                 <i class='bx bxs-dashboard'></i>
-                <span class="nav-label">Dashboard</span>
+                <span class="nav-label">@Localizer["Dashboard"]</span>
             </a>
 
             <div class="nav-item" onclick="toggleSubmenu(this)">
                 <i class='bx bxs-file-doc'></i>
-                <span class="nav-label">Content</span>
+                <span class="nav-label">@Localizer["Content"]</span>
                 <i class='bx bx-chevron-right nav-chevron'></i>
             </div>
             <div class="nav-submenu">
-                <a asp-area="Admin" asp-controller="Language" asp-action="Index" class="nav-item">Languages</a>
-                <a asp-area="Admin" asp-controller="Localization" asp-action="Index" class="nav-item">Translations</a>
+                <a asp-area="Admin" asp-controller="Language" asp-action="Index" class="nav-item">@Localizer["Languages"]</a>
+                <a asp-area="Admin" asp-controller="Localization" asp-action="Index" class="nav-item">@Localizer["Translations"]</a>
                 @if (await ModuleManager.IsModuleEnabledAsync("Forum"))
                 {
-                    <a asp-area="Admin" asp-controller="Forum" asp-action="Index" class="nav-item">Forums</a>
+                    <a asp-area="Admin" asp-controller="Forum" asp-action="Index" class="nav-item">@Localizer["Forums"]</a>
                 }
             </div>
 
@@ -52,13 +52,13 @@
             {
                 <div class="nav-item" onclick="toggleSubmenu(this)">
                     <i class='bx bxs-file-blank'></i>
-                    <span class="nav-label">Pages</span>
+                    <span class="nav-label">@Localizer["Pages"]</span>
                     <i class='bx bx-chevron-right nav-chevron'></i>
                 </div>
                 <div class="nav-submenu">
-                    <a asp-area="Admin" asp-controller="Pages" asp-action="Index" class="nav-item">All Pages</a>
-                    <a asp-area="Admin" asp-controller="Pages" asp-action="Create" class="nav-item">New Page</a>
-                    <a asp-area="Admin" asp-controller="Snippets" asp-action="Index" class="nav-item">Snippets</a>
+                    <a asp-area="Admin" asp-controller="Pages" asp-action="Index" class="nav-item">@Localizer["All Pages"]</a>
+                    <a asp-area="Admin" asp-controller="Pages" asp-action="Create" class="nav-item">@Localizer["New Page"]</a>
+                    <a asp-area="Admin" asp-controller="Snippets" asp-action="Index" class="nav-item">@Localizer["Snippets"]</a>
                 </div>
             }
 
@@ -66,13 +66,13 @@
             {
                 <div class="nav-item" onclick="toggleSubmenu(this)">
                     <i class='bx bxs-megaphone'></i>
-                    <span class="nav-label">Ads</span>
+                    <span class="nav-label">@Localizer["Ads"]</span>
                     <i class='bx bx-chevron-right nav-chevron'></i>
                 </div>
                 <div class="nav-submenu">
-                    <a asp-area="Admin" asp-controller="AdZones" asp-action="Index" class="nav-item">Zones</a>
-                    <a asp-area="Admin" asp-controller="AdBanners" asp-action="Index" class="nav-item">Banners</a>
-                    <a asp-area="Admin" asp-controller="AdPlacements" asp-action="Index" class="nav-item">Placements</a>
+                    <a asp-area="Admin" asp-controller="AdZones" asp-action="Index" class="nav-item">@Localizer["Zones"]</a>
+                    <a asp-area="Admin" asp-controller="AdBanners" asp-action="Index" class="nav-item">@Localizer["Banners"]</a>
+                    <a asp-area="Admin" asp-controller="AdPlacements" asp-action="Index" class="nav-item">@Localizer["Placements"]</a>
                 </div>
             }
 
@@ -80,14 +80,14 @@
             {
                 <div class="nav-item" onclick="toggleSubmenu(this)">
                     <i class='bx bxs-edit-alt'></i>
-                    <span class="nav-label">Blog</span>
+                    <span class="nav-label">@Localizer["Blog"]</span>
                     <i class='bx bx-chevron-right nav-chevron'></i>
                 </div>
                 <div class="nav-submenu">
-                    <a asp-area="Admin" asp-controller="Blog" asp-action="Index" class="nav-item">Posts</a>
-                    <a asp-area="Admin" asp-controller="Blog" asp-action="Categories" class="nav-item">Categories</a>
-                    <a asp-area="Admin" asp-controller="Blog" asp-action="Tags" class="nav-item">Tags</a>
-                    <a asp-area="Admin" asp-controller="Blog" asp-action="Comments" class="nav-item">Comments</a>
+                    <a asp-area="Admin" asp-controller="Blog" asp-action="Index" class="nav-item">@Localizer["Posts"]</a>
+                    <a asp-area="Admin" asp-controller="Blog" asp-action="Categories" class="nav-item">@Localizer["Categories"]</a>
+                    <a asp-area="Admin" asp-controller="Blog" asp-action="Tags" class="nav-item">@Localizer["Tags"]</a>
+                    <a asp-area="Admin" asp-controller="Blog" asp-action="Comments" class="nav-item">@Localizer["Comments"]</a>
                 </div>
             }
 
@@ -95,14 +95,14 @@
             {
                 <div class="nav-item" onclick="toggleSubmenu(this)">
                     <i class='bx bxs-store'></i>
-                    <span class="nav-label">Shop</span>
+                    <span class="nav-label">@Localizer["Shop"]</span>
                     <i class='bx bx-chevron-right nav-chevron'></i>
                 </div>
                 <div class="nav-submenu">
-                    <a asp-area="Admin" asp-controller="Store" asp-action="Index" class="nav-item">Dashboard</a>
-                    <a asp-area="Admin" asp-controller="Store" asp-action="Products" class="nav-item">Products</a>
-                    <a asp-area="Admin" asp-controller="Store" asp-action="Categories" class="nav-item">Categories</a>
-                    <a asp-area="Admin" asp-controller="Store" asp-action="Orders" class="nav-item">Orders</a>
+                    <a asp-area="Admin" asp-controller="Store" asp-action="Index" class="nav-item">@Localizer["Dashboard"]</a>
+                    <a asp-area="Admin" asp-controller="Store" asp-action="Products" class="nav-item">@Localizer["Products"]</a>
+                    <a asp-area="Admin" asp-controller="Store" asp-action="Categories" class="nav-item">@Localizer["Categories"]</a>
+                    <a asp-area="Admin" asp-controller="Store" asp-action="Orders" class="nav-item">@Localizer["Orders"]</a>
                 </div>
             }
 
@@ -110,70 +110,70 @@
             {
                 <div class="nav-item" onclick="toggleSubmenu(this)">
                     <i class='bx bxs-tv'></i>
-                    <span class="nav-label">IPTV</span>
+                    <span class="nav-label">@Localizer["IPTV"]</span>
                     <i class='bx bx-chevron-right nav-chevron'></i>
                 </div>
                 <div class="nav-submenu">
-                    <a asp-controller="IptvAdmin" asp-action="Index" class="nav-item">Dashboard</a>
-                    <a asp-controller="IptvPlan" asp-action="Index" class="nav-item">Plans</a>
-                    <a asp-controller="IptvSubscription" asp-action="Index" class="nav-item">Subscriptions</a>
+                    <a asp-controller="IptvAdmin" asp-action="Index" class="nav-item">@Localizer["Dashboard"]</a>
+                    <a asp-controller="IptvPlan" asp-action="Index" class="nav-item">@Localizer["Plans"]</a>
+                    <a asp-controller="IptvSubscription" asp-action="Index" class="nav-item">@Localizer["Subscriptions"]</a>
                 </div>
             }
 
             <div class="nav-item" onclick="toggleSubmenu(this)">
                 <i class='bx bxs-user-detail'></i>
-                <span class="nav-label">Users</span>
+                <span class="nav-label">@Localizer["Users"]</span>
                 <i class='bx bx-chevron-right nav-chevron'></i>
             </div>
             <div class="nav-submenu">
-                <a asp-area="Admin" asp-controller="User" asp-action="Index" class="nav-item">All Users</a>
-                <a asp-area="Admin" asp-controller="User" asp-action="Create" class="nav-item">Create User</a>
-                <a asp-area="Admin" asp-controller="PhotoModeration" asp-action="Index" class="nav-item">Photo Moderation</a>
-                <a asp-area="Admin" asp-controller="VideoModeration" asp-action="Index" class="nav-item">Video Moderation</a>
-                <a asp-area="Admin" asp-controller="VerificationModeration" asp-action="Index" class="nav-item">Verification</a>
-                <a asp-area="Admin" asp-controller="InterestTag" asp-action="Index" class="nav-item">Interest Tags</a>
-                <a asp-area="Admin" asp-controller="Role" asp-action="Index" class="nav-item">Roles</a>
-                <a asp-area="Admin" asp-controller="RoleAdmin" asp-action="Index" class="nav-item">User Roles</a>
+                <a asp-area="Admin" asp-controller="User" asp-action="Index" class="nav-item">@Localizer["All Users"]</a>
+                <a asp-area="Admin" asp-controller="User" asp-action="Create" class="nav-item">@Localizer["Create User"]</a>
+                <a asp-area="Admin" asp-controller="PhotoModeration" asp-action="Index" class="nav-item">@Localizer["Photo Moderation"]</a>
+                <a asp-area="Admin" asp-controller="VideoModeration" asp-action="Index" class="nav-item">@Localizer["Video Moderation"]</a>
+                <a asp-area="Admin" asp-controller="VerificationModeration" asp-action="Index" class="nav-item">@Localizer["Verification"]</a>
+                <a asp-area="Admin" asp-controller="InterestTag" asp-action="Index" class="nav-item">@Localizer["Interest Tags"]</a>
+                <a asp-area="Admin" asp-controller="Role" asp-action="Index" class="nav-item">@Localizer["Roles"]</a>
+                <a asp-area="Admin" asp-controller="RoleAdmin" asp-action="Index" class="nav-item">@Localizer["User Roles"]</a>
             </div>
 
             @if (await ModuleManager.IsModuleEnabledAsync("Forum") || await ModuleManager.IsModuleEnabledAsync("Chat") || await ModuleManager.IsModuleEnabledAsync("Messages"))
             {
                 <div class="nav-item" onclick="toggleSubmenu(this)">
                     <i class='bx bxs-group'></i>
-                    <span class="nav-label">Community</span>
+                    <span class="nav-label">@Localizer["Community"]</span>
                     <i class='bx bx-chevron-right nav-chevron'></i>
                 </div>
                 <div class="nav-submenu">
                     @if (await ModuleManager.IsModuleEnabledAsync("Forum"))
                     {
-                        <a asp-area="" asp-controller="Forum" asp-action="Index" class="nav-item">Forums</a>
+                        <a asp-area="" asp-controller="Forum" asp-action="Index" class="nav-item">@Localizer["Forums"]</a>
                     }
                     @if (await ModuleManager.IsModuleEnabledAsync("Chat"))
                     {
-                        <a asp-area="Admin" asp-controller="Chat" asp-action="Index" class="nav-item">Chat Rooms</a>
+                        <a asp-area="Admin" asp-controller="Chat" asp-action="Index" class="nav-item">@Localizer["Chat Rooms"]</a>
                     }
                     @if (await ModuleManager.IsModuleEnabledAsync("Messages"))
                     {
-                        <a asp-area="" asp-controller="Messages" asp-action="Index" class="nav-item">Messages</a>
+                        <a asp-area="" asp-controller="Messages" asp-action="Index" class="nav-item">@Localizer["Messages"]</a>
                     }
                 </div>
             }
 
             <a asp-area="Admin" asp-controller="Bans" asp-action="Index" class="nav-item">
                 <i class='bx bxs-shield-x'></i>
-                <span class="nav-label">Bans &amp; Moderation</span>
+                <span class="nav-label">@Localizer["Bans & Moderation"]</span>
             </a>
 
             <a asp-area="Admin" asp-controller="ReportsModeration" asp-action="Index" class="nav-item">
                 <i class='bx bx-flag'></i>
-                <span class="nav-label">User Reports</span>
+                <span class="nav-label">@Localizer["User Reports"]</span>
             </a>
 
             @if (await ModuleManager.IsModuleEnabledAsync("Gamification"))
             {
                 <a asp-area="Admin" asp-controller="Gamification" asp-action="Badges" class="nav-item">
                     <i class='bx bx-trophy'></i>
-                    <span class="nav-label">Gamification</span>
+                    <span class="nav-label">@Localizer["Gamification"]</span>
                 </a>
             }
 
@@ -181,35 +181,35 @@
             {
                 <div class="nav-item" onclick="toggleSubmenu(this)">
                     <i class='bx bxs-video'></i>
-                    <span class="nav-label">Video</span>
+                    <span class="nav-label">@Localizer["Video"]</span>
                     <i class='bx bx-chevron-right nav-chevron'></i>
                 </div>
                 <div class="nav-submenu">
-                    <a asp-area="Admin" asp-controller="Video" asp-action="Index" class="nav-item">Manage Video Rooms</a>
+                    <a asp-area="Admin" asp-controller="Video" asp-action="Index" class="nav-item">@Localizer["Manage Video Rooms"]</a>
                 </div>
             }
 
             <div class="nav-item" onclick="toggleSubmenu(this)">
                 <i class='bx bxs-cog'></i>
-                <span class="nav-label">System</span>
+                <span class="nav-label">@Localizer["System"]</span>
                 <i class='bx bx-chevron-right nav-chevron'></i>
             </div>
             <div class="nav-submenu">
-                <a asp-area="Admin" asp-controller="AuditLogs" asp-action="Index" class="nav-item">Audit Logs</a>
-                <a asp-area="Admin" asp-controller="SystemLogs" asp-action="Index" class="nav-item">System Logs</a>
-                <a asp-area="Admin" asp-controller="SystemSettings" asp-action="Index" class="nav-item">Settings</a>
-                <a asp-area="Admin" asp-controller="Modules" asp-action="Index" class="nav-item">Modules</a>
-                <a asp-area="Admin" asp-controller="Templates" asp-action="Index" class="nav-item">Templates</a>
-                <a asp-area="Admin" asp-controller="TemplateNav" asp-action="Index" class="nav-item">Template Navigation</a>
+                <a asp-area="Admin" asp-controller="AuditLogs" asp-action="Index" class="nav-item">@Localizer["Audit Logs"]</a>
+                <a asp-area="Admin" asp-controller="SystemLogs" asp-action="Index" class="nav-item">@Localizer["System Logs"]</a>
+                <a asp-area="Admin" asp-controller="SystemSettings" asp-action="Index" class="nav-item">@Localizer["Settings"]</a>
+                <a asp-area="Admin" asp-controller="Modules" asp-action="Index" class="nav-item">@Localizer["Modules"]</a>
+                <a asp-area="Admin" asp-controller="Templates" asp-action="Index" class="nav-item">@Localizer["Templates"]</a>
+                <a asp-area="Admin" asp-controller="TemplateNav" asp-action="Index" class="nav-item">@Localizer["Template Navigation"]</a>
             </div>
 
             <div class="nav-item" onclick="toggleSubmenu(this)">
                 <i class='bx bxs-bar-chart-alt-2'></i>
-                <span class="nav-label">Analytics</span>
+                <span class="nav-label">@Localizer["Analytics"]</span>
                 <i class='bx bx-chevron-right nav-chevron'></i>
             </div>
             <div class="nav-submenu">
-                <a asp-area="Admin" asp-controller="Visitor" asp-action="Index" class="nav-item">Visitor Stats</a>
+                <a asp-area="Admin" asp-controller="Visitor" asp-action="Index" class="nav-item">@Localizer["Visitor Stats"]</a>
             </div>
         </nav>
 
@@ -228,7 +228,7 @@
                 </button>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Admin</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">@Localizer["Admin"]</a></li>
                         <li class="breadcrumb-item active">@ViewData["Title"]</li>
                     </ol>
                 </nav>
@@ -255,23 +255,23 @@
                                 <div class="d-flex gap-1 mt-1">
                                     @if (isAdmin)
                                     {
-                                        <span class="badge" style="background:var(--primary);color:#fff;font-size:0.7rem;">Admin</span>
+                                        <span class="badge" style="background:var(--primary);color:#fff;font-size:0.7rem;">@Localizer["Admin"]</span>
                                     }
                                     @if (isModerator)
                                     {
-                                        <span class="badge bg-warning text-dark" style="font-size:0.7rem;">Moderator</span>
+                                        <span class="badge bg-warning text-dark" style="font-size:0.7rem;">@Localizer["Moderator"]</span>
                                     }
                                 </div>
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <a asp-page="/Account/Manage/Index" class="dropdown-item">
-                                    <i class='bx bx-user me-2'></i>My Account
+                                    <i class='bx bx-user me-2'></i>@Localizer["My Account"]
                                 </a>
                             </li>
                             <li>
                                 <a asp-area="" asp-controller="Home" asp-action="Index" class="dropdown-item">
-                                    <i class='bx bx-home me-2'></i>Home Page
+                                    <i class='bx bx-home me-2'></i>@Localizer["Home Page"]
                                 </a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
@@ -280,7 +280,7 @@
                                       asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
                                       method="post" class="px-3 py-1">
                                     <button type="submit" class="dropdown-item text-danger">
-                                        <i class='bx bx-log-out me-2'></i>Sign Out
+                                        <i class='bx bx-log-out me-2'></i>@Localizer["Sign Out"]
                                     </button>
                                 </form>
                             </li>
@@ -295,7 +295,7 @@
         </main>
 
         <footer class="footer-admin">
-            &copy; @DateTime.Now.Year @siteName — <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year @siteName — <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
         </footer>
     </div>
 

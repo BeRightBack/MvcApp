@@ -33,10 +33,10 @@
                                 <a class="nav-link dropdown-toggle" href="#" id="adminDashboardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">@Localizer["Dashboard"]</a>
                                 <ul class="dropdown-menu" aria-labelledby="adminDashboardDropdown">
                                     <li>
-                                        <a class="dropdown-item" asp-controller="IptvAdmin" asp-action="Index">IPTV Dashboard</a>
+                                        <a class="dropdown-item" asp-controller="IptvAdmin" asp-action="Index">@Localizer["IPTV Dashboard"]</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Main Admin Panel</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">@Localizer["Main Admin Panel"]</a>
                                     </li>
                                 </ul>
                             </li>
@@ -62,84 +62,84 @@
                 <div>
                     <a asp-controller="IptvAdmin" asp-action="Index" class="nav_logo">
                         <i class='bx bx-layer nav_logo-icon'></i>
-                        <span class="nav_logo-name">Dashboard</span>
+                        <span class="nav_logo-name">@Localizer["Dashboard"]</span>
                     </a>
                     <div class="nav_list">
                         <a asp-controller="IptvSubscription" asp-action="Index" class="nav_link">
                             <i class='fa fa-users nav_icon'></i>
-                            <span class="nav_name">Subscriptions</span>
+                            <span class="nav_name">@Localizer["Subscriptions"]</span>
                         </a>
                         <a asp-controller="IptvPlan" asp-action="Index" class="nav_link">
                             <i class='fa fa-credit-card nav_icon'></i>
-                            <span class="nav_name">Subscriptions Plans</span>
+                            <span class="nav_name">@Localizer["Subscriptions Plans"]</span>
                         </a>
                         <form asp-controller="IptvAdmin" asp-action="UpdateSubscriptionStatuses" method="post" style="display:inline;">
                             <button type="submit" class="nav_link" style="width:100%; text-align:left; border:none; background:none; cursor:pointer;">
                                 <i class='fa fa-refresh nav_icon'></i>
-                                <span class="nav_name">Update Subscription Statuses</span>
+                                <span class="nav_name">@Localizer["Update Subscription Statuses"]</span>
                             </button>
                         </form>
                         <a class="nav_link dropdown-toggle" id="usersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class='fa fa-user nav_icon'></i>
-                            <span class="nav_name">Users</span>
+                            <span class="nav_name">@Localizer["Users"]</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="usersDropdown">
                             <li>
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">All Users</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">@Localizer["All Users"]</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Create">Create User</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Create">@Localizer["Create User"]</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="Role" asp-action="Index">Roles</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Role" asp-action="Index">@Localizer["Roles"]</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="RoleAdmin" asp-action="Index">User Roles</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="RoleAdmin" asp-action="Index">@Localizer["User Roles"]</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-controller="IptvSubscription" asp-action="Index">Subscriptions</a>
+                                <a class="dropdown-item" asp-controller="IptvSubscription" asp-action="Index">@Localizer["Subscriptions"]</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-controller="IptvPlan" asp-action="Index">Subscriptions Plans</a>
+                                <a class="dropdown-item" asp-controller="IptvPlan" asp-action="Index">@Localizer["Subscriptions Plans"]</a>
                             </li>
                         </ul>
                         <a asp-area="Admin" asp-controller="Language" asp-action="Index" class="nav_link">
                             <i class='fa fa-language nav_icon'></i>
-                            <span class="nav_name">Language</span>
+                            <span class="nav_name">@Localizer["Language"]</span>
                         </a>
                         <a asp-area="Admin" asp-controller="Localization" asp-action="Index" class="nav_link">
                             <i class='fa fa-map-marker nav_icon'></i>
-                            <span class="nav_name">Localization</span>
+                            <span class="nav_name">@Localizer["Localization"]</span>
                         </a>
                         <a asp-area="Admin" asp-controller="Visitor" asp-action="Index" class="nav_link">
                             <i class='fa fa-line-chart nav_icon'></i>
-                            <span class="nav_name">Stats</span>
+                            <span class="nav_name">@Localizer["Stats"]</span>
                         </a>
                         <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="nav_link">
                             <i class='fa fa-tachometer nav_icon'></i>
-                            <span class="nav_name">Main Admin Dashboard</span>
+                            <span class="nav_name">@Localizer["Main Admin Dashboard"]</span>
                         </a>
                         <a asp-area="Admin" asp-controller="Modules" asp-action="Index" class="nav_link">
                             <i class='fa fa-puzzle-piece nav_icon'></i>
-                            <span class="nav_name">Modules</span>
+                            <span class="nav_name">@Localizer["Modules"]</span>
                         </a>
                         <a asp-area="Admin" asp-controller="SystemSettings" asp-action="Index" class="nav_link">
                             <i class='fa fa-cog nav_icon'></i>
-                            <span class="nav_name">System Settings</span>
+                            <span class="nav_name">@Localizer["System Settings"]</span>
                         </a>
                         <a asp-area="Admin" asp-controller="Templates" asp-action="Index" class="nav_link">
                             <i class='fa fa-paint-brush nav_icon'></i>
-                            <span class="nav_name">UI Templates</span>
+                            <span class="nav_name">@Localizer["UI Templates"]</span>
                         </a>
                         <a asp-area="Admin" asp-controller="AuditLogs" asp-action="Index" class="nav_link">
                             <i class='fa fa-history nav_icon'></i>
-                            <span class="nav_name">Audit Logs</span>
+                            <span class="nav_name">@Localizer["Audit Logs"]</span>
                         </a>
                     </div>
                 </div>
                 <a class="nav_link" asp-page="/Account/Logout">
                     <i class='fa fa-sign-out nav_icon'></i>
-                    <span class="nav_name">SignOut</span>
+                    <span class="nav_name">@Localizer["SignOut"]</span>
                 </a>
             </nav>
         </div>

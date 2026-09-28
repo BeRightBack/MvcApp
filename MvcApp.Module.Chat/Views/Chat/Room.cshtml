@@ -10,7 +10,7 @@
 <div class="container mt-4">
     <div class="card">
         <div class="card-header d-flex align-items-center gap-3">
-            <a asp-action="Rooms" class="btn btn-sm btn-outline-secondary">&larr; Rooms</a>
+            <a asp-action="Rooms" class="btn btn-sm btn-outline-secondary">@Localizer["Rooms"]</a>
             <h5 class="mb-0"># @roomName</h5>
         </div>
 
@@ -33,7 +33,7 @@
         <div class="card-footer">
             <form id="messageForm" class="d-flex gap-2" autocomplete="off">
                 <input type="text" id="messageInput" class="form-control" placeholder="Type a message..." required />
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit" class="btn btn-primary">@Localizer["Send"]</button>
             </form>
         </div>
     </div>

@@ -4,14 +4,14 @@
     var total = Model.Sum(i => i.UnitPrice * i.Quantity);
 }
 
-<h1>Shopping Cart</h1>
+<h1>@Localizer["Shopping Cart"]</h1>
 
 @if (!Model.Any())
 {
     <div class="text-center py-5">
         <i class="fa fa-shopping-cart fa-4x text-muted mb-3"></i>
-        <p class="lead">Your cart is empty.</p>
-        <a asp-action="Index" class="btn btn-primary">Continue Shopping</a>
+        <p class="lead">@Localizer["Your cart is empty."]</p>
+        <a asp-action="Index" class="btn btn-primary">@Localizer["Continue Shopping"]</a>
     </div>
 }
 else
@@ -20,10 +20,10 @@ else
         <table class="table">
             <thead>
                 <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
+                    <th>@Localizer["Product"]</th>
+                    <th>@Localizer["Price"]</th>
+                    <th>@Localizer["Quantity"]</th>
+                    <th>@Localizer["Subtotal"]</th>
                     <th></th>
                 </tr>
             </thead>
@@ -61,7 +61,7 @@ else
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                    <td colspan="3" class="text-end"><strong>@Localizer["Total:"]</strong></td>
                     <td><strong class="h4 text-primary">$@total.ToString("F2")</strong></td>
                     <td></td>
                 </tr>
@@ -69,7 +69,7 @@ else
         </table>
     </div>
     <div class="d-flex justify-content-between">
-        <a asp-action="Index" class="btn btn-outline-primary"><i class="fa fa-arrow-left"></i> Continue Shopping</a>
-        <a asp-action="Checkout" class="btn btn-success btn-lg"><i class="fa fa-credit-card"></i> Proceed to Checkout</a>
+        <a asp-action="Index" class="btn btn-outline-primary"><i class="fa fa-arrow-left"></i> @Localizer["Continue Shopping"]</a>
+        <a asp-action="Checkout" class="btn btn-success btn-lg"><i class="fa fa-credit-card"></i> @Localizer["Proceed to Checkout"]</a>
     </div>
 }

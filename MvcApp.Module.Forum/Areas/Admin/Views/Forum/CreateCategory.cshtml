@@ -2,7 +2,7 @@
     ViewData["Title"] = "Create Category";
 }
 
-<h1><i class="fa fa-plus"></i> Create Category</h1>
+<h1><i class="fa fa-plus"></i> @Localizer["Create Category"]</h1>
 
 @if (!ViewData.ModelState.IsValid)
 {
@@ -14,19 +14,19 @@
         <form asp-action="CreateCategory" method="post">
             @Html.AntiForgeryToken()
             <div class="mb-3">
-                <label class="form-label fw-bold">Name</label>
+                <label class="form-label fw-bold">@Localizer["Name"]</label>
                 <input type="text" name="name" class="form-control" required maxlength="100" />
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold">Description</label>
+                <label class="form-label fw-bold">@Localizer["Description"]</label>
                 <input type="text" name="description" class="form-control" maxlength="500" />
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold">Sort Order</label>
+                <label class="form-label fw-bold">@Localizer["Sort Order"]</label>
                 <input type="number" name="sortOrder" class="form-control" value="0" />
             </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">@Localizer["Create"]</button>
+            <a asp-action="Index" class="btn btn-secondary">@Localizer["Cancel"]</a>
         </form>
     </div>
 </div>

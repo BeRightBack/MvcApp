@@ -11,8 +11,8 @@
 <div class="row">
     <div class="col-md-6">
         <address>
-            Broadway<br />
-            New York, NY 10024-2175<br />
+            @Localizer["Broadway"]<br />
+            @Localizer["New York, NY 10024-2175"]<br />
             <abbr title="Phone">P:</abbr>
             212.202.8953 @Localizer["TEXT Only"]
         </address>
@@ -53,12 +53,12 @@
              <br />
              <div class="form-floating mb-3">
                  <input asp-for="CaptchaCode" class="form-control" aria-required="true" placeholder="Enter captcha code" />
-                 <label asp-for="CaptchaCode">Enter Captcha code</label>
+                 <label asp-for="CaptchaCode">@Localizer["Enter Captcha code"]</label>
                  <span asp-validation-for="CaptchaCode" class="text-danger"></span>
                  <div class="captcha-container">
                      <img id="captchaImage" src="@Url.Action("GenerateCaptcha", "Base")" alt="Captcha" class="captcha-image" />
                      <button type="button" id="refreshCaptcha" class="btn btn-sm btn-secondary">
-                         <i class="fas fa-sync-alt"></i> Refresh
+                         <i class="fas fa-sync-alt"></i> @Localizer["Refresh"]
                      </button>
                  </div>
 

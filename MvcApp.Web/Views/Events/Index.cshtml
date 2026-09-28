@@ -9,15 +9,15 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">Events</h1>
-                <p class="text-muted">Discover what's happening around you</p>
+                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">@Localizer["Events"]</h1>
+                <p class="text-muted">@Localizer["Discover what's happening around you"]</p>
             </div>
             <div class="d-flex gap-2">
                 <a asp-action="MyEvents" class="btn btn-outline-secondary rounded-pill">
-                    <i class='bx bx-calendar'></i> My Events
+                    <i class='bx bx-calendar'></i> @Localizer["My Events"]
                 </a>
                 <a asp-action="Create" class="btn rounded-pill" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
-                    <i class='bx bx-plus'></i> Create Event
+                    <i class='bx bx-plus'></i> @Localizer["Create Event"]
                 </a>
             </div>
         </div>
@@ -26,13 +26,13 @@
         <form method="get" class="card border-0 rounded-4 shadow-sm p-4 mb-4">
             <div class="row g-3 align-items-end">
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">City</label>
+                    <label class="form-label fw-semibold small">@Localizer["City"]</label>
                     <input type="text" name="city" value="@ViewBag.City" class="form-control rounded-pill" placeholder="Search by city..." />
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold small">Category</label>
+                    <label class="form-label fw-semibold small">@Localizer["Category"]</label>
                     <select name="categoryId" class="form-select rounded-pill">
-                        <option value="">All Categories</option>
+                        <option value="">@Localizer["All Categories"]</option>
                         @foreach (var cat in categories)
                         {
                             <option value="@cat.Id" selected="@(ViewBag.CategoryId == cat.Id)">@cat.Name</option>
@@ -40,16 +40,16 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold small">From</label>
+                    <label class="form-label fw-semibold small">@Localizer["From"]</label>
                     <input type="date" name="from" value="@ViewBag.From" class="form-control rounded-pill" />
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold small">To</label>
+                    <label class="form-label fw-semibold small">@Localizer["To"]</label>
                     <input type="date" name="to" value="@ViewBag.To" class="form-control rounded-pill" />
                 </div>
                 <div class="col-md-2 d-grid">
                     <button type="submit" class="btn rounded-pill" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
-                        <i class='bx bx-filter-alt'></i> Filter
+                        <i class='bx bx-filter-alt'></i> @Localizer["Filter"]
                     </button>
                 </div>
             </div>
@@ -130,8 +130,8 @@
         {
             <div class="text-center py-5">
                 <i class='bx bx-calendar' style="font-size:4rem; color:#e74c6f;"></i>
-                <h4 class="mt-3">No events found</h4>
-                <p class="text-muted">Try adjusting your filters or create a new event!</p>
+                <h4 class="mt-3">@Localizer["No events found"]</h4>
+                <p class="text-muted">@Localizer["Try adjusting your filters or create a new event!"]</p>
             </div>
         }
     </div>

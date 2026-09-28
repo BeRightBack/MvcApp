@@ -6,13 +6,13 @@
 <div class="container mt-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Forums</a></li>
-            <li class="breadcrumb-item"><a asp-action="Thread" asp-route-id="@post?.ThreadId">Thread</a></li>
-            <li class="breadcrumb-item active">Edit Post</li>
+            <li class="breadcrumb-item"><a asp-action="Index">@Localizer["Forums"]</a></li>
+            <li class="breadcrumb-item"><a asp-action="Thread" asp-route-id="@post?.ThreadId">@Localizer["Thread"]</a></li>
+            <li class="breadcrumb-item active">@Localizer["Edit Post"]</li>
         </ol>
     </nav>
 
-    <h1><i class="fa fa-pencil"></i> Edit Post</h1>
+    <h1><i class="fa fa-pencil"></i> @Localizer["Edit Post"]</h1>
 
     @if (!ViewData.ModelState.IsValid)
     {
@@ -26,15 +26,15 @@
                 <input type="hidden" name="id" value="@post?.Id" />
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Content</label>
+                    <label class="form-label fw-bold">@Localizer["Content"]</label>
                     @{ ViewData["RteName"] = "content"; ViewData["RteHeight"] = 400; ViewData["RteValue"] = post?.Content ?? ""; }
                     <partial name="_RichTextEditor" />
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-save"></i> Save Changes
+                    <i class="fa fa-save"></i> @Localizer["Save Changes"]
                 </button>
-                <a asp-action="Thread" asp-route-id="@post?.ThreadId" class="btn btn-secondary">Cancel</a>
+                <a asp-action="Thread" asp-route-id="@post?.ThreadId" class="btn btn-secondary">@Localizer["Cancel"]</a>
             </form>
         </div>
     </div>

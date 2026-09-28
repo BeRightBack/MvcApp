@@ -4,7 +4,7 @@
 }
 
 
-<h4>StringResource</h4>
+<h4>@Localizer["StringResource"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-11">
@@ -36,14 +36,14 @@
                     <input asp-for="Value" class="form-control" />
                     <span asp-validation-for="Value"></span>
                 </div>*@
-            <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-secondary" id="translateButton">Translate</button>
+            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+            <button type="button" class="btn btn-secondary" id="translateButton">@Localizer["Translate"]</button>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@Localizer["Back to List"]</a>
 </div>
 
 <script>

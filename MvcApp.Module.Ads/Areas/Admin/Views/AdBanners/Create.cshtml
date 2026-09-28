@@ -8,7 +8,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4><i class="bx bx-image"></i> @ViewData["Title"]</h4>
-    <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary"><i class="bx bx-arrow-back"></i> Back</a>
+    <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary"><i class="bx bx-arrow-back"></i> @Localizer["Back"]</a>
 </div>
 
 <form asp-action="@ViewData["Action"]" method="post" class="card" enctype="multipart/form-data">
@@ -62,15 +62,15 @@
         </div>
 
         <div class="row mb-3" id="uploadField">
-            <label class="col-sm-2 col-form-label fw-bold" for="imageFile">Upload Image</label>
+            <label class="col-sm-2 col-form-label fw-bold" for="imageFile">@Localizer["Upload Image"]</label>
             <div class="col-sm-10">
                 <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".png,.jpg,.jpeg,.gif,.webp,.svg" />
                 @Html.ValidationMessage("imageFile", new { @class = "text-danger" })
                 <div class="form-text">
-                    Saved into this zone's folder (<code>/images/ads/&lt;zone&gt;/</code>). Max 2 MB. Overrides the URL above when a file is chosen.
+                    Saved into this zone's folder (<code>@Localizer["/images/ads/ zone /"]</code>). Max 2 MB. Overrides the URL above when a file is chosen.
                     @if (ViewBag.ZoneFormat != null)
                     {
-                        <text>This zone expects <strong>@ViewBag.ZoneFormat</strong> px images.</text>
+                        <text>@Localizer["This zone expects"] <strong>@ViewBag.ZoneFormat</strong> @Localizer["px images."]</text>
                     }
                 </div>
             </div>
@@ -90,7 +90,7 @@
             <div class="col-sm-10">
                 <input asp-for="AltText" class="form-control" placeholder="Banner description" maxlength="200" />
                 <span asp-validation-for="AltText" class="text-danger"></span>
-                <div class="form-text">Alt text for image banners.</div>
+                <div class="form-text">@Localizer["Alt text for image banners."]</div>
             </div>
         </div>
 
@@ -107,7 +107,7 @@
             <div class="col-sm-10">
                 <input asp-for="Weight" type="number" class="form-control" />
                 <span asp-validation-for="Weight" class="text-danger"></span>
-                <div class="form-text">Higher weight = shown first within the zone.</div>
+                <div class="form-text">@Localizer["Higher weight = shown first within the zone."]</div>
             </div>
         </div>
 
@@ -116,7 +116,7 @@
             <div class="col-sm-10">
                 <input asp-for="StartDate" type="datetime-local" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
-                <div class="form-text">Leave empty for immediate start.</div>
+                <div class="form-text">@Localizer["Leave empty for immediate start."]</div>
             </div>
         </div>
 
@@ -125,7 +125,7 @@
             <div class="col-sm-10">
                 <input asp-for="EndDate" type="datetime-local" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
-                <div class="form-text">Leave empty for no end date.</div>
+                <div class="form-text">@Localizer["Leave empty for no end date."]</div>
             </div>
         </div>
 
@@ -134,7 +134,7 @@
             <div class="col-sm-10">
                 <input asp-for="TargetRoles" class="form-control" placeholder="Admin, Editor, Anonymous" maxlength="500" />
                 <span asp-validation-for="TargetRoles" class="text-danger"></span>
-                <div class="form-text">Comma-separated roles. Use "Anonymous" for non-logged-in users. Empty = all users.</div>
+                <div class="form-text">@Localizer["Comma-separated roles. Use \"Anonymous\" for non-logged-in users. Empty = all users."]</div>
             </div>
         </div>
 
@@ -143,7 +143,7 @@
             <div class="col-sm-10">
                 <input asp-for="TargetCultures" class="form-control" placeholder="en, fr, es" maxlength="200" />
                 <span asp-validation-for="TargetCultures" class="text-danger"></span>
-                <div class="form-text">Comma-separated culture codes. Empty = all cultures.</div>
+                <div class="form-text">@Localizer["Comma-separated culture codes. Empty = all cultures."]</div>
             </div>
         </div>
 
@@ -152,7 +152,7 @@
             <div class="col-sm-10">
                 <input asp-for="MaxImpressionsPerDay" type="number" min="0" class="form-control" />
                 <span asp-validation-for="MaxImpressionsPerDay" class="text-danger"></span>
-                <div class="form-text">0 = unlimited.</div>
+                <div class="form-text">@Localizer["0 = unlimited."]</div>
             </div>
         </div>
 
@@ -161,7 +161,7 @@
             <div class="col-sm-10">
                 <input asp-for="MaxClicksPerDay" type="number" min="0" class="form-control" />
                 <span asp-validation-for="MaxClicksPerDay" class="text-danger"></span>
-                <div class="form-text">0 = unlimited.</div>
+                <div class="form-text">@Localizer["0 = unlimited."]</div>
             </div>
         </div>
 
@@ -170,14 +170,14 @@
             <div class="col-sm-10">
                 <div class="form-check form-switch">
                     <input asp-for="IsActive" class="form-check-input" />
-                    <label class="form-check-label" asp-for="IsActive">Active</label>
+                    <label class="form-check-label" asp-for="IsActive">@Localizer["Active"]</label>
                 </div>
             </div>
         </div>
     </div>
     <div class="card-footer">
-        <button type="submit" class="btn btn-primary"><i class="bx bx-save"></i> Save</button>
-        <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary"><i class="bx bx-save"></i> @Localizer["Save"]</button>
+        <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary">@Localizer["Cancel"]</a>
     </div>
 </form>
 

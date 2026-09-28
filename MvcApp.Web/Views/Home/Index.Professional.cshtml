@@ -11,16 +11,16 @@
     <div class="container py-4">
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h1 class="fw-bold mb-3" style="font-family:var(--template-font-heading); font-size:2.5rem;">Grow Your Network</h1>
-                <p class="lead text-muted mb-4">Connect with professionals in your field, share insights, and advance your career.</p>
+                <h1 class="fw-bold mb-3" style="font-family:var(--template-font-heading); font-size:2.5rem;">@Localizer["Grow Your Network"]</h1>
+                <p class="lead text-muted mb-4">@Localizer["Connect with professionals in your field, share insights, and advance your career."]</p>
                 @if (!isAuthenticated)
                 {
-                    <a asp-page="/Account/Register" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">Join Now</a>
-                    <a asp-page="/Account/Login" class="btn btn-outline-primary rounded-pill px-4 py-2 ms-2">Sign In</a>
+                    <a asp-page="/Account/Register" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">@Localizer["Join Now"]</a>
+                    <a asp-page="/Account/Login" class="btn btn-outline-primary rounded-pill px-4 py-2 ms-2">@Localizer["Sign In"]</a>
                 }
                 else
                 {
-                    <a asp-controller="Discover" asp-action="Index" class="btn btn-primary rounded-pill px-4 py-2">Find Connections</a>
+                    <a asp-controller="Discover" asp-action="Index" class="btn btn-primary rounded-pill px-4 py-2">@Localizer["Find Connections"]</a>
                 }
             </div>
             <div class="col-lg-6 d-none d-lg-block text-center">
@@ -33,7 +33,7 @@
 {
     <section class="py-5">
         <div class="container">
-            <h3 class="fw-bold mb-4">Featured Professionals</h3>
+            <h3 class="fw-bold mb-4">@Localizer["Featured Professionals"]</h3>
             <div class="row g-3">
                 @foreach (var m in members.Take(4))
                 {

@@ -61,7 +61,7 @@
             {
                 <li>
                     <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">
-                        <i class='bx bx-cog me-2'></i>Admin Panel
+                        <i class='bx bx-cog me-2'></i>@Localizer["Admin Panel"]
                     </a>
                 </li>
             }
@@ -69,7 +69,7 @@
             {
                 <li>
                     <a class="dropdown-item" asp-area="Admin" asp-controller="Bans" asp-action="Index">
-                        <i class='bx bx-shield-quarter me-2'></i>Moderation
+                        <i class='bx bx-shield-quarter me-2'></i>@Localizer["Moderation"]
                     </a>
                 </li>
             }
@@ -78,5 +78,5 @@
 }
 else
 {
-    <a class="btn btn-sm btn-outline-secondary rounded-pill px-3" asp-area="" asp-page="/Account/Login">Sign In</a>
+    <a class="btn btn-sm btn-outline-secondary rounded-pill px-3" asp-area="" asp-page="/Account/Login">@Localizer["Sign In"]</a>
 }

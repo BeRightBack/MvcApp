@@ -16,35 +16,35 @@
         <div class="row min-vh-100 align-items-center">
             <div class="col-lg-6 text-white py-5">
                 <span class="badge bg-danger bg-opacity-75 px-3 py-2 mb-3 rounded-pill" style="font-size:0.9rem;">
-                    <i class='bx bxs-heart me-1'></i> Find Your Perfect Match
+                    <i class='bx bxs-heart me-1'></i> @Localizer["Find Your Perfect Match"]
                 </span>
                 <h1 class="display-3 fw-bold mb-4" style="font-family:'Playfair Display',Georgia,serif; line-height:1.2; color:#fff;">
-                    Where <span style="color:#ffd700; text-shadow:0 0 30px rgba(255,215,0,0.5);">Sparks</span> Fly &amp; Connections Bloom
+                    @Localizer["Where"] <span style="color:#ffd700; text-shadow:0 0 30px rgba(255,215,0,0.5);">@Localizer["Sparks"]</span> @Localizer["Fly & Connections Bloom"]
                 </h1>
                 <p class="lead mb-4" style="color:rgba(255,255,255,0.75); font-size:1.25rem;">
-                    Join thousands of singles looking for genuine relationships. Your next great love story starts here.
+                    @Localizer["Join thousands of singles looking for genuine relationships. Your next great love story starts here."]
                 </p>
                 <div class="d-flex flex-wrap gap-3 mb-4">
                     @if (!isAuthenticated)
                     {
                         <a asp-page="/Account/Register" class="btn btn-lg rounded-pill px-5 py-3 fw-semibold" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff; box-shadow:0 8px 30px rgba(231,76,111,0.4);">
-                            <i class='bx bx-heart me-2'></i>Join Free
+                            <i class='bx bx-heart me-2'></i>@Localizer["Join Free"]
                         </a>
                         <a asp-page="/Account/Login" class="btn btn-lg rounded-pill px-4 py-3 fw-semibold" style="border:2px solid rgba(255,255,255,0.3); color:#fff;">
-                            Sign In
+                            @Localizer["Sign In"]
                         </a>
                     }
                     else
                     {
                         <a asp-controller="Discover" asp-action="Index" class="btn btn-lg rounded-pill px-5 py-3 fw-semibold" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff; box-shadow:0 8px 30px rgba(231,76,111,0.4);">
-                            <i class='bx bx-search-alt me-2'></i>Discover People
+                            <i class='bx bx-search-alt me-2'></i>@Localizer["Discover People"]
                         </a>
                     }
                 </div>
                 <div class="d-flex gap-4 text-center">
-                    <div><span class="fw-bold fs-3">10K+</span><br /><small style="color:rgba(255,255,255,0.6);">Active Members</small></div>
-                    <div><span class="fw-bold fs-3">2K+</span><br /><small style="color:rgba(255,255,255,0.6);">Matches Made</small></div>
-                    <div><span class="fw-bold fs-3">98%</span><br /><small style="color:rgba(255,255,255,0.6);">Satisfaction</small></div>
+                    <div><span class="fw-bold fs-3">10K+</span><br /><small style="color:rgba(255,255,255,0.6);">@Localizer["Active Members"]</small></div>
+                    <div><span class="fw-bold fs-3">2K+</span><br /><small style="color:rgba(255,255,255,0.6);">@Localizer["Matches Made"]</small></div>
+                    <div><span class="fw-bold fs-3">98%</span><br /><small style="color:rgba(255,255,255,0.6);">@Localizer["Satisfaction"]</small></div>
                 </div>
             </div>
             <div class="col-lg-6 d-none d-lg-block text-center">
@@ -87,29 +87,29 @@
 <section class="py-5" style="background:var(--template-bg-alt, #fef9fb);">
     <div class="container py-5">
         <div class="text-center mb-5">
-            <h2 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif; font-size:2.5rem;">Why You'll Love It Here</h2>
-            <p class="text-muted fs-5">Designed for meaningful connections</p>
+            <h2 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif; font-size:2.5rem;">@Localizer["Why You'll Love It Here"]</h2>
+            <p class="text-muted fs-5">@Localizer["Designed for meaningful connections"]</p>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="card border-0 rounded-4 p-4 h-100 shadow-sm text-center">
                     <div class="mb-3"><i class='bx bx-heart-circle' style="font-size:3rem; color:#e74c6f;"></i></div>
-                    <h5 class="fw-bold">Smart Matching</h5>
-                    <p class="text-muted mb-0">Our algorithm finds people who share your interests, values, and vibe.</p>
+                    <h5 class="fw-bold">@Localizer["Smart Matching"]</h5>
+                    <p class="text-muted mb-0">@Localizer["Our algorithm finds people who share your interests, values, and vibe."]</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card border-0 rounded-4 p-4 h-100 shadow-sm text-center">
                     <div class="mb-3"><i class='bx bx-shield' style="font-size:3rem; color:#6c5ce7;"></i></div>
-                    <h5 class="fw-bold">Safe &amp; Secure</h5>
-                    <p class="text-muted mb-0">Your privacy matters. Verified profiles and reporting keep you safe.</p>
+                    <h5 class="fw-bold">@Localizer["Safe & Secure"]</h5>
+                    <p class="text-muted mb-0">@Localizer["Your privacy matters. Verified profiles and reporting keep you safe."]</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card border-0 rounded-4 p-4 h-100 shadow-sm text-center">
                     <div class="mb-3"><i class='bx bx-message-dots' style="font-size:3rem; color:#fdcb6e;"></i></div>
-                    <h5 class="fw-bold">Real Conversations</h5>
-                    <p class="text-muted mb-0">Chat, laugh, and connect with people who are genuinely interested.</p>
+                    <h5 class="fw-bold">@Localizer["Real Conversations"]</h5>
+                    <p class="text-muted mb-0">@Localizer["Chat, laugh, and connect with people who are genuinely interested."]</p>
                 </div>
             </div>
         </div>
@@ -123,12 +123,12 @@
         <div class="container py-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif; font-size:2rem;">Featured Members</h2>
-                    <p class="text-muted">Meet some amazing people</p>
+                    <h2 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif; font-size:2rem;">@Localizer["Featured Members"]</h2>
+                    <p class="text-muted">@Localizer["Meet some amazing people"]</p>
                 </div>
                 @if (isAuthenticated)
                 {
-                    <a asp-controller="Discover" asp-action="Index" class="btn btn-outline-primary rounded-pill px-4">View All</a>
+                    <a asp-controller="Discover" asp-action="Index" class="btn btn-outline-primary rounded-pill px-4">@Localizer["View All"]</a>
                 }
             </div>
             <div class="row g-4">
@@ -163,18 +163,18 @@
 <!-- CTA Section -->
 <section class="py-5" style="background:linear-gradient(135deg, #2d1b2e, #4a2a3a);">
     <div class="container text-center py-5">
-        <h2 class="text-white fw-bold mb-3" style="font-family:'Playfair Display',Georgia,serif; font-size:2.5rem;">Ready to Find Your Spark?</h2>
-        <p class="text-white-50 mb-4 fs-5">Join thousands of singles who've already found love.</p>
+        <h2 class="text-white fw-bold mb-3" style="font-family:'Playfair Display',Georgia,serif; font-size:2.5rem;">@Localizer["Ready to Find Your Spark?"]</h2>
+        <p class="text-white-50 mb-4 fs-5">@Localizer["Join thousands of singles who've already found love."]</p>
         @if (!isAuthenticated)
         {
             <a asp-page="/Account/Register" class="btn btn-lg rounded-pill px-5 py-3 fw-semibold" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff; box-shadow:0 8px 30px rgba(231,76,111,0.4);">
-                <i class='bx bx-heart me-2'></i>Create Your Free Profile
+                <i class='bx bx-heart me-2'></i>@Localizer["Create Your Free Profile"]
             </a>
         }
         else
         {
             <a asp-controller="Discover" asp-action="Index" class="btn btn-lg rounded-pill px-5 py-3 fw-semibold" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff; box-shadow:0 8px 30px rgba(231,76,111,0.4);">
-                <i class='bx bx-search-alt me-2'></i>Start Discovering
+                <i class='bx bx-search-alt me-2'></i>@Localizer["Start Discovering"]
             </a>
         }
     </div>

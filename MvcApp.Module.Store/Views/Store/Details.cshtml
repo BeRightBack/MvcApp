@@ -6,7 +6,7 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a asp-action="Index">Store</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index">@Localizer["Store"]</a></li>
         @if (Model.Category != null)
         {
             <li class="breadcrumb-item"><a asp-action="Index" asp-route-categoryId="@Model.Category.Id">@Model.Category.Name</a></li>
@@ -35,11 +35,11 @@
 
         @if (Model.StockQuantity > 0)
         {
-            <p class="text-success"><i class="fa fa-check-circle"></i> In Stock</p>
+            <p class="text-success"><i class="fa fa-check-circle"></i> @Localizer["In Stock"]</p>
         }
         else
         {
-            <p class="text-danger"><i class="fa fa-times-circle"></i> Out of Stock</p>
+            <p class="text-danger"><i class="fa fa-times-circle"></i> @Localizer["Out of Stock"]</p>
         }
 
         @if (!string.IsNullOrEmpty(Model.ShortDescription))
@@ -52,14 +52,14 @@
             <input type="hidden" name="productId" value="@Model.Id" />
             <div class="input-group mb-3" style="max-width:200px;">
                 <input type="number" name="quantity" value="1" min="1" max="99" class="form-control text-center" />
-                <button type="submit" class="btn btn-primary"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-cart-plus"></i> @Localizer["Add to Cart"]</button>
             </div>
         </form>
 
         @if (!string.IsNullOrEmpty(Model.Description))
         {
             <hr />
-            <h5>Description</h5>
+            <h5>@Localizer["Description"]</h5>
             <div class="mt-2">@Html.Raw(Model.Description)</div>
         }
     </div>
@@ -68,7 +68,7 @@
 @if (related != null && related.Any())
 {
     <hr />
-    <h3>Related Products</h3>
+    <h3>@Localizer["Related Products"]</h3>
     <div class="row">
         @foreach (var p in related)
         {

@@ -9,22 +9,22 @@
 <div class="row">
     <div class="col-md-6">
         <div class="card mb-3">
-            <div class="card-header"><strong>Order Details</strong></div>
+            <div class="card-header"><strong>@Localizer["Order Details"]</strong></div>
             <div class="card-body">
-                <p><strong>Date:</strong> @Model.OrderDate.ToString("yyyy-MM-dd HH:mm")</p>
-                <p><strong>Status:</strong> <span class="badge bg-secondary">@Model.Status</span></p>
-                <p><strong>Payment:</strong> <span class="badge bg-@(Model.PaymentStatus == PaymentStatus.Paid ? "success" : "secondary")">@Model.PaymentStatus</span></p>
-                <p><strong>Method:</strong> @Model.PaymentMethod</p>
-                <p><strong>Subtotal:</strong> $@Model.Subtotal.ToString("F2")</p>
-                <p><strong>Shipping:</strong> $@Model.ShippingCost.ToString("F2")</p>
-                <p><strong>Tax:</strong> $@Model.Tax.ToString("F2")</p>
-                <p class="h5"><strong>Total:</strong> $@Model.TotalAmount.ToString("F2")</p>
+                <p><strong>@Localizer["Date:"]</strong> @Model.OrderDate.ToString("yyyy-MM-dd HH:mm")</p>
+                <p><strong>@Localizer["Status:"]</strong> <span class="badge bg-secondary">@Model.Status</span></p>
+                <p><strong>@Localizer["Payment:"]</strong> <span class="badge bg-@(Model.PaymentStatus == PaymentStatus.Paid ? "success" : "secondary")">@Model.PaymentStatus</span></p>
+                <p><strong>@Localizer["Method:"]</strong> @Model.PaymentMethod</p>
+                <p><strong>@Localizer["Subtotal:"]</strong> $@Model.Subtotal.ToString("F2")</p>
+                <p><strong>@Localizer["Shipping:"]</strong> $@Model.ShippingCost.ToString("F2")</p>
+                <p><strong>@Localizer["Tax:"]</strong> $@Model.Tax.ToString("F2")</p>
+                <p class="h5"><strong>@Localizer["Total:"]</strong> $@Model.TotalAmount.ToString("F2")</p>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="card mb-3">
-            <div class="card-header"><strong>Shipping Information</strong></div>
+            <div class="card-header"><strong>@Localizer["Shipping Information"]</strong></div>
             <div class="card-body">
                 <p>@Model.ShippingName</p>
                 <p>@Model.ShippingAddress</p>
@@ -33,13 +33,13 @@
             </div>
         </div>
         <div class="card mb-3">
-            <div class="card-header"><strong>Update Status</strong></div>
+            <div class="card-header"><strong>@Localizer["Update Status"]</strong></div>
             <div class="card-body">
                 <form asp-action="UpdateOrderStatus" method="post" class="d-flex gap-2">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="id" value="@Model.Id" />
                     <select name="status" class="form-select" asp-items="Html.GetEnumSelectList<OrderStatus>()"></select>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-refresh"></i> Update</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-refresh"></i> @Localizer["Update"]</button>
                 </form>
             </div>
         </div>
@@ -49,19 +49,19 @@
 @if (Model.Notes != null)
 {
     <div class="alert alert-info">
-        <strong>Notes:</strong> @Model.Notes
+        <strong>@Localizer["Notes:"]</strong> @Model.Notes
     </div>
 }
 
-<h3>Items</h3>
+<h3>@Localizer["Items"]</h3>
 <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Total</th>
+                <th>@Localizer["Product"]</th>
+                <th>@Localizer["Price"]</th>
+                <th>@Localizer["Qty"]</th>
+                <th>@Localizer["Total"]</th>
             </tr>
         </thead>
         <tbody>
@@ -85,11 +85,11 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td colspan="3" class="text-end"><strong>@Localizer["Total:"]</strong></td>
                 <td><strong>$@Model.TotalAmount.ToString("F2")</strong></td>
             </tr>
         </tfoot>
     </table>
 </div>
 
-<a asp-action="Orders" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Back to Orders</a>
+<a asp-action="Orders" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> @Localizer["Back to Orders"]</a>

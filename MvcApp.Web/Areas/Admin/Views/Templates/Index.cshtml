@@ -6,7 +6,7 @@
     var landingEnabled = ViewBag.LandingEnabled as Dictionary<string, bool>;
 }
 
-<h1 class="mb-4">UI Templates</h1>
+<h1 class="mb-4">@Localizer["UI Templates"]</h1>
 <p class="text-muted">Choose how your site looks. Templates change colors, fonts, and visual style. A landing page advertises the template's purpose; when disabled, the site shows the generic home page.</p>
 
 <div class="row g-4">
@@ -19,7 +19,7 @@
                 <div class="card-body text-center p-4">
                     @if (isActive)
                     {
-                        <span class="badge bg-success mb-2">Active</span>
+                        <span class="badge bg-success mb-2">@Localizer["Active"]</span>
                     }
                     <h5 class="card-title">@template.DisplayName</h5>
                     <p class="card-text text-muted small">@template.Description</p>
@@ -33,12 +33,12 @@
                         <form asp-action="SetActive" method="post" style="display:inline">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="name" value="@template.Name" />
-                            <button type="submit" class="btn btn-primary">Activate</button>
+                            <button type="submit" class="btn btn-primary">@Localizer["Activate"]</button>
                         </form>
                     }
                     else
                     {
-                        <button class="btn btn-outline-success" disabled>Active</button>
+                        <button class="btn btn-outline-success" disabled>@Localizer["Active"]</button>
                     }
                     <form asp-action="SetLanding" method="post" style="display:inline">
                         @Html.AntiForgeryToken()
@@ -47,7 +47,7 @@
                         <button type="submit" class="btn @(landing ? "btn-outline-warning" : "btn-outline-secondary")">@(landing ? "Landing On" : "Landing Off")</button>
                     </form>
                     <a asp-action="Index" asp-controller="TemplateNav" asp-route-template="@template.Name"
-                       class="btn btn-outline-info">Navigation</a>
+                       class="btn btn-outline-info">@Localizer["Navigation"]</a>
                 </div>
             </div>
         </div>

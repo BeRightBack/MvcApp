@@ -8,7 +8,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4><i class="bx bx-map-pin"></i> @ViewData["Title"]</h4>
-    <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary"><i class="bx bx-arrow-back"></i> Back</a>
+    <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary"><i class="bx bx-arrow-back"></i> @Localizer["Back"]</a>
 </div>
 
 <form asp-action="@ViewData["Action"]" method="post" class="card">
@@ -22,7 +22,7 @@
             <label asp-for="ZoneId" class="col-sm-2 col-form-label fw-bold"></label>
             <div class="col-sm-10">
                 <select asp-for="ZoneId" class="form-select" asp-items="zones" disabled></select>
-                <div class="form-text">Zone cannot be changed.</div>
+                <div class="form-text">@Localizer["Zone cannot be changed."]</div>
             </div>
         </div>
 
@@ -31,7 +31,7 @@
             <div class="col-sm-10">
                 <input asp-for="PageSlug" class="form-control" maxlength="250" />
                 <span asp-validation-for="PageSlug" class="text-danger"></span>
-                <div class="form-text">Page slug this applies to. Use <code>*</code> for all pages.</div>
+                <div class="form-text">@Localizer["Page slug this applies to. Use"] <code>*</code> @Localizer["for all pages."]</div>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
             <div class="col-sm-10">
                 <div class="form-check form-switch">
                     <input asp-for="IsExclusion" class="form-check-input" id="isExclusion" />
-                    <label class="form-check-label" for="isExclusion">Exclude zone from this page</label>
+                    <label class="form-check-label" for="isExclusion">@Localizer["Exclude zone from this page"]</label>
                 </div>
                 <div class="form-text">If checked, the zone is hidden on the specified page(s). If unchecked, this is an override with custom settings.</div>
             </div>
@@ -51,7 +51,7 @@
             <div class="col-sm-10">
                 <input asp-for="MaxBannersOverride" type="number" min="0" class="form-control" />
                 <span asp-validation-for="MaxBannersOverride" class="text-danger"></span>
-                <div class="form-text">Override max banners for this page. Empty = use zone default.</div>
+                <div class="form-text">@Localizer["Override max banners for this page. Empty = use zone default."]</div>
             </div>
         </div>
 
@@ -60,7 +60,7 @@
             <div class="col-sm-10">
                 <input asp-for="CssClassOverride" class="form-control" maxlength="200" />
                 <span asp-validation-for="CssClassOverride" class="text-danger"></span>
-                <div class="form-text">Override CSS class for zone container on this page.</div>
+                <div class="form-text">@Localizer["Override CSS class for zone container on this page."]</div>
             </div>
         </div>
 
@@ -69,7 +69,7 @@
             <div class="col-sm-10">
                 <input asp-for="WrapperTemplateOverride" class="form-control" maxlength="500" />
                 <span asp-validation-for="WrapperTemplateOverride" class="text-danger"></span>
-                <div class="form-text">Override banner wrapper template. Use <code>{0}</code> for banner HTML.</div>
+                <div class="form-text">@Localizer["Override banner wrapper template. Use"] <code>{0}</code> @Localizer["for banner HTML."]</div>
             </div>
         </div>
 
@@ -86,14 +86,14 @@
             <div class="col-sm-10">
                 <div class="form-check form-switch">
                     <input asp-for="IsActive" class="form-check-input" />
-                    <label class="form-check-label" asp-for="IsActive">Active</label>
+                    <label class="form-check-label" asp-for="IsActive">@Localizer["Active"]</label>
                 </div>
             </div>
         </div>
     </div>
     <div class="card-footer">
-        <button type="submit" class="btn btn-primary"><i class="bx bx-save"></i> Save</button>
-        <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary"><i class="bx bx-save"></i> @Localizer["Save"]</button>
+        <a asp-action="Index" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary">@Localizer["Cancel"]</a>
     </div>
 </form>
 

@@ -7,11 +7,11 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2>Badges</h2>
+        <h2>@Localizer["Badges"]</h2>
         <p class="text-muted mb-0">Collect badges by completing achievements. @userBadges.Count / @Model.Count earned.</p>
     </div>
     <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
-        <i class='bx bx-arrow-back me-1'></i>Back to Points
+        <i class='bx bx-arrow-back me-1'></i>@Localizer["Back to Points"]
     </a>
 </div>
 
@@ -31,11 +31,11 @@
                     <small class="text-muted">@badge.Description</small>
                     @if (earned)
                     {
-                        <div class="mt-2"><span class="badge bg-success">Earned</span></div>
+                        <div class="mt-2"><span class="badge bg-success">@Localizer["Earned"]</span></div>
                     }
                     else
                     {
-                        <div class="mt-2"><span class="badge bg-secondary">Locked</span></div>
+                        <div class="mt-2"><span class="badge bg-secondary">@Localizer["Locked"]</span></div>
                     }
                 </div>
             </div>
