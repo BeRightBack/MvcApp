@@ -381,6 +381,29 @@ When a module is deselected at generation, ALL of these must hold:
   runtime log churn left unstaged. Follow-up if the user wants: swap other test users'
   128×128 randomuser portraits (1 each) for the same-person treatment at better res.
 
+- **System Logs admin page (2026-09-28):** `/Admin/SystemLogs` browses + manages the Serilog
+  `Logs` table (Admin sidebar -> System -> System Logs, beside the older Audit Logs).
+  `ISystemLogService` (`MvcApp.Core\Abstractions`) + `SystemLogService`
+  (`MvcApp.Services`, **MySqlConnector 2.5.0 — package added to MvcApp.Services.csproj, NOT
+  MvcApp.Web**) uses raw SQL because the sink's table is in `serilogsDb`, a different database
+  from the EF model. Filters: level (with live counts), text search (message/template/exception/
+  properties), From/To date, page size 25/50/100/200. Detail page shows local + as-written +
+  UTC timestamps, template, message, exception, pretty-printed JSON properties. Purge buttons
+  (7/30/90/180/365 days + Delete all) are POST + antiforgery + confirm; the days value is
+  allow-listed server-side (anything else = 400). `SystemLogRetentionHostedService` purges at
+  startup then daily using `Logging:RetentionDays` (0 = off) and logs
+  "System log retention active: purging rows older than N day(s)" so its execution is
+  observable. **Timestamps: the log server runs UTC, this box is UTC-4** — the service runs
+  `SET time_zone='+00:00'`, filters convert local->UTC, and the UI shows local time parsed from
+  the sink's own `Timestamp` string (millisecond precision) because `_ts` only stores whole
+  seconds. Indexes `idx_logs_ts` + `idx_logs_level_ts` exist on `Logs` (EXPLAIN verified:
+  level filter = `ref`, paging = index scan of exactly the LIMIT).
+  **File sink is now conditional** (`Logging:FileSink`: unset = on in Development, off in
+  Production; Console + MySQL always on). Verified live: 297 rows, 0.2 MB, level filter and
+  search, detail, exception rendering, purge guard (400 on days=13), retention log line, 0
+  console errors; build 0E, tests 13/13. Screenshots:
+  `E:\Pictures\Screenshots\MvcApp-admin-{systemlogs,systemlogs-filtered,logdetail,logexception}.png`.
+
 ## Coding conventions
 - No code comments unless asked.
 - Follow existing patterns (service abstractions in MvcApp.Core.Abstractions, DI

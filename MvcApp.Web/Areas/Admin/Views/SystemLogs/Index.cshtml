@@ -1,0 +1,219 @@
+@model MvcApp.Core.SystemLogPage
+@{
+    ViewData["Title"] = "System Logs";
+    var level = ViewBag.Level as string ?? "";
+    var search = ViewBag.Search as string ?? "";
+    var from = ViewBag.From as string ?? "";
+    var to = ViewBag.To as string ?? "";
+    var pageSize = (int)(ViewBag.PageSize ?? 50);
+    var levels = Model.LevelCounts.Keys.OrderBy(l => l).ToList();
+
+    string LevelBadgeClass(string? value) => value switch
+    {
+        "Fatal" or "Error" => "bg-danger-subtle text-danger",
+        "Warning" => "bg-warning-subtle text-warning-emphasis",
+        "Debug" or "Verbose" => "bg-secondary-subtle text-secondary",
+        _ => "bg-info-subtle text-info-emphasis"
+    };
+
+    var size = Model.DatabaseBytes > 0
+        ? (Model.DatabaseBytes / 1024d / 1024d).ToString("0.0") + " MB"
+        : "—";
+}
+
+<section class="py-4">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h2 class="fw-bold"><i class='bx bx-terminal'></i> System Logs</h2>
+                <p class="text-muted mb-0">
+                    Serilog application logs
+                    @if (Model.Total > 0)
+                    {
+                        <span class="badge bg-light text-primary ms-2">@Model.Total.ToString("N0") rows</span>
+                    }
+                    <span class="badge bg-light text-secondary ms-1">@size</span>
+                    @if (Model.RetentionDays > 0)
+                    {
+                        <span class="badge bg-light text-secondary ms-1" title="Rows older than this are purged automatically once a day">auto-purge: @Model.RetentionDays days</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-light text-secondary ms-1" title="Logging:RetentionDays = 0">auto-purge: off</span>
+                    }
+                </p>
+            </div>
+            <a asp-area="Admin" asp-controller="AuditLogs" asp-action="Index" class="btn btn-outline-secondary">
+                <i class='bx bx-history me-1'></i> Audit Logs
+            </a>
+        </div>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Message"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @if (!Model.Available)
+        {
+            <div class="alert alert-warning" role="alert">
+                <i class='bx bx-error me-1'></i> The log database could not be read: @Model.UnavailableReason
+            </div>
+        }
+
+        <div class="content-card mb-3">
+            <div class="card-body">
+                <form method="get" asp-action="Index" class="row g-2 align-items-end">
+                    <div class="col-sm-6 col-lg-3">
+                        <label class="form-label small mb-1">Level</label>
+                        <select name="level" class="form-select form-select-sm">
+                            <option value="" selected="@(string.IsNullOrEmpty(level))">All levels</option>
+                            @foreach (var l in levels)
+                            {
+                                <option value="@l" selected="@(string.Equals(l, level, StringComparison.OrdinalIgnoreCase))">@l (@Model.LevelCounts[l])</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <label class="form-label small mb-1">Search</label>
+                        <input type="text" name="search" value="@search" class="form-control form-control-sm"
+                               placeholder="message, template, exception or properties" />
+                    </div>
+                    <div class="col-6 col-sm-3 col-lg-2">
+                        <label class="form-label small mb-1">From</label>
+                        <input type="date" name="from" value="@from" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-6 col-sm-3 col-lg-2">
+                        <label class="form-label small mb-1">To</label>
+                        <input type="date" name="to" value="@to" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-6 col-sm-3 col-lg-1">
+                        <label class="form-label small mb-1">Rows</label>
+                        <select name="pageSize" class="form-select form-select-sm">
+                            @foreach (var size in new[] { 25, 50, 100, 200 })
+                            {
+                                <option value="@size" selected="@(size == pageSize)">@size</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-6 col-sm-3 col-lg-2 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-sm w-100"><i class='bx bx-search me-1'></i> Filter</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-sm" title="Clear filters"><i class='bx bx-x'></i></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="card-body">
+                @if (!Model.Available)
+                {
+                    <p class="text-muted mb-0">No log data available.</p>
+                }
+                else if (Model.Items.Count == 0)
+                {
+                    <p class="text-muted mb-0">No log entries match the current filters.</p>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:170px;">Time</th>
+                                    <th style="width:110px;">Level</th>
+                                    <th>Message</th>
+                                    <th style="width:90px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var log in Model.Items)
+                                {
+                                    <tr>
+                                        <td class="text-nowrap small text-muted">@log.TimestampExactLocal.ToString("MMM d, HH:mm:ss.fff")</td>
+                                        <td><span class="badge @LevelBadgeClass(log.Level)">@log.Level</span></td>
+                                        <td class="small">
+                                            <a asp-action="Detail" asp-route-id="@log.Id" class="text-decoration-none">
+                                                @(log.Message ?? log.MessageTemplate ?? "(no message)")
+                                            </a>
+                                        </td>
+                                        <td class="text-end small">
+                                            @if (!string.IsNullOrWhiteSpace(log.Exception))
+                                            {
+                                                <a asp-action="Detail" asp-route-id="@log.Id" class="text-danger text-decoration-none" title="Has exception">
+                                                    <i class='bx bx-error-circle'></i>
+                                                </a>
+                                            }
+                                            <a asp-action="Detail" asp-route-id="@log.Id" class="text-muted ms-2" title="Details">
+                                                <i class='bx bx-chevron-right'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (Model.TotalPages > 1)
+                    {
+                        <nav>
+                            <ul class="pagination pagination-sm justify-content-center mt-3 mb-0">
+                                <li class="page-item @(Model.Page <= 1 ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-level="@level" asp-route-search="@search"
+                                       asp-route-from="@from" asp-route-to="@to" asp-route-pageSize="@pageSize"
+                                       asp-route-page="@(Model.Page - 1)">Previous</a>
+                                </li>
+                                @for (var i = Math.Max(1, Model.Page - 3); i <= Math.Min(Model.TotalPages, Model.Page + 3); i++)
+                                {
+                                    <li class="page-item @(i == Model.Page ? "active" : "")">
+                                        <a class="page-link" asp-action="Index" asp-route-level="@level" asp-route-search="@search"
+                                           asp-route-from="@from" asp-route-to="@to" asp-route-pageSize="@pageSize"
+                                           asp-route-page="@i">@i</a>
+                                    </li>
+                                }
+                                <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-level="@level" asp-route-search="@search"
+                                       asp-route-from="@from" asp-route-to="@to" asp-route-pageSize="@pageSize"
+                                       asp-route-page="@(Model.Page + 1)">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    }
+                }
+            </div>
+        </div>
+
+        @if (Model.Available)
+        {
+            <div class="content-card mt-3">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-2"><i class='bx bx-trash me-1'></i> Manage</h6>
+                    <p class="text-muted small mb-3">
+                        Rows older than the selected window are deleted. The daily auto-purge
+                        @(Model.RetentionDays > 0 ? $"currently removes anything older than {Model.RetentionDays} days" : "is disabled").
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var days in new[] { 7, 30, 90, 180, 365 })
+                        {
+                            <form method="post" asp-action="Purge" class="d-inline"
+                                  onsubmit="return confirm('Delete all log rows older than @days days?');">
+                                <input type="hidden" name="days" value="@days" />
+                                <button type="submit" class="btn btn-outline-warning btn-sm">
+                                    <i class='bx bx-history me-1'></i> Older than @days days
+                                </button>
+                            </form>
+                        }
+                        <form method="post" asp-action="PurgeAll" class="d-inline ms-auto"
+                              onsubmit="return confirm('Delete EVERY log row? This cannot be undone.');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class='bx bx-trash-alt me-1'></i> Delete all
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
