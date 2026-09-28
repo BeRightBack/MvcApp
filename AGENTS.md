@@ -119,10 +119,18 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
   MariaDB resolves client hostnames per new connection (default config) → every fresh connect stalled
   ~8-10s in reverse-DNS; fixed by adding `45.44.236.68 client-45-44-236-68.xtrasvr.com` to the server's
   `/etc/hosts`. (b) page latency ~7.4s is NOT server-side: pooled queries are ~26-37ms warm
-  (`Threads_created` delta 0, `Queries` +209 per home page) — the page fires ~209 sequential DB
-  round-trips at ~35ms WAN RTT (nav per-item module checks etc.); on localhost it'd be ~200ms. Code-level
+  (`Threads_created` delta 0) — the page fires many sequential DB round-trips at ~35ms WAN RTT
+  (nav per-item module checks etc.); on localhost it'd be ~200ms. Code-level
   caching (settings/nav/module flags) would fix it if ever needed; login and pages DO work against the
-  remote now.
+  remote now. **RE-MEASURED 2026-09-28: the home page is 88 round-trips, not 209** (that figure was
+  a stale, different measurement context). 88 x ~26ms ~= 2.3s, matching EF's reported DB time
+  (2307 ms) inside an ~8s page. Breakdown: **37 SystemSettings lookups** (no caching in
+  `SettingsService.GetAsync`; the nav asks `IsModuleEnabledAsync` per item across navbar + footer +
+  social + profile dropdowns, plus SiteTemplate/Branding), 15 Language + 15 localization-string
+  queries, 8+6+2 AdZone/AdBanner, 1 user/session, 1 VisitorLogs insert, 3 for the member query
+  (post-AsSplitQuery), 1 COUNT. To measure: EF command logs are suppressed by
+  `MinimumLevel.Override("Microsoft", LogEventLevel.Warning)` in `Program.cs` — temporarily set it
+  to Information; each `Executed DbCommand (Xms)` line is followed by its SQL on the next line.
 - SSH: `ssh root@svr1.xtrasvr.com` (root password is user-held, not on this machine). MySQL root shell
   on the server needs its own password; `swan3344` (the app user) has `GRANT ALL ON *.* WITH GRANT
   OPTION` including `mysql.*` — usable for server-side MySQL inspections instead of root.
@@ -435,7 +443,7 @@ When a module is deselected at generation, ALL of these must hold:
   that EF event to read the stack, then reverting. Loads `Photos` + `UserInterestTags`, both
   genuinely used by `MapToMemberModel`, so neither Include is droppable; now
   `.AsNoTracking().AsSplitQuery()`. **Measured neutral** (6501-7697 ms before, 6364-7696 ms
-  after) - the home page is bound by ~209 sequential round-trips at ~35ms WAN RTT, so this
+  after) - the home page is bound by 88 sequential round-trips at ~35ms WAN RTT, so this
   removes the growth risk, not today's latency. HTML byte-identical apart from antiforgery
   tokens; warning 1 -> 0 per page. NOTE: EF command logging is invisible in the logs because
   `Program.cs` has `MinimumLevel.Override("Microsoft", LogEventLevel.Warning)`.
