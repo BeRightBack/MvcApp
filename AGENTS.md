@@ -419,6 +419,16 @@ When a module is deselected at generation, ALL of these must hold:
   "empty", not a failure. 19 new unit tests (32 total). Verified by dropping the DB and
   restarting: recreated, table auto-created, 11 rows — and the same test in a generated app
   against a deliberately absent database (28 rows).
+  **Seeder admin lookup fixed (2026-09-28, VSIX 1.0.54):** `Seeder.cs` `SeedAdminUserAsync`
+  looked the admin up by EMAIL only while Identity enforces unique USERNAMES, so a mismatch
+  between `Administrator:User` and `Administrator:Username` retried creation on every start
+  and logged `Failed to create admin user` + `DuplicateUserName` for a healthy DB (this
+  actually happened in the generated-app test - my harness injected `AdminEmail` into the
+  `Administrator:User` field). It now falls back to `FindByNameAsync`, treats
+  DuplicateUserName / DuplicateEmail as "already exists" (still adding the role if missing),
+  and uses `ConfigOrDefault` instead of `??` (which never fires on an empty string). Verified
+  with the mismatch deliberately in place: 0 errors, config restored byte-for-byte after the
+  test. The admin in the remote DB is `UserName=admin`, `Email=admin@frenzyzone.com`.
 
 ## Coding conventions
 - No code comments unless asked.
