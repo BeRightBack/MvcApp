@@ -5,8 +5,8 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4><i class="bx bx-layout"></i> Ad Zones</h4>
-    <a asp-action="Create" class="btn btn-primary"><i class="bx bx-plus"></i> New Zone</a>
+    <h4><i class="bx bx-layout"></i> @Localizer["Ad Zones"]</h4>
+    <a asp-action="Create" class="btn btn-primary"><i class="bx bx-plus"></i> @Localizer["New Zone"]</a>
 </div>
 
 @if (TempData["Success"] != null)
@@ -23,16 +23,16 @@
             <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>Key</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Format</th>
-                        <th>Max Banners</th>
-                        <th>Landing Page</th>
-                        <th>CSS Class</th>
-                        <th>Order</th>
-                        <th>Active</th>
-                        <th>Actions</th>
+                        <th>@Localizer["Key"]</th>
+                        <th>@Localizer["Name"]</th>
+                        <th>@Localizer["Description"]</th>
+                        <th>@Localizer["Format"]</th>
+                        <th>@Localizer["Max Banners"]</th>
+                        <th>@Localizer["Landing Page"]</th>
+                        <th>@Localizer["CSS Class"]</th>
+                        <th>@Localizer["Order"]</th>
+                        <th>@Localizer["Active"]</th>
+                        <th>@Localizer["Actions"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,18 +49,18 @@
                                 }
                                 else
                                 {
-                                    <span class="text-muted small">any</span>
+                                    <span class="text-muted small">@Localizer["any"]</span>
                                 }
                             </td>
                             <td>@(zone.MaxBanners == 0 ? "∞" : zone.MaxBanners.ToString())</td>
                             <td>
                                 @if (zone.ExcludeFromLandingPage)
                                 {
-                                    <span class="badge bg-warning text-dark"><i class="bx bx-home-alt"></i> Excluded</span>
+                                    <span class="badge bg-warning text-dark"><i class="bx bx-home-alt"></i> @Localizer["Excluded"]</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-success"><i class="bx bx-home-alt"></i> Included</span>
+                                    <span class="badge bg-success"><i class="bx bx-home-alt"></i> @Localizer["Included"]</span>
                                 }
                             </td>
                             <td><code class="small">@zone.DefaultCssClass</code></td>
@@ -68,11 +68,11 @@
                             <td>
                                 @if (zone.IsActive)
                                 {
-                                    <span class="badge bg-success">Active</span>
+                                    <span class="badge bg-success">@Localizer["Active"]</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">Inactive</span>
+                                    <span class="badge bg-secondary">@Localizer["Inactive"]</span>
                                 }
                             </td>
                             <td>

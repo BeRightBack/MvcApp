@@ -6,7 +6,7 @@
 
 <section class="py-4">
     <div class="container" style="max-width:650px;">
-        <h2 class="fw-bold mb-4"><i class='bx bx-upload'></i> Upload Video</h2>
+        <h2 class="fw-bold mb-4"><i class='bx bx-upload'></i> @Localizer["Upload Video"]</h2>
 
         @if (TempData["Error"] != null)
         {
@@ -22,17 +22,17 @@
                     @Html.AntiForgeryToken()
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Title <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold">@Localizer["Title"] <span class="text-danger">*</span></label>
                         <input type="text" name="title" class="form-control" required maxlength="200" autofocus placeholder="Give your video a title" />
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Description</label>
+                        <label class="form-label fw-semibold">@Localizer["Description"]</label>
                         <textarea name="description" class="form-control" rows="3" maxlength="2000" placeholder="Describe your video (optional)"></textarea>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Category</label>
+                        <label class="form-label fw-semibold">@Localizer["Category"]</label>
                         <select name="category" class="form-select">
                             @foreach (var cat in categories)
                             {
@@ -42,22 +42,22 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Video File <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold">@Localizer["Video File"] <span class="text-danger">*</span></label>
                         <input type="file" name="videoFile" class="form-control" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo" required />
-                        <div class="form-text">MP4, WebM, OGG, MOV, or AVI — Max 100MB</div>
+                        <div class="form-text">@Localizer["MP4, WebM, OGG, MOV, or AVI — Max 100MB"]</div>
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Thumbnail (optional)</label>
                         <input type="file" name="thumbnailFile" class="form-control" accept="image/jpeg,image/png,image/webp" />
-                        <div class="form-text">JPEG, PNG, or WebP — If not provided, a default thumbnail is shown</div>
+                        <div class="form-text">@Localizer["JPEG, PNG, or WebP — If not provided, a default thumbnail is shown"]</div>
                     </div>
 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary rounded-pill px-4">
-                            <i class='bx bx-upload'></i> Upload
+                            <i class='bx bx-upload'></i> @Localizer["Upload"]
                         </button>
-                        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill">Cancel</a>
+                        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill">@Localizer["Cancel"]</a>
                     </div>
                 </form>
             </div>

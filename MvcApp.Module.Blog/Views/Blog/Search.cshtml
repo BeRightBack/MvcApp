@@ -9,8 +9,8 @@
         <div class="col-lg-8">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-action="Index">Blog</a></li>
-                    <li class="breadcrumb-item active">Search</li>
+                    <li class="breadcrumb-item"><a asp-action="Index">@Localizer["Blog"]</a></li>
+                    <li class="breadcrumb-item active">@Localizer["Search"]</li>
                 </ol>
             </nav>
 
@@ -19,7 +19,7 @@
             <form asp-action="Search" method="get" class="mb-4">
                 <div class="input-group">
                     <input type="text" name="q" class="form-control" value="@query" placeholder="Search blog..." />
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> @Localizer["Search"]</button>
                 </div>
             </form>
 
@@ -45,7 +45,7 @@
                         {
                             <p>@post.Excerpt</p>
                         }
-                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">Read More</a>
+                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">@Localizer["Read More"]</a>
                     </div>
                 </article>
             }

@@ -10,11 +10,11 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">My Gallery</h1>
-                <p class="text-muted mb-0">Manage your photos</p>
+                <h1 class="fw-bold" style="font-family:'Playfair Display',Georgia,serif;">@Localizer["My Gallery"]</h1>
+                <p class="text-muted mb-0">@Localizer["Manage your photos"]</p>
             </div>
             <a asp-controller="Discover" asp-action="Index" class="btn btn-outline-secondary rounded-pill">
-                <i class='bx bx-arrow-back'></i> Back to Discover
+                <i class='bx bx-arrow-back'></i> @Localizer["Back to Discover"]
             </a>
         </div>
 
@@ -42,26 +42,26 @@
 
         <!-- Upload Form -->
         <div class="card border-0 rounded-4 shadow-sm p-4 mb-4">
-            <h5 class="fw-bold mb-3"><i class='bx bx-cloud-upload'></i> Upload Photo</h5>
+            <h5 class="fw-bold mb-3"><i class='bx bx-cloud-upload'></i> @Localizer["Upload Photo"]</h5>
             <form asp-action="Upload" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <div class="row g-3 align-items-end">
                     <div class="col-md-5">
-                        <label class="form-label fw-semibold small">Photo File</label>
+                        <label class="form-label fw-semibold small">@Localizer["Photo File"]</label>
                         <input type="file" name="file" accept="image/jpeg,image/png,image/gif,image/webp" class="form-control rounded-pill" required />
-                        <div class="form-text">JPEG, PNG, GIF, or WebP. Max 10MB.</div>
+                        <div class="form-text">@Localizer["JPEG, PNG, GIF, or WebP. Max 10MB."]</div>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold small">Privacy</label>
+                        <label class="form-label fw-semibold small">@Localizer["Privacy"]</label>
                         <select name="privacy" class="form-select rounded-pill">
-                            <option value="Public">Public</option>
-                            <option value="MembersOnly">Members Only</option>
+                            <option value="Public">@Localizer["Public"]</option>
+                            <option value="MembersOnly">@Localizer["Members Only"]</option>
                             <option value="ExplicitUnlocked">Explicit (Unlocked)</option>
                         </select>
                     </div>
                     <div class="col-md-2 d-grid">
                         <button type="submit" class="btn rounded-pill" style="background:linear-gradient(135deg,#fdcb6e,#e74c6f); color:#fff;">
-                            <i class='bx bx-upload'></i> Upload
+                            <i class='bx bx-upload'></i> @Localizer["Upload"]
                         </button>
                     </div>
                 </div>
@@ -91,13 +91,13 @@
                                     @switch (photo.PrivacyLevel)
                                     {
                                         case PrivacyLevel.Public:
-                                            <text><i class='bx bx-globe'></i> Public</text>
+                                            <text><i class='bx bx-globe'></i> @Localizer["Public"]</text>
                                             break;
                                         case PrivacyLevel.MembersOnly:
-                                            <text><i class='bx bx-group'></i> Members Only</text>
+                                            <text><i class='bx bx-group'></i> @Localizer["Members Only"]</text>
                                             break;
                                         case PrivacyLevel.ExplicitUnlocked:
-                                            <text><i class='bx bx-lock-open'></i> Explicit</text>
+                                            <text><i class='bx bx-lock-open'></i> @Localizer["Explicit"]</text>
                                             break;
                                     }
                                 </span>
@@ -116,9 +116,9 @@
                                     <form asp-action="SetPrivacy" asp-route-id="@photo.Id" method="post" class="d-inline">
                                         @Html.AntiForgeryToken()
                                         <select name="privacy" onchange="this.form.submit()" class="form-select form-select-sm rounded-pill" style="width:auto;">
-                                            <option value="Public" selected="@(photo.PrivacyLevel == PrivacyLevel.Public)">Public</option>
-                                            <option value="MembersOnly" selected="@(photo.PrivacyLevel == PrivacyLevel.MembersOnly)">Members</option>
-                                            <option value="ExplicitUnlocked" selected="@(photo.PrivacyLevel == PrivacyLevel.ExplicitUnlocked)">Explicit</option>
+                                            <option value="Public" selected="@(photo.PrivacyLevel == PrivacyLevel.Public)">@Localizer["Public"]</option>
+                                            <option value="MembersOnly" selected="@(photo.PrivacyLevel == PrivacyLevel.MembersOnly)">@Localizer["Members"]</option>
+                                            <option value="ExplicitUnlocked" selected="@(photo.PrivacyLevel == PrivacyLevel.ExplicitUnlocked)">@Localizer["Explicit"]</option>
                                         </select>
                                     </form>
                                     <form asp-action="Delete" asp-route-id="@photo.Id" method="post" class="d-inline"
@@ -139,8 +139,8 @@
         {
             <div class="text-center py-5">
                 <i class='bx bx-image' style="font-size:4rem; color:#e74c6f;"></i>
-                <h4 class="mt-3">No photos yet</h4>
-                <p class="text-muted">Upload your first photo to get started!</p>
+                <h4 class="mt-3">@Localizer["No photos yet"]</h4>
+                <p class="text-muted">@Localizer["Upload your first photo to get started!"]</p>
             </div>
         }
     </div>

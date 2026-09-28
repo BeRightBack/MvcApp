@@ -6,13 +6,13 @@
 <div class="container mt-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Forums</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">@Localizer["Forums"]</a></li>
             <li class="breadcrumb-item"><a asp-action="Forum" asp-route-id="@forum?.Id">@forum?.Name</a></li>
-            <li class="breadcrumb-item active">New Thread</li>
+            <li class="breadcrumb-item active">@Localizer["New Thread"]</li>
         </ol>
     </nav>
 
-    <h1><i class="fa fa-plus-circle"></i> Create New Thread</h1>
+    <h1><i class="fa fa-plus-circle"></i> @Localizer["Create New Thread"]</h1>
 
     @if (!ViewData.ModelState.IsValid)
     {
@@ -26,21 +26,21 @@
                 <input type="hidden" name="forumId" value="@forum?.Id" />
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Title</label>
+                    <label class="form-label fw-bold">@Localizer["Title"]</label>
                     <input type="text" name="title" class="form-control" required maxlength="200"
                            placeholder="Enter a descriptive title..." />
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Content</label>
+                    <label class="form-label fw-bold">@Localizer["Content"]</label>
                     @{ ViewData["RteName"] = "content"; ViewData["RteHeight"] = 400; }
                     <partial name="_RichTextEditor" />
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-paper-plane"></i> Create Thread
+                    <i class="fa fa-paper-plane"></i> @Localizer["Create Thread"]
                 </button>
-                <a asp-action="Forum" asp-route-id="@forum?.Id" class="btn btn-secondary">Cancel</a>
+                <a asp-action="Forum" asp-route-id="@forum?.Id" class="btn btn-secondary">@Localizer["Cancel"]</a>
             </form>
         </div>
     </div>

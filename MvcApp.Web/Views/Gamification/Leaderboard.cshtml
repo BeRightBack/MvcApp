@@ -8,8 +8,8 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2>Leaderboard</h2>
-        <p class="text-muted mb-0">Top members ranked by points earned.</p>
+        <h2>@Localizer["Leaderboard"]</h2>
+        <p class="text-muted mb-0">@Localizer["Top members ranked by points earned."]</p>
     </div>
     <div class="text-end">
         <div class="fw-bold" style="color:var(--template-primary);">@totalPoints pts</div>
@@ -23,9 +23,9 @@
             <thead>
                 <tr>
                     <th style="width:60px;" class="text-center">#</th>
-                    <th>Member</th>
-                    <th class="text-center">Badges</th>
-                    <th class="text-end">Points</th>
+                    <th>@Localizer["Member"]</th>
+                    <th class="text-center">@Localizer["Badges"]</th>
+                    <th class="text-end">@Localizer["Points"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,7 +50,7 @@
                             </a>
                             @if (isCurrentUser)
                             {
-                                <span class="badge bg-primary ms-1">You</span>
+                                <span class="badge bg-primary ms-1">@Localizer["You"]</span>
                             }
                         </td>
                         <td class="text-center">

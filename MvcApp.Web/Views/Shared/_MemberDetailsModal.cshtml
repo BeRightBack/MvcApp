@@ -17,7 +17,7 @@
                     @m.KnownAs, @m.Age
                     @if (m.IsMutual)
                     {
-                        <span class="badge text-bg-danger ms-1">Mutual match</span>
+                        <span class="badge text-bg-danger ms-1">@Localizer["Mutual match"]</span>
                     }
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -26,7 +26,7 @@
                 @if (Model.IsBlockedByYou)
                 {
                     <div class="alert alert-warning py-2 small">
-                        <i class='bx bx-block'></i> You have blocked this member. Unblock to see their profile and start messaging.
+                        <i class='bx bx-block'></i> @Localizer["You have blocked this member. Unblock to see their profile and start messaging."]
                     </div>
                 }
                 <div class="row g-4">
@@ -41,7 +41,7 @@
                         }
                         @if (!string.IsNullOrEmpty(m.LookingFor))
                         {
-                            <p class="mb-3"><strong>Looking for:</strong> @m.LookingFor</p>
+                            <p class="mb-3"><strong>@Localizer["Looking for:"]</strong> @m.LookingFor</p>
                         }
                         <div class="small text-muted mb-3">
                             <div class="mb-1"><i class='bx bx-map-pin'></i> @m.City, @m.State</div>
@@ -53,7 +53,7 @@
                                 <i class='bx bx-time-five'></i>
                                 @if (m.LastActive.IsOnline())
                                 {
-                                    <span class="online-text">Online now</span>
+                                    <span class="online-text">@Localizer["Online now"]</span>
                                 }
                                 else
                                 {
@@ -63,7 +63,7 @@
                         </div>
                         @if (interests.Count > 0)
                         {
-                            <h6 class="fw-bold mb-2">Interests</h6>
+                            <h6 class="fw-bold mb-2">@Localizer["Interests"]</h6>
                             <div>
                                 @foreach (var interest in interests)
                                 {
@@ -78,7 +78,7 @@
                 @if (Model.ShowMessageButton)
                 {
                     <a class="btn btn-primary" href="/Messages/Chat/@m.Id">
-                        <i class='bx bx-message-rounded-dots'></i> Send Message
+                        <i class='bx bx-message-rounded-dots'></i> @Localizer["Send Message"]
                     </a>
                 }
                 @if (Model.ShowLikeButton)
@@ -100,7 +100,7 @@
                         <input type="hidden" name="returnUrl" value="@returnUrl" />
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-outline-success">
-                            <i class='bx bx-user-check'></i> Unblock
+                            <i class='bx bx-user-check'></i> @Localizer["Unblock"]
                         </button>
                     </form>
                 }
@@ -112,11 +112,11 @@
                         <input type="hidden" name="returnUrl" value="@returnUrl" />
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-outline-danger">
-                            <i class='bx bx-block'></i> Block
+                            <i class='bx bx-block'></i> @Localizer["Block"]
                         </button>
                     </form>
                 }
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Close"]</button>
             </div>
         </div>
     </div>

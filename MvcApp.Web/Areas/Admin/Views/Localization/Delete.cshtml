@@ -4,9 +4,9 @@
     ViewData["Title"] = "Delete";
 }
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>@Localizer["Are you sure you want to delete this?"]</h3>
 <div>
-    <h4>StringResource</h4>
+    <h4>@Localizer["StringResource"]</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -18,7 +18,7 @@
     </dl>
 </div>
 <div>
-    <h4>Name</h4>
+    <h4>@Localizer["Name"]</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -30,7 +30,7 @@
     </dl>
 </div>
 <div>
-    <h4>Value</h4>
+    <h4>@Localizer["Value"]</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -47,6 +47,6 @@
 
     <div class="form-group">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">@Localizer["Back to List"]</a>
     </div>
 </form>

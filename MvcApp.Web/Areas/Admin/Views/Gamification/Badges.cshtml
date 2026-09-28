@@ -5,7 +5,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h4 class="mb-1">Badges</h4>
+        <h4 class="mb-1">@Localizer["Badges"]</h4>
         <small class="text-muted">@Model.Count badges · @ViewBag.TotalAwarded awarded · @ViewBag.TotalUsers users</small>
     </div>
 </div>
@@ -15,11 +15,11 @@
         <table class="table table-admin">
             <thead>
                 <tr>
-                    <th>Badge</th>
-                    <th>Category</th>
-                    <th>Criteria</th>
-                    <th class="text-center">Value</th>
-                    <th class="text-center">Enabled</th>
+                    <th>@Localizer["Badge"]</th>
+                    <th>@Localizer["Category"]</th>
+                    <th>@Localizer["Criteria"]</th>
+                    <th class="text-center">@Localizer["Value"]</th>
+                    <th class="text-center">@Localizer["Enabled"]</th>
                     <th></th>
                 </tr>
             </thead>

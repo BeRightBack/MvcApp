@@ -7,7 +7,7 @@
 
 <div class="card mb-4">
     <div class="card-header bg-dark text-white">
-        <h5 class="mb-0"><i class="fa fa-search"></i> Search</h5>
+        <h5 class="mb-0"><i class="fa fa-search"></i> @Localizer["Search"]</h5>
     </div>
     <div class="card-body">
         <form asp-action="Search" asp-controller="Blog" method="get">
@@ -23,7 +23,7 @@
 {
     <div class="card mb-4">
         <div class="card-header bg-dark text-white">
-            <h5 class="mb-0"><i class="fa fa-archive"></i> Archives</h5>
+            <h5 class="mb-0"><i class="fa fa-archive"></i> @Localizer["Archives"]</h5>
         </div>
         <div class="card-body py-2">
             <ul class="list-unstyled mb-0">
@@ -42,7 +42,7 @@
 
 <div class="card mb-4">
     <div class="card-header bg-dark text-white">
-        <h5 class="mb-0"><i class="fa fa-folder"></i> Categories</h5>
+        <h5 class="mb-0"><i class="fa fa-folder"></i> @Localizer["Categories"]</h5>
     </div>
     <div class="card-body py-2">
         <ul class="list-unstyled mb-0">
@@ -56,7 +56,7 @@
 
 <div class="card mb-4">
     <div class="card-header bg-dark text-white">
-        <h5 class="mb-0"><i class="fa fa-tags"></i> Tags</h5>
+        <h5 class="mb-0"><i class="fa fa-tags"></i> @Localizer["Tags"]</h5>
     </div>
     <div class="card-body py-2">
         @foreach (var tag in tags)
@@ -68,7 +68,7 @@
 
 <div class="card mb-4">
     <div class="card-header bg-dark text-white">
-        <h5 class="mb-0"><i class="fa fa-clock-o"></i> Recent Posts</h5>
+        <h5 class="mb-0"><i class="fa fa-clock-o"></i> @Localizer["Recent Posts"]</h5>
     </div>
     <div class="card-body py-2">
         <ul class="list-unstyled mb-0">

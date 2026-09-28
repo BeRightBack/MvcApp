@@ -4,7 +4,7 @@
     ViewBag.CurrentPage = "Store";
 }
 
-<h1>Create Category</h1>
+<h1>@Localizer["Create Category"]</h1>
 
 <form asp-action="CreateCategory" method="post">
     <div class="row">
@@ -22,8 +22,8 @@
                 <label asp-for="SortOrder" class="form-label"></label>
                 <input asp-for="SortOrder" class="form-control" type="number" value="0" />
             </div>
-            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
-            <a asp-action="Categories" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> @Localizer["Save"]</button>
+            <a asp-action="Categories" class="btn btn-outline-secondary">@Localizer["Cancel"]</a>
         </div>
     </div>
 </form>

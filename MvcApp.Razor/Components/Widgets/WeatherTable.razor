@@ -1,14 +1,14 @@
 @using MvcApp.Core
 @attribute [BlazorPageComponent("Weather", DisplayName = "Weather forecast", Description = "Static table of sample weather forecasts.", Category = "Content")]
 <div class="mb-4">
-    <h5 class="mb-3">Weather forecast</h5>
+    <h5 class="mb-3">@Localizer["Weather forecast"]</h5>
     <table class="table table-sm table-striped">
         <thead>
             <tr>
-                <th>Date</th>
+                <th>@Localizer["Date"]</th>
                 <th>Temp. (C)</th>
                 <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>@Localizer["Summary"]</th>
             </tr>
         </thead>
         <tbody>

@@ -40,7 +40,7 @@
          style="min-height:@(height)px;overflow-y:auto;font-family:sans-serif;font-size:14px;line-height:1.6"
          oninput="rteSync('@id')">@Html.Raw(value)</div>
     <div id="@id-preview" class="rte-preview form-control mt-1" style="min-height:@(height)px;overflow-y:auto;display:none;font-family:sans-serif;font-size:14px;line-height:1.6;background:#f8f9fa;padding:8px;border:1px solid #ccc"></div>
-    <small class="text-muted">HTML editor with basic formatting. Use toolbar buttons or keyboard shortcuts.</small>
+    <small class="text-muted">@Localizer["HTML editor with basic formatting. Use toolbar buttons or keyboard shortcuts."]</small>
 </div>
 
 <script>

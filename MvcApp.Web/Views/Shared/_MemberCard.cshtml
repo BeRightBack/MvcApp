@@ -27,12 +27,12 @@
             {
                 <div class="position-absolute top-50 start-50 translate-middle text-center" style="z-index:3;">
                     <i class='bx bx-lock' style="font-size:2rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.5);"></i>
-                    <div class="text-white fw-semibold small" style="text-shadow:0 2px 8px rgba(0,0,0,0.5);">Like to reveal</div>
+                    <div class="text-white fw-semibold small" style="text-shadow:0 2px 8px rgba(0,0,0,0.5);">@Localizer["Like to reveal"]</div>
                 </div>
             }
             @if (m.IsMutual)
             {
-                <span class="match-badge"><i class='bx bxs-heart me-1'></i>It's a Match!</span>
+                <span class="match-badge"><i class='bx bxs-heart me-1'></i>@Localizer["It's a Match!"]</span>
             }
             @if (m.LastActive.IsOnline())
             {
@@ -41,13 +41,13 @@
             @if (m.IsAvailable)
             {
                 <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark" title="Available tonight">
-                    <i class='bx bx-moon'></i> Tonight
+                    <i class='bx bx-moon'></i> @Localizer["Tonight"]
                 </span>
             }
             @if (m.IsBoosted)
             {
                 <span class="position-absolute bottom-0 start-0 m-2 badge" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;" title="Boosted profile">
-                    <i class='bx bx-bolt'></i> Boosted
+                    <i class='bx bx-bolt'></i> @Localizer["Boosted"]
                 </span>
             }
         </div>
@@ -74,7 +74,7 @@
                 <i class='bx bx-time-five'></i>
                 @if (m.LastActive.IsOnline())
                 {
-                    <span class="online-text">Online now</span>
+                    <span class="online-text">@Localizer["Online now"]</span>
                 }
                 else
                 {
@@ -118,25 +118,25 @@
                             <input type="hidden" name="returnUrl" value="@returnUrl" />
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-sm rounded-pill btn-outline-warning" title="Super Like — they'll see you first">
-                                <i class='bx bx-star'></i> Super
+                                <i class='bx bx-star'></i> @Localizer["Super"]
                             </button>
                         </form>
                     }
                     else if (m.IsSuperLikedByYou)
                     {
                         <span class="btn btn-sm rounded-pill btn-warning">
-                            <i class='bx bxs-star'></i> Super Liked
+                            <i class='bx bxs-star'></i> @Localizer["Super Liked"]
                         </span>
                     }
                 }
                 @if (Model.ShowMessageButton)
                 {
                     <a class="btn btn-sm rounded-pill btn-outline-primary" href="/Messages/Chat/@m.Id">
-                        <i class='bx bx-message-rounded-dots'></i> Message
+                        <i class='bx bx-message-rounded-dots'></i> @Localizer["Message"]
                     </a>
                 }
                 <a class="btn btn-sm rounded-pill btn-outline-secondary" asp-controller="Members" asp-action="Details" asp-route-id="@m.Username">
-                    <i class='bx bx-user'></i> Profile
+                    <i class='bx bx-user'></i> @Localizer["Profile"]
                 </a>
             </div>
         </div>

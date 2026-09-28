@@ -1,9 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 
 <div class="form-group">
-    <label class="form-label" for="editor">Description</label><br />
-    <button @onclick="Bold">Bold</button>
-    <button @onclick="Italic">Italic</button>
+    <label class="form-label" for="editor">@Localizer["Description"]</label><br />
+    <button @onclick="Bold">@Localizer["Bold"]</button>
+    <button @onclick="Italic">@Localizer["Italic"]</button>
     <InputTextArea @bind-Value="Value" id="editor" class="form-control" @oninput="UpdateText" style="width:100%; height:300px;"></InputTextArea>
 
 

@@ -3,14 +3,14 @@
     ViewData["Title"] = "My Orders";
 }
 
-<h1>My Orders</h1>
+<h1>@Localizer["My Orders"]</h1>
 
 @if (!Model.Any())
 {
     <div class="text-center py-5">
         <i class="fa fa-shopping-bag fa-4x text-muted mb-3"></i>
-        <p class="lead">You haven't placed any orders yet.</p>
-        <a asp-action="Index" class="btn btn-primary">Start Shopping</a>
+        <p class="lead">@Localizer["You haven't placed any orders yet."]</p>
+        <a asp-action="Index" class="btn btn-primary">@Localizer["Start Shopping"]</a>
     </div>
 }
 else
@@ -19,11 +19,11 @@ else
         <table class="table">
             <thead>
                 <tr>
-                    <th>Order #</th>
-                    <th>Date</th>
-                    <th>Items</th>
-                    <th>Total</th>
-                    <th>Status</th>
+                    <th>@Localizer["Order #"]</th>
+                    <th>@Localizer["Date"]</th>
+                    <th>@Localizer["Items"]</th>
+                    <th>@Localizer["Total"]</th>
+                    <th>@Localizer["Status"]</th>
                     <th></th>
                 </tr>
             </thead>

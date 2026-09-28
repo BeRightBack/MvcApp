@@ -7,7 +7,7 @@
 <div class="container-fluid py-3">
     <div class="mb-4">
         <div class="d-flex align-items-center mb-2">
-            <a asp-action="ProjectDetails" asp-route-id="@task.ProjectId" class="btn btn-sm btn-outline-secondary me-3" title="Return to project"><i class="bi bi-arrow-left"></i> Back to Project</a>
+            <a asp-action="ProjectDetails" asp-route-id="@task.ProjectId" class="btn btn-sm btn-outline-secondary me-3" title="Return to project"><i class="bi bi-arrow-left"></i> @Localizer["Back to Project"]</a>
             <span class="badge @UtilityDisplay.StatusBadgeClass(task.Status)">@UtilityDisplay.StatusText(task.Status)</span>
         </div>
         <h1 class="display-6 fw-bold mb-0">@task.Title</h1>
@@ -21,17 +21,17 @@
         <div class="col-md-8">
             <div class="card shadow-sm mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Description</h5>
+                    <h5 class="mb-0">@Localizer["Description"]</h5>
                     <button type="button" class="btn btn-sm btn-outline-secondary"
                             data-bs-toggle="modal" data-bs-target="#editTaskModal"
                             data-id="@task.Id" data-title="@task.Title" data-description="@task.Description"
                             data-status="@task.Status" data-priority="@task.Priority" data-duedate="@(task.DueDate.HasValue ? task.DueDate.Value.ToString("yyyy-MM-dd") : "")"
-                            title="Edit task details"><i class="bi bi-pencil"></i> Edit</button>
+                            title="Edit task details"><i class="bi bi-pencil"></i> @Localizer["Edit"]</button>
                 </div>
                 <div class="card-body">
                     @if (string.IsNullOrWhiteSpace(task.Description))
                     {
-                        <p class="text-muted fst-italic">No description provided</p>
+                        <p class="text-muted fst-italic">@Localizer["No description provided"]</p>
                     }
                     else
                     {
@@ -42,13 +42,13 @@
 
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Subtasks</h5>
-                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addSubtaskModal" title="Add a new subtask"><i class="bi bi-plus-circle"></i> Add Subtask</button>
+                    <h5 class="mb-0">@Localizer["Subtasks"]</h5>
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addSubtaskModal" title="Add a new subtask"><i class="bi bi-plus-circle"></i> @Localizer["Add Subtask"]</button>
                 </div>
                 <div class="card-body">
                     @if (!Model.Subtasks.Any())
                     {
-                        <p class="text-muted text-center py-3">No subtasks yet</p>
+                        <p class="text-muted text-center py-3">@Localizer["No subtasks yet"]</p>
                     }
                     else
                     {
@@ -73,7 +73,7 @@
 
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
-                <div class="card-header"><h5 class="mb-0">Status</h5></div>
+                <div class="card-header"><h5 class="mb-0">@Localizer["Status"]</h5></div>
                 <div class="card-body">
                     <form method="post" asp-action="ChangeTaskStatus" asp-route-id="@task.Id">
                         <select name="status" class="form-select mb-3" aria-label="Change task status" onchange="this.form.submit()">
@@ -84,18 +84,18 @@
                         </select>
                     </form>
                     <div class="d-grid">
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTaskModal" data-id="@task.Id" data-title="@task.Title" title="Delete this task"><i class="bi bi-trash"></i> Delete Task</button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTaskModal" data-id="@task.Id" data-title="@task.Title" title="Delete this task"><i class="bi bi-trash"></i> @Localizer["Delete Task"]</button>
                     </div>
                 </div>
             </div>
 
             <div class="card shadow-sm">
-                <div class="card-header"><h5 class="mb-0">Task Info</h5></div>
+                <div class="card-header"><h5 class="mb-0">@Localizer["Task Info"]</h5></div>
                 <div class="card-body">
-                    <p class="mb-2"><small><strong>Created:</strong> @task.CreatedAt.ToString("MMM d, yyyy")</small></p>
+                    <p class="mb-2"><small><strong>@Localizer["Created:"]</strong> @task.CreatedAt.ToString("MMM d, yyyy")</small></p>
                     @if (task.CompletedAt.HasValue)
                     {
-                        <p class="mb-0"><small><strong>Completed:</strong> @task.CompletedAt.Value.ToString("MMM d, yyyy")</small></p>
+                        <p class="mb-0"><small><strong>@Localizer["Completed:"]</strong> @task.CompletedAt.Value.ToString("MMM d, yyyy")</small></p>
                     }
                 </div>
             </div>
@@ -110,20 +110,20 @@
             <form asp-action="EditTask" method="post">
                 <input type="hidden" id="editTaskId" name="Id" value="0" />
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Task</h5>
+                    <h5 class="modal-title">@Localizer["Edit Task"]</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="editTaskTitle" class="form-label">Task Title</label>
+                        <label for="editTaskTitle" class="form-label">@Localizer["Task Title"]</label>
                         <input id="editTaskTitle" name="Title" class="form-control" required maxlength="200" />
                     </div>
                     <div class="mb-3">
-                        <label for="editTaskDescription" class="form-label">Description</label>
+                        <label for="editTaskDescription" class="form-label">@Localizer["Description"]</label>
                         <textarea id="editTaskDescription" name="Description" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="editTaskStatus" class="form-label">Status</label>
+                        <label for="editTaskStatus" class="form-label">@Localizer["Status"]</label>
                         <select id="editTaskStatus" name="Status" class="form-select">
                             @foreach (var s in Enum.GetValues<ToDoTaskStatus>())
                             {
@@ -132,21 +132,21 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editTaskPriority" class="form-label">Priority</label>
+                        <label for="editTaskPriority" class="form-label">@Localizer["Priority"]</label>
                         <select id="editTaskPriority" name="Priority" class="form-select">
-                            <option value="0">Low</option>
-                            <option value="1">Medium</option>
-                            <option value="2">High</option>
+                            <option value="0">@Localizer["Low"]</option>
+                            <option value="1">@Localizer["Medium"]</option>
+                            <option value="2">@Localizer["High"]</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editTaskDueDate" class="form-label">Due Date</label>
+                        <label for="editTaskDueDate" class="form-label">@Localizer["Due Date"]</label>
                         <input id="editTaskDueDate" name="DueDate" type="date" class="form-control" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                    <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
                 </div>
             </form>
         </div>
@@ -159,18 +159,18 @@
         <div class="modal-content">
             <form asp-action="CreateSubtask" asp-route-id="@task.Id" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Subtask</h5>
+                    <h5 class="modal-title">@Localizer["Add Subtask"]</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="subtaskTitle" class="form-label">Subtask Title</label>
+                        <label for="subtaskTitle" class="form-label">@Localizer["Subtask Title"]</label>
                         <input id="subtaskTitle" name="Title" class="form-control" required maxlength="200" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                    <button type="submit" class="btn btn-primary">@Localizer["Add"]</button>
                 </div>
             </form>
         </div>
@@ -184,16 +184,16 @@
             <form asp-action="DeleteTask" method="post">
                 <input type="hidden" id="deleteTaskId" name="id" value="0" />
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirm Delete</h5>
+                    <h5 class="modal-title">@Localizer["Confirm Delete"]</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete the task "<strong id="deleteTaskTitle"></strong>"?</p>
-                    <p class="text-danger">This will delete all subtasks within this task.</p>
+                    <p>@Localizer["Are you sure you want to delete the task \""]<strong id="deleteTaskTitle"></strong>"?</p>
+                    <p class="text-danger">@Localizer["This will delete all subtasks within this task."]</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                    <button type="submit" class="btn btn-danger">@Localizer["Delete"]</button>
                 </div>
             </form>
         </div>

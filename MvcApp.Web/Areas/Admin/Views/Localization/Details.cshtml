@@ -5,7 +5,7 @@
 }
 
 <div>
-    <h4>StringResource</h4>
+    <h4>@Localizer["StringResource"]</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -17,7 +17,7 @@
     </dl>
 </div>
 <div>
-    <h4>Name</h4>
+    <h4>@Localizer["Name"]</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -29,7 +29,7 @@
     </dl>
 </div>
 <div>
-    <h4>Value</h4>
+    <h4>@Localizer["Value"]</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -42,6 +42,6 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">@Localizer["Edit"]</a> |
+    <a asp-action="Index">@Localizer["Back to List"]</a>
 </div>

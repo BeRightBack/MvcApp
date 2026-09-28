@@ -1,24 +1,24 @@
 ﻿@attribute [StreamRendering]
 
-<PageTitle>Weather</PageTitle>
+<PageTitle>@Localizer["Weather"]</PageTitle>
 
-<h1>Weather</h1>
+<h1>@Localizer["Weather"]</h1>
 
-<p>This component demonstrates showing data.</p>
+<p>@Localizer["This component demonstrates showing data."]</p>
 
 @if (forecasts == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@Localizer["Loading..."]</em></p>
 }
 else
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
+                <th>@Localizer["Date"]</th>
                 <th aria-label="Temperature in Celsius">Temp. (C)</th>
                 <th aria-label="Temperature in Fahrenheit">Temp. (F)</th>
-                <th>Summary</th>
+                <th>@Localizer["Summary"]</th>
             </tr>
         </thead>
         <tbody>

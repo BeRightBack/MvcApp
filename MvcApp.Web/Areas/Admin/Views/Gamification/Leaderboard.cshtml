@@ -5,11 +5,11 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h4 class="mb-1">Leaderboard</h4>
+        <h4 class="mb-1">@Localizer["Leaderboard"]</h4>
         <small class="text-muted">@ViewBag.ActiveUsers active users · @ViewBag.TotalPointsInSystem total points earned</small>
     </div>
     <a asp-action="Badges" class="btn btn-outline-secondary btn-sm">
-        <i class='bx bx-arrow-back me-1'></i>Back
+        <i class='bx bx-arrow-back me-1'></i>@Localizer["Back"]
     </a>
 </div>
 
@@ -19,10 +19,10 @@
             <thead>
                 <tr>
                     <th style="width:60px;" class="text-center">#</th>
-                    <th>User</th>
-                    <th class="text-center">Badges</th>
-                    <th class="text-center">Verified</th>
-                    <th class="text-end">Points</th>
+                    <th>@Localizer["User"]</th>
+                    <th class="text-center">@Localizer["Badges"]</th>
+                    <th class="text-center">@Localizer["Verified"]</th>
+                    <th class="text-end">@Localizer["Points"]</th>
                 </tr>
             </thead>
             <tbody>

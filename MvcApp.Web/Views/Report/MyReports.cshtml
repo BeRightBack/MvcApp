@@ -11,7 +11,7 @@
 
 <section class="py-4">
     <div class="container" style="max-width:800px;">
-        <h2 class="fw-bold mb-4"><i class='bx bx-flag'></i> My Reports</h2>
+        <h2 class="fw-bold mb-4"><i class='bx bx-flag'></i> @Localizer["My Reports"]</h2>
 
         @if (TempData["Message"] != null)
         {
@@ -25,8 +25,8 @@
         {
             <div class="text-center py-5">
                 <i class='bx bx-flag' style="font-size:4rem; color:#6c757d;"></i>
-                <h4 class="mt-3">No reports yet</h4>
-                <p class="text-muted">You haven't reported any users.</p>
+                <h4 class="mt-3">@Localizer["No reports yet"]</h4>
+                <p class="text-muted">@Localizer["You haven't reported any users."]</p>
             </div>
         }
         else
@@ -42,18 +42,18 @@
                                     <span class="badge bg-warning text-dark">@reasonLabel</span>
                                     @if (report.Status == ReportStatus.Pending)
                                     {
-                                        <span class="badge bg-info">Pending Review</span>
+                                        <span class="badge bg-info">@Localizer["Pending Review"]</span>
                                     }
                                     else if (report.Status == ReportStatus.Reviewed)
                                     {
-                                        <span class="badge bg-success">Reviewed</span>
+                                        <span class="badge bg-success">@Localizer["Reviewed"]</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary">Dismissed</span>
+                                        <span class="badge bg-secondary">@Localizer["Dismissed"]</span>
                                     }
                                 </div>
-                                <p class="mb-1">Reported <strong>@report.ReportedUser?.KnownAs</strong> (@@report.ReportedUser?.UserName)</p>
+                                <p class="mb-1">@Localizer["Reported"] <strong>@report.ReportedUser?.KnownAs</strong> (@@report.ReportedUser?.UserName)</p>
                                 @if (!string.IsNullOrEmpty(report.Description))
                                 {
                                     <p class="text-muted small mb-0">@report.Description</p>

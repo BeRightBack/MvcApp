@@ -13,7 +13,7 @@
     <nav>
         <ul class="pagination justify-content-center">
             <li class="page-item @(page <= 1 ? "disabled" : "")">
-                <a class="page-link" href="@GetPageUrl(page - 1, action, slug, query, year, month)">Previous</a>
+                <a class="page-link" href="@GetPageUrl(page - 1, action, slug, query, year, month)">@Localizer["Previous"]</a>
             </li>
             @for (int i = 1; i <= totalPages; i++)
             {
@@ -22,7 +22,7 @@
                 </li>
             }
             <li class="page-item @(page >= totalPages ? "disabled" : "")">
-                <a class="page-link" href="@GetPageUrl(page + 1, action, slug, query, year, month)">Next</a>
+                <a class="page-link" href="@GetPageUrl(page + 1, action, slug, query, year, month)">@Localizer["Next"]</a>
             </li>
         </ul>
     </nav>

@@ -4,14 +4,14 @@
     ViewBag.CurrentPage = "Store";
 }
 
-<h1>Orders</h1>
+<h1>@Localizer["Orders"]</h1>
 
 <div class="mb-3">
-    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa fa-dashboard"></i> Dashboard</a>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa fa-dashboard"></i> @Localizer["Dashboard"]</a>
 </div>
 
 <div class="btn-group mb-3" role="group">
-    <a asp-action="Orders" class="btn btn-outline-primary btn-sm @(ViewBag.StatusFilter == null ? "active" : "")">All</a>
+    <a asp-action="Orders" class="btn btn-outline-primary btn-sm @(ViewBag.StatusFilter == null ? "active" : "")">@Localizer["All"]</a>
     @foreach (var s in Enum.GetValues<OrderStatus>())
     {
         <a asp-action="Orders" asp-route-status="@((int)s)" class="btn btn-outline-primary btn-sm @(ViewBag.StatusFilter != null && (OrderStatus)ViewBag.StatusFilter == s ? "active" : "")">@s</a>
@@ -22,13 +22,13 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Order #</th>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Payment</th>
+                <th>@Localizer["Order #"]</th>
+                <th>@Localizer["Date"]</th>
+                <th>@Localizer["Customer"]</th>
+                <th>@Localizer["Items"]</th>
+                <th>@Localizer["Total"]</th>
+                <th>@Localizer["Status"]</th>
+                <th>@Localizer["Payment"]</th>
                 <th></th>
             </tr>
         </thead>

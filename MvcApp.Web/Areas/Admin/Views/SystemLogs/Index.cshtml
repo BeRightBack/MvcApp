@@ -25,7 +25,7 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
             <div>
-                <h2 class="fw-bold"><i class='bx bx-terminal'></i> System Logs</h2>
+                <h2 class="fw-bold"><i class='bx bx-terminal'></i> @Localizer["System Logs"]</h2>
                 <p class="text-muted mb-0">
                     Serilog application logs
                     @if (Model.Total > 0)
@@ -39,12 +39,12 @@
                     }
                     else
                     {
-                        <span class="badge bg-light text-secondary ms-1" title="Logging:RetentionDays = 0">auto-purge: off</span>
+                        <span class="badge bg-light text-secondary ms-1" title="Logging:RetentionDays = 0">@Localizer["auto-purge: off"]</span>
                     }
                 </p>
             </div>
             <a asp-area="Admin" asp-controller="AuditLogs" asp-action="Index" class="btn btn-outline-secondary">
-                <i class='bx bx-history me-1'></i> Audit Logs
+                <i class='bx bx-history me-1'></i> @Localizer["Audit Logs"]
             </a>
         </div>
 
@@ -67,9 +67,9 @@
             <div class="card-body">
                 <form method="get" asp-action="Index" class="row g-2 align-items-end">
                     <div class="col-sm-6 col-lg-3">
-                        <label class="form-label small mb-1">Level</label>
+                        <label class="form-label small mb-1">@Localizer["Level"]</label>
                         <select name="level" class="form-select form-select-sm">
-                            <option value="" selected="@(string.IsNullOrEmpty(level))">All levels</option>
+                            <option value="" selected="@(string.IsNullOrEmpty(level))">@Localizer["All levels"]</option>
                             @foreach (var l in levels)
                             {
                                 <option value="@l" selected="@(string.Equals(l, level, StringComparison.OrdinalIgnoreCase))">@l (@Model.LevelCounts[l])</option>
@@ -77,20 +77,20 @@
                         </select>
                     </div>
                     <div class="col-sm-6 col-lg-4">
-                        <label class="form-label small mb-1">Search</label>
+                        <label class="form-label small mb-1">@Localizer["Search"]</label>
                         <input type="text" name="search" value="@search" class="form-control form-control-sm"
                                placeholder="message, template, exception or properties" />
                     </div>
                     <div class="col-6 col-sm-3 col-lg-2">
-                        <label class="form-label small mb-1">From</label>
+                        <label class="form-label small mb-1">@Localizer["From"]</label>
                         <input type="date" name="from" value="@from" class="form-control form-control-sm" />
                     </div>
                     <div class="col-6 col-sm-3 col-lg-2">
-                        <label class="form-label small mb-1">To</label>
+                        <label class="form-label small mb-1">@Localizer["To"]</label>
                         <input type="date" name="to" value="@to" class="form-control form-control-sm" />
                     </div>
                     <div class="col-6 col-sm-3 col-lg-1">
-                        <label class="form-label small mb-1">Rows</label>
+                        <label class="form-label small mb-1">@Localizer["Rows"]</label>
                         <select name="pageSize" class="form-select form-select-sm">
                             @foreach (var size in new[] { 25, 50, 100, 200 })
                             {
@@ -99,7 +99,7 @@
                         </select>
                     </div>
                     <div class="col-6 col-sm-3 col-lg-2 d-flex gap-2">
-                        <button type="submit" class="btn btn-primary btn-sm w-100"><i class='bx bx-search me-1'></i> Filter</button>
+                        <button type="submit" class="btn btn-primary btn-sm w-100"><i class='bx bx-search me-1'></i> @Localizer["Filter"]</button>
                         <a asp-action="Index" class="btn btn-outline-secondary btn-sm" title="Clear filters"><i class='bx bx-x'></i></a>
                     </div>
                 </form>
@@ -110,11 +110,11 @@
             <div class="card-body">
                 @if (!Model.Available)
                 {
-                    <p class="text-muted mb-0">No log data available.</p>
+                    <p class="text-muted mb-0">@Localizer["No log data available."]</p>
                 }
                 else if (Model.Items.Count == 0)
                 {
-                    <p class="text-muted mb-0">No log entries match the current filters.</p>
+                    <p class="text-muted mb-0">@Localizer["No log entries match the current filters."]</p>
                 }
                 else
                 {
@@ -122,9 +122,9 @@
                         <table class="table table-hover align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="width:170px;">Time</th>
-                                    <th style="width:110px;">Level</th>
-                                    <th>Message</th>
+                                    <th style="width:170px;">@Localizer["Time"]</th>
+                                    <th style="width:110px;">@Localizer["Level"]</th>
+                                    <th>@Localizer["Message"]</th>
                                     <th style="width:90px;"></th>
                                 </tr>
                             </thead>
@@ -163,7 +163,7 @@
                                 <li class="page-item @(Model.Page <= 1 ? "disabled" : "")">
                                     <a class="page-link" asp-action="Index" asp-route-level="@level" asp-route-search="@search"
                                        asp-route-from="@from" asp-route-to="@to" asp-route-pageSize="@pageSize"
-                                       asp-route-page="@(Model.Page - 1)">Previous</a>
+                                       asp-route-page="@(Model.Page - 1)">@Localizer["Previous"]</a>
                                 </li>
                                 @for (var i = Math.Max(1, Model.Page - 3); i <= Math.Min(Model.TotalPages, Model.Page + 3); i++)
                                 {
@@ -176,7 +176,7 @@
                                 <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : "")">
                                     <a class="page-link" asp-action="Index" asp-route-level="@level" asp-route-search="@search"
                                        asp-route-from="@from" asp-route-to="@to" asp-route-pageSize="@pageSize"
-                                       asp-route-page="@(Model.Page + 1)">Next</a>
+                                       asp-route-page="@(Model.Page + 1)">@Localizer["Next"]</a>
                                 </li>
                             </ul>
                         </nav>
@@ -189,7 +189,7 @@
         {
             <div class="content-card mt-3">
                 <div class="card-body">
-                    <h6 class="fw-bold mb-2"><i class='bx bx-trash me-1'></i> Manage</h6>
+                    <h6 class="fw-bold mb-2"><i class='bx bx-trash me-1'></i> @Localizer["Manage"]</h6>
                     <p class="text-muted small mb-3">
                         Rows older than the selected window are deleted. The daily auto-purge
                         @(Model.RetentionDays > 0 ? $"currently removes anything older than {Model.RetentionDays} days" : "is disabled").
@@ -208,7 +208,7 @@
                         <form method="post" asp-action="PurgeAll" class="d-inline ms-auto"
                               onsubmit="return confirm('Delete EVERY log row? This cannot be undone.');">
                             <button type="submit" class="btn btn-outline-danger btn-sm">
-                                <i class='bx bx-trash-alt me-1'></i> Delete all
+                                <i class='bx bx-trash-alt me-1'></i> @Localizer["Delete all"]
                             </button>
                         </form>
                     </div>

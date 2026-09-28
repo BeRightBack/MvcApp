@@ -8,8 +8,8 @@
 
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1><i class="fa fa-video-camera"></i> Video Rooms</h1>
-        <a asp-action="Create" class="btn btn-primary"><i class="fa fa-plus"></i> New Room</a>
+        <h1><i class="fa fa-video-camera"></i> @Localizer["Video Rooms"]</h1>
+        <a asp-action="Create" class="btn btn-primary"><i class="fa fa-plus"></i> @Localizer["New Room"]</a>
     </div>
 
     @if (TempData["Success"] != null)
@@ -22,12 +22,12 @@
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>Room</th>
-                        <th class="text-center">Messages</th>
-                        <th>Last Activity</th>
-                        <th>Created By</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Actions</th>
+                        <th>@Localizer["Room"]</th>
+                        <th class="text-center">@Localizer["Messages"]</th>
+                        <th>@Localizer["Last Activity"]</th>
+                        <th>@Localizer["Created By"]</th>
+                        <th class="text-center">@Localizer["Status"]</th>
+                        <th class="text-center">@Localizer["Actions"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,20 +67,20 @@
                             <td class="text-center">
                                 @if (room.IsActive)
                                 {
-                                    <span class="badge bg-success">Active</span>
+                                    <span class="badge bg-success">@Localizer["Active"]</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">Disabled</span>
+                                    <span class="badge bg-secondary">@Localizer["Disabled"]</span>
                                 }
                             </td>
                             <td class="text-center">
-                                <a asp-action="Messages" asp-route-id="@room.Id" class="btn btn-sm btn-outline-primary"><i class="fa fa-list"></i> Messages</a>
-                                <a asp-action="Edit" asp-route-id="@room.Id" class="btn btn-sm btn-outline-secondary"><i class="fa fa-pencil"></i> Edit</a>
+                                <a asp-action="Messages" asp-route-id="@room.Id" class="btn btn-sm btn-outline-primary"><i class="fa fa-list"></i> @Localizer["Messages"]</a>
+                                <a asp-action="Edit" asp-route-id="@room.Id" class="btn btn-sm btn-outline-secondary"><i class="fa fa-pencil"></i> @Localizer["Edit"]</a>
                                 <form asp-action="Delete" asp-route-id="@room.Id" method="post" class="d-inline"
                                       onsubmit="return confirm('Delete this room and all its messages?');">
                                     @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i> Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i> @Localizer["Delete"]</button>
                                 </form>
                             </td>
                         </tr>
@@ -88,7 +88,7 @@
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">No video rooms yet.</td>
+                            <td colspan="6" class="text-center text-muted py-4">@Localizer["No video rooms yet."]</td>
                         </tr>
                     }
                 </tbody>

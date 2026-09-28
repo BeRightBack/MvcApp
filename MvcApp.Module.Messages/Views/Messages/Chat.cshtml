@@ -13,7 +13,7 @@
 <div class="container mt-4">
     <div class="card">
         <div class="card-header d-flex align-items-center gap-3">
-            <a asp-action="Index" class="btn btn-sm btn-outline-secondary">&larr; Back</a>
+            <a asp-action="Index" class="btn btn-sm btn-outline-secondary">@Localizer["Back"]</a>
             <img src="@Url.Action("GetProfilePicture", "Account", new { userId = recipientId })"
                  onerror="this.onerror=null;this.src='/images/default-user.png';"
                  alt="" width="32" height="32"
@@ -22,7 +22,7 @@
             @if (videoEnabled)
             {
                 <button type="button" id="btnVideoCall" class="btn btn-sm btn-danger ms-auto">
-                    <i class="fa fa-video-camera"></i> Video Call
+                    <i class="fa fa-video-camera"></i> @Localizer["Video Call"]
                 </button>
             }
         </div>
@@ -47,7 +47,7 @@
             <form id="messageForm" class="d-flex gap-2" autocomplete="off">
                 <input type="hidden" id="recipientId" value="@recipientId" />
                 <input type="text" id="messageInput" class="form-control" placeholder="Type a message..." required />
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit" class="btn btn-primary">@Localizer["Send"]</button>
             </form>
         </div>
     </div>

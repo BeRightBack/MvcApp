@@ -3,7 +3,7 @@
 }
 
 <div class="container-fluid">
-    <h1>New Video Room</h1>
+    <h1>@Localizer["New Video Room"]</h1>
 
     @if (!ViewData.ModelState.IsValid)
     {
@@ -15,7 +15,7 @@
             <form asp-action="Create" method="post">
                 @Html.AntiForgeryToken()
                 <div class="mb-3">
-                    <label class="form-label">Room Name</label>
+                    <label class="form-label">@Localizer["Room Name"]</label>
                     <input type="text" name="name" class="form-control" required maxlength="100" />
                 </div>
                 <div class="mb-3">
@@ -28,11 +28,11 @@
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" name="isActive" class="form-check-input" value="true" checked id="isActive" />
-                    <label class="form-check-label" for="isActive">Active</label>
+                    <label class="form-check-label" for="isActive">@Localizer["Active"]</label>
                     <input type="hidden" name="isActive" value="false" />
                 </div>
-                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Create Room</button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> @Localizer["Create Room"]</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">@Localizer["Cancel"]</a>
             </form>
         </div>
     </div>

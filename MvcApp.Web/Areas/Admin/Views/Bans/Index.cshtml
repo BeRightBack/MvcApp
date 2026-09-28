@@ -5,7 +5,7 @@
 }
 
 <div class="page-header d-flex justify-content-between align-items-center">
-    <h1>Bans &amp; Moderation</h1>
+    <h1>@Localizer["Bans & Moderation"]</h1>
     <span class="badge bg-danger">@activeCount active</span>
 </div>
 
@@ -26,32 +26,32 @@
 
 <div class="content-card mb-4">
     <div class="card-body">
-        <h5 class="mb-3"><i class='bx bxs-user-x'></i> Ban a user</h5>
+        <h5 class="mb-3"><i class='bx bxs-user-x'></i> @Localizer["Ban a user"]</h5>
         <form asp-action="Ban" method="post" class="row g-3">
             <div class="col-md-3">
-                <label class="form-label">Username or email</label>
+                <label class="form-label">@Localizer["Username or email"]</label>
                 <input type="text" name="username" class="form-control" required placeholder="username or email" />
             </div>
             <div class="col-md-4">
-                <label class="form-label">Reason</label>
+                <label class="form-label">@Localizer["Reason"]</label>
                 <input type="text" name="reason" class="form-control" required placeholder="Why is this user being banned?" />
             </div>
             <div class="col-md-3">
-                <label class="form-label">Duration</label>
+                <label class="form-label">@Localizer["Duration"]</label>
                 <select name="durationHours" class="form-select">
-                    <option value="1">1 hour</option>
-                    <option value="6">6 hours</option>
-                    <option value="12">12 hours</option>
-                    <option value="24">1 day</option>
-                    <option value="72">3 days</option>
-                    <option value="168">1 week</option>
-                    <option value="720">30 days</option>
-                    <option value="2160">90 days</option>
-                    <option value="-1">Indefinitely</option>
+                    <option value="1">@Localizer["1 hour"]</option>
+                    <option value="6">@Localizer["6 hours"]</option>
+                    <option value="12">@Localizer["12 hours"]</option>
+                    <option value="24">@Localizer["1 day"]</option>
+                    <option value="72">@Localizer["3 days"]</option>
+                    <option value="168">@Localizer["1 week"]</option>
+                    <option value="720">@Localizer["30 days"]</option>
+                    <option value="2160">@Localizer["90 days"]</option>
+                    <option value="-1">@Localizer["Indefinitely"]</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="btn btn-danger w-100"><i class='bx bx-shield-x'></i> Ban</button>
+                <button type="submit" class="btn btn-danger w-100"><i class='bx bx-shield-x'></i> @Localizer["Ban"]</button>
             </div>
         </form>
     </div>
@@ -63,12 +63,12 @@
             <table class="table table-admin">
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Reason</th>
-                        <th>Banned By</th>
-                        <th>Banned At</th>
-                        <th>Expires</th>
-                        <th>Status</th>
+                        <th>@Localizer["User"]</th>
+                        <th>@Localizer["Reason"]</th>
+                        <th>@Localizer["Banned By"]</th>
+                        <th>@Localizer["Banned At"]</th>
+                        <th>@Localizer["Expires"]</th>
+                        <th>@Localizer["Status"]</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -90,15 +90,15 @@
                             <td>
                                 @if (active)
                                 {
-                                    <span class="badge bg-danger">Active</span>
+                                    <span class="badge bg-danger">@Localizer["Active"]</span>
                                 }
                                 else if (ban.RevokedAt.HasValue)
                                 {
-                                    <span class="badge bg-secondary">Revoked</span>
+                                    <span class="badge bg-secondary">@Localizer["Revoked"]</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">Expired</span>
+                                    <span class="badge bg-secondary">@Localizer["Expired"]</span>
                                 }
                             </td>
                             <td class="text-end">
@@ -106,7 +106,7 @@
                                 {
                                     <form asp-action="Revoke" method="post" class="d-inline" onsubmit="return confirm('Revoke this ban?');">
                                         <input type="hidden" name="id" value="@ban.Id" />
-                                        <button type="submit" class="btn btn-sm btn-outline-success"><i class='bx bx-shield'></i> Revoke</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-success"><i class='bx bx-shield'></i> @Localizer["Revoke"]</button>
                                     </form>
                                 }
                             </td>
@@ -115,7 +115,7 @@
                     @if (Model.Count == 0)
                     {
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">No bans yet.</td>
+                            <td colspan="7" class="text-center text-muted py-4">@Localizer["No bans yet."]</td>
                         </tr>
                     }
                 </tbody>

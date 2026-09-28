@@ -7,11 +7,11 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4><i class="bx bx-image"></i> Ad Banners</h4>
+    <h4><i class="bx bx-image"></i> @Localizer["Ad Banners"]</h4>
     <div>
         <form asp-action="Index" method="get" class="d-inline">
             <select name="zoneId" class="form-select form-select-sm d-inline-block w-auto" onchange="this.form.submit()">
-                <option value="">-- Select Zone --</option>
+                <option value="">@Localizer["-- Select Zone --"]</option>
                 @foreach (var item in zones ?? Enumerable.Empty<SelectListItem>())
                 {
                     <option value="@item.Value" selected="@(item.Value == selectedZoneId?.ToString())">@item.Text</option>
@@ -20,7 +20,7 @@
         </form>
         @if (selectedZoneId.HasValue)
         {
-            <a asp-action="Create" asp-route-zoneId="@selectedZoneId" class="btn btn-primary btn-sm ms-2"><i class="bx bx-plus"></i> New Banner</a>
+            <a asp-action="Create" asp-route-zoneId="@selectedZoneId" class="btn btn-primary btn-sm ms-2"><i class="bx bx-plus"></i> @Localizer["New Banner"]</a>
         }
     </div>
 </div>
@@ -35,7 +35,7 @@
 
 @if (!selectedZoneId.HasValue)
 {
-    <div class="alert alert-info">Select a zone to manage its banners.</div>
+    <div class="alert alert-info">@Localizer["Select a zone to manage its banners."]</div>
 }
 else
 {
@@ -45,16 +45,16 @@ else
                 <table class="table table-hover align-middle mb-0" id="bannersTable">
                     <thead class="table-light">
                         <tr>
-                            <th style="width: 40px">Order</th>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Preview</th>
-                            <th>Schedule</th>
-                            <th>Targeting</th>
-                            <th>Weight</th>
-                            <th>Limits</th>
-                            <th>Active</th>
-                            <th style="width: 120px">Actions</th>
+                            <th style="width: 40px">@Localizer["Order"]</th>
+                            <th>@Localizer["Name"]</th>
+                            <th>@Localizer["Type"]</th>
+                            <th>@Localizer["Preview"]</th>
+                            <th>@Localizer["Schedule"]</th>
+                            <th>@Localizer["Targeting"]</th>
+                            <th>@Localizer["Weight"]</th>
+                            <th>@Localizer["Limits"]</th>
+                            <th>@Localizer["Active"]</th>
+                            <th style="width: 120px">@Localizer["Actions"]</th>
                         </tr>
                     </thead>
                     <tbody class="sortable-tbody">
@@ -83,7 +83,7 @@ else
                                     }
                                     else
                                     {
-                                        <span class="text-muted">Always</span>
+                                        <span class="text-muted">@Localizer["Always"]</span>
                                     }
                                 </td>
                                 <td class="small">
@@ -97,7 +97,7 @@ else
                                     }
                                     @if (string.IsNullOrWhiteSpace(banner.TargetRoles) && string.IsNullOrWhiteSpace(banner.TargetCultures))
                                     {
-                                        <span class="text-muted">All</span>
+                                        <span class="text-muted">@Localizer["All"]</span>
                                     }
                                 </td>
                                 <td>@banner.Weight</td>
@@ -111,15 +111,15 @@ else
                                 <td>
                                     @if (banner.IsActive && banner.IsScheduled)
                                     {
-                                        <span class="badge bg-success">Live</span>
+                                        <span class="badge bg-success">@Localizer["Live"]</span>
                                     }
                                     else if (banner.IsActive && !banner.IsScheduled)
                                     {
-                                        <span class="badge bg-warning text-dark">Scheduled</span>
+                                        <span class="badge bg-warning text-dark">@Localizer["Scheduled"]</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary">Paused</span>
+                                        <span class="badge bg-secondary">@Localizer["Paused"]</span>
                                     }
                                 </td>
                                 <td>

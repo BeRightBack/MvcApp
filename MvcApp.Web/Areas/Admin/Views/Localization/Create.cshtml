@@ -3,7 +3,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h4>StringResource</h4>
+<h4>@Localizer["StringResource"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -23,12 +23,12 @@
                 <input asp-for="Value" class="form-control" />
                 <span asp-validation-for="Value"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary">@Localizer["Create"]</button>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@Localizer["Back to List"]</a>
 </div>
 

@@ -12,10 +12,10 @@
 
 <div class="container-fluid mt-3 px-3">
     <div class="d-flex align-items-center gap-3 mb-2">
-        <a asp-action="Index" class="btn btn-sm btn-outline-secondary">&larr; Rooms</a>
+        <a asp-action="Index" class="btn btn-sm btn-outline-secondary">@Localizer["Rooms"]</a>
         <h5 class="mb-0"># @roomName</h5>
-        <span class="badge bg-danger ms-auto" id="liveBadge">LIVE</span>
-        <span class="text-muted small" id="viewerCount">0 watching</span>
+        <span class="badge bg-danger ms-auto" id="liveBadge">@Localizer["LIVE"]</span>
+        <span class="text-muted small" id="viewerCount">@Localizer["0 watching"]</span>
     </div>
 
     <div class="row g-3">
@@ -29,7 +29,7 @@
                             <span class="fa fa-video-camera"></span>
                             <span class="slot-label">Slot @(i + 1)</span>
                         </div>
-                        <button type="button" class="claim-btn btn btn-sm btn-danger">Go Live Here</button>
+                        <button type="button" class="claim-btn btn btn-sm btn-danger">@Localizer["Go Live Here"]</button>
                         <div class="occupant-bar d-none">
                             <span class="live-dot"></span>
                             <strong class="occupant-name"></strong>
@@ -40,18 +40,18 @@
 
             <div class="d-flex flex-wrap gap-2 mt-3" id="controlBar">
                 <button type="button" id="btnMic" class="btn btn-outline-secondary btn-sm" disabled>
-                    <span class="mic-on">Mute Mic</span><span class="mic-off d-none">Unmute Mic</span>
+                    <span class="mic-on">@Localizer["Mute Mic"]</span><span class="mic-off d-none">@Localizer["Unmute Mic"]</span>
                 </button>
                 <button type="button" id="btnCam" class="btn btn-outline-secondary btn-sm" disabled>
-                    <span class="cam-on">Stop Camera</span><span class="cam-off d-none">Start Camera</span>
+                    <span class="cam-on">@Localizer["Stop Camera"]</span><span class="cam-off d-none">@Localizer["Start Camera"]</span>
                 </button>
-                <button type="button" id="btnScreen" class="btn btn-outline-secondary btn-sm" disabled>Share Screen</button>
-                <button type="button" id="btnLeave" class="btn btn-danger btn-sm d-none">Stop Streaming</button>
+                <button type="button" id="btnScreen" class="btn btn-outline-secondary btn-sm" disabled>@Localizer["Share Screen"]</button>
+                <button type="button" id="btnLeave" class="btn btn-danger btn-sm d-none">@Localizer["Stop Streaming"]</button>
             </div>
-            <div class="text-muted small mt-2" id="liveStatus">Click a spot to go live. No camera? You can still broadcast audio or join as a viewer.</div>
+            <div class="text-muted small mt-2" id="liveStatus">@Localizer["Click a spot to go live. No camera? You can still broadcast audio or join as a viewer."]</div>
 
             <div class="card mt-3">
-                <div class="card-header">Text chat</div>
+                <div class="card-header">@Localizer["Text chat"]</div>
                 <div class="card-body" id="chatList" style="height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:0.4rem">
                     @foreach (var msg in Model)
                     {
@@ -67,7 +67,7 @@
                 <div class="card-footer">
                     <form id="chatForm" class="d-flex gap-2" autocomplete="off">
                         <input type="text" id="chatInput" class="form-control" placeholder="Message the room…" required />
-                        <button type="submit" class="btn btn-danger">Send</button>
+                        <button type="submit" class="btn btn-danger">@Localizer["Send"]</button>
                     </form>
                 </div>
             </div>
@@ -76,11 +76,11 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>In this room</span>
-                    <span class="badge bg-danger" id="inRoomCount">0 in room</span>
+                    <span>@Localizer["In this room"]</span>
+                    <span class="badge bg-danger" id="inRoomCount">@Localizer["0 in room"]</span>
                 </div>
                 <ul class="list-group list-group-flush" id="participantList" style="max-height:200px;overflow-y:auto">
-                    <li class="list-group-item text-muted">Loading participants…</li>
+                    <li class="list-group-item text-muted">@Localizer["Loading participants…"]</li>
                 </ul>
             </div>
         </div>

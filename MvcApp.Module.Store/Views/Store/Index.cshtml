@@ -5,12 +5,12 @@
     var selectedCategory = ViewBag.SelectedCategory as int?;
 }
 
-<h1>Store</h1>
+<h1>@Localizer["Store"]</h1>
 
 <div class="row mb-4">
     <div class="col-12">
         <div class="btn-group flex-wrap" role="group">
-            <a asp-action="Index" class="btn btn-outline-primary @(selectedCategory == null ? "active" : "")">All</a>
+            <a asp-action="Index" class="btn btn-outline-primary @(selectedCategory == null ? "active" : "")">@Localizer["All"]</a>
             @foreach (var cat in categories)
             {
                 <a asp-action="Index" asp-route-categoryId="@cat.Id" class="btn btn-outline-primary @(selectedCategory == cat.Id ? "active" : "")">@cat.Name</a>

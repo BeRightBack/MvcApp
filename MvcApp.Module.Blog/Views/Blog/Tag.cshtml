@@ -9,7 +9,7 @@
         <div class="col-lg-8">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-action="Index">Blog</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Index">@Localizer["Blog"]</a></li>
                     <li class="breadcrumb-item active">Tag: @tag?.Name</li>
                 </ol>
             </nav>
@@ -18,7 +18,7 @@
 
             @if (!Model.Any())
             {
-                <div class="alert alert-info">No posts with this tag.</div>
+                <div class="alert alert-info">@Localizer["No posts with this tag."]</div>
             }
 
             @foreach (var post in Model)
@@ -38,7 +38,7 @@
                         {
                             <p>@post.Excerpt</p>
                         }
-                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">Read More</a>
+                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">@Localizer["Read More"]</a>
                     </div>
                 </article>
             }

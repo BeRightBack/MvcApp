@@ -21,13 +21,13 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="fw-bold"><i class='bx bx-terminal'></i> Log #@Model.Id</h2>
-            <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class='bx bx-arrow-back me-1'></i> Back</a>
+            <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class='bx bx-arrow-back me-1'></i> @Localizer["Back"]</a>
         </div>
 
         <div class="content-card">
             <div class="card-body">
                 <dl class="row mb-0 small">
-                    <dt class="col-sm-3">Level</dt>
+                    <dt class="col-sm-3">@Localizer["Level"]</dt>
                     <dd class="col-sm-9"><span class="badge bg-secondary-subtle text-secondary">@Model.Level</span></dd>
 
                     <dt class="col-sm-3">Logged (local)</dt>
@@ -39,25 +39,25 @@
                     <dt class="col-sm-3">Stored (UTC)</dt>
                     <dd class="col-sm-9"><code>@Model.TimestampUtc.ToString("yyyy-MM-dd HH:mm:ss")</code></dd>
 
-                    <dt class="col-sm-3">Message template</dt>
+                    <dt class="col-sm-3">@Localizer["Message template"]</dt>
                     <dd class="col-sm-9"><code>@Model.MessageTemplate</code></dd>
 
-                    <dt class="col-sm-3">Message</dt>
+                    <dt class="col-sm-3">@Localizer["Message"]</dt>
                     <dd class="col-sm-9" style="white-space:pre-wrap;word-break:break-word;">@Model.Message</dd>
 
                     @if (!string.IsNullOrWhiteSpace(Model.Exception))
                     {
-                        <dt class="col-sm-3 text-danger">Exception</dt>
+                        <dt class="col-sm-3 text-danger">@Localizer["Exception"]</dt>
                         <dd class="col-sm-9">
                             <pre class="mb-0 p-2 rounded" style="background:var(--template-bg-alt,#f8f9fa);white-space:pre-wrap;word-break:break-word;">@Model.Exception</pre>
                         </dd>
                     }
 
-                    <dt class="col-sm-3">Properties</dt>
+                    <dt class="col-sm-3">@Localizer["Properties"]</dt>
                     <dd class="col-sm-9">
                         @if (string.IsNullOrWhiteSpace(pretty))
                         {
-                            <span class="text-muted">none</span>
+                            <span class="text-muted">@Localizer["none"]</span>
                         }
                         else
                         {

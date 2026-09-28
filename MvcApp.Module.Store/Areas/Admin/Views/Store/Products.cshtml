@@ -4,24 +4,24 @@
     ViewBag.CurrentPage = "Store";
 }
 
-<h1>Products</h1>
+<h1>@Localizer["Products"]</h1>
 
 <div class="mb-3">
-    <a asp-action="CreateProduct" class="btn btn-primary"><i class="fa fa-plus"></i> Create Product</a>
-    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa fa-dashboard"></i> Dashboard</a>
+    <a asp-action="CreateProduct" class="btn btn-primary"><i class="fa fa-plus"></i> @Localizer["Create Product"]</a>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa fa-dashboard"></i> @Localizer["Dashboard"]</a>
 </div>
 
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Active</th>
-                <th>Featured</th>
+                <th>@Localizer["Image"]</th>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["Category"]</th>
+                <th>@Localizer["Price"]</th>
+                <th>@Localizer["Stock"]</th>
+                <th>@Localizer["Active"]</th>
+                <th>@Localizer["Featured"]</th>
                 <th></th>
             </tr>
         </thead>

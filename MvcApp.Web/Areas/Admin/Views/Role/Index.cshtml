@@ -5,7 +5,7 @@
 }
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New Role</a>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["Create New Role"]</a>
 </p>
 @if (Model != null)
 {
@@ -32,9 +32,9 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">@Localizer["Edit"]</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">@Localizer["Details"]</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">@Localizer["Delete"]</a>
                     </td>
                 </tr>
             }
@@ -43,5 +43,5 @@
 }
 else
 {
-    <p>No data available.</p>
+    <p>@Localizer["No data available."]</p>
 }

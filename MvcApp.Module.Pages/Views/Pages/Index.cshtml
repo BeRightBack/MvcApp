@@ -7,14 +7,14 @@
 <div class="container py-4">
     <div class="page-header d-flex align-items-center justify-content-between mb-4">
         <div>
-            <h1 class="h3 mb-1">Pages</h1>
-            <p class="text-muted mb-0">Select a page to view its content.</p>
+            <h1 class="h3 mb-1">@Localizer["Pages"]</h1>
+            <p class="text-muted mb-0">@Localizer["Select a page to view its content."]</p>
         </div>
     </div>
 
     @if (!pages.Any())
     {
-        <div class="alert alert-info">No published pages yet.</div>
+        <div class="alert alert-info">@Localizer["No published pages yet."]</div>
     }
     else
     {

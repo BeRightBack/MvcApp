@@ -18,7 +18,7 @@
 <section class="py-4">
     <div class="container" style="max-width:900px;">
         <a asp-action="Index" class="btn btn-outline-secondary rounded-pill mb-4">
-            <i class='bx bx-arrow-back'></i> Back to Videos
+            <i class='bx bx-arrow-back'></i> @Localizer["Back to Videos"]
         </a>
 
         <div class="card border-0 rounded-4 shadow-sm overflow-hidden mb-4">
@@ -26,7 +26,7 @@
                 <video controls playsinline style="width:100%; max-height:500px; background:#000;"
                        poster="@(!string.IsNullOrEmpty(Model.ThumbnailFilename) ? $"/Videos/{Model.User?.UserName}/{Model.ThumbnailFilename}" : "")">
                     <source src="@videoUrl" type="video/@Model.Filename.Split('.').Last()" />
-                    Your browser does not support video playback.
+                    @Localizer["Your browser does not support video playback."]
                 </video>
             </div>
             <div class="card-body p-4">
@@ -69,7 +69,7 @@
                           onsubmit="return confirm('Permanently delete this video?');">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-outline-danger rounded-pill btn-sm">
-                            <i class='bx bx-trash'></i> Delete My Video
+                            <i class='bx bx-trash'></i> @Localizer["Delete My Video"]
                         </button>
                     </form>
                 }

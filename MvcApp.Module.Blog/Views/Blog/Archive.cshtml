@@ -14,8 +14,8 @@
         <div class="col-lg-8">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-action="Index">Blog</a></li>
-                    <li class="breadcrumb-item active">Archive</li>
+                    <li class="breadcrumb-item"><a asp-action="Index">@Localizer["Blog"]</a></li>
+                    <li class="breadcrumb-item active">@Localizer["Archive"]</li>
                 </ol>
             </nav>
 
@@ -23,7 +23,7 @@
 
             @if (!Model.Any())
             {
-                <div class="alert alert-info">No posts in this period.</div>
+                <div class="alert alert-info">@Localizer["No posts in this period."]</div>
             }
 
             @foreach (var post in Model)
@@ -39,7 +39,7 @@
                                 <i class="fa fa-calendar ms-2"></i> @(post.PublishedAt?.ToString("MMM dd, yyyy") ?? post.CreatedAt.ToString("MMM dd, yyyy"))
                             </small>
                         </div>
-                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">Read More</a>
+                        <a asp-action="Post" asp-route-slug="@post.Slug" class="btn btn-primary btn-sm">@Localizer["Read More"]</a>
                     </div>
                 </article>
             }
@@ -54,7 +54,7 @@
             }
             <div class="card mb-4">
                 <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0"><i class="fa fa-archive"></i> Archives</h5>
+                    <h5 class="mb-0"><i class="fa fa-archive"></i> @Localizer["Archives"]</h5>
                 </div>
                 <div class="card-body py-2">
                     <ul class="list-unstyled mb-0">
@@ -72,7 +72,7 @@
 
             <div class="card mb-4">
                 <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0"><i class="fa fa-folder"></i> Categories</h5>
+                    <h5 class="mb-0"><i class="fa fa-folder"></i> @Localizer["Categories"]</h5>
                 </div>
                 <div class="card-body py-2">
                     <ul class="list-unstyled mb-0">
@@ -86,7 +86,7 @@
 
             <div class="card mb-4">
                 <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0"><i class="fa fa-tags"></i> Tags</h5>
+                    <h5 class="mb-0"><i class="fa fa-tags"></i> @Localizer["Tags"]</h5>
                 </div>
                 <div class="card-body py-2">
                     @foreach (var tag in tags)
@@ -98,7 +98,7 @@
 
             <div class="card mb-4">
                 <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0"><i class="fa fa-clock-o"></i> Recent Posts</h5>
+                    <h5 class="mb-0"><i class="fa fa-clock-o"></i> @Localizer["Recent Posts"]</h5>
                 </div>
                 <div class="card-body py-2">
                     <ul class="list-unstyled mb-0">

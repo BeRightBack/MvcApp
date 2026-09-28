@@ -22,7 +22,7 @@
     <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-3" style="min-width:200px;">
         <form method="post" asp-controller="Home" asp-action="SetCurrency" asp-antiforgery="true">
             <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-            <label class="form-label small fw-semibold mb-1">Currency</label>
+            <label class="form-label small fw-semibold mb-1">@Localizer["Currency"]</label>
             <select name="currency" onchange="this.form.submit()" class="form-select form-select-sm">
                 <option value="USD" selected="@(currentCurrency == "USD" ? "selected" : null)">USD ($)</option>
                 <option value="CAD" selected="@(currentCurrency == "CAD" ? "selected" : null)">CAD (CA$)</option>
@@ -33,7 +33,7 @@
         <hr class="dropdown-divider" />
         <form asp-area="" asp-action="ChangeLanguage" asp-controller="Home" method="post">
             <input type="hidden" id="returnUrl" name="returnUrl" value="@returnUrl" />
-            <label class="form-label small fw-semibold mb-1">Language</label>
+            <label class="form-label small fw-semibold mb-1">@Localizer["Language"]</label>
             <select id="culture" name="culture" class="form-select form-select-sm"
                     onchange="this.form.submit();"
                     asp-items="cultureItems"

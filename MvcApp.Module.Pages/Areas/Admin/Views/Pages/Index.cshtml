@@ -6,8 +6,8 @@
 
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1><i class="fa fa-file-text-o"></i> Manage Pages</h1>
-        <a asp-action="Create" class="btn btn-primary"><i class="fa fa-plus"></i> New Page</a>
+        <h1><i class="fa fa-file-text-o"></i> @Localizer["Manage Pages"]</h1>
+        <a asp-action="Create" class="btn btn-primary"><i class="fa fa-plus"></i> @Localizer["New Page"]</a>
     </div>
 
     @if (TempData["Success"] != null)
@@ -24,13 +24,13 @@
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>Title</th>
-                        <th>Slug</th>
-                        <th class="text-center">Status</th>
-                        <th>Author</th>
-                        <th>Created</th>
-                        <th>Updated</th>
-                        <th class="text-center">Actions</th>
+                        <th>@Localizer["Title"]</th>
+                        <th>@Localizer["Slug"]</th>
+                        <th class="text-center">@Localizer["Status"]</th>
+                        <th>@Localizer["Author"]</th>
+                        <th>@Localizer["Created"]</th>
+                        <th>@Localizer["Updated"]</th>
+                        <th class="text-center">@Localizer["Actions"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,11 +42,11 @@
                             <td class="text-center">
                                 @if (pg.IsPublished)
                                 {
-                                    <span class="badge bg-success">Published</span>
+                                    <span class="badge bg-success">@Localizer["Published"]</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-warning">Draft</span>
+                                    <span class="badge bg-warning">@Localizer["Draft"]</span>
                                 }
                             </td>
                             <td>@pg.CreatedByUsername</td>
@@ -65,7 +65,7 @@
                     }
                     @if (!pages.Any())
                     {
-                        <tr><td colspan="7" class="text-center text-muted py-4">No pages yet.</td></tr>
+                        <tr><td colspan="7" class="text-center text-muted py-4">@Localizer["No pages yet."]</td></tr>
                     }
                 </tbody>
             </table>

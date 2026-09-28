@@ -4,8 +4,8 @@
 }
 
 <div class="page-header d-flex justify-content-between align-items-center">
-    <h1>System Settings</h1>
-    <a asp-action="Create" class="btn btn-primary btn-admin">Add Setting</a>
+    <h1>@Localizer["System Settings"]</h1>
+    <a asp-action="Create" class="btn btn-primary btn-admin">@Localizer["Add Setting"]</a>
 </div>
 
 @foreach (var group in Model)
@@ -16,10 +16,10 @@
             <table class="table table-admin">
                 <thead>
                     <tr>
-                        <th>Key</th>
-                        <th>Value</th>
-                        <th>Description</th>
-                        <th>Updated</th>
+                        <th>@Localizer["Key"]</th>
+                        <th>@Localizer["Value"]</th>
+                        <th>@Localizer["Description"]</th>
+                        <th>@Localizer["Updated"]</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -32,9 +32,9 @@
                             <td class="text-muted small">@setting.Description</td>
                             <td class="small text-muted text-nowrap">@setting.UpdatedAt.ToString("MMM dd")</td>
                             <td class="text-nowrap">
-                                <a asp-action="Edit" asp-route-id="@setting.Id" class="btn btn-sm btn-outline-secondary btn-admin">Edit</a>
+                                <a asp-action="Edit" asp-route-id="@setting.Id" class="btn btn-sm btn-outline-secondary btn-admin">@Localizer["Edit"]</a>
                                 <form asp-action="Delete" asp-route-id="@setting.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this setting?')">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-admin">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-admin">@Localizer["Delete"]</button>
                                 </form>
                             </td>
                         </tr>

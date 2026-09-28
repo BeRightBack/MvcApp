@@ -22,18 +22,18 @@
     <div class="d-flex align-items-center gap-2 mb-2">
         <ul class="nav nav-pills nav-sm mb-0">
             <li class="nav-item">
-                <button type="button" class="nav-link active pe-tab" data-mode="visual">Visual</button>
+                <button type="button" class="nav-link active pe-tab" data-mode="visual">@Localizer["Visual"]</button>
             </li>
             <li class="nav-item">
-                <button type="button" class="nav-link pe-tab" data-mode="source">Source</button>
+                <button type="button" class="nav-link pe-tab" data-mode="source">@Localizer["Source"]</button>
             </li>
         </ul>
         <div class="ms-auto d-flex gap-2">
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="peOpenLibrary('@editorId')">
-                <i class="fa fa-cubes"></i> Snippets &amp; Components
+                <i class="fa fa-cubes"></i> @Localizer["Snippets & Components"]
             </button>
             <button type="button" class="btn btn-sm btn-outline-primary" onclick="pePreview('@editorId')">
-                <i class="fa fa-eye"></i> Preview
+                <i class="fa fa-eye"></i> @Localizer["Preview"]
             </button>
         </div>
     </div>
@@ -77,11 +77,11 @@
     <div class="pe-source-wrap" data-editor="@editorId" style="display:none">
         <textarea id="@sourceId" class="form-control font-monospace" style="min-height:@(height)px"
                   spellcheck="false">@value</textarea>
-        <div class="form-text">Razor source mode. Use <code>@@Model.Title</code>, <code>@@if</code>, <code>@@foreach</code> and component helpers. HTML is output as-is.</div>
+        <div class="form-text">@Localizer["Razor source mode. Use"] <code>@@Model.Title</code>, <code>@@if</code>, <code>@@foreach</code> @Localizer["and component helpers. HTML is output as-is."]</div>
     </div>
 
     <div id="@(editorId)-warn" class="alert alert-warning mt-2 mb-0" style="display:none">
-        This page body contains Razor code. Visual mode is best for plain HTML; switch to <strong>Source</strong> to edit Razor expressions.
+        This page body contains Razor code. Visual mode is best for plain HTML; switch to <strong>@Localizer["Source"]</strong> @Localizer["to edit Razor expressions."]
     </div>
 </div>
 
@@ -90,20 +90,20 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header py-2">
-                <h6 class="modal-title">Snippets &amp; Components</h6>
+                <h6 class="modal-title">@Localizer["Snippets & Components"]</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs mb-3">
-                    <li class="nav-item"><button type="button" class="nav-link active pe-lib-tab" data-mode="snippets">Snippets</button></li>
-                    <li class="nav-item"><button type="button" class="nav-link pe-lib-tab" data-mode="components">Components</button></li>
-                    <li class="nav-item"><button type="button" class="nav-link pe-lib-tab" data-mode="blazor">Blazor</button></li>
+                    <li class="nav-item"><button type="button" class="nav-link active pe-lib-tab" data-mode="snippets">@Localizer["Snippets"]</button></li>
+                    <li class="nav-item"><button type="button" class="nav-link pe-lib-tab" data-mode="components">@Localizer["Components"]</button></li>
+                    <li class="nav-item"><button type="button" class="nav-link pe-lib-tab" data-mode="blazor">@Localizer["Blazor"]</button></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active pe-lib-pane" data-mode="snippets" id="@(editorId)-tab-snippets">
                         @if (!snippets.Any())
                         {
-                            <p class="text-muted">No snippets yet. Add them in Admin &rarr; Pages &rarr; Snippets.</p>
+                            <p class="text-muted">@Localizer["No snippets yet. Add them in Admin Pages Snippets."]</p>
                         }
                         @foreach (var group in snippets.GroupBy(s => s.Category))
                         {
@@ -119,7 +119,7 @@
                                         }
                                     </div>
                                     <button type="button" class="btn btn-sm btn-outline-primary pe-snippet-insert ms-2"
-                                            onclick="peInsertSnippet('@editorId','@s.Id')">Insert</button>
+                                            onclick="peInsertSnippet('@editorId','@s.Id')">@Localizer["Insert"]</button>
                                 </div>
                             }
                         }
@@ -134,7 +134,7 @@
                                     <br /><small class="text-muted">@c.Description</small>
                                 </div>
                                 <button type="button" class="btn btn-sm btn-outline-primary pe-component-insert ms-2"
-                                        onclick="peInsertComponent('@editorId','@c.Name')">Insert</button>
+                                        onclick="peInsertComponent('@editorId','@c.Name')">@Localizer["Insert"]</button>
                             </div>
                         }
                     </div>
@@ -142,9 +142,9 @@
                         @if (!blazorComponents.Any())
                         {
                             <p class="text-muted">
-                                No Blazor widgets registered yet. Add a component with the
-                                <code>[BlazorPageComponent]</code> attribute and register its assembly in
-                                <code>Program.cs</code>.
+                                @Localizer["No Blazor widgets registered yet. Add a component with the"]
+                                <code>@Localizer["[BlazorPageComponent]"]</code> @Localizer["attribute and register its assembly in"]
+                                <code>@Localizer["Program.cs"]</code>.
                             </p>
                         }
                         @foreach (var b in blazorComponents)
@@ -159,7 +159,7 @@
                                     <br /><code class="small">@@Blazor("@b.Name")</code>
                                 </div>
                                 <button type="button" class="btn btn-sm btn-outline-primary pe-blazor-insert ms-2"
-                                        onclick="peInsertBlazor('@editorId','@b.Name')">Insert</button>
+                                        onclick="peInsertBlazor('@editorId','@b.Name')">@Localizer["Insert"]</button>
                             </div>
                         }
                     </div>
