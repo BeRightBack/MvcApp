@@ -113,14 +113,17 @@ namespace MvcApp.Identity
         {
             try
             {
-                string adminRole = config["Administrator:Role"] ?? "Admin";
-                string adminUsername = config["Administrator:Username"] ?? "admin";
-                string adminEmail = config["Administrator:User"] ?? "admin@frenzyzone.com";
-                string adminPassword = config["Administrator:Password"] ?? "Electro@2013";
+                string adminRole = ConfigOrDefault(config, "Administrator:Role", "Admin");
+                string adminUsername = ConfigOrDefault(config, "Administrator:Username", "admin");
+                string adminEmail = ConfigOrDefault(config, "Administrator:User", "admin@frenzyzone.com");
+                string adminPassword = ConfigOrDefault(config, "Administrator:Password", "Electro@2013");
 
-                logger.LogInformation("Checking for admin user: {AdminEmail}", adminEmail);
+                logger.LogInformation("Checking for admin user: {AdminEmail} (username {AdminUsername})", adminEmail, adminUsername);
 
-                var adminUser = await userManager.FindByEmailAsync(adminEmail);
+                // Identity rejects duplicate UserNames, so matching on the email alone would
+                // retry the creation on every start whenever the two config values disagree.
+                var adminUser = await userManager.FindByEmailAsync(adminEmail)
+                                ?? await userManager.FindByNameAsync(adminUsername);
 
                 if (adminUser == null)
                 {
@@ -163,6 +166,19 @@ namespace MvcApp.Identity
                         await userManager.AddToRoleAsync(adminUser, adminRole);
                         logger.LogInformation("Admin user added to {AdminRole} role.", adminRole);
                     }
+                    else if (result.Errors.Any(e => e.Code == "DuplicateUserName" || e.Code == "DuplicateEmail"))
+                    {
+                        // The account already exists under the other identifier, which is a
+                        // healthy state; report it as such instead of as a failure.
+                        logger.LogInformation("Admin user already exists under the configured username or email.");
+
+                        var existing = await userManager.FindByNameAsync(adminUsername) ?? await userManager.FindByEmailAsync(adminEmail);
+                        if (existing != null && !await userManager.IsInRoleAsync(existing, adminRole))
+                        {
+                            await userManager.AddToRoleAsync(existing, adminRole);
+                            logger.LogInformation("Admin role added to existing user {AdminEmail}.", adminEmail);
+                        }
+                    }
                     else
                     {
                         logger.LogError("Failed to create admin user with {ErrorCount} error(s)", result.Errors.Count());
@@ -189,6 +205,13 @@ namespace MvcApp.Identity
                 throw;
             }
         }
+
+        /// <summary>
+        /// Reads a setting, falling back when it is missing OR blank. A plain ?? only
+        /// handles null, so an explicitly empty value would otherwise be used as-is.
+        /// </summary>
+        private static string ConfigOrDefault(IConfiguration config, string key, string fallback) =>
+            string.IsNullOrWhiteSpace(config[key]) ? fallback : config[key]!;
 
         private static async Task SeedTestUsersAsync(UserManager<UserDetails> userManager, ILogger logger, UserDbContext context)
         {
