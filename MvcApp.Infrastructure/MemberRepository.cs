@@ -23,6 +23,8 @@ public class MemberRepository(UserDbContext db) : IMemberRepository
     public async Task<PaginationList<MemberModel>> GetMembersAsync(MemberParameters userParameters)
     {
         IQueryable<UserDetails> users = db.Users
+            .AsNoTracking()
+            .AsSplitQuery()
             .Include(p => p.Photos)
             .Include(u => u.UserInterestTags).ThenInclude(ut => ut.Tag)
             .AsQueryable();
