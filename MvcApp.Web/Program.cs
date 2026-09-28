@@ -343,34 +343,45 @@ try
     app.MapHub<NotificationHub>("/notificationhub");
     app.MapHealthChecks("/health");
 
-    // Seed data in background while server starts
-    if (app.Environment.IsDevelopment())
+    // Seed in the background while the server starts. The bootstrap tier (languages,
+    // settings, module flags, roles, the administrator, reference data) runs in EVERY
+    // environment: without it a production deployment has no admin to log in with and
+    // every module reads as disabled. The demo tier (test users, likes, messages, page
+    // snippets) is opt-in via Seeding:IncludeDemoData, which defaults to on in
+    // Development and off everywhere else.
+    var includeDemoData = app.Configuration.GetValue("Seeding:IncludeDemoData", app.Environment.IsDevelopment());
+
+    _ = Task.Run(async () =>
     {
-        _ = Task.Run(async () =>
+        try
         {
-            try
+            Log.Information("Starting background seeding... (demo data: {DemoData})",
+                includeDemoData ? "on" : "off");
+
+            await SeedLanguageAsync(app);
+            await SeedSettingsAsync(app);
+            await SeedChatRoomsAsync(app);
+            await SeedForumAsync(app);
+            await SeedBlogAsync(app);
+            await SeedEventCategoriesAsync(app);
+            await SeedInterestTagsAsync(app);
+            await SeedGamificationAsync(app);
+            await SeedVipPlansAsync(app);
+            RegisterBlazorPageWidgetAssemblies(app);
+            app.SeedData(includeDemoData);
+
+            if (includeDemoData)
             {
-                Log.Information("Starting background seeding...");
-                await SeedLanguageAsync(app);
-                await SeedSettingsAsync(app);
-                await SeedChatRoomsAsync(app);
-                await SeedForumAsync(app);
-                await SeedBlogAsync(app);
                 await SeedPageSnippetsAsync(app);
-                await SeedEventCategoriesAsync(app);
-                await SeedInterestTagsAsync(app);
-                await SeedGamificationAsync(app);
-                await SeedVipPlansAsync(app);
-                RegisterBlazorPageWidgetAssemblies(app);
-                app.SeedData();
-                Log.Information("Background seeding completed.");
             }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Error during background seeding");
-            }
-        });
-    }
+
+            Log.Information("Background seeding completed.");
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Error during background seeding");
+        }
+    });
 
     try
     {
