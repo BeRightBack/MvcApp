@@ -60,8 +60,22 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
   `lower_case_table_names` is active, names written as `Identity_db` in
   `appsettings.json` resolve fine). EF contexts: `UserDbContext`,
   `LocalizationDbContext` (NOT `LocalisationDbContext`).
-  `MvcApp_logs` (Serilog logs DB, from `appsettings.json` → `Serilog:ConnectionStrings:Logs`)
-  does NOT exist on the server — unverified whether the sink creates it on first write.
+- **Serilog log DB — CORRECTED 2026-09-27 (verified):** config key is
+  `appsettings.json` → `ConnectionStrings:SerilogLogs` (it was `Serilog:ConnectionString:Logs`;
+  the code, its comment and its exception message all said `…ConnectionStrings…` — plural, which
+  never existed, so the documented env-var override was wrong; `Program.cs` now reads the
+  singular-correct `ConnectionStrings:SerilogLogs` and the dead `ConnectionStrings:MvcAppLogs`
+  entry + the whole `Serilog` section were deleted, which also cleared the VS warning
+  "Property name is not allowed by the schema" at the old line 58 — the `$schema`
+  (json.schemastore.org/appsettings.json) defines only Kestrel/Logging/AllowedHosts/
+  ConnectionStrings, so the custom `Serilog` section was flagged; custom names INSIDE
+  `ConnectionStrings` are fine. Override env var = `ConnectionStrings__SerilogLogs`.
+  The connection string points at the **REMOTE** `mysql.xtrasvr.com`, database
+  **`serilogsDb`** (keys `Server|Database|Uid|Pwd`) — NOT local `MvcApp_logs` as previously
+  documented. `SHOW DATABASES` on the remote (2026-09-27) lists no such database and
+  `lower_case_table_names=0` (names case-sensitive), so **MySQL log writes have been failing
+  silently**; requests are unaffected and the file sink (`MvcApp.Web\logs\log-*.txt`) still
+  works. Create it with `CREATE DATABASE serilogsDb;` if MySQL log persistence is wanted.
 - **Seeding is BACKGROUND on dev start** (`Program.cs`: "Starting background seeding"
   before `Now listening`): migrations + `SettingsSeeder`/`SeedLanguage`/chat/forum etc.
   run concurrently while the app already serves. On a fresh DB allow ~20-40s before /
@@ -106,9 +120,10 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
 - SSH: `ssh root@svr1.xtrasvr.com` (root password is user-held, not on this machine). MySQL root shell
   on the server needs its own password; `swan3344` (the app user) has `GRANT ALL ON *.* WITH GRANT
   OPTION` including `mysql.*` — usable for server-side MySQL inspections instead of root.
-- The app's Serilog `Logs` sink writes to its OWN `Server=localhost;Database=MvcApp_logs` (local MySQL
-  8.0.46), not to the remote — local `MvcApp_logs` must exist or log writes fail silently (does not
-  block requests).
+- The app's Serilog `Logs` sink reads `ConnectionStrings:SerilogLogs`, which points at the
+  REMOTE `mysql.xtrasvr.com` / database `serilogsDb` (see the corrected Databases entry —
+  the earlier "local `MvcApp_logs`" note was wrong). That database does not exist, so writes
+  fail silently (never blocks requests); file logging under `MvcApp.Web\logs\` is unaffected.
 
 ## Key settings (SystemSettings table: Key, Value, Description, Group, UpdatedAt, UpdatedBy)
 - `SiteTemplate` = active template (currently `Luxury` — verified live 2026-09-27; exact template Name, compared
