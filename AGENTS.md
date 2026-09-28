@@ -447,6 +447,29 @@ When a module is deselected at generation, ALL of these must hold:
   removes the growth risk, not today's latency. HTML byte-identical apart from antiforgery
   tokens; warning 1 -> 0 per page. NOTE: EF command logging is invisible in the logs because
   `Program.cs` has `MinimumLevel.Override("Microsoft", LogEventLevel.Warning)`.
+  **Seeding split into bootstrap + demo (2026-09-28, VSIX 1.0.56):** the whole seeding block
+  was `if (app.Environment.IsDevelopment())`, so a **Production** deployment had no admin user,
+  no roles, no SystemSettings, no `SiteTemplate` and no `Module.*.Enabled` rows (every module
+  read as disabled) — generated apps were undeployable. Bootstrap now always runs (languages,
+  settings, chat/forum/blog structure, event categories, interest tags, badges, VIP plans,
+  Blazor widget registry, roles, admin user); demo content (26 test users + photos, likes,
+  messages, page snippets) is gated on **`Seeding:IncludeDemoData`**, defaulting to
+  `app.Environment.IsDevelopment()` (on in dev, off in production unless set explicitly —
+  the key is deliberately absent from appsettings.json so the environment decides).
+  `Seeder.SeedData(app, includeDemoData)` overload added. Verified on a fresh
+  prodtest_Identity/prodtest_Localisation (scripted migrations, 67 tables + 32 history rows):
+  Production -> 1 user (admin), roles Admin+Moderator, 26 settings, 12 module rows,
+  SiteTemplate=Default, 5 languages, 3 plans/12 details, **0 likes/messages/photos/snippets**,
+  admin login works, /Admin + /Admin/SystemLogs render, anonymous /Admin still redirects to
+  login. Same fresh DB in Development -> 27 users, 43 likes, 43 messages, 33 photos, 14
+  snippets. Both test DBs dropped afterwards.
+- **On "each template as its own module":** declined, deliberately. A generated app has exactly
+  ONE active template (`SiteTemplate` is a single setting), so templates are alternatives, not
+  simultaneous features — per-template module boundaries would add guard tokens and settings
+  rows for something that can never be enabled alongside another. Per-app independence is
+  already real: the wizard gives each app its own `<ProjectName>_Identity` / `_Localisation`
+  databases (`ModulePickerWindow.xaml.cs:27`), its own connection strings, migrations and
+  seeding.
 
 ## Coding conventions
 - No code comments unless asked.
