@@ -403,6 +403,14 @@ When a module is deselected at generation, ALL of these must hold:
   search, detail, exception rendering, purge guard (400 on days=13), retention log line, 0
   console errors; build 0E, tests 13/13. Screenshots:
   `E:\Pictures\Screenshots\MvcApp-admin-{systemlogs,systemlogs-filtered,logdetail,logexception}.png`.
+  **VSIX 1.0.52 (2026-09-28) carries this feature** — and the first GENERATED-app test of a
+  template feature (detokenized tree, real remote DBs, own port 9002, then freed): HTTP 200,
+  admin login, `/Admin/SystemLogs` with 709 rows / level counts / filters / purge / detail all
+  working. Generated apps need their own `<ProjectName>_logs` database (`CREATE DATABASE …`)
+  or the MySQL sink and the retention job only warn; `Logging:RetentionDays` and
+  `Logging:FileSink` are the two knobs. Wizard tokens are NOT valid JSON — validate template
+  config files by detokenizing first (a scripted `-replace` corrupted appsettings.json once;
+  recovered by extracting the pristine file from the previous .vsix).
 
 ## Coding conventions
 - No code comments unless asked.
