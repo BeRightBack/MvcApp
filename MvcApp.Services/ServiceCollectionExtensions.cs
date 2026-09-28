@@ -27,6 +27,11 @@ namespace MvcApp.Services
             // Template-driven navigation
             services.AddScoped<INavService, NavService>();
 
+            // Serilog MySQL sink logs (own database, raw SQL - not part of the EF model)
+            services.Configure<SystemLogOptions>(configuration.GetSection(SystemLogOptions.SectionName));
+            services.AddScoped<ISystemLogService, SystemLogService>();
+            services.AddHostedService<SystemLogRetentionHostedService>();
+
             // Other cross-cutting services
             services.AddMemoryCache();
 

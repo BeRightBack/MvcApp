@@ -67,7 +67,15 @@ if (string.IsNullOrWhiteSpace(logsConnectionString))
     throw new InvalidOperationException("ConnectionStrings:SerilogLogs is not configured. Add it to appsettings.json or set the environment variable.");
 }
 
-Log.Logger = new LoggerConfiguration()
+var isDevelopment =
+    string.Equals(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT"), "Development", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Development", StringComparison.OrdinalIgnoreCase);
+
+// MySQL is the system of record for logs; the file sink only exists to make local
+// tailing easy. Logging:FileSink forces it on or off, unset = on in Development only.
+var writeFileSink = logConfig.GetValue<bool?>("Logging:FileSink") ?? isDevelopment;
+
+var loggerConfig = new LoggerConfiguration()
     .MinimumLevel.Debug()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .MinimumLevel.Override("System", LogEventLevel.Warning)
@@ -78,12 +86,18 @@ Log.Logger = new LoggerConfiguration()
         connectionString: logsConnectionString,
         tableName: "Logs",
         restrictedToMinimumLevel: LogEventLevel.Information
-    )
-    .WriteTo.File(path: "logs/log-.txt",
+    );
+
+if (writeFileSink)
+{
+    loggerConfig = loggerConfig.WriteTo.File(path: "logs/log-.txt",
         outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
         rollingInterval: RollingInterval.Day,
         restrictedToMinimumLevel: LogEventLevel.Information
-    ).CreateLogger();
+    );
+}
+
+Log.Logger = loggerConfig.CreateLogger();
 
 // When launched from bin\Debug\<tfm> (or from a different working directory) the content
 // root may point at a folder without wwwroot/appsettings.json. Fall back to a directory
