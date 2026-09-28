@@ -14,16 +14,19 @@ namespace MvcApp.Localization.Custom
         private readonly IList<CultureInfo> _supportedCultures;
         private readonly Translator _translator;
         private readonly IConfiguration _configuration;
+        private readonly BackgroundTranslationService _backgroundTranslation;
 
         public DbStringLocalizer(LocalizationDbContext context,
             IOptions<RequestLocalizationOptions> localizationOptions,
             Translator translator,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            BackgroundTranslationService backgroundTranslation)
         {
             _context = context;
             _supportedCultures = localizationOptions.Value.SupportedCultures!;
             _translator = translator;
             _configuration = configuration;
+            _backgroundTranslation = backgroundTranslation;
         }
 
         public static HttpContext HttpContext => new HttpContextAccessor().HttpContext!;
@@ -52,44 +55,14 @@ namespace MvcApp.Localization.Custom
                         return new LocalizedString(name, stringResource.Value, false);
                     }
 
-                    if (stringResource == null || string.IsNullOrEmpty(stringResource.Value))
-                    {
-                        foreach (var item in _supportedCultures)
-                        {
-                            var languageId = _languageService?.GetLanguageByCulture(item.Name)?.Id;
-                            var targetLanguage = GetTargetLanguage(languageId!.Value);
-
-
-
-                            var translatedValue = TranslateText(name, targetLanguage!).Result;
-                            var _resource = new StringResource
-                            {
-                                LanguageId = languageId!,
-                                Name = name,
-                                Value = translatedValue
-                            };
-                            _localizationService?.AddOrUpdateStringResource(_resource);
-                        }
-
-                        return new LocalizedString(name, name, true);
-                    }
+                    // Missing key: hand it to the background translator and return the same value
+                    // the inline path returned. The page never waits for DeepL; the translation is
+                    // stored and picked up on a later request.
+                    _backgroundTranslation.Enqueue(name);
                 }
+
                 return new LocalizedString(name, name, true);
             }
-        }
-
-        private string? GetTargetLanguage(int culture)
-        {
-            return culture switch
-            {
-                1 => _configuration?["DeepLConfig:TargetLangEn"]!,
-                4 => _configuration?["DeepLConfig:TargetLangIt"]!,
-                2 => _configuration?["DeepLConfig:TargetLangFr"]!,
-                3 => _configuration?["DeepLConfig:TargetLangEs"]!,
-                6 => _configuration?["DeepLConfig:TargetLangDe"]!,
-                5 => _configuration?["DeepLConfig:TargetLangPt"]!,
-                _ => null,
-            };
         }
 
         public LocalizedString this[string name, params object[] arguments] => this[name];
@@ -97,44 +70,5 @@ namespace MvcApp.Localization.Custom
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures) => _context.StringResources.Select(e => new LocalizedString(e.Name!, e.Value!));
 
         public IStringLocalizer WithCulture(CultureInfo culture) => this;
-
-        private async Task<string> TranslateText(string text, string targetLanguage)
-        {
-            const int maxRetries = 5; // Maximum number of retries
-            const int initialDelay = 1000; // Initial delay in milliseconds (1 second)
-            int retryCount = 0;
-
-            while (true)
-            {
-                try
-                {
-                    var result = await _translator.TranslateTextAsync(text, SourceLang, targetLanguage);
-                    return result.Text;
-                }
-                catch (TooManyRequestsException)
-                {
-                    retryCount++;
-                    if (retryCount > maxRetries)
-                    {
-                        // Log the error and return the original text as a fallback
-                        Console.WriteLine("Max retries reached. Returning original text.");
-                        return text;
-                    }
-
-                    // Exponential backoff
-                    int delay = initialDelay * (int)Math.Pow(2, retryCount - 1);
-                    Console.WriteLine($"Too many requests. Retrying in {delay}ms...");
-                    await Task.Delay(delay);
-                }
-                catch (Exception ex)
-                {
-                    // Log other exceptions and return the original text as a fallback
-                    Console.WriteLine($"Translation failed: {ex.Message}");
-                    return text;
-                }
-            }
-        }
-
     }
 }
-

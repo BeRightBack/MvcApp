@@ -25,6 +25,10 @@ namespace MvcApp.Localization
 
             services.AddDbContext<LocalizationDbContext>(opts => opts.UseMySQL(conn3!));
 
+            services.AddSingleton<LocalizationCache>();
+            services.AddSingleton<BackgroundTranslationService>();
+            services.AddHostedService(sp => sp.GetRequiredService<BackgroundTranslationService>());
+
             services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<ILanguageService, LanguageService>();
             services.AddScoped<IStringLocalizer<SharedResource>, DbStringLocalizer<SharedResource>>();
