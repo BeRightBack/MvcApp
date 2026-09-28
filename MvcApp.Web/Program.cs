@@ -67,6 +67,10 @@ if (string.IsNullOrWhiteSpace(logsConnectionString))
     throw new InvalidOperationException("ConnectionStrings:SerilogLogs is not configured. Add it to appsettings.json or set the environment variable.");
 }
 
+// The MySQL sink connects eagerly when the logger is built and is then dropped for the
+// lifetime of the process if its database is missing, so create the database first.
+await SystemLogDatabaseInitializer.EnsureExistsAsync(logsConnectionString);
+
 var isDevelopment =
     string.Equals(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT"), "Development", StringComparison.OrdinalIgnoreCase) ||
     string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Development", StringComparison.OrdinalIgnoreCase);

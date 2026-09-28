@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -35,6 +36,15 @@ public sealed class SystemLogRetentionHostedService(
             try
             {
                 using var scope = scopeFactory.CreateScope();
+
+                // A fresh install has no log database yet; create it before the first
+                // purge so the MySQL sink starts receiving rows.
+                var initializer = scope.ServiceProvider.GetRequiredService<SystemLogDatabaseInitializer>();
+                await initializer.EnsureExistsAsync(
+                    scope.ServiceProvider.GetRequiredService<IConfiguration>()
+                        .GetConnectionString("SerilogLogs"),
+                    stoppingToken);
+
                 var service = scope.ServiceProvider.GetRequiredService<ISystemLogService>();
                 var deleted = await service.DeleteOlderThanAsync(retentionDays, stoppingToken);
                 if (deleted > 0)

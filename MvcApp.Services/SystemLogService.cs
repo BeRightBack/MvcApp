@@ -25,6 +25,8 @@ public sealed class SystemLogService(
     IOptions<SystemLogOptions> options,
     ILogger<SystemLogService> logger) : ISystemLogService
 {
+    private const MySqlErrorCode TableNotFoundErrorCode = MySqlErrorCode.NoSuchTable;
+
     private readonly SystemLogOptions _options = options.Value;
 
     private string? ConnectionString =>
@@ -59,6 +61,10 @@ public sealed class SystemLogService(
             page.LevelCounts = await LevelCountsAsync(connection, cancellationToken);
             page.DatabaseBytes = await DatabaseBytesAsync(connection, cancellationToken);
             page.Items = await PageAsync(connection, where, parameters, page, cancellationToken);
+        }
+        catch (MySqlException ex) when (ex.ErrorCode == TableNotFoundErrorCode)
+        {
+            return Unavailable(page, "The log table has not been created yet - it appears with the first log entry.");
         }
         catch (Exception ex) when (ex is MySqlException or InvalidOperationException or TimeoutException)
         {
@@ -115,6 +121,12 @@ public sealed class SystemLogService(
             command.Parameters.AddWithValue("@cutoff", cutoff);
             return await command.ExecuteNonQueryAsync(cancellationToken);
         }
+        catch (MySqlException ex) when (ex.ErrorCode == TableNotFoundErrorCode)
+        {
+            // The sink creates the table with the first write, so this is expected
+            // on a fresh install rather than a failure worth warning about.
+            return 0;
+        }
         catch (Exception ex) when (ex is MySqlException or InvalidOperationException or TimeoutException)
         {
             logger.LogWarning(ex, "System log retention purge failed");
@@ -133,6 +145,10 @@ public sealed class SystemLogService(
             await connection.OpenAsync(cancellationToken);
             await using var command = new MySqlCommand("DELETE FROM Logs", connection);
             return await command.ExecuteNonQueryAsync(cancellationToken);
+        }
+        catch (MySqlException ex) when (ex.ErrorCode == TableNotFoundErrorCode)
+        {
+            return 0;
         }
         catch (Exception ex) when (ex is MySqlException or InvalidOperationException or TimeoutException)
         {
