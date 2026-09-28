@@ -463,6 +463,17 @@ When a module is deselected at generation, ALL of these must hold:
   admin login works, /Admin + /Admin/SystemLogs render, anonymous /Admin still redirects to
   login. Same fresh DB in Development -> 27 users, 43 likes, 43 messages, 33 photos, 14
   snippets. Both test DBs dropped afterwards.
+  **SystemSettings cache (2026-09-28, VSIX 1.0.57):** `SettingsCache` (singleton over
+  `IMemoryCache`) holds the whole `SystemSettings` table as a dictionary; `SettingsService.GetAsync`
+  reads from it instead of a SELECT per key. **Every writer invalidates** — `SetAsync`, the admin
+  `SystemSettingsController` Edit/Create/Delete (writes via the DbContext, so it bypasses the
+  service and would go stale), and the seeder via `SettingsSeeder.InvalidateCache`. 10-minute
+  sliding+absolute expiry is the safety net. Measured with an identical script, warm requests:
+  **6904/7200 ms before, 4428/4549 ms after** (~2.5s, 36% faster); round-trips **88 -> 50**,
+  SystemSettings queries **37 -> 0**. Invalidation verified end-to-end (module disabled in the
+  admin panel changed the nav on the very next request). Remaining home-page round-trips:
+  ~15 Language + ~15 localization strings, 16 AdZone/AdBanner, plus user/session/visitor rows —
+  localization is the next biggest target if more speed is wanted.
 - **On "each template as its own module":** declined, deliberately. A generated app has exactly
   ONE active template (`SiteTemplate` is a single setting), so templates are alternatives, not
   simultaneous features — per-template module boundaries would add guard tokens and settings
