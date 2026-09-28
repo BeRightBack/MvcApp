@@ -72,10 +72,16 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
   `ConnectionStrings` are fine. Override env var = `ConnectionStrings__SerilogLogs`.
   The connection string points at the **REMOTE** `mysql.xtrasvr.com`, database
   **`serilogsDb`** (keys `Server|Database|Uid|Pwd`) — NOT local `MvcApp_logs` as previously
-  documented. `SHOW DATABASES` on the remote (2026-09-27) lists no such database and
-  `lower_case_table_names=0` (names case-sensitive), so **MySQL log writes have been failing
-  silently**; requests are unaffected and the file sink (`MvcApp.Web\logs\log-*.txt`) still
-  works. Create it with `CREATE DATABASE serilogsDb;` if MySQL log persistence is wanted.
+  documented. That database did not exist (`SHOW DATABASES`, `lower_case_table_names=0` so
+  names are case-sensitive) and MySQL log writes were failing silently. **FIXED 2026-09-27:**
+  `CREATE DATABASE serilogsDb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;` run with the
+  app user (has `GRANT ALL`); the sink auto-created its table. Verified live: 19 rows written
+  seconds after 3 home-page hits, `Message` = `HTTP "GET" "/" responded 200 in …`,
+  levels Information+Warning. **Table shape gotcha:** the auto-created `Logs` table uses
+  `Timestamp varchar(100)` — NOT the `@Timestamp` name the docs imply — plus
+  `Level|Template|Message|Exception|Properties` and an auto `_ts timestamp` column; order/filter
+  on `_ts` (`MAX(_ts)`, `MIN(_ts)`), never on `@Timestamp` (ERROR 1054). Backticked SQL is
+  fragile through the PowerShell pipe — write the .sql file and pipe `Get-Content -Raw`.
 - **Seeding is BACKGROUND on dev start** (`Program.cs`: "Starting background seeding"
   before `Now listening`): migrations + `SettingsSeeder`/`SeedLanguage`/chat/forum etc.
   run concurrently while the app already serves. On a fresh DB allow ~20-40s before /
@@ -122,8 +128,8 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
   OPTION` including `mysql.*` — usable for server-side MySQL inspections instead of root.
 - The app's Serilog `Logs` sink reads `ConnectionStrings:SerilogLogs`, which points at the
   REMOTE `mysql.xtrasvr.com` / database `serilogsDb` (see the corrected Databases entry —
-  the earlier "local `MvcApp_logs`" note was wrong). That database does not exist, so writes
-  fail silently (never blocks requests); file logging under `MvcApp.Web\logs\` is unaffected.
+  the earlier "local `MvcApp_logs`" note was wrong). `serilogsDb` was created 2026-09-27 and
+  the sink now persists rows there (file logging under `MvcApp.Web\logs\` also stays on).
 
 ## Key settings (SystemSettings table: Key, Value, Description, Group, UpdatedAt, UpdatedBy)
 - `SiteTemplate` = active template (currently `Luxury` — verified live 2026-09-27; exact template Name, compared
