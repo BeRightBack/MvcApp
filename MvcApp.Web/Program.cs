@@ -31,7 +31,7 @@ using System.Net;
 using System.Threading.RateLimiting;
 
 // Serilog log-store connection string is read from configuration (appsettings.json overridable by the
-// MvcApp__Serilog__ConnectionStrings__Logs environment variable) so that credentials never live in code.
+// ConnectionStrings__SerilogLogs environment variable) so that credentials never live in code.
 // Find appsettings.json using the same content-root discovery as the rest of the app.
 var serilogBase = Directory.GetCurrentDirectory();
 if (!Directory.Exists(Path.Combine(serilogBase, "wwwroot")) || !File.Exists(Path.Combine(serilogBase, "appsettings.json")))
@@ -61,10 +61,10 @@ var logConfig = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
-var logsConnectionString = logConfig["Serilog:ConnectionStrings:Logs"];
+var logsConnectionString = logConfig["ConnectionStrings:SerilogLogs"];
 if (string.IsNullOrWhiteSpace(logsConnectionString))
 {
-    throw new InvalidOperationException("Serilog:ConnectionStrings:Logs is not configured. Add it to appsettings.json or set the environment variable.");
+    throw new InvalidOperationException("ConnectionStrings:SerilogLogs is not configured. Add it to appsettings.json or set the environment variable.");
 }
 
 Log.Logger = new LoggerConfiguration()
