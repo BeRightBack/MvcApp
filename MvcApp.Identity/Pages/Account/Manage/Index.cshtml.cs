@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MvcApp.Core;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using MvcApp.Localization.Custom;
 using System.Security.Claims;
 
 namespace MvcApp.Identity.Pages.Account.Manage
@@ -39,16 +40,16 @@ namespace MvcApp.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Phone]
-            [Display(Name = "Phone number")]
+            [LocalizedDisplayName("Phone number")]
             public string? PhoneNumber { get; set; }
 
-            [Display(Name = "First name")]
+            [LocalizedDisplayName("First name")]
             public string? FirstName { get; set; }
 
-            [Display(Name = "Last name")]
+            [LocalizedDisplayName("Last name")]
             public string? LastName { get; set; }
 
-            [Display(Name = "Username")]
+            [LocalizedDisplayName("Username")]
             public string? Username { get; set; }
 
             public byte[]? ProfilePicture { get; set; }
@@ -58,32 +59,32 @@ namespace MvcApp.Identity.Pages.Account.Manage
 
             public IFormFile? ProfilePictureFile { get; set; }
 
-            [Display(Name = "Known As")]
+            [LocalizedDisplayName("Known As")]
             public string? KnownAs { get; set; }
 
-            [Display(Name = "Introduction")]
+            [LocalizedDisplayName("Introduction")]
             public string? Introduction { get; set; }
 
-            [Display(Name = "Looking For")]
+            [LocalizedDisplayName("Looking For")]
             public string? LookingFor { get; set; }
 
-            [Display(Name = "Gender")]
+            [LocalizedDisplayName("Gender")]
             public string? Gender { get; set; }
 
             [DataType(DataType.Date)]
-            [Display(Name = "Date of Birth")]
+            [LocalizedDisplayName("Date of Birth")]
             public DateTime? DateOfBirth { get; set; }
 
-            [Display(Name = "City")]
+            [LocalizedDisplayName("City")]
             public string? City { get; set; }
 
-            [Display(Name = "Country")]
+            [LocalizedDisplayName("Country")]
             public string? Country { get; set; }
 
-            [Display(Name = "Incognito Mode")]
+            [LocalizedDisplayName("Incognito Mode")]
             public bool IsIncognito { get; set; }
 
-            [Display(Name = "Who can message you")]
+            [LocalizedDisplayName("Who can message you")]
             public MessagingPermission MessagingPermission { get; set; }
 
             public List<int> InterestTagIds { get; set; } = [];

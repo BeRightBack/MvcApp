@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -12,6 +12,7 @@ using MvcApp.Core.Abstractions;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using MvcApp.Localization.Custom;
 
 namespace MvcApp.Identity.Pages.Account
 {
@@ -71,7 +72,7 @@ namespace MvcApp.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [Display(Name = "Username or email")]
+            [LocalizedDisplayName("Username or email")]
             public string Username { get; set; }
 
             /// <summary>
@@ -86,7 +87,7 @@ namespace MvcApp.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [LocalizedDisplayName("Remember me?")]
             public bool RememberMe { get; set; }
         }
 

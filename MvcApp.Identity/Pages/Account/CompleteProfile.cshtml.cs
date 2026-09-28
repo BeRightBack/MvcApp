@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MvcApp.Core;
 using System.ComponentModel.DataAnnotations;
+using MvcApp.Localization.Custom;
 
 namespace MvcApp.Identity.Pages.Account
 {
@@ -28,35 +29,35 @@ namespace MvcApp.Identity.Pages.Account
         public class InputModel
         {
             [Required(ErrorMessage = "First name is required")]
-            [Display(Name = "First Name")]
+            [LocalizedDisplayName("First Name")]
             public string FirstName { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "Last name is required")]
-            [Display(Name = "Last Name")]
+            [LocalizedDisplayName("Last Name")]
             public string LastName { get; set; } = string.Empty;
 
-            [Display(Name = "Known As")]
+            [LocalizedDisplayName("Known As")]
             public string? KnownAs { get; set; }
 
-            [Display(Name = "Introduction")]
+            [LocalizedDisplayName("Introduction")]
             public string? Introduction { get; set; }
 
-            [Display(Name = "Looking For")]
+            [LocalizedDisplayName("Looking For")]
             public string? LookingFor { get; set; }
 
             [Required(ErrorMessage = "Gender is required")]
-            [Display(Name = "Gender")]
+            [LocalizedDisplayName("Gender")]
             public string Gender { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "Date of birth is required")]
             [DataType(DataType.Date)]
-            [Display(Name = "Date of Birth")]
+            [LocalizedDisplayName("Date of Birth")]
             public DateTime DateOfBirth { get; set; }
 
-            [Display(Name = "City")]
+            [LocalizedDisplayName("City")]
             public string? City { get; set; }
 
-            [Display(Name = "Country")]
+            [LocalizedDisplayName("Country")]
             public string? Country { get; set; }
 
             public IFormFile? ProfilePictureFile { get; set; }

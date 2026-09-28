@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -12,6 +12,7 @@ using MvcApp.Core;
 using MvcApp.Services;
 using MvcApp.Core.Abstractions;
 using System.ComponentModel.DataAnnotations;
+using MvcApp.Localization.Custom;
 using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.RateLimiting;
@@ -74,22 +75,22 @@ namespace MvcApp.Identity.Pages.Account
             [Required]
             [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 3)]
             [RegularExpression(@"^[a-zA-Z0-9_-]+$", ErrorMessage = "Username can only contain letters, numbers, underscores, and hyphens.")]
-            [Display(Name = "Username")]
+            [LocalizedDisplayName("Username")]
             public string Username { get; set; }
 
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [LocalizedDisplayName("Email")]
             public string Email { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [LocalizedDisplayName("Password")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [LocalizedDisplayName("Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
         }
