@@ -69,7 +69,10 @@ if (string.IsNullOrWhiteSpace(logsConnectionString))
 
 // The MySQL sink connects eagerly when the logger is built and is then dropped for the
 // lifetime of the process if its database is missing, so create the database first.
-await SystemLogDatabaseInitializer.EnsureExistsAsync(logsConnectionString);
+if (await SystemLogDatabaseInitializer.EnsureExistsAsync(logsConnectionString))
+{
+    Console.WriteLine("Created the Serilog log database named in ConnectionStrings:SerilogLogs.");
+}
 
 var isDevelopment =
     string.Equals(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT"), "Development", StringComparison.OrdinalIgnoreCase) ||
