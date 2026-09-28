@@ -131,6 +131,39 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
   (post-AsSplitQuery), 1 COUNT. To measure: EF command logs are suppressed by
   `MinimumLevel.Override("Microsoft", LogEventLevel.Warning)` in `Program.cs` — temporarily set it
   to Information; each `Executed DbCommand (Xms)` line is followed by its SQL on the next line.
+- **Localization audit + self-translate made non-blocking (2026-09-28):**
+  - `Localisation_db` holds **5 languages (en, fr, es, it, pt) x 212 keys = 1060 rows**.
+    German is configured (`DeepLConfig:TargetLangDe`, mapped in `GetTargetLanguage`) but NOT
+    seeded — user chose to keep the 5.
+  - **218 files** still contain hardcoded user-visible text (Web 97, Identity 31, Store 16,
+    Blog 12, Forum 11, Pages 9, Ads 9, Razor 8, rest across Chat/Video/IPTV/Utility/Messages),
+    and **145 of the 308 distinct `@Localizer` keys used in views are missing from the
+    database** — the blocking path was already being hit before this work started.
+  - The inline miss path called DeepL for every culture with `.Result` inside a property
+    getter, but it returned the key either way. Self-translate is now preserved exactly and
+    just moved off the request path: `BackgroundTranslationService` (channel + dedup, 429
+    backoff) stores the translation a moment later. Verified end-to-end on a real page.
+  - `LocalizationCache` (singleton) holds Languages + StringResources: **home page 1645-3213
+    ms with 20 round-trips** (88 -> 50 -> 20 across the two caches; 6904-7200 ms originally),
+    localization queries 30 -> 0.
+  - **Data quirk:** `StringResources` has duplicate `Name` rows per language; the cache keeps
+    the first occurrence to match the old `FirstOrDefault` (a `ToDictionary` threw on this and
+    500'd `/iptv`).
+  - **Identity pages could not localize at all** — `MvcApp.Identity/Pages/_ViewImports.cshtml`
+    had no `IStringLocalizer` injection. Added, then localized Login/Register/ForgotPassword/
+    ResetPassword/ConfirmEmail/ResendEmailConfirmation/Logout/Lockout/AccessDenied, and
+    switched 11 models from `[Display]` to the existing `[LocalizedDisplayName]`.
+  - **form-floating quirk (pre-existing, exposed by localization):** the label and the input's
+    placeholder are both rendered, so each field drew its name twice — invisible while both
+    were English, visibly garbled once the placeholder was translated. Auth inputs now use
+    `placeholder=" "`, which keeps `:placeholder-shown` working (label still floats) with the
+    label as the only visible text.
+  - **Known pre-existing risk (NOT changed):** `LocalizationContext.Localizer` is a static
+    property assigned per request by `LocalizationMiddleware`, so concurrent requests with
+    different cultures can cross-contaminate `[LocalizedDisplayName]`. Worth fixing via
+    `IHttpContextAccessor` or an ambient scope before it bites.
+  - **Remaining localization work:** ~208 files still to convert, in batches
+    (public shell + Members/Discover/Gallery next, then the rest).
 - SSH: `ssh root@svr1.xtrasvr.com` (root password is user-held, not on this machine). MySQL root shell
   on the server needs its own password; `swan3344` (the app user) has `GRANT ALL ON *.* WITH GRANT
   OPTION` including `mysql.*` — usable for server-side MySQL inspections instead of root.
