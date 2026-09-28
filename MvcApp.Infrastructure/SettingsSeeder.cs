@@ -63,4 +63,10 @@ public static class SettingsSeeder
 
         await db.SaveChangesAsync();
     }
+
+    /// <summary>
+    /// Drops the cached settings snapshot. Call after seeding so readers pick up the rows
+    /// this seeder just inserted or upserted.
+    /// </summary>
+    public static void InvalidateCache(SettingsCache cache) => cache.Invalidate();
 }

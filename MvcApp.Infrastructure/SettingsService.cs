@@ -4,12 +4,30 @@ using MvcApp.Core.Abstractions;
 
 namespace MvcApp.Infrastructure;
 
-public class SettingsService(UserDbContext db) : ISettingsService
+public class SettingsService(UserDbContext db, SettingsCache cache) : ISettingsService
 {
     public async Task<string?> GetAsync(string key)
     {
-        var setting = await db.SystemSettings.AsNoTracking().FirstOrDefaultAsync(s => s.Key == key);
-        return setting?.Value;
+        var snapshot = await GetSnapshotAsync();
+        return snapshot.TryGetValue(key, out var value) ? value : null;
+    }
+
+    private async Task<Dictionary<string, string>> GetSnapshotAsync()
+    {
+        if (cache.TryGetSnapshot(out var cached))
+        {
+            return cached;
+        }
+
+        var rows = await db.SystemSettings.AsNoTracking().ToListAsync();
+        var snapshot = new Dictionary<string, string>(rows.Count, StringComparer.Ordinal);
+        foreach (var row in rows)
+        {
+            snapshot[row.Key] = row.Value ?? string.Empty;
+        }
+
+        cache.SetSnapshot(snapshot);
+        return snapshot;
     }
 
     public async Task<T?> GetAsync<T>(string key) where T : struct
@@ -41,5 +59,6 @@ public class SettingsService(UserDbContext db) : ISettingsService
             });
         }
         await db.SaveChangesAsync();
+        cache.Invalidate();
     }
 }

@@ -437,6 +437,9 @@ static async Task SeedSettingsAsync(WebApplication app)
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
     await EnsureMigratedAsync(db);
     await SettingsSeeder.SeedAsync(db);
+
+    // The seeder may have inserted or upserted rows; drop any snapshot cached earlier.
+    SettingsSeeder.InvalidateCache(scope.ServiceProvider.GetRequiredService<SettingsCache>());
 }
 
 static async Task SeedChatRoomsAsync(WebApplication app)

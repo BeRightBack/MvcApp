@@ -10,7 +10,7 @@ namespace MvcApp.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class SystemSettingsController(UserDbContext db, IAuditService auditService) : Controller
+    public class SystemSettingsController(UserDbContext db, IAuditService auditService, SettingsCache settingsCache) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -41,6 +41,7 @@ namespace MvcApp.Web.Areas.Admin.Controllers
                 existing.UpdatedAt = DateTime.UtcNow;
                 existing.UpdatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 await db.SaveChangesAsync();
+                settingsCache.Invalidate();
                 await auditService.LogAsync("Edit", "SystemSetting", setting.Key, $"Updated setting '{setting.Key}'");
                 return RedirectToAction(nameof(Index));
             }
@@ -59,6 +60,7 @@ namespace MvcApp.Web.Areas.Admin.Controllers
                 setting.UpdatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 db.SystemSettings.Add(setting);
                 await db.SaveChangesAsync();
+                settingsCache.Invalidate();
                 await auditService.LogAsync("Create", "SystemSetting", setting.Key, $"Created setting '{setting.Key}' = '{setting.Value}'");
                 return RedirectToAction(nameof(Index));
             }
@@ -74,6 +76,7 @@ namespace MvcApp.Web.Areas.Admin.Controllers
             {
                 db.SystemSettings.Remove(setting);
                 await db.SaveChangesAsync();
+                settingsCache.Invalidate();
                 await auditService.LogAsync("Delete", "SystemSetting", setting.Key, $"Deleted setting '{setting.Key}'");
             }
             return RedirectToAction(nameof(Index));
