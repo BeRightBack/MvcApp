@@ -411,6 +411,14 @@ When a module is deselected at generation, ALL of these must hold:
   `Logging:FileSink` are the two knobs. Wizard tokens are NOT valid JSON — validate template
   config files by detokenizing first (a scripted `-replace` corrupted appsettings.json once;
   recovered by extracting the pristine file from the previous .vsix).
+  **Log DB is auto-created (2026-09-28, VSIX 1.0.53):** `SystemLogDatabaseInitializer`
+  creates it from `Program.cs` **before** the logger is built — `Serilog.Sinks.MySQL`
+  connects eagerly, so a missing DB at that moment silently kills the sink for the whole
+  process (verified: creating it later never produced a table or rows). The sink still
+  creates the `Logs` table on first write. `MySqlErrorCode.NoSuchTable` is treated as
+  "empty", not a failure. 19 new unit tests (32 total). Verified by dropping the DB and
+  restarting: recreated, table auto-created, 11 rows — and the same test in a generated app
+  against a deliberately absent database (28 rows).
 
 ## Coding conventions
 - No code comments unless asked.
