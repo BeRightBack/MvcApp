@@ -31,6 +31,7 @@ namespace MvcApp.Localization
 
             services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<ILanguageService, LanguageService>();
+            services.AddScoped<TranslationSeedSeeder>();
             services.AddScoped<IStringLocalizer<SharedResource>, DbStringLocalizer<SharedResource>>();
 
             services.AddScoped<Translator>(sp =>
