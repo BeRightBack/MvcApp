@@ -158,10 +158,14 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
     were English, visibly garbled once the placeholder was translated. Auth inputs now use
     `placeholder=" "`, which keeps `:placeholder-shown` working (label still floats) with the
     label as the only visible text.
-  - **Known pre-existing risk (NOT changed):** `LocalizationContext.Localizer` is a static
-    property assigned per request by `LocalizationMiddleware`, so concurrent requests with
-    different cultures can cross-contaminate `[LocalizedDisplayName]`. Worth fixing via
-    `IHttpContextAccessor` or an ambient scope before it bites.
+  - **Static `LocalizationContext` — FIXED 2026-09-28 (commit `e2dd6bb`), and the earlier
+    warning here was overstated.** It no longer parks a request-scoped service on a static; it
+    resolves the localizer from the CURRENT request's services and returns null when there is no
+    request, so `[LocalizedDisplayName]` falls back to untranslated text instead of throwing in a
+    hosted service or test. `LocalizationMiddleware` now does nothing per request.
+    **It was never a cross-request contamination bug**: `DbStringLocalizer` resolves the culture
+    from `Thread.CurrentThread.CurrentUICulture` at lookup time, so even a stale instance returned
+    the right translation. The real defect was the null `HttpContext` dereference.
   - **Front end fully localized 2026-09-28 (commit `da5b4fd`): 1900 strings across 214 views
     and components** — public views, admin area, all module views, Identity pages, `.razor`.
     The reason 218 files were hardcoded was structural, not effort: **only IPTV had an
@@ -233,6 +237,22 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
     row; the earlier "Luxury" note was stale). The active home view is therefore
     `Views/Home/Index.Dating.cshtml` — check the setting before touching a template's landing
     page. All 11 templates are localized regardless.
+  - **Binary files added to the VSIX template MUST use `<ProjectItem ReplaceParameters="false">`.**
+    The template engine performs text replacement on files marked `true`, which corrupts binaries.
+    The shipped `Resources\translations.json.gz` was declared `true` in 1.0.58/1.0.59 — a real
+    latent bug that a detokenized build CANNOT catch, because it reads the file from the template
+    tree rather than through the template engine. Fixed in 1.0.60. All 61 jpg/png ProjectItems in
+    `MvcApp.Web.vstemplate` were already `false`, so the pattern is now consistent.
+  - **Attribute/localizer passes mask `<script>`, so JS string literals get missed.** The four
+    ad-banner placeholders set via `newInput.placeholder = '...'` were skipped for that reason
+    (fixed 2026-09-28, `e2dd6bb`). When injecting a translation into JavaScript, emit it as JSON
+    via `@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["..."].Value))` — a value
+    containing an apostrophe would otherwise terminate a single-quoted JS literal.
+  - **Sentence fragments split at inline markup are a known, accepted limitation.** Two keys begin
+    with punctuation (", and restarting the application.", ", as it can result...") because a
+    `<code>` element sits mid-sentence. English renders correctly and the French reads naturally
+    (", puis de redémarrer l'application."). Merging them into one key would mean moving or
+    dropping the inline styling — a copy decision, not a bug.
 - SSH: `ssh root@svr1.xtrasvr.com` (root password is user-held, not on this machine). MySQL root shell
   on the server needs its own password; `swan3344` (the app user) has `GRANT ALL ON *.* WITH GRANT
   OPTION` including `mysql.*` — usable for server-side MySQL inspections instead of root.
@@ -701,3 +721,33 @@ When a module is deselected at generation, ALL of these must hold:
   VSIX tree as **1.0.51** (detokenized build 0E/10W, VSIX Release 0W/0E, payload verified —
   incl. the Default-navbar / NavGrouping / layout-override prior-session work). NOT
   installed — user defers VS install.**
+
+## Port history - VSIX 1.0.60 (2026-09-28, three defect fixes)
+Ported 5 files from source commit `e2dd6bb` (port base `0d3f917`). Manifest 1.0.59 -> 1.0.60.
+- **The translation payload's `ProjectItem` was fixed from `ReplaceParameters="true"` to
+  `"false"`.** This was a real latent bug in 1.0.58/1.0.59: the template engine does text
+  replacement on files marked `true`, so a 97 KB gzipped binary would very likely have been
+  corrupted in a generated app. It would fail to decompress, the seeder would log a warning, and
+  the app would start untranslated and burst-translate itself - exactly what the payload exists to
+  prevent. **A detokenized build cannot catch this**, because it reads the file from the template
+  tree instead of through the template engine. Every other binary in this template is `false`
+  (verified in the built payload: 61 jpg/png ProjectItems in MvcApp.Web.vstemplate, all `false`,
+  zero `true`), and there were NO binary ProjectItems at all before the payload, so the pattern
+  was unproven here. **When adding a binary to this template, use `ReplaceParameters="false"`.**
+- **`LocalizationContext` no longer stores a request-scoped service on a static.** It resolves the
+  localizer from the current request's services and returns null with no current request, so
+  callers fall back to untranslated text instead of throwing. `LocalizationMiddleware` now does
+  nothing per request. Severity correction: this was NOT cross-request contamination - the
+  localizer resolves culture itself at lookup time - the real defect was the null case.
+- **The four ad-banner placeholders inside `<script>` blocks are localized**, injected once as
+  JSON rather than into single-quoted JavaScript literals (a translation containing an apostrophe
+  would terminate the string). The server-rendered placeholder for the same field, a Razor ternary,
+  is localized too. The attribute pass masked script content and so missed these.
+- **Verified:** detokenized build **0E/10W** (= source baseline); VSIX Release 0W/0E; payload
+  manifest **1.0.60**, 1018 entries, all 20 vstemplates parsing, `translations.json.gz` present
+  (97430 bytes, 1353 keys, `Log in` -> `Se connecter`) and now declared `ReplaceParameters="false"`.
+  NOT INSTALLED (user defers), and **no wizard-generated app has been created from
+  1.0.58 / 1.0.59 / 1.0.60** - the template is verified to compile and to contain the right
+  files, not verified to produce a working app through the wizard.
+
+## Session continuity (IMPORTANT)
