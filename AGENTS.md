@@ -233,6 +233,25 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
     `BackgroundTranslationService`. Copy added in a new release is still translated automatically
     on first render — self-translate is not replaced. The `Program.cs` `MVCAPP_TRANSLATE_KEYS_FILE`
     hook used earlier on 2026-09-28 is deleted.
+  - **Three defects in the translation worker, all mine, fixed 2026-09-28 (`81839d5`, VSIX
+    1.0.61).** The "Translate missing keys" button queued keys and appeared to do nothing:
+    1. The worker's guard skipped any DeepL result **equal to the source text**, but "Admin",
+       "RSVP", "PayPal", "Design", "Smart TV" are genuinely identical across languages, so the
+       correct answer was discarded — API call made, result thrown away, no log line. Only the
+       SOURCE language is skipped now. DeepL was never at fault (a direct call returned 200).
+    2. The source-language guard compared DeepL codes: `TargetLangEn` is **"EN-US"** while
+       `SourceLang` is **"EN"**, so it never matched and 161 junk source-language rows were
+       written (en 212 -> 373). It now compares the language's `Culture`, and skips before the
+       lookup so no API call is spent. Those rows were deleted after checking that only 2 of 373
+       differed from their key, both merely by a leading space — **no English copy was altered**
+       (13 pages byte-identical before/after).
+    3. The coverage metric grouped keys **case-sensitively** while the column collation
+       (`utf8mb4_uca1400_ai_ci`) compares them case- and accent-insensitively. The table holds
+       both `password` and `Password`; the app serves either from the other (which is why the
+       login page shows "Mot de passe"), but the metric saw two half-filled keys and could never
+       reach zero. Keys are now normalized the way the database compares them. **Compare keys the
+       way the database does, not the way your language's string comparer does.**
+    Self-translate was never disabled at any point — the keys were being translated and dropped.
   - **`SiteTemplate` is `Dating`, not `Luxury`** (corrected 2026-09-28 by reading the live DB
     row; the earlier "Luxury" note was stale). The active home view is therefore
     `Views/Home/Index.Dating.cshtml` — check the setting before touching a template's landing
