@@ -179,7 +179,7 @@ else
             // Save order on drop
             tbody.addEventListener('drop', async () => {
                 const ids = [...tbody.querySelectorAll('tr')].map(r => parseInt(r.dataset.bannerId));
-                const zoneId = @selectedZoneId;
+                const zoneId = @(selectedZoneId ?? 0);
                 await fetch(`/Admin/Ads/Banners/Reorder?zoneId=${zoneId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value },

@@ -69,7 +69,7 @@
                 @foreach (var item in await NavService.GetNavItemsAsync())
                     {
                         <div class="nav-item px-3">
-                            <a class="nav-link" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a>
+                            <a class="nav-link" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@item.Label</a>
                         </div>
                     }
                     @if (User.IsInRole("Admin"))
@@ -143,18 +143,18 @@ else
                             {
                                 var item = group.Items[0];
                                 <li class="nav-item">
-                                    <a class="nav-link px-2 px-lg-3" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a>
+                                    <a class="nav-link px-2 px-lg-3" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@item.Label</a>
                                 </li>
                             }
                             else
                             {
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle px-2 px-lg-3" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Localizer[group.Label]</a>
+                                    <a class="nav-link dropdown-toggle px-2 px-lg-3" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@group.Label</a>
                                     <ul class="dropdown-menu">
                                         @foreach (var item in group.Items)
                                         {
                                             <li>
-                                                <a class="dropdown-item" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a>
+                                                <a class="dropdown-item" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@item.Label</a>
                                             </li>
                                         }
                                     </ul>
@@ -203,7 +203,7 @@ else
                 <ul class="list-unstyled">
                     @foreach (var item in await NavService.GetFooterItemsAsync())
                     {
-                        <li><a class="nav-link" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@Localizer[item.Label]</a></li>
+                        <li><a class="nav-link" asp-area="@item.Area" asp-controller="@item.Controller" asp-action="@item.Action" asp-route-slug="@item.Slug">@item.Label</a></li>
                     }
                 </ul>
             </div>

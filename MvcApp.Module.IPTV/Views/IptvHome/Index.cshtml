@@ -94,8 +94,8 @@
                             <div class="card-header text-center">
                                 <!-- Corrected line -->
                                 <h3 class="card-title">@plan.Name</h3>
-                                <p>@Localizer[@plan.DescriptionShort!]</p>
-                                <p>@Localizer[@plan.Description!]</p>
+                                <p>@plan.DescriptionShort</p>
+                                <p>@plan.Description</p>
                             </div>
                             @if (plan.SubscriptionDetails != null && plan.SubscriptionDetails.Any())
                             {
@@ -117,7 +117,7 @@
                                         decimal originalUsdPrice = detail.Price; // Assume US base
                                         decimal convertedPrice = originalUsdPrice * selectedRate;
                                         <li class="list-group-item">
-                                            <p><strong>@Localizer[@detail.Description!]</strong></p>
+                                            <p><strong>@detail.Description</strong></p>
                                             @*<p>@Localizer["Price:"] @detail.Price.ToString("C", usCulture) USD</p>*@
                                             <p>@Localizer["Price:"] @convertedPrice.ToString("C", displayCulture) @selectedCurrency</p>
                                             <p>@Localizer["Subscription Duration:"] @_duration @Localizer[_unit]</p>
