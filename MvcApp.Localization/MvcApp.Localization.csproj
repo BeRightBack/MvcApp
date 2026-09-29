@@ -22,4 +22,15 @@
     <ProjectReference Include="..\MvcApp.Core\MvcApp.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- The translation set a freshly generated app starts with, so it renders translated
+         instead of English and does not have to machine-translate itself on first traffic.
+         Gzipped JSON (326 KB -> 97 KB) as an embedded resource: no file-copy wiring to break in
+         the project or the VSIX template, and it travels with the assembly.
+         LogicalName is pinned so the resource name does not shift if the folder is renamed. -->
+    <EmbeddedResource Include="Resources\translations.json.gz">
+      <LogicalName>MvcApp.Localization.Translations.json.gz</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

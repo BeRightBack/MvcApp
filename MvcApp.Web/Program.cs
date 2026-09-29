@@ -429,6 +429,11 @@ static async Task SeedLanguageAsync(WebApplication app)
 
     var service = scope.ServiceProvider.GetRequiredService<SeedLanguage>();
     await service.EnsureSeedLanguageAsync();
+
+    // Languages must exist first: the translation seed only writes rows for cultures that
+    // already have a Language row.
+    var translations = scope.ServiceProvider.GetRequiredService<TranslationSeedSeeder>();
+    await translations.SeedAsync();
 }
 
 static async Task SeedSettingsAsync(WebApplication app)
