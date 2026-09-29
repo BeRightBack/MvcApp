@@ -186,11 +186,33 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
     capture. **Non-deterministic pages: `/Admin` (live counters), `/Admin/SystemLogs` (live log
     rows), `/Home/Test` (random weather)** — they differ between two runs of the same build,
     so exclude them from text diffs.
-  - **Self-translate is the mechanism and was preserved throughout** (user: "the self translate
-    is the key feature to keep, be very careful not to break it"). Progress after the
-    localization commit: 824 translations, **0 rate-limit events, 0 failures**, distinct keys
-    212 → 377. The queue is fed by page visits, so a site becomes translated as it is browsed;
-    pre-translating everything would need a crawl of every page (~4k DeepL calls).
+  - **Pre-translation done 2026-09-28 (commit `69b5cf4`): 212 -> 1350 distinct keys (5541 rows).**
+    Run through the app's own `BackgroundTranslationService` (so the pacing/429-backoff/dedup
+    were the app's, not a parallel script) via a **temporary, now-removed** env-gated hook in
+    `Program.cs` (`MVCAPP_TRANSLATE_KEYS_FILE` enqueued the keys, then the hook was deleted —
+    `Program.cs` is byte-identical to before). ~4900 translations, **1 rate-limit event, 0
+    failures**. Coverage: 1345 keys referenced in source, **1318 resolve in the DB**; the other
+    27 are intentionally English (setting keys, C# type names, validation-message lookup keys
+    like `CompareError`, and brands). To re-run after adding copy: extract the keys, enqueue
+    them, let the queue drain, then measure — do NOT call DeepL from a script, so the app stays
+    the single source of truth for retry behaviour.
+  - **`StringResources` collation is `utf8mb4_uca1400_ai_ci`** — case- AND accent-insensitive.
+    Consequences that cost real time: (a) `Live`/`LIVE` and `Created By`/`Created by` match
+    each other, so a PowerShell ordinal comparison over-reports missing keys — measure coverage
+    case-insensitively or you will chase phantom gaps; (b) it is PAD SPACE, so a **leading**
+    space is significant and a key stored as `' Text'` can never be found. Three keys were
+    seeded with a leading space; they are trimmed now. When measuring coverage, do NOT pipe
+    `mysql.exe` output through the PowerShell console (it re-encodes and breaks non-ASCII
+    comparison) — redirect the process output to a file and read it as UTF-8.
+  - **Nav labels are localized in `NavService.FilterAsync`**, the single funnel every navbar,
+    footer and dropdown list passes through, so both `NavDefaults` (code) and the admin's
+    `SiteNav` JSON (DB) are covered. This is why `MvcApp.Services` references
+    `MvcApp.Localization` (no cycle: Localization references only Core).
+  - **Never wrap technical identifiers in `@Localizer`** — it reaches the text scan only when
+    shown inside `<code>` or an input-group prefix, but the damage is real: DeepL translated the
+    icon class `bx bx-heart` into `bx bx-cœur` and it was stored, so an admin copying that
+    example would paste a class that renders no icon. Same for setting keys, C# type names and
+    URL path examples. A bare `...` is also left alone.
   - **`SiteTemplate` is `Dating`, not `Luxury`** (corrected 2026-09-28 by reading the live DB
     row; the earlier "Luxury" note was stale). The active home view is therefore
     `Views/Home/Index.Dating.cshtml` — check the setting before touching a template's landing
