@@ -32,7 +32,7 @@
                 onsubmit="return confirm(this.dataset.confirm);">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn btn-outline-warning btn-sm">
-                    <i class="bx bx-wand"></i> @Localizer["Translate missing keys"]
+                    <i class="bx bx-globe"></i> @Localizer["Translate missing keys"]
                 </button>
                 <span class="form-text">@Localizer["Runs in the background, paced against the DeepL rate limit. The page stays usable while it works."]</span>
             </form>
