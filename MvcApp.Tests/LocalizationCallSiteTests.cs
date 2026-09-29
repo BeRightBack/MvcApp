@@ -23,12 +23,17 @@ public class LocalizationCallSiteTests
     private static readonly string[] ViewExtensions = { ".cshtml", ".razor" };
 
     /// <summary>Locates the repository root by walking up to the solution file.</summary>
+    /// <remarks>
+    /// Deliberately matches any solution name. This test ships inside the VSIX template, where the
+    /// generated solution is named after the project, so looking for "MvcApp.slnx" specifically
+    /// would throw in every generated app.
+    /// </remarks>
     private static string RepositoryRoot()
     {
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir is not null)
         {
-            if (dir.EnumerateFiles("MvcApp.slnx").Any() || dir.EnumerateFiles("*.sln").Any())
+            if (dir.EnumerateFiles("*.slnx").Any() || dir.EnumerateFiles("*.sln").Any())
             {
                 return dir.FullName;
             }
@@ -37,6 +42,27 @@ public class LocalizationCallSiteTests
         }
 
         throw new InvalidOperationException("Could not locate the repository root from " + AppContext.BaseDirectory);
+    }
+
+    /// <summary>
+    /// Finds the bundled boxicons stylesheet without assuming the project's name, for the same
+    /// reason: in a generated app the web project is "&lt;ProjectName&gt;.Web", not "MvcApp.Web".
+    /// </summary>
+    private static string BundledBoxiconsCss()
+    {
+        var root = RepositoryRoot();
+        var expected = "wwwroot/lib/boxicons/css/boxicons.min.css";
+
+        var match = Directory
+            .EnumerateFiles(root, "boxicons.min.css", SearchOption.AllDirectories)
+            .Select(p => p.Replace('\\', '/'))
+            .FirstOrDefault(p => p.EndsWith(expected, StringComparison.OrdinalIgnoreCase));
+
+        Assert.True(
+            match is not null,
+            "Bundled boxicons stylesheet not found. Expected a file ending in " + expected + " somewhere under " + root);
+
+        return match!;
     }
 
     /// <summary>
@@ -227,9 +253,7 @@ public class LocalizationCallSiteTests
     [Fact]
     public void EveryBoxiconClassExistsInTheBundledStylesheet()
     {
-        var cssPath = Path.Combine(RepositoryRoot(), "MvcApp.Web", "wwwroot", "lib", "boxicons", "css", "boxicons.min.css");
-        Assert.True(File.Exists(cssPath), "Bundled boxicons stylesheet not found at " + cssPath);
-
+        var cssPath = BundledBoxiconsCss();
         var css = File.ReadAllText(cssPath);
 
         var used = new SortedSet<string>(StringComparer.Ordinal);
