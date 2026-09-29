@@ -252,10 +252,46 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
        reach zero. Keys are now normalized the way the database compares them. **Compare keys the
        way the database does, not the way your language's string comparer does.**
     Self-translate was never disabled at any point — the keys were being translated and dropped.
-  - **`SiteTemplate` is `Dating`, not `Luxury`** (corrected 2026-09-28 by reading the live DB
-    row; the earlier "Luxury" note was stale). The active home view is therefore
-    `Views/Home/Index.Dating.cshtml` — check the setting before touching a template's landing
-    page. All 11 templates are localized regardless.
+  - **A full audit of the localization pass found 4 more regressions, all mine, fixed 2026-09-29
+    (`1ab9ec1`).** They were invisible to the English A/B because English always renders the key,
+    so each only misbehaves in another language or on a nullable value. **An English A/B cannot find
+    this class of bug — a French capture can.**
+    1. **Nav labels were translated twice.** `NavService.FilterAsync` sets
+       `item.Label = localizer[item.Label].Value`, and `_Layout.cshtml` then wrapped the *result* in
+       `@Localizer[item.Label]` at 5 sites. The translated label became a lookup key, so French text
+       went to DeepL as English source — the table held key `Boutique` with `es=Tienda`.
+       **Localize each string in exactly ONE place.** The service is the right place for nav.
+    2. **Database content was treated as translation keys.** `@Localizer[@plan.Description]` in
+       `IptvHome/Index`, `IptvStore/Index` and `Views/Home/Index.Iptv` machine-translated the
+       seeded VIP plan copy into 4 languages and desynced it from what an admin edits.
+       **Never wrap a model/DB value in `@Localizer`** — content is not UI chrome and has no
+       translation workflow.
+    3. **Localized text inside a JS string literal.** `IptvPlan/Create.cshtml` had `@Localizer[...]`
+       inside `'...'` literals; the admin "Translate missing keys" confirm had a localized sentence
+       inside `confirm('...')`. Razor's JS encoder rescues an apostrophe *by luck*, so these look
+       fine until a translation contains one. **Emit via `JsonSerializer.Serialize`, or read the
+       text from a `data-` attribute — never put localized copy in a JS literal.**
+    4. **HTML entity in a key.** `Localizer["Language &amp; Currency"]` double-encodes and the
+       tooltip showed a literal `&amp;`. Decode entities in the key — the same trap as the `<code>`
+       case above, still not caught until this sweep.
+    Two pre-existing bugs surfaced in the same sweep and were fixed: `/Admin/Ads/Banners` emitted
+    `const zoneId = @selectedZoneId;` from a nullable `int?`, producing `const zoneId = ;` — a
+    syntax error that killed the whole script block and left drag-to-reorder dead; and the
+    Translations stat card used `bxs-translate`, which **does not exist in the bundled boxicons at
+    all** (that font has no translate glyph), so it rendered a blank box. **A missing icon-font
+    glyph looks exactly like a missing icon — check the class exists in the shipped CSS.**
+    Checked and found clean, left alone: no `@Localizer` in any functional attribute
+    (`value`/`id`/`name`/`href`/`src`/`action`/`class`/`data-*`); no format-argument calls; all 15
+    TempData reads are `!= null` checks, not literal comparisons, so the 99 localized controller
+    messages still display; `<option value="Male">@Localizer["Male"]</option>` correctly keeps the
+    English value and translates only the label.
+  - **`SiteTemplate` is `Luxury`, not `Dating`** (re-verified 2026-09-29 by reading the live DB
+    row AND confirming the rendered page: the home hero shows "LUXURY ADULTS-ONLY DATING" /
+    "XXXciety" from `Views/Home/Index.Luxury.cshtml`). Note the 2026-09-28 note in this file claimed
+    the opposite and was itself wrong — it "corrected" a correct earlier value. **Re-verify this
+    from the DB before trusting any note about it.** The active home view follows the setting, so
+    check `SiteTemplate` before touching a template's landing page. All 11 templates are localized
+    regardless.
   - **Binary files added to the VSIX template MUST use `<ProjectItem ReplaceParameters="false">`.**
     The template engine performs text replacement on files marked `true`, which corrupts binaries.
     The shipped `Resources\translations.json.gz` was declared `true` in 1.0.58/1.0.59 — a real
@@ -281,9 +317,10 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
   the sink now persists rows there (file logging under `MvcApp.Web\logs\` also stays on).
 
 ## Key settings (SystemSettings table: Key, Value, Description, Group, UpdatedAt, UpdatedBy)
-- `SiteTemplate` = active template (currently **`Dating`** — read from the live DB 2026-09-28;
-  the earlier "Luxury" note was stale. Exact template Name, compared OrdinalIgnoreCase). The
-  active landing view follows it, so `/` renders `Views/Home/Index.Dating.cshtml`.
+- `SiteTemplate` = active template (currently **`Luxury`** — read from the live DB 2026-09-29 and
+  confirmed against the rendered hero; the 2026-09-28 "Dating" note in this file was wrong.
+  Exact template Name, compared OrdinalIgnoreCase). The active landing view follows it, so `/`
+  renders `Views/Home/Index.Luxury.cshtml`.
 - `Module.*.Enabled` = module toggles (Ads, Blog, Chat, Forum, Iptv, Messages, Pages, Store,
   Utility, Video). Modules deselected at generation time have NO `Module.<X>.Enabled` row and
   are hidden from the admin Modules list (`ModuleManager.GetAllModulesAsync` skips modules
@@ -332,6 +369,18 @@ When a module is deselected at generation, ALL of these must hold:
    hard-enable a module the generation can omit.
 
 ## Known pitfalls / watch list
+- **User uploads under `wwwroot` are UNTRACKED and therefore unrecoverable.** Verified 2026-09-29:
+  the admin's `ProfilePicturePath` pointed at `wwwroot/images/<guid>/<guid>.jpg`, the file was
+  missing, and it could not be found in any commit, `git stash`, the reflog, the 10 dangling blobs
+  from `git fsck --lost-found`, the Recycle Bin, anywhere on C:/E:, or the built VSIX. Nothing
+  tracks that folder, so a single stray `Remove-Item` destroys a user's photo permanently. **Before
+  any recursive delete or "restore/reset files" operation, check whether the target path is under
+  `MvcApp.Web\wwwroot\images\` or `MvcApp.Web\wwwroot\Photos\`, and back it up first.** Recovered in
+  this case by repointing the DB at the surviving tracked file
+  `wwwroot/Photos/admin/a715e390-beb6-4c50-a45e-877593cf4d74.jpg` (the DB row was updated in both
+  `User.ProfilePicturePath` and `Photos.Filename`, because `AccountController.GetProfilePicture`
+  resolves the two differently: the former against `wwwroot`, the latter as
+  `wwwroot/Photos/{UserName}/{Filename}`).
 - EF warnings `Model[10632] No instantiatable types ... Blog/Chat/Forum/Store` are benign
   (configs were moved to Infrastructure).
 - **MariaDB migration lock + raw-SQL semicolons (FIXED + VERIFIED 2026-09-25):**
