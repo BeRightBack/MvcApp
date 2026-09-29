@@ -63,7 +63,7 @@
                                 <img src="/Verifications/@request.User?.UserName/@request.Filename"
                                      class="w-100 h-100" style="object-fit:cover; border-radius:1rem 1rem 0 0;"
                                      onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'d-flex align-items-center justify-content-center h-100 text-muted\'><i class=\'bx bx-image\' style=\'font-size:3rem;\'></i></div>';"
-                                     alt="Verification photo">
+                                     alt="@(Localizer["Verification photo"])">
                                 <span class="position-absolute top-0 end-0 m-2 badge @(request.Status == VerificationStatus.Pending ? "bg-warning text-dark" : request.Status == VerificationStatus.Approved ? "bg-success" : "bg-danger")">
                                     @request.Status
                                 </span>
@@ -99,7 +99,7 @@
                                     <div id="rejectForm_@request.Id" style="display:none;" class="mt-2">
                                         <form asp-action="Reject" asp-route-id="@request.Id" method="post">
                                             @Html.AntiForgeryToken()
-                                            <input type="text" name="notes" class="form-control form-control-sm mb-1" placeholder="Rejection reason (optional)" />
+                                            <input type="text" name="notes" class="form-control form-control-sm mb-1" placeholder="@(Localizer["Rejection reason (optional)"])" />
                                             <button type="submit" class="btn btn-sm btn-danger rounded-pill">@Localizer["Confirm Reject"]</button>
                                         </form>
                                     </div>

@@ -108,7 +108,7 @@
                                     {
                                         <form asp-action="SetMain" asp-route-id="@photo.Id" method="post" class="d-inline">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill" title="Set as main photo">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill" title="@(Localizer["Set as main photo"])">
                                                 <i class='bx bx-star'></i>
                                             </button>
                                         </form>
@@ -124,7 +124,7 @@
                                     <form asp-action="Delete" asp-route-id="@photo.Id" method="post" class="d-inline"
                                           onsubmit="return confirm('Delete this photo?');">
                                         @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill" title="Delete">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill" title="@(Localizer["Delete"])">
                                             <i class='bx bx-trash'></i>
                                         </button>
                                     </form>

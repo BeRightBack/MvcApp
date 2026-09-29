@@ -3,6 +3,42 @@
     ViewData["Title"] = "Index";
 }
 
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>@Localizer["Translation coverage"]</h5>
+        <p class="mb-2">
+            @* DbStringLocalizer ignores format arguments, so placeholders are substituted here. *@
+            @* LanguageCount is the number of TARGET languages: no row is stored for the source
+               language, so counting it would report every key as incomplete. *@
+            @string.Format(Localizer["{0} key(s) across {1} target language(s)."], ViewBag.KeyCount, ViewBag.LanguageCount)
+            @if ((int)ViewBag.MissingCount > 0)
+            {
+                <strong class="text-warning">&#183; @string.Format(Localizer["{0} still need a translation."], ViewBag.MissingCount)</strong>
+            }
+            else
+            {
+                <span class="text-success">&#183; @Localizer["Every language is covered."]</span>
+            }
+        </p>
+        @if ((int)ViewBag.MissingCount > 0)
+        {
+            <form asp-controller="Localization" asp-action="TranslateMissing" method="post" class="d-inline"
+                onsubmit="return confirm('@Localizer["Queue the missing translations for background translation?"]');">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-warning btn-sm">
+                    <i class="bx bx-wand"></i> @Localizer["Translate missing keys"]
+                </button>
+                <span class="form-text">@Localizer["Runs in the background, paced against the DeepL rate limit. The page stays usable while it works."]</span>
+            </form>
+        }
+    </div>
+</div>
+
 <a asp-controller="Localization" asp-action="Create" class="btn btn-primary">@Localizer["Create"]</a>
 <form asp-controller="Localization" asp-action="Index" asp-route-page="1" asp-route-pageSize=@ViewBag.PageSize&
     asp-route-searchString=@ViewBag.SearchString method="get" class="form-inline" role="form">
@@ -65,13 +101,13 @@
         </table>
     </div>
     <div class="col-md-12">
-        <nav aria-label="Page navigation example">
+        <nav aria-label="@(Localizer["Page navigation example"])">
             <ul class="pagination justify-content-center">
                 @if (ViewBag.Page > 1)
                 {
                     <li class="page-item">
                         <a asp-action="Index" asp-route-page=@(ViewBag.Page - 1) asp-route-pageSize=@ViewBag.PageSize&
-                            asp-route-searchString=@ViewBag.SearchString class="page-link" aria-label="Previous">
+                            asp-route-searchString=@ViewBag.SearchString class="page-link" aria-label="@(Localizer["Previous"])">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">@Localizer["Previous"]</span>
                         </a>
@@ -124,7 +160,7 @@
                 {
                     <li class="page-item">
                         <a asp-action="Index" asp-route-page=@(ViewBag.Page + 1) asp-route-pageSize=@ViewBag.PageSize&
-                            asp-route-searchString=@ViewBag.SearchString class="page-link" aria-label="Next">
+                            asp-route-searchString=@ViewBag.SearchString class="page-link" aria-label="@(Localizer["Next"])">
                             <span aria-hidden="true">&raquo;</span>
                             <span class="sr-only">@Localizer["Next"]</span>
                         </a>

@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Web.Controllers;
 
 [Authorize]
-public class VideoUploadController(UserDbContext db, UserManager<UserDetails> userManager, IGamificationService gamification) : Controller
+public class VideoUploadController(UserDbContext db, UserManager<UserDetails> userManager, IGamificationService gamification, IStringLocalizer<SharedResource> localizer) : Controller
 {
     private static readonly string[] AllowedVideoTypes = [
         "video/mp4", "video/webm", "video/ogg", "video/quicktime", "video/x-msvideo"
@@ -62,28 +64,28 @@ public class VideoUploadController(UserDbContext db, UserManager<UserDetails> us
 
         if (string.IsNullOrWhiteSpace(title))
         {
-            TempData["Error"] = "Title is required.";
+            TempData["Error"] = localizer["Title is required."];
             ViewBag.Categories = Enum.GetValues<VideoCategory>();
             return View();
         }
 
         if (videoFile == null || videoFile.Length == 0)
         {
-            TempData["Error"] = "Please select a video file.";
+            TempData["Error"] = localizer["Please select a video file."];
             ViewBag.Categories = Enum.GetValues<VideoCategory>();
             return View();
         }
 
         if (!AllowedVideoTypes.Contains(videoFile.ContentType.ToLower()))
         {
-            TempData["Error"] = "Only MP4, WebM, OGG, MOV, and AVI videos are allowed.";
+            TempData["Error"] = localizer["Only MP4, WebM, OGG, MOV, and AVI videos are allowed."];
             ViewBag.Categories = Enum.GetValues<VideoCategory>();
             return View();
         }
 
         if (videoFile.Length > MaxFileSize)
         {
-            TempData["Error"] = "Video file must be under 100MB.";
+            TempData["Error"] = localizer["Video file must be under 100MB."];
             ViewBag.Categories = Enum.GetValues<VideoCategory>();
             return View();
         }
@@ -129,7 +131,7 @@ public class VideoUploadController(UserDbContext db, UserManager<UserDetails> us
 
         await gamification.AwardPointsAsync(user.Id, 15, "Uploaded a video", "Video", video.Id);
 
-        TempData["Message"] = "Video uploaded! It will appear after moderator approval.";
+        TempData["Message"] = localizer["Video uploaded! It will appear after moderator approval."];
         return RedirectToAction(nameof(Index));
     }
 
@@ -160,7 +162,7 @@ public class VideoUploadController(UserDbContext db, UserManager<UserDetails> us
         video.IsDeleted = true;
         await db.SaveChangesAsync();
 
-        TempData["Message"] = "Video deleted.";
+        TempData["Message"] = localizer["Video deleted."];
         return RedirectToAction(nameof(Index));
     }
 

@@ -5,6 +5,8 @@ using MvcApp.Core;
 using MvcApp.Common.Filters;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Forum.Controllers.Areas.Admin
 {
@@ -13,6 +15,7 @@ namespace MvcApp.Module.Forum.Controllers.Areas.Admin
     [ModuleEnabledFilter("Forum")]
     public class ForumController : Controller
     {
+        private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly UserDbContext _db;
         private readonly IRepository<ForumCategory> _categoryRepo;
         private readonly IRepository<MvcApp.Core.Forum> _forumRepo;
@@ -22,8 +25,9 @@ namespace MvcApp.Module.Forum.Controllers.Areas.Admin
             UserDbContext db,
             IRepository<ForumCategory> categoryRepo,
             IRepository<MvcApp.Core.Forum> forumRepo,
-            IRepository<ForumThread> threadRepo)
+            IRepository<ForumThread> threadRepo, IStringLocalizer<SharedResource> localizer)
         {
+            _localizer = localizer;
             _db = db;
             _categoryRepo = categoryRepo;
             _forumRepo = forumRepo;
@@ -63,7 +67,7 @@ namespace MvcApp.Module.Forum.Controllers.Areas.Admin
             await _categoryRepo.AddAsync(category);
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = "Category created.";
+            TempData["Success"] = _localizer["Category created."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -93,7 +97,7 @@ namespace MvcApp.Module.Forum.Controllers.Areas.Admin
             await _categoryRepo.UpdateAsync(category);
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = "Category updated.";
+            TempData["Success"] = _localizer["Category updated."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -106,7 +110,7 @@ namespace MvcApp.Module.Forum.Controllers.Areas.Admin
             await _categoryRepo.DeleteAsync(category);
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = "Category deleted.";
+            TempData["Success"] = _localizer["Category deleted."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -140,7 +144,7 @@ namespace MvcApp.Module.Forum.Controllers.Areas.Admin
             await _forumRepo.AddAsync(forum);
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = "Forum created.";
+            TempData["Success"] = _localizer["Forum created."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -176,7 +180,7 @@ namespace MvcApp.Module.Forum.Controllers.Areas.Admin
             await _forumRepo.UpdateAsync(forum);
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = "Forum updated.";
+            TempData["Success"] = _localizer["Forum updated."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -189,7 +193,7 @@ namespace MvcApp.Module.Forum.Controllers.Areas.Admin
             await _forumRepo.DeleteAsync(forum);
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = "Forum deleted.";
+            TempData["Success"] = _localizer["Forum deleted."];
             return RedirectToAction(nameof(Index));
         }
     }

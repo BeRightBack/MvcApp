@@ -18,7 +18,7 @@
 
             <form asp-action="Search" method="get" class="mb-4">
                 <div class="input-group">
-                    <input type="text" name="q" class="form-control" value="@query" placeholder="Search blog..." />
+                    <input type="text" name="q" class="form-control" value="@query" placeholder="@(Localizer["Search blog..."])" />
                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> @Localizer["Search"]</button>
                 </div>
             </form>

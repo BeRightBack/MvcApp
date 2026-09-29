@@ -5,18 +5,22 @@ using MvcApp.Core;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Web.Controllers
 {
     [Authorize]
     public class GalleryController : Controller
     {
+        private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly UserDbContext _db;
         private readonly UserManager<UserDetails> _userManager;
         private readonly IGamificationService _gamification;
 
-        public GalleryController(UserDbContext db, UserManager<UserDetails> userManager, IGamificationService gamification)
+        public GalleryController(UserDbContext db, UserManager<UserDetails> userManager, IGamificationService gamification, IStringLocalizer<SharedResource> localizer)
         {
+            _localizer = localizer;
             _db = db;
             _userManager = userManager;
             _gamification = gamification;
@@ -48,27 +52,27 @@ namespace MvcApp.Web.Controllers
 
             if (file == null || file.Length == 0)
             {
-                TempData["Error"] = "Please select a file.";
+                TempData["Error"] = _localizer["Please select a file."];
                 return RedirectToAction(nameof(Index));
             }
 
             var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif", "image/webp" };
             if (!allowedTypes.Contains(file.ContentType.ToLower()))
             {
-                TempData["Error"] = "Only JPEG, PNG, GIF, and WebP images are allowed.";
+                TempData["Error"] = _localizer["Only JPEG, PNG, GIF, and WebP images are allowed."];
                 return RedirectToAction(nameof(Index));
             }
 
             if (file.Length > 10 * 1024 * 1024)
             {
-                TempData["Error"] = "File size must be under 10MB.";
+                TempData["Error"] = _localizer["File size must be under 10MB."];
                 return RedirectToAction(nameof(Index));
             }
 
             var photoCount = await _db.Photos.CountAsync(p => p.UserDetailsId == user.Id);
             if (photoCount >= 10)
             {
-                TempData["Error"] = "Maximum 10 photos allowed.";
+                TempData["Error"] = _localizer["Maximum 10 photos allowed."];
                 return RedirectToAction(nameof(Index));
             }
 
@@ -101,7 +105,7 @@ namespace MvcApp.Web.Controllers
 
             await _gamification.AwardPointsAsync(user.Id, 10, "Uploaded a photo", "Photo", photo.Id);
 
-            TempData["Message"] = "Photo uploaded successfully.";
+            TempData["Message"] = _localizer["Photo uploaded successfully."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -121,7 +125,7 @@ namespace MvcApp.Web.Controllers
             photo.IsMain = true;
             await _db.SaveChangesAsync();
 
-            TempData["Message"] = "Main photo updated.";
+            TempData["Message"] = _localizer["Main photo updated."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -138,7 +142,7 @@ namespace MvcApp.Web.Controllers
             photo.PrivacyLevel = privacy;
             await _db.SaveChangesAsync();
 
-            TempData["Message"] = "Privacy level updated.";
+            TempData["Message"] = _localizer["Privacy level updated."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -166,7 +170,7 @@ namespace MvcApp.Web.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["Message"] = "Photo deleted.";
+            TempData["Message"] = _localizer["Photo deleted."];
             return RedirectToAction(nameof(Index));
         }
     }

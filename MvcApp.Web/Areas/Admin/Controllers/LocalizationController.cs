@@ -2,6 +2,7 @@ using DeepL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
 using MvcApp.Localization;
@@ -17,13 +18,23 @@ namespace MvcApp.Web.Areas.Admin.Controllers
         private readonly Translator translator;
         private readonly IConfiguration? Configuration;
         private readonly IAuditService _auditService;
+        private readonly BackgroundTranslationService _backgroundTranslation;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
-        public LocalizationController(LocalizationDbContext context, Translator translator, IConfiguration Configuration, IAuditService auditService)
+        public LocalizationController(
+            LocalizationDbContext context,
+            Translator translator,
+            IConfiguration Configuration,
+            IAuditService auditService,
+            BackgroundTranslationService backgroundTranslation,
+            IStringLocalizer<SharedResource> localizer)
         {
             _context = context;
             this.translator = translator;
             this.Configuration = Configuration;
             _auditService = auditService;
+            _backgroundTranslation = backgroundTranslation;
+            _localizer = localizer;
         }
 
         public string SourceLang => Configuration?["DeepLConfig:SourceLang"]!;
@@ -79,7 +90,94 @@ namespace MvcApp.Web.Areas.Admin.Controllers
             ViewBag.TotalPages = totalPages;
             ViewBag.SearchString = searchString;
 
+            // Coverage: how many keys are missing a value for at least one language, so an admin
+            // can see the gap and top it up deliberately instead of waiting for traffic to
+            // discover it one page view at a time.
+            var (languageIds, byKey) = await LoadCoverageAsync();
+
+            ViewBag.LanguageCount = languageIds.Count;
+            ViewBag.KeyCount = byKey.Count;
+            ViewBag.MissingCount = CountIncomplete(byKey, languageIds);
+
             return View(stringResources);
+        }
+
+        /// <summary>
+        /// The languages a key is expected to be translated INTO, and the keys that exist.
+        /// </summary>
+        /// <remarks>
+        /// The source language is excluded on purpose. No row is ever stored for it - the
+        /// localizer returns the key when a row is missing and the key IS the source text - so
+        /// counting it would report every key as incomplete and make "translate missing" queue
+        /// the whole table for work that does not exist.
+        /// </remarks>
+        private async Task<(List<int> LanguageIds, Dictionary<string, HashSet<int>> KeysByName)> LoadCoverageAsync()
+        {
+            var sourceLang = (Configuration?["DeepLConfig:SourceLang"] ?? "EN").ToLowerInvariant();
+
+            var languages = await _context.Languages
+                .AsNoTracking()
+                .Where(l => l.Culture != null)
+                .Select(l => new { l.Id, l.Culture })
+                .ToListAsync();
+
+            var targetIds = languages
+                .Where(l => !string.Equals(l.Culture!.Trim().ToLowerInvariant(), sourceLang, StringComparison.Ordinal))
+                .Select(l => l.Id)
+                .ToList();
+
+            var pairs = await _context.StringResources
+                .AsNoTracking()
+                .Select(s => new { s.Name, s.LanguageId })
+                .ToListAsync();
+
+            var byKey = pairs
+                .GroupBy(p => p.Name!.Trim(), StringComparer.Ordinal)
+                // LanguageId is nullable on the entity; a row with no language is not coverage.
+                .ToDictionary(g => g.Key, g => g.Where(p => p.LanguageId.HasValue)
+                                                 .Select(p => p.LanguageId!.Value)
+                                                 .ToHashSet());
+
+            return (targetIds, byKey);
+        }
+
+        private static int CountIncomplete(Dictionary<string, HashSet<int>> byKey, List<int> targetIds) =>
+            byKey.Count(kv => targetIds.Any(id => !kv.Value.Contains(id)));
+
+        /// <summary>
+        /// Queues every key that lacks a value for at least one language for translation. The work
+        /// happens in <see cref="BackgroundTranslationService"/> off the request thread, paced and
+        /// with 429 backoff, so this returns immediately and the page is never blocked.
+        ///
+        /// This only covers keys already in the table. Copy added in a new release is still
+        /// translated automatically the first time a page renders it - that self-translate
+        /// behaviour is deliberate and is not replaced by this.
+        /// </summary>
+        [HttpPost, ActionName("TranslateMissing")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TranslateMissing()
+        {
+            var (languageIds, byKey) = await LoadCoverageAsync();
+
+            var missing = byKey
+                .Where(kv => languageIds.Any(id => !kv.Value.Contains(id)))
+                .Select(kv => kv.Key)
+                .ToList();
+
+            foreach (var key in missing)
+            {
+                _backgroundTranslation.Enqueue(key);
+            }
+
+            await _auditService.LogAsync("Translate missing translations", "Localization",
+                details: $"Queued {missing.Count} key(s) of {byKey.Count}");
+
+            // DbStringLocalizer ignores format arguments (its indexer with args returns the
+            // unformatted string), so the placeholder is substituted here rather than passed in.
+            var template = _localizer["Queued {0} key(s) for translation. They are translated in the background; reload this page in a minute to see the result."];
+            TempData["Success"] = string.Format(template, missing.Count);
+
+            return RedirectToAction(nameof(Index));
         }
 
 

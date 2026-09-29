@@ -40,9 +40,9 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-controller="IptvHome" asp-action="Index">
-                    <img src="~/_content/MvcApp.Module.IPTV/Logos/logo-transparent-png.png" alt="Quebec Iptv Logo" />
+                    <img src="~/_content/MvcApp.Module.IPTV/Logos/logo-transparent-png.png" alt="@(Localizer["Quebec Iptv Logo"])" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="@(Localizer["Toggle navigation"])">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -86,7 +86,7 @@
                         var defaultImage = Url.Content("~/_content/MvcApp.Module.IPTV/images/default-user.png");
                         <div class="header_img">
                             <img src="@Url.Action("GetProfilePicture", "Account", new { userId })"
-                                 onerror="this.onerror=null;this.src='@defaultImage';" alt="User Image" width="25" height="25">
+                                 onerror="this.onerror=null;this.src='@defaultImage';" alt="@(Localizer["User Image"])" width="25" height="25">
                         </div>
                     }
                     <partial name="_IptvLoginPartial" />

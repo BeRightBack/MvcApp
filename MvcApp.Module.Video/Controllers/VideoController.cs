@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using MvcApp.Common.Filters;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Video.Controllers;
 
@@ -14,7 +16,7 @@ public class VideoController(
     UserManager<UserDetails> userManager,
     IRepository<VideoRoom> roomRepo,
     IRepository<VideoRoomMessage> messageRepo,
-    IUnitOfWork unitOfWork) : Controller
+    IUnitOfWork unitOfWork, IStringLocalizer<SharedResource> localizer) : Controller
 {
     public async Task<IActionResult> Index()
     {
@@ -38,7 +40,7 @@ public class VideoController(
         var trimmed = name?.Trim();
         if (string.IsNullOrWhiteSpace(trimmed))
         {
-            TempData["VideoFlash"] = "A room name is required.";
+            TempData["VideoFlash"] = localizer["A room name is required."];
             return RedirectToAction(nameof(Index));
         }
 

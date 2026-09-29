@@ -37,14 +37,14 @@
                 <form asp-action="PinThread" method="post" style="display:inline">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="threadId" value="@thread?.Id" />
-                    <button type="submit" class="btn btn-sm btn-outline-info" title="Toggle Pin">
+                    <button type="submit" class="btn btn-sm btn-outline-info" title="@(Localizer["Toggle Pin"])">
                         <i class="fa fa-thumb-tack"></i>
                     </button>
                 </form>
                 <form asp-action="LockThread" method="post" style="display:inline">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="threadId" value="@thread?.Id" />
-                    <button type="submit" class="btn btn-sm btn-outline-warning" title="Toggle Lock">
+                    <button type="submit" class="btn btn-sm btn-outline-warning" title="@(Localizer["Toggle Lock"])">
                         <i class="fa fa-lock"></i>
                     </button>
                 </form>
@@ -52,7 +52,7 @@
                       onsubmit="return confirm('Delete entire thread?');">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="threadId" value="@thread?.Id" />
-                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Thread">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" title="@(Localizer["Delete Thread"])">
                         <i class="fa fa-trash"></i>
                     </button>
                 </form>
@@ -81,14 +81,14 @@
                 <div>
                     @if (post.CreatedById == currentUserId || isAdmin)
                     {
-                        <a asp-action="EditPost" asp-route-id="@post.Id" class="btn btn-sm btn-outline-primary" title="Edit">
+                        <a asp-action="EditPost" asp-route-id="@post.Id" class="btn btn-sm btn-outline-primary" title="@(Localizer["Edit"])">
                             <i class="fa fa-pencil"></i>
                         </a>
                         <form asp-action="DeletePost" method="post" style="display:inline"
                               onsubmit="return confirm('Delete this post?');">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="postId" value="@post.Id" />
-                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" title="@(Localizer["Delete"])">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </form>

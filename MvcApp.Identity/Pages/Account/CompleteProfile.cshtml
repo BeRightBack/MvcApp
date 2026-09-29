@@ -15,7 +15,7 @@
 
             <div class="mb-3 text-center">
                 <img src="/images/default-user.png"
-                     alt="Profile" width="140" height="140"
+                     alt="@(Localizer["Profile"])" width="140" height="140"
                      class="rounded-circle border" style="object-fit:cover" id="profilePreview" />
                 <div class="mt-2">
                     <input asp-for="Input.ProfilePictureFile" type="file" accept="image/*" class="form-control form-control-sm"
@@ -26,14 +26,14 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.FirstName" class="form-control" placeholder="First name" />
+                        <input asp-for="Input.FirstName" class="form-control" placeholder="@(Localizer["First name"])" />
                         <label asp-for="Input.FirstName"></label>
                         <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.LastName" class="form-control" placeholder="Last name" />
+                        <input asp-for="Input.LastName" class="form-control" placeholder="@(Localizer["Last name"])" />
                         <label asp-for="Input.LastName"></label>
                         <span asp-validation-for="Input.LastName" class="text-danger"></span>
                     </div>
@@ -41,18 +41,18 @@
             </div>
 
             <div class="form-floating mb-3">
-                <input asp-for="Input.KnownAs" class="form-control" placeholder="Display name" />
+                <input asp-for="Input.KnownAs" class="form-control" placeholder="@(Localizer["Display name"])" />
                 <label asp-for="Input.KnownAs"></label>
                 <span asp-validation-for="Input.KnownAs" class="text-danger"></span>
             </div>
 
             <div class="form-floating mb-3">
-                <textarea asp-for="Input.Introduction" class="form-control" placeholder="Tell us about yourself" style="height:100px"></textarea>
+                <textarea asp-for="Input.Introduction" class="form-control" placeholder="@(Localizer["Tell us about yourself"])" style="height:100px"></textarea>
                 <label asp-for="Input.Introduction"></label>
             </div>
 
             <div class="form-floating mb-3">
-                <textarea asp-for="Input.LookingFor" class="form-control" placeholder="What are you looking for?" style="height:80px"></textarea>
+                <textarea asp-for="Input.LookingFor" class="form-control" placeholder="@(Localizer["What are you looking for?"])" style="height:80px"></textarea>
                 <label asp-for="Input.LookingFor"></label>
             </div>
 
@@ -80,13 +80,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.City" class="form-control" placeholder="City" />
+                        <input asp-for="Input.City" class="form-control" placeholder="@(Localizer["City"])" />
                         <label asp-for="Input.City"></label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.Country" class="form-control" placeholder="Country" />
+                        <input asp-for="Input.Country" class="form-control" placeholder="@(Localizer["Country"])" />
                         <label asp-for="Input.Country"></label>
                     </div>
                 </div>

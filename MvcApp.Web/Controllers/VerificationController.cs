@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcApp.Core;
 using MvcApp.Infrastructure;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Web.Controllers;
 
 [Authorize]
-public class VerificationController(UserDbContext db, UserManager<UserDetails> userManager) : Controller
+public class VerificationController(UserDbContext db, UserManager<UserDetails> userManager, IStringLocalizer<SharedResource> localizer) : Controller
 {
     private static readonly string[] AllowedImageTypes = ["image/jpeg", "image/png", "image/webp"];
     private const long MaxFileSize = 10 * 1024 * 1024; // 10MB
@@ -38,7 +40,7 @@ public class VerificationController(UserDbContext db, UserManager<UserDetails> u
 
         if (user.IsVerified)
         {
-            TempData["Error"] = "You are already verified.";
+            TempData["Error"] = localizer["You are already verified."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -46,32 +48,32 @@ public class VerificationController(UserDbContext db, UserManager<UserDetails> u
             .AnyAsync(v => v.UserId == user.Id && v.Status == VerificationStatus.Pending);
         if (hasPendingRequest)
         {
-            TempData["Error"] = "You already have a pending verification request.";
+            TempData["Error"] = localizer["You already have a pending verification request."];
             return RedirectToAction(nameof(Index));
         }
 
         if (string.IsNullOrWhiteSpace(displayNumber))
         {
-            TempData["Error"] = "Please enter the number shown in your photo.";
+            TempData["Error"] = localizer["Please enter the number shown in your photo."];
             ViewBag.DisplayNumber = displayNumber;
             return View("Status", null);
         }
 
         if (selfieFile == null || selfieFile.Length == 0)
         {
-            TempData["Error"] = "Please upload a selfie photo.";
+            TempData["Error"] = localizer["Please upload a selfie photo."];
             return RedirectToAction(nameof(Index));
         }
 
         if (!AllowedImageTypes.Contains(selfieFile.ContentType.ToLower()))
         {
-            TempData["Error"] = "Only JPEG, PNG, and WebP images are allowed.";
+            TempData["Error"] = localizer["Only JPEG, PNG, and WebP images are allowed."];
             return RedirectToAction(nameof(Index));
         }
 
         if (selfieFile.Length > MaxFileSize)
         {
-            TempData["Error"] = "Image must be under 10MB.";
+            TempData["Error"] = localizer["Image must be under 10MB."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -100,7 +102,7 @@ public class VerificationController(UserDbContext db, UserManager<UserDetails> u
         db.VerificationRequests.Add(request);
         await db.SaveChangesAsync();
 
-        TempData["Message"] = "Verification request submitted! Our team will review it shortly.";
+        TempData["Message"] = localizer["Verification request submitted! Our team will review it shortly."];
         return RedirectToAction(nameof(Index));
     }
 }

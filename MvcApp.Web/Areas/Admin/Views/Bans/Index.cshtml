@@ -30,11 +30,11 @@
         <form asp-action="Ban" method="post" class="row g-3">
             <div class="col-md-3">
                 <label class="form-label">@Localizer["Username or email"]</label>
-                <input type="text" name="username" class="form-control" required placeholder="username or email" />
+                <input type="text" name="username" class="form-control" required placeholder="@(Localizer["username or email"])" />
             </div>
             <div class="col-md-4">
                 <label class="form-label">@Localizer["Reason"]</label>
-                <input type="text" name="reason" class="form-control" required placeholder="Why is this user being banned?" />
+                <input type="text" name="reason" class="form-control" required placeholder="@(Localizer["Why is this user being banned?"])" />
             </div>
             <div class="col-md-3">
                 <label class="form-label">@Localizer["Duration"]</label>

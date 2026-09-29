@@ -32,7 +32,7 @@
                     </div>
                     <div class="mb-3">
                         <label asp-for="Group" class="form-label small fw-semibold"></label>
-                        <input asp-for="Group" class="form-control" placeholder="General" list="suggestedGroups" />
+                        <input asp-for="Group" class="form-control" placeholder="@(Localizer["General"])" list="suggestedGroups" />
                         @{ var groups = new[] { "General", "Security", "Features", "Registration", "Maintenance" }; }
                         <datalist id="suggestedGroups">
                             @foreach (var g in groups) { @Html.Raw("<option value=\"" + g + "\">"); }

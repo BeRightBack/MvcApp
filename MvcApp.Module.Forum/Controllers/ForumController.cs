@@ -6,6 +6,8 @@ using MvcApp.Core;
 using MvcApp.Common.Filters;
 using MvcApp.Core.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Forum.Controllers;
 
@@ -17,7 +19,7 @@ public class ForumController(
     IRepository<MvcApp.Core.Forum> forumRepo,
     IRepository<ForumThread> threadRepo,
     IRepository<ForumPost> postRepo,
-    IBanService banService) : Controller
+    IBanService banService, IStringLocalizer<SharedResource> localizer) : Controller
 {
     public async Task<IActionResult> Index()
     {
@@ -73,7 +75,7 @@ public class ForumController(
 
         if (await banService.IsBannedAsync(currentUser.Id))
         {
-            TempData["Error"] = "Your account is suspended. You cannot post to the forum.";
+            TempData["Error"] = localizer["Your account is suspended. You cannot post to the forum."];
             return RedirectToAction(nameof(Forum), new { id = forumId });
         }
 
@@ -165,7 +167,7 @@ public class ForumController(
 
         if (await banService.IsBannedAsync(currentUser.Id))
         {
-            TempData["Error"] = "Your account is suspended. You cannot post to the forum.";
+            TempData["Error"] = localizer["Your account is suspended. You cannot post to the forum."];
             return RedirectToAction(nameof(Thread), new { id = threadId });
         }
 
@@ -175,7 +177,7 @@ public class ForumController(
 
         if (string.IsNullOrWhiteSpace(content))
         {
-            TempData["Error"] = "Content is required.";
+            TempData["Error"] = localizer["Content is required."];
             return RedirectToAction(nameof(Thread), new { id = threadId });
         }
 
@@ -244,7 +246,7 @@ public class ForumController(
         }
 
         await UpdateAsync();
-        TempData["Success"] = "Post deleted.";
+        TempData["Success"] = localizer["Post deleted."];
         return RedirectToAction(nameof(Thread), new { id = post.ThreadId });
     }
 
@@ -293,7 +295,7 @@ public class ForumController(
         await postRepo.UpdateAsync(post);
         await UpdateAsync();
 
-        TempData["Success"] = "Post updated.";
+        TempData["Success"] = localizer["Post updated."];
         return RedirectToAction(nameof(Thread), new { id = post.ThreadId });
     }
 
@@ -349,7 +351,7 @@ public class ForumController(
         }
 
         await UpdateAsync();
-        TempData["Success"] = "Thread deleted.";
+        TempData["Success"] = localizer["Thread deleted."];
         return RedirectToAction(nameof(Forum), new { id = thread.ForumId });
     }
 

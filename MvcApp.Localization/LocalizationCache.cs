@@ -38,8 +38,13 @@ public sealed class LocalizationCache(IMemoryCache memoryCache)
     public bool TryGetLanguageByCulture(string culture, out Language? language)
     {
         language = null;
-        if (!memoryCache.TryGetValue(LanguagesByCultureKey, out Dictionary<string, Language>? map)) return false;
-        return map.TryGetValue(culture.Trim().ToLowerInvariant(), out language);
+        // TryGetValue is annotated MaybeNullWhen(false), which the negated form does not narrow,
+        // so the value is checked for null explicitly rather than assumed present.
+        if (memoryCache.TryGetValue(LanguagesByCultureKey, out Dictionary<string, Language>? map) && map is not null)
+        {
+            return map.TryGetValue(culture.Trim().ToLowerInvariant(), out language);
+        }
+        return false;
     }
 
     public bool TryGetResources(int languageId, out Dictionary<string, string> resources) =>
@@ -52,15 +57,15 @@ public sealed class LocalizationCache(IMemoryCache memoryCache)
     {
         lock (_sync)
         {
-            if (!memoryCache.TryGetValue(ResourceKey(languageId), out Dictionary<string, string>? resources))
+            if (memoryCache.TryGetValue(ResourceKey(languageId), out Dictionary<string, string>? resources) && resources is not null)
             {
-                // Not loaded yet: drop the language list so the next reader re-reads.
-                memoryCache.Remove(LanguagesKey);
-                memoryCache.Remove(LanguagesByCultureKey);
+                resources[key] = value;
                 return;
             }
 
-            resources[key] = value;
+            // Not loaded yet: drop the language list so the next reader re-reads.
+            memoryCache.Remove(LanguagesKey);
+            memoryCache.Remove(LanguagesByCultureKey);
         }
     }
 

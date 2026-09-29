@@ -8,6 +8,8 @@ using MvcApp.Common.Filters;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Store.Controllers.Areas.Admin;
 
@@ -18,7 +20,7 @@ public partial class StoreController(
     IRepository<Product> productRepo,
     IRepository<ProductCategory> categoryRepo,
     IRepository<Order> orderRepo,
-    IRepository<OrderItem> orderItemRepo) : Controller
+    IRepository<OrderItem> orderItemRepo, IStringLocalizer<SharedResource> localizer) : Controller
 {
     public async Task<IActionResult> Index()
     {
@@ -90,7 +92,7 @@ public partial class StoreController(
 
         model.CreatedAt = DateTime.UtcNow;
         await productRepo.AddAsync(model);
-        TempData["Success"] = "Product created.";
+        TempData["Success"] = localizer["Product created."];
         return RedirectToAction(nameof(Products));
     }
 
@@ -139,7 +141,7 @@ public partial class StoreController(
         existing.SortOrder = model.SortOrder;
 
         await productRepo.UpdateAsync(existing);
-        TempData["Success"] = "Product updated.";
+        TempData["Success"] = localizer["Product updated."];
         return RedirectToAction(nameof(Products));
     }
 
@@ -151,7 +153,7 @@ public partial class StoreController(
         if (product == null) return NotFound();
 
         await productRepo.DeleteAsync(product);
-        TempData["Success"] = "Product deleted.";
+        TempData["Success"] = localizer["Product deleted."];
         return RedirectToAction(nameof(Products));
     }
 
@@ -172,7 +174,7 @@ public partial class StoreController(
         if (!ModelState.IsValid) return View(model);
 
         await categoryRepo.AddAsync(model);
-        TempData["Success"] = "Category created.";
+        TempData["Success"] = localizer["Category created."];
         return RedirectToAction(nameof(Categories));
     }
 
@@ -184,7 +186,7 @@ public partial class StoreController(
         if (category == null) return NotFound();
 
         await categoryRepo.DeleteAsync(category);
-        TempData["Success"] = "Category deleted.";
+        TempData["Success"] = localizer["Category deleted."];
         return RedirectToAction(nameof(Categories));
     }
 

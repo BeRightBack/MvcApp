@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using MvcApp.Common.Filters;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Pages.Controllers.Admin
 {
@@ -12,10 +14,12 @@ namespace MvcApp.Module.Pages.Controllers.Admin
     [ModuleEnabledFilter("Pages")]
     public class SnippetsController : Controller
     {
+        private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly IRepository<ContentPageSnippet> _repo;
 
-        public SnippetsController(IRepository<ContentPageSnippet> repo)
+        public SnippetsController(IRepository<ContentPageSnippet> repo, IStringLocalizer<SharedResource> localizer)
         {
+            _localizer = localizer;
             _repo = repo;
         }
 
@@ -48,7 +52,7 @@ namespace MvcApp.Module.Pages.Controllers.Admin
             snippet.CreatedAt = DateTime.UtcNow;
 
             await _repo.AddAsync(snippet);
-            TempData["Success"] = "Snippet created.";
+            TempData["Success"] = _localizer["Snippet created."];
             return RedirectToAction(nameof(Edit), new { id = snippet.Id });
         }
 
@@ -80,7 +84,7 @@ namespace MvcApp.Module.Pages.Controllers.Admin
             existing.UpdatedAt = DateTime.UtcNow;
 
             await _repo.UpdateAsync(existing);
-            TempData["Success"] = "Snippet updated.";
+            TempData["Success"] = _localizer["Snippet updated."];
             return RedirectToAction(nameof(Edit), new { id });
         }
 
@@ -91,7 +95,7 @@ namespace MvcApp.Module.Pages.Controllers.Admin
             var snippet = await _repo.GetByIdAsync(id);
             if (snippet == null) return NotFound();
             await _repo.DeleteAsync(snippet);
-            TempData["Success"] = "Snippet deleted.";
+            TempData["Success"] = _localizer["Snippet deleted."];
             return RedirectToAction(nameof(Index));
         }
     }

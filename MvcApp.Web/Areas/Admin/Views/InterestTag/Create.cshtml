@@ -24,7 +24,7 @@
 
                     <div class="mb-3">
                         <label asp-for="Name" class="form-label fw-semibold">@Localizer["Tag Name"]</label>
-                        <input asp-for="Name" class="form-control" placeholder="e.g. Hiking, BDSM, Vegan..." autofocus />
+                        <input asp-for="Name" class="form-control" placeholder="@(Localizer["e.g. Hiking, BDSM, Vegan..."])" autofocus />
                         <span asp-validation-for="Name" class="text-danger small"></span>
                     </div>
 

@@ -10,7 +10,7 @@
             <p class="text-muted">@Localizer["Manage your projects and tasks"]</p>
         </div>
         <div class="col-auto">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal" title="Create a new project">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal" title="@(Localizer["Create a new project"])">
                 <span class="bi bi-plus-circle"></span> @Localizer["New Project"]
             </button>
         </div>
@@ -25,15 +25,15 @@
                     <div class="card h-100 shadow-sm project-card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h5 class="card-title mb-0 text-primary" style="cursor:pointer" onclick="location.href='@Url.Action(nameof(UtilityController.ProjectDetails), new { id = project.Id })'" title="View project details">@project.Name</h5>
+                                <h5 class="card-title mb-0 text-primary" style="cursor:pointer" onclick="location.href='@Url.Action(nameof(UtilityController.ProjectDetails), new { id = project.Id })'" title="@(Localizer["View project details"])">@project.Name</h5>
                                 <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" title="Project options"><i class="bi bi-three-dots-vertical"></i></button>
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" title="@(Localizer["Project options"])"><i class="bi bi-three-dots-vertical"></i></button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
                                             <button type="button" class="dropdown-item"
                                                     data-bs-toggle="modal" data-bs-target="#editProjectModal"
                                                     data-id="@project.Id" data-name="@project.Name" data-description="@project.Description"
-                                                    title="Edit project">
+                                                    title="@(Localizer["Edit project"])">
                                                 <i class="bi bi-pencil me-2"></i> @Localizer["Edit"]
                                             </button>
                                         </li>
@@ -41,7 +41,7 @@
                                             <button type="button" class="dropdown-item text-danger"
                                                     data-bs-toggle="modal" data-bs-target="#deleteProjectModal"
                                                     data-id="@project.Id" data-name="@project.Name"
-                                                    title="Delete project">
+                                                    title="@(Localizer["Delete project"])">
                                                 <i class="bi bi-trash me-2"></i> @Localizer["Delete"]
                                             </button>
                                         </li>
@@ -50,8 +50,8 @@
                             </div>
                             <p class="card-text">@(string.IsNullOrEmpty(project.Description) ? "No description" : (project.Description.Length > 100 ? project.Description[..100] + "..." : project.Description))</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted" title="Created date">Created: @project.CreatedAt.ToString("MMM d, yyyy")</small>
-                                <a asp-action="ProjectDetails" asp-route-id="@project.Id" class="btn btn-sm btn-primary" title="View project details">@Localizer["View"] <i class="bi bi-arrow-right"></i></a>
+                                <small class="text-muted" title="@(Localizer["Created date"])">Created: @project.CreatedAt.ToString("MMM d, yyyy")</small>
+                                <a asp-action="ProjectDetails" asp-route-id="@project.Id" class="btn btn-sm btn-primary" title="@(Localizer["View project details"])">@Localizer["View"] <i class="bi bi-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
             <div class="display-1 text-muted mb-4"><i class="bi bi-folder"></i></div>
             <h2>@Localizer["No projects yet"]</h2>
             <p class="lead">@Localizer["You don't have any projects yet. Click the \"New Project\" button to get started!"]</p>
-            <button type="button" class="btn btn-lg btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addProjectModal" title="Create your first project">
+            <button type="button" class="btn btn-lg btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addProjectModal" title="@(Localizer["Create your first project"])">
                 <i class="bi bi-plus-circle"></i> @Localizer["Create Project"]
             </button>
         </div>
@@ -79,7 +79,7 @@
             <form asp-action="CreateProject" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title">@Localizer["Create New Project"]</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@(Localizer["Close"])"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -108,7 +108,7 @@
                 <input type="hidden" id="editProjectId" name="Id" value="0" />
                 <div class="modal-header">
                     <h5 class="modal-title">@Localizer["Edit Project"]</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@(Localizer["Close"])"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -137,7 +137,7 @@
                 <input type="hidden" id="deleteProjectId" name="id" value="0" />
                 <div class="modal-header">
                     <h5 class="modal-title">@Localizer["Confirm Delete"]</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@(Localizer["Close"])"></button>
                 </div>
                 <div class="modal-body">
                     <p>@Localizer["Are you sure you want to delete the project \""]<strong id="deleteProjectName"></strong>"?</p>

@@ -20,7 +20,7 @@ public class IptvAdminController(UserDbContext context, SubscriptionStatusUpdate
     public IActionResult UpdateSubscriptionStatuses()
     {
         subscriptionStatusUpdater.UpdateSubscriptionStatuses();
-        TempData["Message"] = "Subscription statuses updated successfully.";
+        TempData["Message"] = localizer["Subscription statuses updated successfully."];
         return RedirectToAction(nameof(Index), "IptvSubscription");
     }
 

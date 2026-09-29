@@ -36,17 +36,17 @@
             }
             @if (m.LastActive.IsOnline())
             {
-                <span class="online-dot" title="Online now"></span>
+                <span class="online-dot" title="@(Localizer["Online now"])"></span>
             }
             @if (m.IsAvailable)
             {
-                <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark" title="Available tonight">
+                <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark" title="@(Localizer["Available tonight"])">
                     <i class='bx bx-moon'></i> @Localizer["Tonight"]
                 </span>
             }
             @if (m.IsBoosted)
             {
-                <span class="position-absolute bottom-0 start-0 m-2 badge" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;" title="Boosted profile">
+                <span class="position-absolute bottom-0 start-0 m-2 badge" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;" title="@(Localizer["Boosted profile"])">
                     <i class='bx bx-bolt'></i> @Localizer["Boosted"]
                 </span>
             }
@@ -56,11 +56,11 @@
                 @m.KnownAs, @m.Age
                 @if (m.IsVerified)
                 {
-                    <i class='bx bxs-check-circle text-info' title="Verified" style="font-size:0.9rem;"></i>
+                    <i class='bx bxs-check-circle text-info' title="@(Localizer["Verified"])" style="font-size:0.9rem;"></i>
                 }
                 @if (m.IsVip)
                 {
-                    <i class='bx bxs-crown text-warning' title="VIP Member" style="font-size:0.9rem;"></i>
+                    <i class='bx bxs-crown text-warning' title="@(Localizer["VIP Member"])" style="font-size:0.9rem;"></i>
                 }
             </h5>
             <div class="text-muted small mb-1">
@@ -117,7 +117,7 @@
                             <input type="hidden" name="targetUserId" value="@m.Id" />
                             <input type="hidden" name="returnUrl" value="@returnUrl" />
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm rounded-pill btn-outline-warning" title="Super Like — they'll see you first">
+                            <button type="submit" class="btn btn-sm rounded-pill btn-outline-warning" title="@(Localizer["Super Like — they'll see you first"])">
                                 <i class='bx bx-star'></i> @Localizer["Super"]
                             </button>
                         </form>

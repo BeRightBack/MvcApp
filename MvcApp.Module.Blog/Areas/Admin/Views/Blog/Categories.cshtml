@@ -22,10 +22,10 @@
                 <form asp-action="CreateCategory" method="post">
                     @Html.AntiForgeryToken()
                     <div class="mb-2">
-                        <input type="text" name="name" class="form-control" placeholder="Category name" required />
+                        <input type="text" name="name" class="form-control" placeholder="@(Localizer["Category name"])" required />
                     </div>
                     <div class="mb-2">
-                        <input type="text" name="description" class="form-control" placeholder="Description (optional)" />
+                        <input type="text" name="description" class="form-control" placeholder="@(Localizer["Description (optional)"])" />
                     </div>
                     <button type="submit" class="btn btn-primary btn-sm">@Localizer["Add Category"]</button>
                 </form>

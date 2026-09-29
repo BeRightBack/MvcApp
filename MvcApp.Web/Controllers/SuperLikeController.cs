@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.SignalR;
 using MvcApp.Common.Hubs;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Web.Controllers
 {
@@ -14,7 +16,7 @@ namespace MvcApp.Web.Controllers
         IGamificationService gamification,
         IUnitOfWork unitOfWork,
         UserManager<UserDetails> userManager,
-        IHubContext<NotificationHub> notificationHub) : Controller
+        IHubContext<NotificationHub> notificationHub, IStringLocalizer<SharedResource> localizer) : Controller
     {
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -29,7 +31,7 @@ namespace MvcApp.Web.Controllers
             var sent = await superLikeService.SendSuperLikeAsync(currentUser.Id, targetUserId);
             if (!sent)
             {
-                TempData["Error"] = "You've used all your Super Likes for today, or you've already Super Liked this person.";
+                TempData["Error"] = localizer["You've used all your Super Likes for today, or you've already Super Liked this person."];
                 return LocalRedirect(returnUrl ?? "/Discover");
             }
 
@@ -61,7 +63,7 @@ namespace MvcApp.Web.Controllers
                     await gamification.AwardPointsAsync(currentUser.Id, 30, "Mutual Super Like match!", "Match");
             }
 
-            TempData["Message"] = "Super Like sent!";
+            TempData["Message"] = localizer["Super Like sent!"];
             return LocalRedirect(returnUrl ?? "/Discover");
         }
 
@@ -75,13 +77,13 @@ namespace MvcApp.Web.Controllers
             var activated = await superLikeService.ActivateBoostAsync(currentUser.Id);
             if (!activated)
             {
-                TempData["Error"] = "You've used all your Boosts for today, or a Boost is already active.";
+                TempData["Error"] = localizer["You've used all your Boosts for today, or a Boost is already active."];
                 return RedirectToAction("Index", "Discover");
             }
 
             await gamification.AwardPointsAsync(currentUser.Id, 15, "Activated a Boost", "Boost");
             await gamification.CheckAndAwardBadgesAsync(currentUser.Id);
-            TempData["Message"] = "Your profile is now boosted for 30 minutes!";
+            TempData["Message"] = localizer["Your profile is now boosted for 30 minutes!"];
             return RedirectToAction("Index", "Discover");
         }
 

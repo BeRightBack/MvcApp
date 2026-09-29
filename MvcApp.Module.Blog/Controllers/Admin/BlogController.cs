@@ -8,6 +8,8 @@ using MvcApp.Common.Filters;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Blog.Controllers.Admin
 {
@@ -16,6 +18,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
     [ModuleEnabledFilter("Blog")]
     public class BlogController : Controller
     {
+        private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly UserDbContext _db;
         private readonly UserManager<UserDetails> _userManager;
         private readonly IRepository<BlogPost> _postRepo;
@@ -29,8 +32,9 @@ namespace MvcApp.Module.Blog.Controllers.Admin
             IRepository<BlogPost> postRepo,
             IRepository<BlogCategory> categoryRepo,
             IRepository<BlogTag> tagRepo,
-            IRepository<BlogComment> commentRepo)
+            IRepository<BlogComment> commentRepo, IStringLocalizer<SharedResource> localizer)
         {
+            _localizer = localizer;
             _db = db;
             _userManager = userManager;
             _postRepo = postRepo;
@@ -110,7 +114,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
                 await _db.SaveChangesAsync();
             }
 
-            TempData["Success"] = "Post created.";
+            TempData["Success"] = _localizer["Post created."];
             return RedirectToAction(nameof(Edit), new { id = post.Id });
         }
 
@@ -177,7 +181,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
             }
             await _db.SaveChangesAsync();
 
-            TempData["Success"] = "Post updated.";
+            TempData["Success"] = _localizer["Post updated."];
             return RedirectToAction(nameof(Edit), new { id });
         }
 
@@ -189,7 +193,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
             if (post == null) return NotFound();
             await _postRepo.DeleteAsync(post);
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Post deleted.";
+            TempData["Success"] = _localizer["Post deleted."];
             return RedirectToAction(nameof(Index));
         }
 
@@ -205,7 +209,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                TempData["Error"] = "Name is required.";
+                TempData["Error"] = _localizer["Name is required."];
                 return RedirectToAction(nameof(Categories));
             }
 
@@ -222,7 +226,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
                 Description = description?.Trim()
             });
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Category created.";
+            TempData["Success"] = _localizer["Category created."];
             return RedirectToAction(nameof(Categories));
         }
 
@@ -235,14 +239,14 @@ namespace MvcApp.Module.Blog.Controllers.Admin
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                TempData["Error"] = "Name is required.";
+                TempData["Error"] = _localizer["Name is required."];
                 return RedirectToAction(nameof(Categories));
             }
 
             category.Name = name.Trim();
             category.Description = description?.Trim();
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Category updated.";
+            TempData["Success"] = _localizer["Category updated."];
             return RedirectToAction(nameof(Categories));
         }
 
@@ -254,7 +258,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
             if (category == null) return NotFound();
             _db.BlogCategories.Remove(category);
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Category deleted.";
+            TempData["Success"] = _localizer["Category deleted."];
             return RedirectToAction(nameof(Categories));
         }
 
@@ -270,7 +274,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                TempData["Error"] = "Name is required.";
+                TempData["Error"] = _localizer["Name is required."];
                 return RedirectToAction(nameof(Tags));
             }
 
@@ -286,7 +290,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
                 Slug = slug
             });
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Tag created.";
+            TempData["Success"] = _localizer["Tag created."];
             return RedirectToAction(nameof(Tags));
         }
 
@@ -298,7 +302,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
             if (tag == null) return NotFound();
             _db.BlogTags.Remove(tag);
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Tag deleted.";
+            TempData["Success"] = _localizer["Tag deleted."];
             return RedirectToAction(nameof(Tags));
         }
 
@@ -321,7 +325,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
             if (comment == null) return NotFound();
             comment.IsApproved = true;
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Comment approved.";
+            TempData["Success"] = _localizer["Comment approved."];
             return RedirectToAction(nameof(Comments));
         }
 
@@ -333,7 +337,7 @@ namespace MvcApp.Module.Blog.Controllers.Admin
             if (comment == null) return NotFound();
             _db.BlogComments.Remove(comment);
             await _db.SaveChangesAsync();
-            TempData["Success"] = "Comment deleted.";
+            TempData["Success"] = _localizer["Comment deleted."];
             return RedirectToAction(nameof(Comments));
         }
 

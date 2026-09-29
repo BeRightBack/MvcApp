@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form method="get" asp-action="Create">
             <div class="form-group">
-                <input type="text" name="searchQuery" value="@ViewData["SearchQuery"]" class="form-control" placeholder="Search users..." />
+                <input type="text" name="searchQuery" value="@ViewData["SearchQuery"]" class="form-control" placeholder="@(Localizer["Search users..."])" />
                 <button type="submit" class="btn btn-primary mt-2">@Localizer["Search"]</button>
             </div>
         </form>
@@ -51,7 +51,7 @@
                 <a asp-action="Index" class="btn btn-secondary">@Localizer["Cancel"]</a>
             </div>
         </form>
-        <nav aria-label="Page navigation">
+        <nav aria-label="@(Localizer["Page navigation"])">
             <ul class="pagination">
                 @for (int i = 1; i <= (int)ViewData["TotalPages"]!; i++)
                 {

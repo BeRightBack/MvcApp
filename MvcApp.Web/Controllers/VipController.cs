@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using MvcApp.Core;
 using MvcApp.Infrastructure;
 using MvcApp.Web.Services;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Web.Controllers;
 
@@ -12,7 +14,7 @@ namespace MvcApp.Web.Controllers;
 public class VipController(
     UserDbContext db,
     UserManager<UserDetails> userManager,
-    VipPayPalService payPalService) : Controller
+    VipPayPalService payPalService, IStringLocalizer<SharedResource> localizer) : Controller
 {
     private static readonly Dictionary<string, (decimal Rate, string Symbol, string Code)> _currencies = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -133,7 +135,7 @@ public class VipController(
                 return RedirectToAction(nameof(MySubscription));
             }
 
-            TempData["Error"] = "Payment was not completed. Please try again.";
+            TempData["Error"] = localizer["Payment was not completed. Please try again."];
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
@@ -145,7 +147,7 @@ public class VipController(
 
     public IActionResult PaymentCancel()
     {
-        TempData["Error"] = "Payment was cancelled.";
+        TempData["Error"] = localizer["Payment was cancelled."];
         return RedirectToAction(nameof(Index));
     }
 

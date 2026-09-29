@@ -44,28 +44,28 @@
     <div class="pe-visual-wrap" data-editor="@editorId">
         <div class="rte-toolbar btn-toolbar mb-1" role="toolbar" style="flex-wrap:wrap;gap:2px">
             <div class="btn-group btn-group-sm me-1">
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','bold')" title="Bold"><b>B</b></button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','italic')" title="Italic"><i>I</i></button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','underline')" title="Underline"><u>U</u></button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','strikeThrough')" title="Strikethrough"><s>S</s></button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','bold')" title="@(Localizer["Bold"])"><b>B</b></button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','italic')" title="@(Localizer["Italic"])"><i>I</i></button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','underline')" title="@(Localizer["Underline"])"><u>U</u></button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','strikeThrough')" title="@(Localizer["Strikethrough"])"><s>S</s></button>
             </div>
             <div class="btn-group btn-group-sm me-1">
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','h1')" title="Heading 1">H1</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','h2')" title="Heading 2">H2</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','h3')" title="Heading 3">H3</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','p')" title="Paragraph">P</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','h1')" title="@(Localizer["Heading 1"])">H1</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','h2')" title="@(Localizer["Heading 2"])">H2</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','h3')" title="@(Localizer["Heading 3"])">H3</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','formatBlock','p')" title="@(Localizer["Paragraph"])">P</button>
             </div>
             <div class="btn-group btn-group-sm me-1">
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','insertUnorderedList')" title="Bullet List">&#8226;</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','insertOrderedList')" title="Numbered List">1.</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','blockquote')" title="Blockquote">&ldquo;</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','insertHorizontalRule')" title="Horizontal Rule">&mdash;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','insertUnorderedList')" title="@(Localizer["Bullet List"])">&#8226;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','insertOrderedList')" title="@(Localizer["Numbered List"])">1.</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','blockquote')" title="@(Localizer["Blockquote"])">&ldquo;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','insertHorizontalRule')" title="@(Localizer["Horizontal Rule"])">&mdash;</button>
             </div>
             <div class="btn-group btn-group-sm me-1">
-                <button type="button" class="btn btn-outline-secondary" onclick="peLink('@editorId')" title="Insert Link">&#128279;</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peImage('@editorId')" title="Insert Image">&#128247;</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCode('@editorId')" title="Code Block">&lt;/&gt;</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','removeFormat')" title="Clear Formatting">&#9887;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peLink('@editorId')" title="@(Localizer["Insert Link"])">&#128279;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peImage('@editorId')" title="@(Localizer["Insert Image"])">&#128247;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCode('@editorId')" title="@(Localizer["Code Block"])">&lt;/&gt;</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="peCmd('@editorId','removeFormat')" title="@(Localizer["Clear Formatting"])">&#9887;</button>
             </div>
         </div>
         <div id="@visualId" class="pe-visual rte-editor form-control" contenteditable="true"

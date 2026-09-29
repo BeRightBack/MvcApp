@@ -28,11 +28,11 @@
                     <form asp-action="CreateRoom" method="post" class="row g-2 align-items-end">
                         <div class="col-md-4">
                             <label class="form-label">@Localizer["Room name"]</label>
-                            <input type="text" name="name" class="form-control" required maxlength="100" placeholder="e.g. Night Owls" />
+                            <input type="text" name="name" class="form-control" required maxlength="100" placeholder="@(Localizer["e.g. Night Owls"])" />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Description (optional)</label>
-                            <input type="text" name="description" class="form-control" maxlength="500" placeholder="What is this room about?" />
+                            <input type="text" name="description" class="form-control" maxlength="500" placeholder="@(Localizer["What is this room about?"])" />
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">@Localizer["Spots"]</label>

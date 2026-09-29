@@ -35,11 +35,11 @@
                     <span class="badge bg-light text-secondary ms-1">@size</span>
                     @if (Model.RetentionDays > 0)
                     {
-                        <span class="badge bg-light text-secondary ms-1" title="Rows older than this are purged automatically once a day">auto-purge: @Model.RetentionDays days</span>
+                        <span class="badge bg-light text-secondary ms-1" title="@(Localizer["Rows older than this are purged automatically once a day"])">auto-purge: @Model.RetentionDays days</span>
                     }
                     else
                     {
-                        <span class="badge bg-light text-secondary ms-1" title="Logging:RetentionDays = 0">@Localizer["auto-purge: off"]</span>
+                        <span class="badge bg-light text-secondary ms-1" title="@(Localizer["Logging:RetentionDays = 0"])">@Localizer["auto-purge: off"]</span>
                     }
                 </p>
             </div>
@@ -79,7 +79,7 @@
                     <div class="col-sm-6 col-lg-4">
                         <label class="form-label small mb-1">@Localizer["Search"]</label>
                         <input type="text" name="search" value="@search" class="form-control form-control-sm"
-                               placeholder="message, template, exception or properties" />
+                               placeholder="@(Localizer["message, template, exception or properties"])" />
                     </div>
                     <div class="col-6 col-sm-3 col-lg-2">
                         <label class="form-label small mb-1">@Localizer["From"]</label>
@@ -100,7 +100,7 @@
                     </div>
                     <div class="col-6 col-sm-3 col-lg-2 d-flex gap-2">
                         <button type="submit" class="btn btn-primary btn-sm w-100"><i class='bx bx-search me-1'></i> @Localizer["Filter"]</button>
-                        <a asp-action="Index" class="btn btn-outline-secondary btn-sm" title="Clear filters"><i class='bx bx-x'></i></a>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-sm" title="@(Localizer["Clear filters"])"><i class='bx bx-x'></i></a>
                     </div>
                 </form>
             </div>
@@ -142,11 +142,11 @@
                                         <td class="text-end small">
                                             @if (!string.IsNullOrWhiteSpace(log.Exception))
                                             {
-                                                <a asp-action="Detail" asp-route-id="@log.Id" class="text-danger text-decoration-none" title="Has exception">
+                                                <a asp-action="Detail" asp-route-id="@log.Id" class="text-danger text-decoration-none" title="@(Localizer["Has exception"])">
                                                     <i class='bx bx-error-circle'></i>
                                                 </a>
                                             }
-                                            <a asp-action="Detail" asp-route-id="@log.Id" class="text-muted ms-2" title="Details">
+                                            <a asp-action="Detail" asp-route-id="@log.Id" class="text-muted ms-2" title="@(Localizer["Details"])">
                                                 <i class='bx bx-chevron-right'></i>
                                             </a>
                                         </td>

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MvcApp.Common.Filters;
 using MvcApp.Module.Ads.Entities;
 using MvcApp.Module.Ads.Services;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Ads.Areas.Admin.Controllers;
 
@@ -13,11 +15,13 @@ namespace MvcApp.Module.Ads.Areas.Admin.Controllers;
 [Route("Admin/Ads/Placements")]
 public class AdPlacementsController : Controller
 {
+    private readonly IStringLocalizer<SharedResource> _localizer;
     private readonly IAdPlacementService _placementService;
     private readonly IAdZoneService _zoneService;
 
-    public AdPlacementsController(IAdPlacementService placementService, IAdZoneService zoneService)
+    public AdPlacementsController(IAdPlacementService placementService, IAdZoneService zoneService, IStringLocalizer<SharedResource> localizer)
     {
+        _localizer = localizer;
         _placementService = placementService;
         _zoneService = zoneService;
     }
@@ -56,7 +60,7 @@ public class AdPlacementsController : Controller
         if (ModelState.IsValid)
         {
             await _placementService.CreateAsync(placement);
-            TempData["Success"] = "Placement created successfully.";
+            TempData["Success"] = _localizer["Placement created successfully."];
             return RedirectToAction(nameof(Index), new { zoneId = placement.ZoneId });
         }
         var zones = await _zoneService.GetAllAsync(true);
@@ -86,7 +90,7 @@ public class AdPlacementsController : Controller
         if (ModelState.IsValid)
         {
             await _placementService.UpdateAsync(placement);
-            TempData["Success"] = "Placement updated successfully.";
+            TempData["Success"] = _localizer["Placement updated successfully."];
             return RedirectToAction(nameof(Index), new { zoneId = placement.ZoneId });
         }
         var zones = await _zoneService.GetAllAsync(true);
@@ -100,7 +104,7 @@ public class AdPlacementsController : Controller
     public async Task<IActionResult> Delete(int id, int zoneId)
     {
         await _placementService.DeleteAsync(id);
-        TempData["Success"] = "Placement deleted.";
+        TempData["Success"] = _localizer["Placement deleted."];
         return RedirectToAction(nameof(Index), new { zoneId });
     }
 }
