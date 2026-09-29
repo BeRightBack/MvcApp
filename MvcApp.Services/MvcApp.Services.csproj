@@ -19,6 +19,7 @@
 
  	<ItemGroup>
  	  <ProjectReference Include="..\MvcApp.Core\MvcApp.Core.csproj" />
+  <ProjectReference Include="..\MvcApp.Localization\MvcApp.Localization.csproj" />
  	</ItemGroup>
 
 </Project>
