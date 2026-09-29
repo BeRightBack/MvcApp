@@ -55,7 +55,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <h3 class="mb-1">@selectedPlan.Name</h3>
-                                <p class="text-muted mb-0">@Localizer[@selectedPlan.DescriptionShort ?? ""]</p>
+                                <p class="text-muted mb-0">@selectedPlan.DescriptionShort</p>
                             </div>
                             @if (selectedPlan.SubscriptionDetails.Count > 0)
                             {
@@ -67,7 +67,7 @@
                                 </div>
                             }
                         </div>
-                        <p>@Localizer[@selectedPlan.Description ?? ""]</p>
+                        <p>@selectedPlan.Description</p>
                         <h5>@Localizer["Durations & Pricing"]</h5>
                         <ul class="list-unstyled mb-3">
                             @foreach (var detail in selectedPlan.SubscriptionDetails.OrderBy(d => d.DurationInMonths))

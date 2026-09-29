@@ -28,7 +28,8 @@
         @if ((int)ViewBag.MissingCount > 0)
         {
             <form asp-controller="Localization" asp-action="TranslateMissing" method="post" class="d-inline"
-                onsubmit="return confirm('@Localizer["Queue the missing translations for background translation?"]');">
+                data-confirm="@Localizer["Queue the missing translations for background translation?"]"
+                onsubmit="return confirm(this.dataset.confirm);">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn btn-outline-warning btn-sm">
                     <i class="bx bx-wand"></i> @Localizer["Translate missing keys"]
