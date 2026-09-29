@@ -213,6 +213,22 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
     icon class `bx bx-heart` into `bx bx-cœur` and it was stored, so an admin copying that
     example would paste a class that renders no icon. Same for setting keys, C# type names and
     URL path examples. A bare `...` is also left alone.
+  - **Remaining English surface closed 2026-09-28 (commit `0d3f917`, ported as VSIX 1.0.59):**
+    260 attribute values (`placeholder`/`title`/`alt`/`aria-label`, using the
+    `placeholder="@(Localizer["Close"])"` form — `@( )` permits nested quotes inside a
+    double-quoted attribute so the emitted HTML is unchanged) and 99 controller
+    TempData/ModelState literals across 26 controllers (16 primary-constructor parameters, 10
+    classic constructors needing a field). English verified unchanged across 30 pages; 32/32 tests.
+  - **`DbStringLocalizer` ignores format arguments** — its `this[name, args]` returns `this[name]`,
+    so `Localizer["{0} keys", n]` renders a literal `{0}`. Use `string.Format(Localizer["..."], n)`.
+  - **No `StringResources` row is ever stored for the source language** (the localizer returns the
+    key, and the key is the source text). Any coverage check MUST exclude it or every key looks
+    incomplete — that mistake first reported 1149 missing keys when only 55 were real.
+  - **Pre-translation is now a supported operation, not a code hook:** `/Admin/Localization`
+    reports coverage and has a POST + antiforgery + confirm action that queues incomplete keys into
+    `BackgroundTranslationService`. Copy added in a new release is still translated automatically
+    on first render — self-translate is not replaced. The `Program.cs` `MVCAPP_TRANSLATE_KEYS_FILE`
+    hook used earlier on 2026-09-28 is deleted.
   - **`SiteTemplate` is `Dating`, not `Luxury`** (corrected 2026-09-28 by reading the live DB
     row; the earlier "Luxury" note was stale). The active home view is therefore
     `Views/Home/Index.Dating.cshtml` — check the setting before touching a template's landing
