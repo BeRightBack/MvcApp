@@ -44,7 +44,7 @@
                 {
                     <form method="post" asp-controller="SuperLike" asp-action="Boost" class="d-inline">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-sm rounded-pill @(boostsUsed >= boostLimit ? "btn-outline-secondary" : "")" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;" @(boostsUsed >= boostLimit ? "disabled" : "") title="Boost your profile for 30 minutes">
+                        <button type="submit" class="btn btn-sm rounded-pill @(boostsUsed >= boostLimit ? "btn-outline-secondary" : "")" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;" @(boostsUsed >= boostLimit ? "disabled" : "") title="@(Localizer["Boost your profile for 30 minutes"])">
                             <i class='bx bx-bolt'></i> Boost (@boostsUsed / @boostLimit)
                         </button>
                     </form>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label fw-semibold small">@Localizer["City"]</label>
-                    <input type="text" name="city" value="@ViewBag.City" class="form-control rounded-pill" placeholder="Search by city..." />
+                    <input type="text" name="city" value="@ViewBag.City" class="form-control rounded-pill" placeholder="@(Localizer["Search by city..."])" />
                 </div>
                 <div class="col-md-2">
                     <div class="form-check mt-4">

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MvcApp.Common.Filters;
 using MvcApp.Module.Ads.Entities;
 using MvcApp.Module.Ads.Services;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Ads.Areas.Admin.Controllers;
 
@@ -14,12 +16,14 @@ namespace MvcApp.Module.Ads.Areas.Admin.Controllers;
 [Route("Admin/Ads/Banners")]
 public class AdBannersController : Controller
 {
+    private readonly IStringLocalizer<SharedResource> _localizer;
     private readonly IAdBannerService _bannerService;
     private readonly IAdZoneService _zoneService;
     private readonly IAdMediaService _mediaService;
 
-    public AdBannersController(IAdBannerService bannerService, IAdZoneService zoneService, IAdMediaService mediaService)
+    public AdBannersController(IAdBannerService bannerService, IAdZoneService zoneService, IAdMediaService mediaService, IStringLocalizer<SharedResource> localizer)
     {
+        _localizer = localizer;
         _bannerService = bannerService;
         _zoneService = zoneService;
         _mediaService = mediaService;
@@ -60,7 +64,7 @@ public class AdBannersController : Controller
         if (ModelState.IsValid)
         {
             await _bannerService.CreateAsync(banner);
-            TempData["Success"] = "Banner created successfully.";
+            TempData["Success"] = _localizer["Banner created successfully."];
             return RedirectToAction(nameof(Index), new { zoneId = banner.ZoneId });
         }
         await PopulateFormListsAsync(banner.ZoneId);
@@ -90,7 +94,7 @@ public class AdBannersController : Controller
         if (ModelState.IsValid)
         {
             await _bannerService.UpdateAsync(banner);
-            TempData["Success"] = "Banner updated successfully.";
+            TempData["Success"] = _localizer["Banner updated successfully."];
             return RedirectToAction(nameof(Index), new { zoneId = banner.ZoneId });
         }
         await PopulateFormListsAsync(banner.ZoneId);
@@ -108,7 +112,7 @@ public class AdBannersController : Controller
             _mediaService.DeleteBannerImage(banner.Content);
             await _bannerService.DeleteAsync(id);
         }
-        TempData["Success"] = "Banner deleted.";
+        TempData["Success"] = _localizer["Banner deleted."];
         return RedirectToAction(nameof(Index), new { zoneId });
     }
 

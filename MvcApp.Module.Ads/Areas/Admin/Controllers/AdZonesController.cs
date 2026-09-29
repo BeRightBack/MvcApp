@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MvcApp.Common.Filters;
 using MvcApp.Module.Ads.Entities;
 using MvcApp.Module.Ads.Services;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Ads.Areas.Admin.Controllers;
 
@@ -13,9 +15,14 @@ namespace MvcApp.Module.Ads.Areas.Admin.Controllers;
 [Route("Admin/Ads/Zones")]
 public class AdZonesController : Controller
 {
+    private readonly IStringLocalizer<SharedResource> _localizer;
     private readonly IAdZoneService _zoneService;
 
-    public AdZonesController(IAdZoneService zoneService) => _zoneService = zoneService;
+    public AdZonesController(IAdZoneService zoneService, IStringLocalizer<SharedResource> localizer)
+    {
+        _zoneService = zoneService;
+        _localizer = localizer;
+    }
 
     // GET: Admin/Ads/Zones
     [HttpGet("")]
@@ -44,7 +51,7 @@ public class AdZonesController : Controller
         if (ModelState.IsValid)
         {
             await _zoneService.CreateAsync(zone);
-            TempData["Success"] = "Zone created successfully.";
+            TempData["Success"] = _localizer["Zone created successfully."];
             return RedirectToAction(nameof(Index));
         }
         return View(zone);
@@ -72,7 +79,7 @@ public class AdZonesController : Controller
         if (ModelState.IsValid)
         {
             await _zoneService.UpdateAsync(zone);
-            TempData["Success"] = "Zone updated successfully.";
+            TempData["Success"] = _localizer["Zone updated successfully."];
             return RedirectToAction(nameof(Index));
         }
         return View(zone);
@@ -84,7 +91,7 @@ public class AdZonesController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         await _zoneService.DeleteAsync(id);
-        TempData["Success"] = "Zone deleted.";
+        TempData["Success"] = _localizer["Zone deleted."];
         return RedirectToAction(nameof(Index));
     }
 

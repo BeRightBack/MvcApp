@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Web.Areas.Admin.Controllers;
 
@@ -14,7 +16,7 @@ public class ReportsModerationController(
     UserDbContext db,
     UserManager<UserDetails> userManager,
     IBanService banService,
-    IAuditService auditService) : Controller
+    IAuditService auditService, IStringLocalizer<SharedResource> localizer) : Controller
 {
     private const int PageSize = 20;
 
@@ -62,7 +64,7 @@ public class ReportsModerationController(
 
         await db.SaveChangesAsync();
 
-        TempData["Message"] = "Report dismissed.";
+        TempData["Message"] = localizer["Report dismissed."];
         return RedirectToAction(nameof(Index));
     }
 
@@ -87,7 +89,7 @@ public class ReportsModerationController(
         await db.SaveChangesAsync();
         await auditService.LogAsync("BanViaReport", "Report", id.ToString(), $"Banned user {report.ReportedUserId} via report #{id}");
 
-        TempData["Message"] = "User banned and report resolved.";
+        TempData["Message"] = localizer["User banned and report resolved."];
         return RedirectToAction(nameof(Index));
     }
 
@@ -105,7 +107,7 @@ public class ReportsModerationController(
 
         await db.SaveChangesAsync();
 
-        TempData["Message"] = "Report marked as reviewed.";
+        TempData["Message"] = localizer["Report marked as reviewed."];
         return RedirectToAction(nameof(Index));
     }
 }

@@ -6,6 +6,8 @@ using MvcApp.Common.Filters;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Web.Controllers
 {
@@ -13,12 +15,14 @@ namespace MvcApp.Web.Controllers
     [ModuleEnabledFilter("Events")]
     public class EventsController : Controller
     {
+        private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly UserDbContext _db;
         private readonly UserManager<UserDetails> _userManager;
         private readonly IGamificationService _gamification;
 
-        public EventsController(UserDbContext db, UserManager<UserDetails> userManager, IGamificationService gamification)
+        public EventsController(UserDbContext db, UserManager<UserDetails> userManager, IGamificationService gamification, IStringLocalizer<SharedResource> localizer)
         {
+            _localizer = localizer;
             _db = db;
             _userManager = userManager;
             _gamification = gamification;
@@ -201,7 +205,7 @@ namespace MvcApp.Web.Controllers
             {
                 if (eventItem.MaxAttendees > 0 && eventItem.RSVPs.Count(r => r.Status == RSVPStatus.Going) >= eventItem.MaxAttendees && status == RSVPStatus.Going)
                 {
-                    TempData["Error"] = "This event is full.";
+                    TempData["Error"] = _localizer["This event is full."];
                     return RedirectToAction(nameof(Details), new { id = eventId });
                 }
 

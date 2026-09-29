@@ -1,5 +1,5 @@
 @model int
-<a class="nav-link py-1 px-2" asp-controller="Notifications" asp-action="Index" title="Notifications">
+<a class="nav-link py-1 px-2" asp-controller="Notifications" asp-action="Index" title="@(Localizer["Notifications"])">
     <i class='bx bx-bell' style="font-size:1.2rem;"></i>
     @if (Model > 0)
     {

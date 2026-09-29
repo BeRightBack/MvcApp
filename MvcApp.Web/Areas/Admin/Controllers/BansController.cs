@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
 using System.Security.Claims;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Web.Areas.Admin.Controllers
 {
@@ -12,7 +14,7 @@ namespace MvcApp.Web.Areas.Admin.Controllers
     public class BansController(
         IBanService banService,
         UserManager<UserDetails> userManager,
-        IAuditService auditService) : Controller
+        IAuditService auditService, IStringLocalizer<SharedResource> localizer) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -39,13 +41,13 @@ namespace MvcApp.Web.Areas.Admin.Controllers
 
             if (await userManager.IsInRoleAsync(user, "Admin"))
             {
-                TempData["Error"] = "Administrators cannot be banned.";
+                TempData["Error"] = localizer["Administrators cannot be banned."];
                 return RedirectToAction(nameof(Index));
             }
 
             if (string.IsNullOrWhiteSpace(reason))
             {
-                TempData["Error"] = "A reason is required.";
+                TempData["Error"] = localizer["A reason is required."];
                 return RedirectToAction(nameof(Index));
             }
 
@@ -66,9 +68,9 @@ namespace MvcApp.Web.Areas.Admin.Controllers
         {
             var revokedById = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "system";
             if (await banService.RevokeAsync(id, revokedById))
-                TempData["Success"] = "Ban revoked.";
+                TempData["Success"] = localizer["Ban revoked."];
             else
-                TempData["Error"] = "Ban not found or already revoked.";
+                TempData["Error"] = localizer["Ban not found or already revoked."];
             return RedirectToAction(nameof(Index));
         }
 

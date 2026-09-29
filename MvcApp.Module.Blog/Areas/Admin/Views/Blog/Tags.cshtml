@@ -22,7 +22,7 @@
                 <form asp-action="CreateTag" method="post">
                     @Html.AntiForgeryToken()
                     <div class="mb-2">
-                        <input type="text" name="name" class="form-control" placeholder="Tag name" required />
+                        <input type="text" name="name" class="form-control" placeholder="@(Localizer["Tag name"])" required />
                     </div>
                     <button type="submit" class="btn btn-primary btn-sm">@Localizer["Add Tag"]</button>
                 </form>

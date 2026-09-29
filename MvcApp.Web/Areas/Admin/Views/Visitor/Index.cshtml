@@ -14,7 +14,7 @@
 
 <h3>@Localizer["Visits Per Day"]</h3>
 <form method="get">
-    <input type="text" name="visitsSearchString" value="@Model.VisitsSearchString" placeholder="Search by date" />
+    <input type="text" name="visitsSearchString" value="@Model.VisitsSearchString" placeholder="@(Localizer["Search by date"])" />
     <input type="submit" value="Search" />
 </form>
 <table class="table">
@@ -42,7 +42,7 @@
     </tbody>
 </table>
 <div>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="@(Localizer["Page navigation example"])">
         <ul class="pagination">
             <li class="page-item @(Model.VisitsPerDay.HasPreviousPage ? "" : "disabled")">
                 <a class="page-link" asp-action="Index"
@@ -68,7 +68,7 @@
 
 <h3>@Localizer["Visitor Locations"]</h3>
 <form method="get">
-    <input type="text" name="locationsSearchString" value="@Model.LocationsSearchString" placeholder="Search by date" />
+    <input type="text" name="locationsSearchString" value="@Model.LocationsSearchString" placeholder="@(Localizer["Search by date"])" />
     <input type="submit" value="Search" />
 </form>
 <table class="table">
@@ -102,7 +102,7 @@
     </tbody>
 </table>
 <div>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="@(Localizer["Page navigation example"])">
         <ul class="pagination">
             <li class="page-item @(Model.VisitorLocations.HasPreviousPage ? "" : "disabled")">
                 <a class="page-link" asp-action="Index"

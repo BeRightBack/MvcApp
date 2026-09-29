@@ -55,7 +55,7 @@
                                 <form asp-action="ApproveComment" method="post" style="display:inline">
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="id" value="@comment.Id" />
-                                    <button type="submit" class="btn btn-sm btn-success" title="Approve"><i class="fa fa-check"></i></button>
+                                    <button type="submit" class="btn btn-sm btn-success" title="@(Localizer["Approve"])"><i class="fa fa-check"></i></button>
                                 </form>
                             }
                             <form asp-action="DeleteComment" method="post" style="display:inline"

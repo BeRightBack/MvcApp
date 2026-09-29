@@ -7,6 +7,8 @@ using MvcApp.Core;
 using MvcApp.Common.Filters;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Video.Controllers.Areas.Admin;
 
@@ -16,7 +18,7 @@ namespace MvcApp.Module.Video.Controllers.Areas.Admin;
 public class VideoController(
     UserManager<UserDetails> userManager,
     IRepository<VideoRoom> roomRepo,
-    IRepository<VideoRoomMessage> messageRepo) : Controller
+    IRepository<VideoRoomMessage> messageRepo, IStringLocalizer<SharedResource> localizer) : Controller
 {
     public async Task<IActionResult> Index()
     {
@@ -102,7 +104,7 @@ public class VideoController(
         room.IsActive = isActive;
         await roomRepo.UpdateAsync(room);
 
-        TempData["Success"] = "Room updated.";
+        TempData["Success"] = localizer["Room updated."];
         return RedirectToAction(nameof(Index));
     }
 
@@ -120,7 +122,7 @@ public class VideoController(
         }
         await roomRepo.DeleteAsync(room);
 
-        TempData["Success"] = "Room deleted.";
+        TempData["Success"] = localizer["Room deleted."];
         return RedirectToAction(nameof(Index));
     }
 
@@ -168,7 +170,7 @@ public class VideoController(
         var roomId = message.VideoRoomId;
         await messageRepo.DeleteAsync(message);
 
-        TempData["Success"] = "Message deleted.";
+        TempData["Success"] = localizer["Message deleted."];
         return RedirectToAction(nameof(Messages), new { id = roomId });
     }
 }

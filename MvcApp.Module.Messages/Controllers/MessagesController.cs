@@ -6,6 +6,8 @@ using MvcApp.Common.Filters;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
 using MvcApp.Module.Messages.ViewModels;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Messages.Controllers;
 
@@ -15,7 +17,7 @@ public class MessagesController(
     UserManager<UserDetails> userManager,
     IMessageRepository messageRepo,
     ILikesRepository likesRepo,
-    IUserBlockRepository blockRepo) : Controller
+    IUserBlockRepository blockRepo, IStringLocalizer<SharedResource> localizer) : Controller
 {
     public async Task<IActionResult> Index()
     {
@@ -55,14 +57,14 @@ public class MessagesController(
 
         if (await blockRepo.IsBlockedAsync(currentUser.Id, recipient.Id))
         {
-            TempData["MessagesError"] = "You cannot view this conversation.";
+            TempData["MessagesError"] = localizer["You cannot view this conversation."];
             return RedirectToAction(nameof(Index));
         }
 
         var matches = await likesRepo.GetMatchesAsync(currentUser.Id);
         if (matches.All(m => m.Id != recipient.Id))
         {
-            TempData["MessagesError"] = "You can only message your matches.";
+            TempData["MessagesError"] = localizer["You can only message your matches."];
             return RedirectToAction(nameof(Index));
         }
 

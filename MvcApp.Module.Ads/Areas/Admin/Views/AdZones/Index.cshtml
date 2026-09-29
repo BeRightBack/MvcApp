@@ -77,12 +77,12 @@
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <a asp-action="Edit" asp-route-id="@zone.Id" class="btn btn-outline-primary" title="Edit"><i class="bx bx-edit"></i></a>
+                                    <a asp-action="Edit" asp-route-id="@zone.Id" class="btn btn-outline-primary" title="@(Localizer["Edit"])"><i class="bx bx-edit"></i></a>
                                     <form asp-action="Delete" asp-route-id="@zone.Id" method="post" style="display:inline" onsubmit="return confirm('Delete this zone and all its banners?');">
-                                        <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bx bx-trash"></i></button>
+                                        <button type="submit" class="btn btn-outline-danger" title="@(Localizer["Delete"])"><i class="bx bx-trash"></i></button>
                                     </form>
-                                    <a asp-controller="AdBanners" asp-action="Index" asp-route-zoneId="@zone.Id" class="btn btn-outline-info" title="Manage Banners"><i class="bx bx-image"></i></a>
-                                    <a asp-controller="AdPlacements" asp-action="Index" asp-route-zoneId="@zone.Id" class="btn btn-outline-secondary" title="Placements"><i class="bx bx-map-pin"></i></a>
+                                    <a asp-controller="AdBanners" asp-action="Index" asp-route-zoneId="@zone.Id" class="btn btn-outline-info" title="@(Localizer["Manage Banners"])"><i class="bx bx-image"></i></a>
+                                    <a asp-controller="AdPlacements" asp-action="Index" asp-route-zoneId="@zone.Id" class="btn btn-outline-secondary" title="@(Localizer["Placements"])"><i class="bx bx-map-pin"></i></a>
                                 </div>
                             </td>
                         </tr>

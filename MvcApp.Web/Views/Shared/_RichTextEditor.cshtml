@@ -9,31 +9,31 @@
     <input type="hidden" name="@name" id="@id-hidden" value="@value" />
     <div class="rte-toolbar btn-toolbar mb-1" role="toolbar" style="flex-wrap:wrap;gap:2px">
         <div class="btn-group btn-group-sm me-1">
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('bold')" title="Bold"><b>B</b></button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('italic')" title="Italic"><i>I</i></button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('underline')" title="Underline"><u>U</u></button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('bold')" title="@(Localizer["Bold"])"><b>B</b></button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('italic')" title="@(Localizer["Italic"])"><i>I</i></button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('underline')" title="@(Localizer["Underline"])"><u>U</u></button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('strikeThrough')" title="@(Localizer["Strikethrough"])"><s>S</s></button>
         </div>
         <div class="btn-group btn-group-sm me-1">
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','h1')" title="Heading 1">H1</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','h2')" title="Heading 2">H2</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','h3')" title="Heading 3">H3</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','p')" title="Paragraph">P</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','h1')" title="@(Localizer["Heading 1"])">H1</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','h2')" title="@(Localizer["Heading 2"])">H2</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','h3')" title="@(Localizer["Heading 3"])">H3</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','p')" title="@(Localizer["Paragraph"])">P</button>
         </div>
         <div class="btn-group btn-group-sm me-1">
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('insertUnorderedList')" title="Bullet List">&#8226;</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('insertOrderedList')" title="Numbered List">1.</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('blockquote')" title="Blockquote">&ldquo;</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('insertHorizontalRule')" title="Horizontal Rule">&mdash;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('insertUnorderedList')" title="@(Localizer["Bullet List"])">&#8226;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('insertOrderedList')" title="@(Localizer["Numbered List"])">1.</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('blockquote')" title="@(Localizer["Blockquote"])">&ldquo;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('insertHorizontalRule')" title="@(Localizer["Horizontal Rule"])">&mdash;</button>
         </div>
         <div class="btn-group btn-group-sm me-1">
-            <button type="button" class="btn btn-outline-secondary" onclick="rteLink()" title="Insert Link">&#128279;</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteImage()" title="Insert Image">&#128247;</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','pre')" title="Code Block">&lt;/&gt;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteLink()" title="@(Localizer["Insert Link"])">&#128279;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteImage()" title="@(Localizer["Insert Image"])">&#128247;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteCmd('formatBlock','pre')" title="@(Localizer["Code Block"])">&lt;/&gt;</button>
         </div>
         <div class="btn-group btn-group-sm">
-            <button type="button" class="btn btn-outline-secondary" onclick="rtePreview('@id')" title="Toggle Preview">&#128065;</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="rteClearFormatting()" title="Clear Formatting">&#9887;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rtePreview('@id')" title="@(Localizer["Toggle Preview"])">&#128065;</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="rteClearFormatting()" title="@(Localizer["Clear Formatting"])">&#9887;</button>
         </div>
     </div>
     <div id="@id-editor" class="rte-editor form-control" contenteditable="true"

@@ -8,6 +8,8 @@ using MvcApp.Common.Filters;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Blog.Controllers;
 
@@ -18,7 +20,7 @@ public partial class BlogController(
     IRepository<BlogCategory> categoryRepo,
     IRepository<BlogTag> tagRepo,
     IRepository<BlogComment> commentRepo,
-    IBanService banService) : Controller
+    IBanService banService, IStringLocalizer<SharedResource> localizer) : Controller
 {
     [AllowAnonymous]
     public async Task<IActionResult> Index(int page = 1)
@@ -256,7 +258,7 @@ public partial class BlogController(
 
         if (string.IsNullOrWhiteSpace(content))
         {
-            TempData["Error"] = "Comment cannot be empty.";
+            TempData["Error"] = localizer["Comment cannot be empty."];
             return RedirectToAction(nameof(Post), "Blog", new { slug = post.Slug });
         }
 
@@ -264,7 +266,7 @@ public partial class BlogController(
 
         if (currentUser != null && await banService.IsBannedAsync(currentUser.Id))
         {
-            TempData["Error"] = "Your account is suspended. You cannot post comments.";
+            TempData["Error"] = localizer["Your account is suspended. You cannot post comments."];
             return RedirectToAction(nameof(Post), "Blog", new { slug = post.Slug });
         }
 
@@ -305,7 +307,7 @@ public partial class BlogController(
         await commentRepo.UpdateAsync(comment);
 
         var post = await postRepo.Query().FirstOrDefaultAsync(p => p.Id == comment.PostId);
-        TempData["Success"] = "Comment deleted.";
+        TempData["Success"] = localizer["Comment deleted."];
         return RedirectToAction(nameof(Post), "Blog", new { slug = post?.Slug });
     }
 

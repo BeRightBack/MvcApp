@@ -22,6 +22,7 @@ namespace MvcApp.Module.Pages.Controllers.Admin
         private readonly IPageRenderer _renderer;
         private readonly BlazorComponentRegistry _blazorRegistry;
         private readonly UserManager<UserDetails> _userManager;
+          private readonly IStringLocalizer<SharedResource> _localizer;
 
         public PagesController(
             IRepository<ContentPage> pageRepo,
@@ -36,6 +37,7 @@ namespace MvcApp.Module.Pages.Controllers.Admin
             _renderer = renderer;
             _blazorRegistry = blazorRegistry;
             _userManager = userManager;
+            _localizer = localizer;
         }
 
         public async Task<IActionResult> Index()
@@ -86,7 +88,7 @@ namespace MvcApp.Module.Pages.Controllers.Admin
             if (isPublished) page.PublishedAt = DateTime.UtcNow;
 
             await _pageRepo.AddAsync(page);
-            TempData["Success"] = "Page created.";
+            TempData["Success"] = _localizer["Page created."];
             return RedirectToAction(nameof(Edit), new { id = page.Id });
         }
 
@@ -128,7 +130,7 @@ namespace MvcApp.Module.Pages.Controllers.Admin
                 page.PublishedAt = DateTime.UtcNow;
 
             await _pageRepo.UpdateAsync(page);
-            TempData["Success"] = "Page updated.";
+            TempData["Success"] = _localizer["Page updated."];
             return RedirectToAction(nameof(Edit), new { id });
         }
 
@@ -139,7 +141,7 @@ namespace MvcApp.Module.Pages.Controllers.Admin
             var page = await _pageRepo.GetByIdAsync(id);
             if (page == null) return NotFound();
             await _pageRepo.DeleteAsync(page);
-            TempData["Success"] = "Page deleted.";
+            TempData["Success"] = _localizer["Page deleted."];
             return RedirectToAction(nameof(Index));
         }
 

@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcApp.Core;
 using MvcApp.Infrastructure;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Web.Controllers;
 
 [Authorize]
-public class ReportController(UserDbContext db, UserManager<UserDetails> userManager) : Controller
+public class ReportController(UserDbContext db, UserManager<UserDetails> userManager, IStringLocalizer<SharedResource> localizer) : Controller
 {
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -19,7 +21,7 @@ public class ReportController(UserDbContext db, UserManager<UserDetails> userMan
 
         if (reporter.Id == reportedUserId)
         {
-            TempData["Error"] = "You cannot report yourself.";
+            TempData["Error"] = localizer["You cannot report yourself."];
             return RedirectToAction("Details", "Members", new { id = reportedUserId });
         }
 
@@ -27,7 +29,7 @@ public class ReportController(UserDbContext db, UserManager<UserDetails> userMan
             .AnyAsync(r => r.ReporterId == reporter.Id && r.ReportedUserId == reportedUserId && r.Status == ReportStatus.Pending);
         if (alreadyReported)
         {
-            TempData["Error"] = "You have already reported this user. Our team is reviewing it.";
+            TempData["Error"] = localizer["You have already reported this user. Our team is reviewing it."];
             return RedirectToAction("Details", "Members", new { id = reportedUserId });
         }
 

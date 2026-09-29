@@ -62,7 +62,7 @@ else
                         {
                             <tr data-banner-id="@banner.Id">
                                 <td>
-                                    <span class="drag-handle text-muted" title="Drag to reorder"><i class="bx bx-grip-vertical"></i></span>
+                                    <span class="drag-handle text-muted" title="@(Localizer["Drag to reorder"])"><i class="bx bx-grip-vertical"></i></span>
                                 </td>
                                 <td>@banner.Name</td>
                                 <td><span class="badge bg-info">@banner.Type</span></td>
@@ -124,9 +124,9 @@ else
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a asp-action="Edit" asp-route-id="@banner.Id" class="btn btn-outline-primary" title="Edit"><i class="bx bx-edit"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@banner.Id" class="btn btn-outline-primary" title="@(Localizer["Edit"])"><i class="bx bx-edit"></i></a>
                                         <form asp-action="Delete" asp-route-id="@banner.Id" asp-route-zoneId="@banner.ZoneId" method="post" style="display:inline" onsubmit="return confirm('Delete this banner?');">
-                                            <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bx bx-trash"></i></button>
+                                            <button type="submit" class="btn btn-outline-danger" title="@(Localizer["Delete"])"><i class="bx bx-trash"></i></button>
                                         </form>
                                     </div>
                                 </td>

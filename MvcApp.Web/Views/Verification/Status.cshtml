@@ -80,7 +80,7 @@
                         @Html.AntiForgeryToken()
                         <div class="mb-3">
                             <label class="form-label fw-semibold">@Localizer["Number in your photo"]</label>
-                            <input type="text" name="displayNumber" class="form-control" required placeholder="Enter the number you wrote on paper" />
+                            <input type="text" name="displayNumber" class="form-control" required placeholder="@(Localizer["Enter the number you wrote on paper"])" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">@Localizer["Selfie with number"]</label>
@@ -103,7 +103,7 @@
                         @Html.AntiForgeryToken()
                         <div class="mb-3">
                             <label class="form-label fw-semibold">@Localizer["Number in your photo"]</label>
-                            <input type="text" name="displayNumber" class="form-control" required placeholder="Enter the number you wrote on paper"
+                            <input type="text" name="displayNumber" class="form-control" required placeholder="@(Localizer["Enter the number you wrote on paper"])"
                                    value="@(ViewBag.DisplayNumber ?? "")" />
                             <div class="form-text">@Localizer["Write"] <strong>@challengeNumber</strong> @Localizer["on a piece of paper and hold it in your selfie"]</div>
                         </div>

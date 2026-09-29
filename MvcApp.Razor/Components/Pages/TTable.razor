@@ -3,7 +3,7 @@
 @typeparam TEntity
 @typeparam TModel
 
-<input type="text" @oninput="SearchTable" placeholder="Search..." />
+<input type="text" @oninput="SearchTable" placeholder="@(Localizer["Search..."])" />
 
 @if (filtered is not null && filtered.Count > 0)
 {

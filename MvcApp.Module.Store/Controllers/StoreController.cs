@@ -8,6 +8,8 @@ using MvcApp.Common.Filters;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
 using MvcApp.Module.Store.Services;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Store.Controllers;
 
@@ -19,7 +21,7 @@ public class StoreController(
     IRepository<CartItem> cartRepo,
     IRepository<Order> orderRepo,
     IRepository<OrderItem> orderItemRepo,
-    StorePayPalService payPalService) : Controller
+    StorePayPalService payPalService, IStringLocalizer<SharedResource> localizer) : Controller
 {
     [AllowAnonymous]
     public async Task<IActionResult> Index(int page = 1, int? categoryId = null)
@@ -117,7 +119,7 @@ public class StoreController(
             });
         }
 
-        TempData["Success"] = "Item added to cart.";
+        TempData["Success"] = localizer["Item added to cart."];
         return RedirectToAction(nameof(Cart));
     }
 
@@ -253,12 +255,12 @@ public class StoreController(
             }
             catch (Exception)
             {
-                TempData["Error"] = "Unable to start PayPal payment. Please try again or choose Cash on Delivery.";
+                TempData["Error"] = localizer["Unable to start PayPal payment. Please try again or choose Cash on Delivery."];
                 return RedirectToAction(nameof(Checkout));
             }
         }
 
-        TempData["Success"] = "Order placed successfully!";
+        TempData["Success"] = localizer["Order placed successfully!"];
         return RedirectToAction(nameof(OrderConfirmation), new { id = order.Id });
     }
 

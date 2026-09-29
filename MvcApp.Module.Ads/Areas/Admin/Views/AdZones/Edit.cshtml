@@ -53,9 +53,9 @@
             <label class="col-sm-2 col-form-label fw-bold">@Localizer["Banner Format"]</label>
             <div class="col-sm-5">
                 <div class="input-group">
-                    <input asp-for="BannerWidth" type="number" min="0" class="form-control" placeholder="Width (px)" />
+                    <input asp-for="BannerWidth" type="number" min="0" class="form-control" placeholder="@(Localizer["Width (px)"])" />
                     <span class="input-group-text">×</span>
-                    <input asp-for="BannerHeight" type="number" min="0" class="form-control" placeholder="Height (px)" />
+                    <input asp-for="BannerHeight" type="number" min="0" class="form-control" placeholder="@(Localizer["Height (px)"])" />
                 </div>
                 <span asp-validation-for="BannerWidth" class="text-danger"></span>
                 <span asp-validation-for="BannerHeight" class="text-danger"></span>

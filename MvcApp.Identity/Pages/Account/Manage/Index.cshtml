@@ -17,7 +17,7 @@
             <div class="mb-3 text-center">
                 <img src="@Url.Action("GetProfilePicture", "Account", new { userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value })"
                      onerror="this.onerror=null;this.src='/images/default-user.png';"
-                     alt="Profile" width="120" height="120"
+                     alt="@(Localizer["Profile"])" width="120" height="120"
                      class="rounded-circle border" style="object-fit:cover" id="profilePreview" />
                 <div class="mt-2">
                     <input asp-for="Input.ProfilePictureFile" type="file" accept="image/*" class="form-control form-control-sm"
@@ -26,23 +26,23 @@
             </div>
 
             <div class="form-floating mb-3">
-                <input asp-for="Input.FirstName" class="form-control" placeholder="First name" />
+                <input asp-for="Input.FirstName" class="form-control" placeholder="@(Localizer["First name"])" />
                 <label asp-for="Input.FirstName" class="form-label"></label>
             </div>
 
             <div class="form-floating mb-3">
-                <input asp-for="Input.LastName" class="form-control" placeholder="Last name" />
+                <input asp-for="Input.LastName" class="form-control" placeholder="@(Localizer["Last name"])" />
                 <label asp-for="Input.LastName" class="form-label"></label>
             </div>
 
             <div class="form-floating mb-3">
-                <input asp-for="Input.Username" class="form-control" placeholder="Username" />
+                <input asp-for="Input.Username" class="form-control" placeholder="@(Localizer["Username"])" />
                 <label asp-for="Input.Username" class="form-label"></label>
                 <span class="text-muted small">@Model.UserNameChangeLimitMessage</span>
             </div>
 
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Phone number" />
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="@(Localizer["Phone number"])" />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
@@ -51,17 +51,17 @@
             <h5 class="mb-3">@Localizer["Additional Info"]</h5>
 
             <div class="form-floating mb-3">
-                <input asp-for="Input.KnownAs" class="form-control" placeholder="Display name" />
+                <input asp-for="Input.KnownAs" class="form-control" placeholder="@(Localizer["Display name"])" />
                 <label asp-for="Input.KnownAs" class="form-label"></label>
             </div>
 
             <div class="form-floating mb-3">
-                <textarea asp-for="Input.Introduction" class="form-control" placeholder="About you" style="height:100px"></textarea>
+                <textarea asp-for="Input.Introduction" class="form-control" placeholder="@(Localizer["About you"])" style="height:100px"></textarea>
                 <label asp-for="Input.Introduction" class="form-label"></label>
             </div>
 
             <div class="form-floating mb-3">
-                <textarea asp-for="Input.LookingFor" class="form-control" placeholder="What are you looking for?" style="height:80px"></textarea>
+                <textarea asp-for="Input.LookingFor" class="form-control" placeholder="@(Localizer["What are you looking for?"])" style="height:80px"></textarea>
                 <label asp-for="Input.LookingFor" class="form-label"></label>
             </div>
 
@@ -89,13 +89,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.City" class="form-control" placeholder="City" />
+                        <input asp-for="Input.City" class="form-control" placeholder="@(Localizer["City"])" />
                         <label asp-for="Input.City" class="form-label"></label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.Country" class="form-control" placeholder="Country" />
+                        <input asp-for="Input.Country" class="form-control" placeholder="@(Localizer["Country"])" />
                         <label asp-for="Input.Country" class="form-label"></label>
                     </div>
                 </div>

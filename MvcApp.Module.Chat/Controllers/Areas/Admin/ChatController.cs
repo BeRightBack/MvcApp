@@ -7,6 +7,8 @@ using MvcApp.Core;
 using MvcApp.Common.Filters;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
+using Microsoft.Extensions.Localization;
+using MvcApp.Localization;
 
 namespace MvcApp.Module.Chat.Controllers.Areas.Admin;
 
@@ -16,7 +18,7 @@ namespace MvcApp.Module.Chat.Controllers.Areas.Admin;
 public class ChatController(
     UserManager<UserDetails> userManager,
     IRepository<ChatRoom> roomRepo,
-    IRepository<ChatRoomMessage> messageRepo) : Controller
+    IRepository<ChatRoomMessage> messageRepo, IStringLocalizer<SharedResource> localizer) : Controller
 {
     public async Task<IActionResult> Index()
     {
@@ -98,7 +100,7 @@ public class ChatController(
         room.Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
         await roomRepo.UpdateAsync(room);
 
-        TempData["Success"] = "Room updated.";
+        TempData["Success"] = localizer["Room updated."];
         return RedirectToAction(nameof(Index));
     }
 
@@ -117,7 +119,7 @@ public class ChatController(
         }
         await roomRepo.DeleteAsync(room);
 
-        TempData["Success"] = "Room deleted.";
+        TempData["Success"] = localizer["Room deleted."];
         return RedirectToAction(nameof(Index));
     }
 
@@ -165,7 +167,7 @@ public class ChatController(
         var roomId = message.ChatRoomId;
         await messageRepo.DeleteAsync(message);
 
-        TempData["Success"] = "Message deleted.";
+        TempData["Success"] = localizer["Message deleted."];
         return RedirectToAction(nameof(Messages), new { id = roomId });
     }
 }
