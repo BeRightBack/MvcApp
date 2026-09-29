@@ -181,6 +181,14 @@
 
 @section Scripts {
     <script>
+            // Localized once and injected as JSON: dropping a translation straight into a
+            // single-quoted JavaScript literal would break on any value containing an apostrophe.
+            const bannerI18n = {
+                imageUrl:      @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["Image URL or path"].Value)),
+                htmlContent:   @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["HTML content"].Value)),
+                textContent:   @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["Text content"].Value)),
+                scriptContent: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["Script tag content"].Value))
+            };
         function updateFieldsForType(type) {
             const contentField = document.getElementById('contentField');
             const targetUrlField = document.getElementById('targetUrlField');
@@ -203,7 +211,7 @@
                         newInput.name = 'Content';
                         newInput.id = 'Content';
                         newInput.maxLength = 4000;
-                        newInput.placeholder = 'Image URL or path';
+                        newInput.placeholder = bannerI18n.imageUrl;
                         newInput.value = contentInput.value;
                         contentInput.replaceWith(newInput);
                     }
@@ -220,7 +228,7 @@
                         newInput.id = 'Content';
                         newInput.rows = 8;
                         newInput.maxLength = 4000;
-                        newInput.placeholder = 'HTML content';
+                        newInput.placeholder = bannerI18n.htmlContent;
                         newInput.value = contentInput.value;
                         contentInput.replaceWith(newInput);
                     }
@@ -236,7 +244,7 @@
                         newInput.id = 'Content';
                         newInput.rows = 8;
                         newInput.maxLength = 4000;
-                        newInput.placeholder = 'Script tag content';
+                        newInput.placeholder = bannerI18n.scriptContent;
                         newInput.value = contentInput.value;
                         contentInput.replaceWith(newInput);
                     }
@@ -252,7 +260,7 @@
                         newInput.name = 'Content';
                         newInput.id = 'Content';
                         newInput.maxLength = 4000;
-                        newInput.placeholder = 'Text content';
+                        newInput.placeholder = bannerI18n.textContent;
                         newInput.value = contentInput.value;
                         contentInput.replaceWith(newInput);
                     }

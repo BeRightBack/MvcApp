@@ -15,8 +15,9 @@ namespace MvcApp.Localization.Custom
         {
             get
             {
-                var localizer = LocalizationContext.Localizer;
-                return localizer?[_name] ?? _name;
+                // Resolves the localizer from the current request, and falls back to the
+                // untranslated name when there is none (background work, or a test).
+                return LocalizationContext.Translate(_name);
             }
         }
     }
