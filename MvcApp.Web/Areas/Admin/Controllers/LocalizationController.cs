@@ -7,6 +7,8 @@ using MvcApp.Core;
 using MvcApp.Core.Abstractions;
 using MvcApp.Localization;
 using MvcApp.Localization.Custom;
+using System.Globalization;
+using System.Text;
 
 namespace MvcApp.Web.Areas.Admin.Controllers
 {
@@ -132,13 +134,39 @@ namespace MvcApp.Web.Areas.Admin.Controllers
                 .ToListAsync();
 
             var byKey = pairs
-                .GroupBy(p => p.Name!.Trim(), StringComparer.Ordinal)
+                .GroupBy(p => NormalizeKey(p.Name!), StringComparer.Ordinal)
                 // LanguageId is nullable on the entity; a row with no language is not coverage.
                 .ToDictionary(g => g.Key, g => g.Where(p => p.LanguageId.HasValue)
                                                  .Select(p => p.LanguageId!.Value)
                                                  .ToHashSet());
 
             return (targetIds, byKey);
+        }
+
+        /// <summary>
+        /// Normalizes a key the way the database compares one.
+        /// </summary>
+        /// <remarks>
+        /// <c>StringResources.Name</c> is matched by MySQL under collation
+        /// <c>utf8mb4_uca1400_ai_ci</c>, which is case- AND accent-insensitive, so a lookup for
+        /// "Password" is served by a row stored as "password". Grouping coverage
+        /// case-sensitively therefore reported "password" and "Password" as two keys, each
+        /// appearing short for the languages the other one had, and the count never reached zero.
+        /// Diacritics are folded the same way so the two agree.
+        /// </remarks>
+        private static string NormalizeKey(string name)
+        {
+            var trimmed = name.Trim();
+            var decomposed = trimmed.Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder(decomposed.Length);
+            foreach (var ch in decomposed)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)
+                {
+                    sb.Append(char.ToLowerInvariant(ch));
+                }
+            }
+            return sb.ToString();
         }
 
         private static int CountIncomplete(Dictionary<string, HashSet<int>> byKey, List<int> targetIds) =>

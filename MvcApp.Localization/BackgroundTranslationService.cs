@@ -91,6 +91,18 @@ public sealed class BackgroundTranslationService(
 
         foreach (var language in languageService.GetLanguages().ToList())
         {
+            // Never write a row for the SOURCE language: the localizer already falls back to the
+            // key, and the key IS the source text.
+            //
+            // This compares the language's CULTURE, not the DeepL target code. DeepLConfig has
+            // SourceLang = "EN" but TargetLangEn = "EN-US", so comparing the DeepL codes never
+            // matched and the worker wrote a source-language row for every key it touched. Check
+            // it before the lookup so no API call is spent on it either.
+            if (string.Equals(language.Culture?.Trim(), SourceLang?.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             var existing = localizationService.GetStringResource(key, language.Id);
             if (existing != null && !string.IsNullOrEmpty(existing.Value)) continue;
 
@@ -98,7 +110,14 @@ public sealed class BackgroundTranslationService(
             if (string.IsNullOrWhiteSpace(target)) continue;
 
             var translated = await TranslateWithRetryAsync(translator, key, target, cancellationToken);
-            if (string.IsNullOrWhiteSpace(translated) || translated == key) continue;
+            if (string.IsNullOrWhiteSpace(translated)) continue;
+
+            // Do NOT skip a target language just because the translation happens to equal the
+            // source text. Plenty of words are genuinely identical across languages - "Admin",
+            // "RSVP", "PayPal", "Design" - and DeepL correctly returns them unchanged. Treating
+            // that as "nothing to store" left those keys permanently incomplete: the API call was
+            // made, the result discarded, no log line written, and the coverage count never moved.
+            // That is what made the admin "Translate missing keys" button look broken.
 
             localizationService.AddOrUpdateStringResource(new StringResource
             {
