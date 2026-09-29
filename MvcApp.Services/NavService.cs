@@ -1,14 +1,17 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
+using MvcApp.Localization;
 
 namespace MvcApp.Services;
 
 public class NavService(
     ISettingsService settings,
     IModuleManager moduleManager,
-    IHttpContextAccessor httpContextAccessor) : INavService
+    IHttpContextAccessor httpContextAccessor,
+    IStringLocalizer<SharedResource> localizer) : INavService
 {
     public async Task<List<NavItem>> GetNavItemsAsync()
     {
@@ -153,6 +156,14 @@ public class NavService(
                 continue;
             if (item.RequiresAuth && (user?.Identity == null || !user.Identity.IsAuthenticated))
                 continue;
+            // Nav labels are plain strings - from NavDefaults in code, or from the SiteNav JSON an
+            // admin saves - so they are resolved here, at the single funnel every navbar, footer
+            // and dropdown list passes through, rather than at each call site. A label with no
+            // translation returns itself unchanged and is picked up by the background translator.
+            if (!string.IsNullOrWhiteSpace(item.Label))
+            {
+                item.Label = localizer[item.Label].Value;
+            }
             result.Add(item);
         }
         return result;
