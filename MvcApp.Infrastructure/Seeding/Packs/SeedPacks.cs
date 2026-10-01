@@ -85,9 +85,10 @@ public sealed class DatingPack : ISeedPack
     public string Name => SeedPackNames.Dating;
     public string DisplayName => "Dating";
     public string Description =>
-        "Interest tags for member discovery, and VIP subscription plans. "
+        "Interest tags for member discovery. The VIP plans used to sit here too, but they are "
+        + "not dating content — Plans owns them, and every template that sells a tier lists it. "
         + "Not needed for a business, magazine or IPTV site.";
-    public IReadOnlyList<string> EntityNames => ["InterestTag", "SubscriptionPlan", "SubscriptionDetail"];
+    public IReadOnlyList<string> EntityNames => ["InterestTag"];
 
     public async Task SeedAsync(SeedPackService packs, UserDbContext db, string? appliedBy, CancellationToken ct)
     {
@@ -95,12 +96,6 @@ public sealed class DatingPack : ISeedPack
         {
             if (d.InterestTags.Any()) return;
             d.InterestTags.AddRange(DatingInterestTags.Build());
-        }, appliedBy: appliedBy, ct: ct);
-
-        await packs.ApplyAsync<SubscriptionPlan>(Name, d =>
-        {
-            if (d.SubscriptionPlans.Any()) return;
-            d.SubscriptionPlans.AddRange(DatingSubscriptionPlans.Build());
         }, appliedBy: appliedBy, ct: ct);
     }
 }

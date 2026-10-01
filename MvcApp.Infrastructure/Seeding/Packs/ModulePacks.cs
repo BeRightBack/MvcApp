@@ -4,6 +4,37 @@ using MvcApp.Core.Seeding;
 
 namespace MvcApp.Infrastructure.Seeding.Packs;
 
+public sealed class PlansPack : ISeedPack
+{
+    public string Name => SeedPackNames.Plans;
+    public string DisplayName => "Subscription plans";
+    public string Description =>
+        "The three VIP tiers and their duration ladder. Shared by /Vip and /iptv-store, so "
+        + "every template that sells a membership lists this pack.";
+    public IReadOnlyList<string> EntityNames => ["SubscriptionPlan", "SubscriptionDetail"];
+
+    public async Task SeedAsync(SeedPackService packs, UserDbContext db, string? appliedBy, CancellationToken ct)
+    {
+        // Adopt before apply. A database that already has tiers — an existing deployment, or
+        // the Seeder that ran before packs existed — must be claimed into the manifest, not
+        // duplicated. ApplyAsync no-ops on a non-empty table but records nothing when it does,
+        // which would leave the pack permanently "not applied" and retried on every boot.
+        await packs.AdoptAsync<SubscriptionPlan>(Name, d => d.SubscriptionPlans, appliedBy, ct);
+
+        await packs.ApplyAsync<SubscriptionPlan>(Name, d =>
+        {
+            if (d.SubscriptionPlans.Any()) return;
+            d.SubscriptionPlans.AddRange(SubscriptionPlanSeedData.Build());
+        }, appliedBy: appliedBy, ct: ct);
+
+        // The details are cascade-created through plan.SubscriptionDetails, so ApplyAsync above
+        // only ever tracks SubscriptionPlan. Record them here or the manifest understates what
+        // this pack owns. Removing the plans cascades to the details, so the two are consistent
+        // either way; this makes IsApplied and the admin counts honest.
+        await packs.AdoptAsync<SubscriptionDetail>(Name, d => d.SubscriptionDetails, appliedBy, ct);
+    }
+}
+
 public sealed class ChatPack : ISeedPack
 {
     public string Name => SeedPackNames.Chat;
