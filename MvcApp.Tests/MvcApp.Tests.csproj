@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MvcApp.Services\MvcApp.Services.csproj" />
+    <ProjectReference Include="..\MvcApp.Web\MvcApp.Web.csproj" />
   </ItemGroup>
 
 </Project>

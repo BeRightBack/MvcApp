@@ -18,3 +18,9 @@
 
 # Note: appsettings.json (secrets) is ignored per-project via MvcApp.Web/.gitignore;
 # don't add a global appsettings.json rule here — the template sources ship one.
+
+# But a ROOT-level appsettings.json is a real, credential-bearing file that appeared in the
+# repo root and was NOT covered by any rule. `/appsettings.json` anchors to the root only,
+# so the template trees (which legitimately ship appsettings.json) keep working.
+/appsettings.json
+/appsettings.Development.json
