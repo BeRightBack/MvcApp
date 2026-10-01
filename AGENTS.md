@@ -37,6 +37,13 @@ steps, reuse-over-rewrite, sub-agent delegation) live in the global
    verified 2026-09-23). Do NOT use `--no-incremental`: it deletes the BundlerMinifier
    `wwwroot\css\site.min.css` before `DefineStaticWebAssets` runs → 1 error. A plain
    `dotnet build` regenerates it.
+   **A clean build does NOT validate `.cshtml` (added 2026-10-01).** `Directory.Build.props`
+   sets `UseRazorSourceGenerator=false` to work around an SDK 10.0.300+ bug (the generator
+   falsely raises RZ1021 for valid HTML inside `@if`/`@foreach` — dotnet/roslyn#85656), so
+   views are compiled at RUNTIME and `dotnet build` never parses them. A new or edited view
+   is unproven until the app has actually served it: run it and read the rendered HTML
+   (step 4), not just the build log. Two real defects shipped through a green build this
+   way — see the Frenzyzone entries below.
 3. Start detached:
    `Start-Process -FilePath "dotnet" -ArgumentList "run","--project","MvcApp.Web","--no-build","--urls","http://localhost:9001" -WorkingDirectory "E:\Apps\MvcApp" -WindowStyle Hidden`
 4. Verify by POLLING, not fixed sleep: `Invoke-WebRequest http://localhost:9001/` until
@@ -44,7 +51,9 @@ steps, reuse-over-rewrite, sub-agent delegation) live in the global
    background seeding finishes — early requests 500 with `Table 'identity_db.<x>'
    doesn't exist` by design. Never kill the app before it returns 200 (see Databases).
 5. Behavior-affecting changes also need: `dotnet test MvcApp.Tests` → 13/13 passed, ~24s,
-   no DB/environment required (verified 2026-09-23).
+   no DB/environment required (verified 2026-09-23). **The count has since grown to 58** —
+   `TemplateProfileTests` (14) and the others were added with the per-template seeding work;
+   treat "all pass" as the assertion, not the literal 13.
 6. When done: STOP the instance and FREE port 9001, then confirm
    `Get-NetTCPConnection -LocalPort 9001 -State Listen` returns nothing.
 
@@ -317,10 +326,20 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
   the sink now persists rows there (file logging under `MvcApp.Web\logs\` also stays on).
 
 ## Key settings (SystemSettings table: Key, Value, Description, Group, UpdatedAt, UpdatedBy)
-- `SiteTemplate` = active template (currently **`Luxury`** — read from the live DB 2026-09-29 and
-  confirmed against the rendered hero; the 2026-09-28 "Dating" note in this file was wrong.
-  Exact template Name, compared OrdinalIgnoreCase). The active landing view follows it, so `/`
-  renders `Views/Home/Index.Luxury.cshtml`.
+- `SiteTemplate` = active template (currently **`Luxury`** on production — read from the live DB
+  2026-09-29 and confirmed against the rendered hero; the 2026-09-28 "Dating" note in this file
+  was wrong. Exact template Name, compared OrdinalIgnoreCase). The active landing view follows
+  it, so `/` renders `Views/Home/Index.Luxury.cshtml`. **Re-read this from the DB before
+  touching any template's landing page — it is per-environment and has changed repeatedly.**
+  There are now **12** templates; the 12th, `Frenzyzone`, was added 2026-10-01. Adding one needs
+  four things, in this order: a `UiTemplateInfo` entry in `MvcApp.Services/TemplateService.cs`
+  (`_templates` is `private static`), `wwwroot/css/templates/<name>.css`, a
+  `Views/Home/Index.<Name>.cshtml`, a `TemplateSeedProfile` in `TemplateProfileService.cs`, and
+  a `NavDefaults` block. `HomeController.ResolveViewAsync` is convention-based (`<View>.<Name>`
+  then `<View>.Default`), so a new template needs **no migration** and no layout change —
+  `_Layout.cshtml` only special-cases the literal `"Business"` for the sidebar shell, so
+  Frenzyzone gets the standard top navigation. `Every_template_the_app_offers_has_a_profile`
+  fails until BOTH the service entry and the profile exist, so use it as the checklist.
 - `Module.*.Enabled` = module toggles (Ads, Blog, Chat, Forum, Iptv, Messages, Pages, Store,
   Utility, Video). Modules deselected at generation time have NO `Module.<X>.Enabled` row and
   are hidden from the admin Modules list (`ModuleManager.GetAllModulesAsync` skips modules
@@ -369,6 +388,33 @@ When a module is deselected at generation, ALL of these must hold:
    hard-enable a module the generation can omit.
 
 ## Known pitfalls / watch list
+- **A module-gated landing page must gate its PROSE too, not just its links (2026-10-01).**
+  The Frenzyzone hero lead was one fixed sentence naming "services, company pages, publishing
+  and a storefront". With `Module.Store.Enabled=false` the Store card and the `/Store` link
+  were correctly suppressed by `IsModuleEnabledAsync` while the lead still advertised a
+  storefront — a page describing a feature it does not have. Gating the link is not gating
+  the claim; any sentence naming a capability has to be composed from the enabled set.
+- **Never hardcode a conjunction or separator in generated prose (2026-10-01).** The same
+  view joined its area list with a literal `" and "`, which rendered English inside an
+  otherwise French sentence: `services, édition and une vitrine`. Localize the connector.
+  Key it on a **whole word** (`Localizer["and"]`), never `", "` / `" and "` — `StringResources`
+  is `utf8mb4_uca1400_ai_ci`, which is **PAD SPACE**, so a key with a leading space can
+  never be found. `DbStringLocalizer` also IGNORES format arguments, so
+  `Localizer["{0} …", x]` renders a literal `{0}`; substitute explicitly
+  (`Localizer["{0} …"].Value.Replace("{0}", x)`).
+- **A key that translates to itself is not a bug.** `Services` → `Services` in French is
+  correct; the worker stores it. Do not "fix" it or treat a still-English-looking string as
+  an untranslated key without checking the DB first — and check the real schema:
+  `StringResources` is `(Id, LanguageId, Name, Value)`, there is **no per-language `fr`
+  column**, so `SELECT … , fr FROM StringResources` fails and returns nothing silently.
+  Join `Languages` on `LanguageId` for the culture.
+- **When checking translation coverage, test the real keys, not a language heuristic.**
+  A "does this look English?" regex flags every French string as English (Latin characters
+  only) and produced three wrong counts in a row (33/15/1 for a true value of 37/38).
+  Extract the actual `@Localizer["…"]` keys from the view and test each against the
+  unescaped rendered text. Note self-translate is ASYNCHRONOUS: a page fetched seconds after
+  a copy change will legitimately show a mix of translated and untranslated strings while
+  `BackgroundTranslationService` drains. Wait for the queue before concluding anything.
 - **User uploads under `wwwroot` are UNTRACKED and therefore unrecoverable.** Verified 2026-09-29:
   the admin's `ProfilePicturePath` pointed at `wwwroot/images/<guid>/<guid>.jpg`, the file was
   missing, and it could not be found in any commit, `git stash`, the reflog, the 10 dangling blobs
@@ -405,6 +451,40 @@ When a module is deselected at generation, ALL of these must hold:
      67 tables / 31 history rows, `Localisation_db` 3 tables / 1 history row — verified via
      information_schema. Production mode on the remote: clean start, HTTP 200, DB-backed
      pages render (no seeding). Source build 0E/10W; tests 13/13.
+  3b. **`--idempotent` CANNOT work on MariaDB — verified 2026-10-01, do not use it.**
+     Oracle's provider emits idempotent guards in **T-SQL**:
+     `IF NOT EXISTS(SELECT * FROM __EFMigrationsHistory WHERE MigrationId='...') BEGIN ... END;`
+     MariaDB cannot parse that — running a generated `--idempotent` script produced
+     **628 × ERROR 1064** on a MariaDB 11.8.9 with an empty schema. Two escape routes were
+     tried and BOTH fail, so do not spend time on them again:
+       - Rewriting the guards as `IF ... THEN ... END IF;` — the `mysql` client splits input on
+         `;`, so the block is cut in half and dies at the inner statement.
+       - Wrapping each block in `DELIMITER $$ ... END $$` — the `mysql` client **ignores
+         `DELIMITER` in piped/redirected input** (proved with a two-line `SELECT 1; SELECT 2; END $$`
+         test: both SELECTs ran, then it errored 1064 on the orphan `END`). `--delimiter=` exists
+         as a startup option, not per-script.
+     **Use a bounded script instead** — positional FROM/TO, which emits plain statements with
+     no blocks at all:
+       `dotnet ef migrations script <FROM_MIGRATION> <TO_MIGRATION> --project MvcApp.Infrastructure --startup-project MvcApp.Web -c UserDbContext --output out.sql`
+     `FROM`/`TO` are **positional arguments, not `--from`/`--to` flags** (`--from` →
+     "Unrecognized option"). 34 migrations produced 101 KB / 628 syntax errors idempotent;
+     the same range bounded produced 62 lines / 2.5 KB and parsed cleanly.
+     Then harden it for a partially-migrated database (this is what actually stops a re-run
+     dying on 1091/1051/1061/1050/1062): `ALTER TABLE t DROP CONSTRAINT IF EXISTS c`,
+     `ALTER TABLE t DROP INDEX IF EXISTS i` (MariaDB has no bare `DROP INDEX … IF EXISTS` on
+     the statement form — use the `ALTER TABLE` form), `CREATE [UNIQUE] INDEX IF NOT EXISTS`,
+     `CREATE TABLE IF NOT EXISTS`, `INSERT IGNORE INTO __EFMigrationsHistory`. Verified by
+     applying to a DB where those exact objects were ABSENT (the case that kills the raw
+     script): exit 0, no errors, and a second run was also exit 0.
+  3c. **The remote presents a self-signed TLS cert** (`subject == issuer == CN=MariaDB Server`).
+     The app connects fine — Oracle's `MySql.Data` defaults to `SslMode=Preferred` without
+     validating the cert — but the **client** refuses it:
+     `ERROR 2026 (HY000): TLS/SSL error: self-signed certificate`.
+     Use `--ssl-verify-server-cert=0` (keeps TLS, skips CA validation). Do **NOT** use
+     `--skip-ssl`: that sends the password in the clear. The app's `appsettings.json`
+     connection strings carry no `SslMode` token at all — adding one by hand
+     (`SslMode=None`) makes the provider throw `ArgumentException: Requested value 'None' was
+     not found`, so leave the app's connections alone and only pass the flag to `mysql`.
   4. **Development seeding on MariaDB FIXED 2026-09-25** (commit `7a925eb`, pushed
      `71ef7e8..7a925eb`): the 7 seed steps in Program.cs called `MigrateAsync()`
      unconditionally → MariaDB lock crash → NOTHING seeded → remote had 0 users / 0
@@ -446,7 +526,12 @@ When a module is deselected at generation, ALL of these must hold:
   instead (no lock involved): `dotnet ef migrations script --project
   MvcApp.Infrastructure --startup-project MvcApp.Web -c UserDbContext --output <file>.sql`
   (same for `-c LocalizationDbContext`) then apply via `mysql.exe -e "source <file>.sql"`
-  (creds via `$env:MYSQL_PWD`). Verified 2026-09-25: remote `Identity_db` = 67 tables /
+  (creds via `$env:MYSQL_PWD`). **Do NOT add `--idempotent` on MariaDB** — it generates
+  T-SQL `IF … BEGIN … END` guards that MariaDB cannot parse (628 × ERROR 1064), and neither
+  a `THEN/END IF` rewrite nor `DELIMITER $$` rescues it. Pass positional `<FROM> <TO>`
+  instead for a bounded, block-free script, and add the remote's
+  `--ssl-verify-server-cert=0` when applying — see watchlist items 3b and 3c.
+  Verified 2026-09-25: remote `Identity_db` = 67 tables /
   31 history rows, `Localisation_db` = 3 tables / 1 history row. Development mode on the
   remote now WORKS on a fully-migrated MariaDB — all seed-step `MigrateAsync()` calls are
   guarded by a pending-check (2026-09-25, see watchlist item 4; verified live: seeding
