@@ -1,0 +1,26 @@
+<Project>
+
+  <!--
+    Razor source generator workaround.
+
+    The Razor source generator shipped in .NET SDK 10.0.300 and later falsely reports
+    RZ1021 ("Markup in a code block must start with a tag") for perfectly valid markup:
+    any HTML element inside a Razor code block (@if / @foreach / ...) can be mis-parsed,
+    and the rest of the line is emitted as raw C#. One bad .cshtml then cascades into
+    100+ CS errors across the whole assembly, so the real cause is easy to miss.
+
+    Upstream issue: https://github.com/dotnet/roslyn/issues/85656
+    Reproduced here on SDK 10.0.401 with <strong> inside @if, <br /><small> on one line,
+    <text> in a block, and <script src="..."> in a block.
+
+    Switching the Razor compile step back to the non-source-generator path avoids the
+    faulty parser. This is the workaround named in the upstream issue; it changes only
+    how .cshtml files are turned into C#, not what the views render.
+
+    Remove this file once the SDK is updated to a version where the bug is fixed.
+  -->
+  <PropertyGroup>
+    <UseRazorSourceGenerator>false</UseRazorSourceGenerator>
+  </PropertyGroup>
+
+</Project>
