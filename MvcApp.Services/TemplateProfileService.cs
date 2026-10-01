@@ -32,7 +32,7 @@ public class TemplateProfileService : ITemplateProfileService
         {
             Template = "Dating",
             Purpose = "Adult dating club. Interest tags and VIP tiers are the point.",
-            Packs = [SeedPackNames.Community, SeedPackNames.Dating],
+            Packs = [SeedPackNames.Community, SeedPackNames.Dating, SeedPackNames.Plans],
             Modules = ["Forum", "Chat", "Messages", "Video", "Utility", "Gamification", "Pages"],
             OffModules = ["Iptv"],
         },
@@ -40,7 +40,7 @@ public class TemplateProfileService : ITemplateProfileService
         {
             Template = "Luxury",
             Purpose = "Members-only premium club. VIP tiers, chat and video.",
-            Packs = [SeedPackNames.Community, SeedPackNames.Dating, SeedPackNames.Chat, SeedPackNames.Video],
+            Packs = [SeedPackNames.Community, SeedPackNames.Dating, SeedPackNames.Plans, SeedPackNames.Chat, SeedPackNames.Video],
             Modules = ["Forum", "Chat", "Messages", "Video", "Utility", "Gamification", "Pages"],
             OffModules = ["Iptv"],
         },
@@ -104,7 +104,7 @@ public class TemplateProfileService : ITemplateProfileService
         {
             Template = "IPTV",
             Purpose = "Streaming service. Subscription plans and a support forum.",
-            Packs = [SeedPackNames.Community],
+            Packs = [SeedPackNames.Community, SeedPackNames.Plans],
             Modules = ["Iptv", "Forum", "Pages", "Messages"],
             OffModules = [],
         },

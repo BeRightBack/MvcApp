@@ -43,6 +43,7 @@ public static class NavDefaults
         ],
         ["Business"] =
         [
+            new() { Label = "Store",         Controller = "Store",    Action = "Index", Module = "Store" },
             new() { Label = "Pages",         Controller = "Pages",    Action = "Index", Module = "Pages" },
             new() { Label = "FAQ",           Controller = "Home",     Action = "Faq" },
             new() { Label = "Contact",       Controller = "Home",     Action = "Contact" },

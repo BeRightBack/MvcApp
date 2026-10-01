@@ -28,6 +28,7 @@ namespace MvcApp.Infrastructure
             services.AddScoped<ISeedPack, CommunityPack>();
             services.AddScoped<ISeedPack, BlogPack>();
             services.AddScoped<ISeedPack, DatingPack>();
+            services.AddScoped<ISeedPack, PlansPack>();
             services.AddScoped<ISeedPack, ChatPack>();
             services.AddScoped<ISeedPack, EventsPack>();
             services.AddScoped<ISeedPack, GamificationPack>();
