@@ -16,6 +16,11 @@
 # Local logs
 *.log
 
+# Serilog's rolling file sink writes logs/log-YYYYMMDD.txt, which the *.log rule above
+# does not match - that is how 62 runtime log files came to be tracked. Ignore the
+# directory instead of trying to match the rolling filename.
+**/logs/
+
 # Note: appsettings.json (secrets) is ignored per-project via MvcApp.Web/.gitignore;
 # don't add a global appsettings.json rule here — the template sources ship one.
 
