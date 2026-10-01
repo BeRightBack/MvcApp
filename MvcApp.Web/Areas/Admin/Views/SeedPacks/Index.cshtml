@@ -1,0 +1,157 @@
+@{
+    ViewData["Title"] = "Seed Packs";
+    var active = (string)ViewBag.ActiveTemplate;
+    var selected = (string)ViewBag.SelectedTemplate;
+    var packs = (IReadOnlyList<MvcApp.Infrastructure.Seeding.SeedPlanItem>)ViewBag.Packs;
+    var templates = (List<MvcApp.Core.Abstractions.UiTemplateInfo>)ViewBag.Templates;
+    var details = ViewBag.PackDetails as List<dynamic>;
+    var profileList = ViewBag.Profiles as List<dynamic>;
+}
+
+<div class="page-header">
+    <h1>@Localizer["Seed Packs"]</h1>
+    <p class="text-muted">
+        @Localizer["Each template seeds only the content it needs. A pack applies the rows and records them, so it can be removed later without touching anything else."]
+    </p>
+</div>
+
+@if (TempData["Success"] is string ok)
+{
+    <div class="alert alert-success">@ok</div>
+}
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<div class="content-card mb-4">
+    <div class="card-body">
+        <h5 class="mb-1">@Localizer["Template profile"]</h5>
+        <p class="text-muted small">
+            @Localizer["The active template is"]
+            <strong>@active</strong>@Localizer[". Applying a profile adds what that template needs. It never deletes another template's content."]
+        </p>
+        <form asp-action="ApplyProfile" method="post" class="d-flex flex-wrap gap-2 align-items-center">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="template" value="@selected" />
+            <button type="submit" class="btn btn-primary btn-admin">
+                <i class="bx bx-play me-1"></i>@Localizer["Apply this template's profile"]
+            </button>
+            <span class="text-muted small">@Localizer["Viewing:"] <strong>@selected</strong></span>
+        </form>
+    </div>
+</div>
+
+@if (profileList is not null)
+{
+    <div class="content-card mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">@Localizer["What each template seeds"]</h5>
+            <div class="table-responsive">
+                <table class="table table-admin">
+                    <thead>
+                        <tr>
+                            <th>@Localizer["Template"]</th>
+                            <th>@Localizer["Purpose"]</th>
+                            <th>@Localizer["Packs"]</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var profile in profileList)
+                        {
+                            <tr>
+                                <td><strong>@profile.Template</strong></td>
+                                <td class="text-muted">@profile.Purpose</td>
+                                <td><code>@profile.Packs</code></td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-secondary btn-admin"
+                                       asp-action="Index" asp-route-template="@profile.Template">
+                                        @Localizer["View"]
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="content-card">
+    <div class="card-body p-0">
+        <table class="table table-admin">
+            <thead>
+                <tr>
+                    <th>@Localizer["Pack"]</th>
+                    <th>@Localizer["Description"]</th>
+                    <th>@Localizer["Used by"]</th>
+                    <th>@Localizer["Rows"]</th>
+                    <th>@Localizer["Status"]</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pack in packs)
+                {
+                    <tr>
+                        <td><strong>@pack.DisplayName</strong></td>
+                        <td class="text-muted small">
+                            @{
+                                var detail = details?.FirstOrDefault(d =>
+                                    string.Equals((string)d.Name, pack.Pack, StringComparison.OrdinalIgnoreCase));
+                            }
+                            @(detail?.Description ?? "")
+                        </td>
+                        <td>
+                            @if (pack.Needed)
+                            {
+                                <span class="badge bg-primary">@selected</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@Localizer["not this template"]</span>
+                            }
+                        </td>
+                        <td>@pack.Rows</td>
+                        <td>
+                            @if (pack.Applied)
+                            {
+                                <span class="badge bg-success">@Localizer["Applied"]</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-dark">@Localizer["Not applied"]</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            @if (pack.Applied)
+                            {
+                                <form asp-action="Remove" method="post" class="d-inline"
+                                      data-confirm="@Localizer["Delete the rows this pack created? Anything you added yourself is not touched."]"
+                                      onsubmit="return confirm(this.dataset.confirm);">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="pack" value="@pack.Pack" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-admin">
+                                        @Localizer["Remove"]
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="Apply" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="pack" value="@pack.Pack" />
+                                    <button type="submit" class="btn btn-sm btn-outline-success btn-admin">
+                                        @Localizer["Apply"]
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

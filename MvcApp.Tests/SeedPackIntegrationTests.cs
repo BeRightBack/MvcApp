@@ -17,6 +17,7 @@ using MvcApp.Module.Store;
 using MvcApp.Module.Utility;
 using MvcApp.Module.Video;
 using Xunit;
+using MvcApp.Core.Seeding;
 
 namespace MvcApp.Tests;
 

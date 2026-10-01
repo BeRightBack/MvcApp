@@ -1,7 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
+using MvcApp.Infrastructure.Seeding;
+using MvcApp.Infrastructure.Seeding.Packs;
 using MvcApp.Module.Ads.Entities;
+using MvcApp.Module.Ads.Seeding;
 using MvcApp.Module.Ads.Services;
 
 namespace MvcApp.Module.Ads;
@@ -30,6 +33,9 @@ public static class ServiceRegistration
         // HttpContextAccessor + cache for tracking/rendering
         services.AddHttpContextAccessor();
         services.AddMemoryCache();
+
+        // The ad zones live in this module, so the pack that owns them does too.
+        services.AddScoped<ISeedPack, AdsPack>();
 
         return services;
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.Features;
+﻿using System.Data;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -362,10 +363,13 @@ try
 
             await SeedLanguageAsync(app);
             await SeedSettingsAsync(app);
-            await SeedChatRoomsAsync(app);
+
+            // Chat rooms, event categories and badges are owned by the Chat / Events /
+            // Gamification packs, so they apply only when the active template needs them and
+            // they are recorded in SeedManifest. The old inline seeders created those rows
+            // outside the manifest, which made them impossible to remove.
             await ApplySeedPacksAsync(app);
-            await SeedEventCategoriesAsync(app);
-            await SeedGamificationAsync(app);
+
             RegisterBlazorPageWidgetAssemblies(app);
             app.SeedData(includeDemoData);
 
@@ -406,16 +410,48 @@ finally
 }
 
 
-// Migrate only when there are pending migrations. On MariaDB the Oracle provider
-// takes GET_LOCK(-1) unconditionally inside MigrateAsync (MariaDB returns NULL, which
-// crashes as InvalidCastException), so when the schema is already applied (remote
-// deploy path uses scripted migrations) we must skip the call entirely.
+// Migrate only when there are pending migrations AND the server can actually be migrated
+// in-process. On MariaDB the Oracle provider takes GET_LOCK(-1) unconditionally inside
+// MigrateAsync (MariaDB returns NULL, which crashes as InvalidCastException) BEFORE it
+// looks at the pending list, so a pending migration on MariaDB cannot be applied here at
+// all. MariaDB deployments apply migrations with `dotnet ef migrations script` piped to
+// mysql instead.
 static async Task EnsureMigratedAsync(DbContext db)
 {
-    if ((await db.Database.GetPendingMigrationsAsync()).Any())
+    var pending = (await db.Database.GetPendingMigrationsAsync()).ToList();
+
+    if (pending.Count == 0)
     {
-        await db.Database.MigrateAsync();
+        return;
     }
+
+    if (await IsMariaDbAsync(db))
+    {
+        throw new InvalidOperationException(
+            $"{pending.Count} pending migration(s) cannot be applied at startup because this "
+            + "server is MariaDB: MySql.EntityFrameworkCore's history repository runs "
+            + "SELECT GET_LOCK('__EFMigrationsLock', -1) and MariaDB returns NULL for a negative "
+            + "timeout, which the provider casts to Int64 and fails on. Generate and apply a "
+            + "script instead: dotnet ef migrations script "
+            + $"{pending[0]} {pending[^1]} --project MvcApp.Infrastructure "
+            + "--startup-project MvcApp.Web -c UserDbContext --output migrate.sql, then pipe it "
+            + "to the mysql client. Pending migrations: "
+            + string.Join(", ", pending));
+    }
+
+    await db.Database.MigrateAsync();
+}
+
+static async Task<bool> IsMariaDbAsync(DbContext db)
+{
+    var connection = db.Database.GetDbConnection();
+
+    if (connection.State != ConnectionState.Open)
+    {
+        await connection.OpenAsync();
+    }
+
+    return connection.ServerVersion.Contains("MariaDB", StringComparison.OrdinalIgnoreCase);
 }
 
 static async Task SeedLanguageAsync(WebApplication app)
@@ -446,40 +482,24 @@ static async Task SeedSettingsAsync(WebApplication app)
     SettingsSeeder.InvalidateCache(scope.ServiceProvider.GetRequiredService<SettingsCache>());
 }
 
-static async Task SeedChatRoomsAsync(WebApplication app)
-{
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-
-    if (await db.ChatRooms.AnyAsync()) return;
-
-    db.ChatRooms.AddRange(
-        new ChatRoom { Name = "General Discussion", Description = "Talk about anything and everything" },
-        new ChatRoom { Name = "Tech Support", Description = "Get help with technical issues" },
-        new ChatRoom { Name = "Announcements", Description = "Official announcements and updates" }
-    );
-    await db.SaveChangesAsync();
-}
-
 static async Task ApplySeedPacksAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
     await EnsureMigratedAsync(db);
 
-    var packs = scope.ServiceProvider.GetRequiredService<SeedPackService>();
-    var applied = scope.ServiceProvider.GetServices<ISeedPack>();
+    var templateService = scope.ServiceProvider.GetRequiredService<ITemplateService>();
+    var template = await templateService.GetActiveTemplateAsync();
 
-    foreach (var pack in applied)
+    // Only the packs this template's profile asks for. Before this, every registered pack ran
+    // on every boot, so a business portal shipped dating content it never wanted.
+    var planner = scope.ServiceProvider.GetRequiredService<SeedPackPlanner>();
+    var plan = await planner.ApplyForTemplateAsync(template, "startup", CancellationToken.None);
+
+    foreach (var item in plan.Where(i => i.Applied))
     {
-        try
-        {
-            await pack.SeedAsync(packs, db, "startup", CancellationToken.None);
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Seed pack {Pack} failed; continuing with the remaining packs", pack.Name);
-        }
+        Log.Information("Seed pack {Pack}: {Rows} row(s) on disk (required by {Template}: {Needed})",
+            item.Pack, item.Rows, template, item.Needed ? "yes" : "no");
     }
 }
 
@@ -503,34 +523,8 @@ static void RegisterBlazorPageWidgetAssemblies(WebApplication app)
     registry.RegisterAssembly(typeof(MvcApp.Razor.Components.Pages.Counter).Assembly);
 }
 
-static async Task SeedEventCategoriesAsync(WebApplication app)
-{
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await EnsureMigratedAsync(db);
-
-    if (await db.EventCategories.AnyAsync()) return;
-
-    db.EventCategories.AddRange(
-        new EventCategory { Name = "Party", Icon = "bx-party" },
-        new EventCategory { Name = "Networking", Icon = "bx-group" },
-        new EventCategory { Name = "Sports", Icon = "bx-dumbbell" },
-        new EventCategory { Name = "Music", Icon = "bx-music" },
-        new EventCategory { Name = "Food & Drink", Icon = "bx-food" },
-        new EventCategory { Name = "Nightlife", Icon = "bx-moon" },
-        new EventCategory { Name = "Outdoors", Icon = "bx-sun" },
-        new EventCategory { Name = "Arts & Culture", Icon = "bx-palette" },
-        new EventCategory { Name = "Tech", Icon = "bx-chip" },
-        new EventCategory { Name = "Other", Icon = "bx-calendar" }
-    );
-    await db.SaveChangesAsync();
-}
-
-static async Task SeedGamificationAsync(WebApplication app)
-{
-    using var scope = app.Services.CreateScope();
-    var gamification = scope.ServiceProvider.GetRequiredService<IGamificationService>();
-    await gamification.SeedBadgesAsync();
-}
+// Event categories are seeded by EventsPack and badges by GamificationPack; see
+// ApplySeedPacksAsync. Neither has an inline seeder here on purpose: rows created outside
+// SeedManifest cannot be removed by a pack.
 
 
