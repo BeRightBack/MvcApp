@@ -122,6 +122,16 @@ public static class NavDefaults
             new() { Label = "IPTV Store",   Controller = "IptvStore", Action = "Index", Module = "Iptv" },
             new() { Label = "FAQ",           Controller = "Home",     Action = "Faq" },
             new() { Label = "Contact",       Controller = "Home",     Action = "Contact" }
+        ],
+        ["Frenzyzone"] =
+        [
+            new() { Label = "Services",      Controller = "Pages",    Action = "Index", Module = "Pages" },
+            new() { Label = "Store",         Controller = "Store",    Action = "Index", Module = "Store" },
+            new() { Label = "Blog",          Controller = "Blog",     Action = "Index", Module = "Blog" },
+            new() { Label = "Forums",        Controller = "Forum",    Action = "Index", Module = "Forum" },
+            new() { Label = "FAQ",           Controller = "Home",     Action = "Faq" },
+            new() { Label = "Contact",       Controller = "Home",     Action = "Contact" },
+            new() { Label = "Utility",       Controller = "Utility",  Action = "Index", Module = "Utility", RequiresAuth = true }
         ]
     };
 

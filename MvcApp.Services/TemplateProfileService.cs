@@ -108,6 +108,14 @@ public class TemplateProfileService : ITemplateProfileService
             Modules = ["Iptv", "Forum", "Pages", "Messages"],
             OffModules = [],
         },
+        new()
+        {
+            Template = "Frenzyzone",
+            Purpose = "Business portal: services, publishing, a storefront and contact. No dating, no IPTV, no membership tiers.",
+            Packs = [SeedPackNames.Community, SeedPackNames.Blog, SeedPackNames.Ads],
+            Modules = ["Forum", "Messages", "Pages", "Blog", "Store", "Ads", "Utility"],
+            OffModules = ["Iptv"],
+        },
     ];
 
     public IReadOnlyList<TemplateSeedProfile> GetProfiles() => _profiles;
