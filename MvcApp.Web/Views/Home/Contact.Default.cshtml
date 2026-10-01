@@ -1,8 +1,14 @@
 ﻿@using System.Security.Claims
 @using MvcApp.Web.Models.HomeViewModels
 @model ContactViewModel
+@inject MvcApp.Core.Abstractions.IBrandingService Branding
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     Layout = "_Layout";
+    var siteName = await Branding.GetSiteNameAsync();
+    // The address the form below actually delivers to: SmtpEmailSender sends contact
+    // submissions to the configured from-address, so this is the site's real mailbox.
+    var contactEmail = Configuration["SmtpSettings:From"];
 }
 <h2><strong>@Localizer["Contact Us"]</strong></h2>
 <br />
@@ -10,16 +16,16 @@
 <div class="row">
     <div class="col-md-6">
         <address>
-            @Localizer["Broadway"]<br />
-            @Localizer["New York, NY 10024-2175"]<br />
-            <abbr title="@(Localizer["Phone"])">P:</abbr>
-            212.202.8953 @Localizer["TEXT Only"]
+            <strong>@siteName</strong>
         </address>
 
-        <address>
-            <strong>@Localizer["Support:"]</strong> <a href="mailto:Support@quebeciptv.org">Support@quebeciptv.org</a><br />
-            <strong>@Localizer["Marketing:"]</strong> <a href="mailto:Marketing@quebeciptv.org">Marketing@quebeciptv.org</a>
-        </address>
+        @if (!string.IsNullOrWhiteSpace(contactEmail))
+        {
+            <address>
+                <strong>@Localizer["Email:"]</strong>
+                <a href="mailto:@contactEmail">@contactEmail</a>
+            </address>
+        }
     </div>
     <div class="col-md-6">
         <form method="post">

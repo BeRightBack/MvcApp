@@ -10,4 +10,3 @@ Disallow: /subscription/
 Disallow: /user/
 Disallow: /cgi-bin/
 Allow: /
-Sitemap: https://quebeciptv.org/Sitemap

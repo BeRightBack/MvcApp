@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@inject MvcApp.Core.Abstractions.IBrandingService Branding
+@{
+    var siteName = await Branding.GetSiteNameAsync();
+    var logoUrl = await Branding.GetLogoUrlAsync();
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>    
     <meta charset="utf-8" />
@@ -19,17 +24,12 @@
     {
       "@@context": "https://schema.org",
       "@@type": "Organization",
-      "name": "Quebec Iptv",
-      "url": "https://www.quebeciptv.org",
-      "logo": "https://www.quebeciptv.org/Logos/logo-png.png",
-      "sameAs": [
-        "https://www.facebook.com/yourprofile",
-        "https://www.twitter.com/yourprofile",
-        "https://www.instagram.com/yourprofile"
-      ]
+      "name": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(siteName)),
+      "url": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Url.Content("~/").TrimEnd('/')))
+      @(logoUrl != null ? ",\n      \"logo\": " + System.Text.Json.JsonSerializer.Serialize(Url.Content(logoUrl)) : "")
     }
     </script>
-    <title>@ViewData["Title"] - @Localizer["Quebec Iptv"]</title>
+    <title>@ViewData["Title"] - @siteName</title>
     @*<script type="importmap"></script>*@
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link href="~/css/styles.min.css" rel="stylesheet" />
@@ -164,7 +164,7 @@
         @RenderBody()
         <footer class="footer mt-auto py-3 bg-light">
             <div class="container">
-                <span class="text-muted">&copy; @DateTime.Now.Year - Quebec Iptv - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a></span>
+                <span class="text-muted">&copy; @DateTime.Now.Year - @siteName - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a></span>
             </div>
         </footer>
     </div>
