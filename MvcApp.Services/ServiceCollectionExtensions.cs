@@ -20,6 +20,7 @@ namespace MvcApp.Services
 
             // UI template system
             services.AddScoped<ITemplateService, TemplateService>();
+            services.AddSingleton<ITemplateProfileService, TemplateProfileService>();
 
             // Site branding
             services.AddScoped<IBrandingService, BrandingService>();

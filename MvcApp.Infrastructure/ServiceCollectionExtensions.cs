@@ -24,9 +24,13 @@ namespace MvcApp.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<SeedPackService>();
+            services.AddScoped<SeedPackPlanner>();
             services.AddScoped<ISeedPack, CommunityPack>();
             services.AddScoped<ISeedPack, BlogPack>();
             services.AddScoped<ISeedPack, DatingPack>();
+            services.AddScoped<ISeedPack, ChatPack>();
+            services.AddScoped<ISeedPack, EventsPack>();
+            services.AddScoped<ISeedPack, GamificationPack>();
             services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAdminRepository, AdminRepository>();

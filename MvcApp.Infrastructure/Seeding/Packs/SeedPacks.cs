@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MvcApp.Core;
+using MvcApp.Core.Seeding;
 
 namespace MvcApp.Infrastructure.Seeding.Packs;
 
