@@ -17,7 +17,33 @@
     <div class="container">
         <span class="fz-eyebrow">@Localizer["Business Portal"]</span>
         <h1>@Localizer["The work behind the work, in one place."]</h1>
-        <p class="lead">@Localizer["Services, company pages, publishing and a storefront — one portal your team actually runs, and your customers can actually use."]</p>
+        @* The lead sentence must not advertise a module that is switched off, so the areas
+           are composed from the enabled set rather than written as one fixed claim. The
+           list separator and the conjunctions are localized too: a hardcoded " and " renders
+           English inside an otherwise French sentence. Format arguments are ignored by
+           DbStringLocalizer, so the value is substituted explicitly. *@
+        <p class="lead">
+            @{
+                var areas = new List<string>();
+                if (pagesOn) { areas.Add(Localizer["services"].Value); }
+                if (blogOn) { areas.Add(Localizer["publishing"].Value); }
+                if (storeOn) { areas.Add(Localizer["a storefront"].Value); }
+                // Whole-word keys, never ", " / " and ": the StringResources collation is
+                // PAD SPACE, so a key with a leading space can never be found.
+                var conj = " " + Localizer["and"].Value + " ";
+                var areaText = areas.Count switch
+                {
+                    0 => "",
+                    1 => areas[0],
+                    2 => areas[0] + conj + areas[1],
+                    _ => string.Join(", ", areas.Take(areas.Count - 1)) + conj + areas[^1],
+                };
+                var leadTemplate = Localizer["{0}— one portal your team actually runs, and your customers can actually use."].Value;
+            }
+            @(string.IsNullOrEmpty(areaText)
+                ? Localizer["One portal your team actually runs, and your customers can actually use."].Value
+                : leadTemplate.Replace("{0}", areaText + " "))
+        </p>
         <div class="fz-hero-actions">
             <a class="fz-btn-primary" asp-controller="Home" asp-action="Contact">@Localizer["Start a conversation"]</a>
             @if (pagesOn)
