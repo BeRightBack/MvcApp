@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http.Features;
+﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +10,8 @@ using MvcApp.Core;
 using MvcApp.Core.Abstractions;
 using MvcApp.Identity;
 using MvcApp.Infrastructure;
+using MvcApp.Infrastructure.Seeding.Packs;
+using MvcApp.Infrastructure.Seeding;
 using MvcApp.Web.Middlewares;
 using MvcApp.Web.Health;
 using MvcApp.Localization;
@@ -361,12 +363,9 @@ try
             await SeedLanguageAsync(app);
             await SeedSettingsAsync(app);
             await SeedChatRoomsAsync(app);
-            await SeedForumAsync(app);
-            await SeedBlogAsync(app);
+            await ApplySeedPacksAsync(app);
             await SeedEventCategoriesAsync(app);
-            await SeedInterestTagsAsync(app);
             await SeedGamificationAsync(app);
-            await SeedVipPlansAsync(app);
             RegisterBlazorPageWidgetAssemblies(app);
             app.SeedData(includeDemoData);
 
@@ -462,53 +461,26 @@ static async Task SeedChatRoomsAsync(WebApplication app)
     await db.SaveChangesAsync();
 }
 
-static async Task SeedForumAsync(WebApplication app)
+static async Task ApplySeedPacksAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
     await EnsureMigratedAsync(db);
 
-    if (await db.ForumCategories.AnyAsync()) return;
+    var packs = scope.ServiceProvider.GetRequiredService<SeedPackService>();
+    var applied = scope.ServiceProvider.GetServices<ISeedPack>();
 
-    var general = new ForumCategory { Name = "General", Description = "General discussions", SortOrder = 0 };
-    var support = new ForumCategory { Name = "Support", Description = "Get help and support", SortOrder = 1 };
-    var offTopic = new ForumCategory { Name = "Off-Topic", Description = "Anything not covered elsewhere", SortOrder = 2 };
-
-    db.ForumCategories.AddRange(general, support, offTopic);
-    await db.SaveChangesAsync();
-
-    db.Forums.AddRange(
-        new Forum { CategoryId = general.Id, Name = "Introductions", Description = "Introduce yourself to the community", SortOrder = 0 },
-        new Forum { CategoryId = general.Id, Name = "General Discussion", Description = "Talk about anything", SortOrder = 1 },
-        new Forum { CategoryId = support.Id, Name = "Technical Support", Description = "Get help with technical issues", SortOrder = 0 },
-        new Forum { CategoryId = support.Id, Name = "Feature Requests", Description = "Suggest new features", SortOrder = 1 },
-        new Forum { CategoryId = offTopic.Id, Name = "Random Chat", Description = "Casual conversation", SortOrder = 0 },
-        new Forum { CategoryId = offTopic.Id, Name = "Games & Fun", Description = "Gaming discussions and fun threads", SortOrder = 1 }
-    );
-    await db.SaveChangesAsync();
-}
-
-static async Task SeedBlogAsync(WebApplication app)
-{
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await EnsureMigratedAsync(db);
-
-    if (await db.BlogCategories.AnyAsync()) return;
-
-    var tech = new BlogCategory { Name = "Technology", Slug = "technology", Description = "Tech news and tutorials", SortOrder = 0 };
-    var news = new BlogCategory { Name = "News", Slug = "news", Description = "Company and product announcements", SortOrder = 1 };
-    var guides = new BlogCategory { Name = "Guides", Slug = "guides", Description = "How-to guides and best practices", SortOrder = 2 };
-
-    db.BlogCategories.AddRange(tech, news, guides);
-
-    var gettingStarted = new BlogTag { Name = "Getting Started", Slug = "getting-started" };
-    var tips = new BlogTag { Name = "Tips & Tricks", Slug = "tips-tricks" };
-    var updates = new BlogTag { Name = "Updates", Slug = "updates" };
-    var tutorial = new BlogTag { Name = "Tutorial", Slug = "tutorial" };
-
-    db.BlogTags.AddRange(gettingStarted, tips, updates, tutorial);
-    await db.SaveChangesAsync();
+    foreach (var pack in applied)
+    {
+        try
+        {
+            await pack.SeedAsync(packs, db, "startup", CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Seed pack {Pack} failed; continuing with the remaining packs", pack.Name);
+        }
+    }
 }
 
 static async Task SeedPageSnippetsAsync(WebApplication app)
@@ -554,60 +526,6 @@ static async Task SeedEventCategoriesAsync(WebApplication app)
     await db.SaveChangesAsync();
 }
 
-static async Task SeedInterestTagsAsync(WebApplication app)
-{
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await EnsureMigratedAsync(db);
-
-    if (await db.InterestTags.AnyAsync()) return;
-
-    db.InterestTags.AddRange(
-        new InterestTag { Name = "Music", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Movies", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Travel", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Foodie", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Fitness", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Reading", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Gaming", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Dancing", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Art", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Photography", Category = InterestCategory.Interest, IsCurated = true },
-        new InterestTag { Name = "Romance", Category = InterestCategory.Fantasy, IsCurated = true },
-        new InterestTag { Name = "Adventure", Category = InterestCategory.Fantasy, IsCurated = true },
-        new InterestTag { Name = "Roleplay", Category = InterestCategory.Fantasy, IsCurated = true },
-        new InterestTag { Name = "Threesome", Category = InterestCategory.Fantasy, IsCurated = true },
-        new InterestTag { Name = "BDSM", Category = InterestCategory.Fantasy, IsCurated = true },
-        new InterestTag { Name = "Polyamory", Category = InterestCategory.Fantasy, IsCurated = true },
-        new InterestTag { Name = "Erotic Massage", Category = InterestCategory.Fantasy, IsCurated = true },
-        new InterestTag { Name = "Open Relationship", Category = InterestCategory.Fantasy, IsCurated = true },
-        new InterestTag { Name = "Hiking", Category = InterestCategory.Hobby, IsCurated = true },
-        new InterestTag { Name = "Cooking", Category = InterestCategory.Hobby, IsCurated = true },
-        new InterestTag { Name = "Yoga", Category = InterestCategory.Hobby, IsCurated = true },
-        new InterestTag { Name = "Surfing", Category = InterestCategory.Hobby, IsCurated = true },
-        new InterestTag { Name = "Camping", Category = InterestCategory.Hobby, IsCurated = true },
-        new InterestTag { Name = "DIY", Category = InterestCategory.Hobby, IsCurated = true },
-        new InterestTag { Name = "Gardening", Category = InterestCategory.Hobby, IsCurated = true },
-        new InterestTag { Name = "Vegetarian", Category = InterestCategory.Lifestyle, IsCurated = true },
-        new InterestTag { Name = "Vegan", Category = InterestCategory.Lifestyle, IsCurated = true },
-        new InterestTag { Name = "420 Friendly", Category = InterestCategory.Lifestyle, IsCurated = true },
-        new InterestTag { Name = "Social Drinker", Category = InterestCategory.Lifestyle, IsCurated = true },
-        new InterestTag { Name = "Non-Smoker", Category = InterestCategory.Lifestyle, IsCurated = true },
-        new InterestTag { Name = "Dog Lover", Category = InterestCategory.Lifestyle, IsCurated = true },
-        new InterestTag { Name = "Cat Lover", Category = InterestCategory.Lifestyle, IsCurated = true },
-        new InterestTag { Name = "Night Owl", Category = InterestCategory.Lifestyle, IsCurated = true },
-        new InterestTag { Name = "Early Bird", Category = InterestCategory.Lifestyle, IsCurated = true },
-        new InterestTag { Name = "Submissive", Category = InterestCategory.Kink, IsCurated = true },
-        new InterestTag { Name = "Dominant", Category = InterestCategory.Kink, IsCurated = true },
-        new InterestTag { Name = "Switch", Category = InterestCategory.Kink, IsCurated = true },
-        new InterestTag { Name = "Voyeur", Category = InterestCategory.Kink, IsCurated = true },
-        new InterestTag { Name = "Exhibitionist", Category = InterestCategory.Kink, IsCurated = true },
-        new InterestTag { Name = "Pet Play", Category = InterestCategory.Kink, IsCurated = true },
-        new InterestTag { Name = "Bondage", Category = InterestCategory.Kink, IsCurated = true }
-    );
-    await db.SaveChangesAsync();
-}
-
 static async Task SeedGamificationAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
@@ -615,58 +533,4 @@ static async Task SeedGamificationAsync(WebApplication app)
     await gamification.SeedBadgesAsync();
 }
 
-static async Task SeedVipPlansAsync(WebApplication app)
-{
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    if (await db.SubscriptionPlans.AnyAsync()) return;
 
-    var plans = new[]
-    {
-        new SubscriptionPlan
-        {
-            Name = "Basic",
-            DescriptionShort = "Essential VIP",
-            Description = "The essential VIP upgrade - crown badge and photo reveals.",
-            Features = "VIP Crown Badge on your profile\nSee Who Liked You - photos revealed",
-            SubscriptionDetails =
-            [
-                new() { Price = 9.99m, Description = "1 Month Service", DurationInMonths = 1 },
-                new() { Price = 26.97m, Description = "3 Month Service, save 10%", DurationInMonths = 3 },
-                new() { Price = 47.95m, Description = "6 Month Service, save 20%", DurationInMonths = 6 },
-                new() { Price = 83.92m, Description = "12 Month Service, save 30%", DurationInMonths = 12 }
-            ]
-        },
-        new SubscriptionPlan
-        {
-            Name = "Premium",
-            DescriptionShort = "Most Popular",
-            Description = "Best value - extra Super Likes, VIP chat rooms, and photo reveals.",
-            Features = "Everything in Basic\n5 Super Likes per day\nAccess to VIP-only chat rooms",
-            SubscriptionDetails =
-            [
-                new() { Price = 14.99m, Description = "1 Month Service", DurationInMonths = 1 },
-                new() { Price = 40.47m, Description = "3 Month Service, save 10%", DurationInMonths = 3 },
-                new() { Price = 71.95m, Description = "6 Month Service, save 20%", DurationInMonths = 6 },
-                new() { Price = 125.92m, Description = "12 Month Service, save 30%", DurationInMonths = 12 }
-            ]
-        },
-        new SubscriptionPlan
-        {
-            Name = "Platinum",
-            DescriptionShort = "Ultimate VIP",
-            Description = "The complete VIP experience with additional boosts for maximum visibility.",
-            Features = "Everything in Premium\n2 Search Boosts per day",
-            SubscriptionDetails =
-            [
-                new() { Price = 19.99m, Description = "1 Month Service", DurationInMonths = 1 },
-                new() { Price = 53.97m, Description = "3 Month Service, save 10%", DurationInMonths = 3 },
-                new() { Price = 95.95m, Description = "6 Month Service, save 20%", DurationInMonths = 6 },
-                new() { Price = 167.92m, Description = "12 Month Service, save 30%", DurationInMonths = 12 }
-            ]
-        }
-    };
-
-    db.SubscriptionPlans.AddRange(plans);
-    await db.SaveChangesAsync();
-}

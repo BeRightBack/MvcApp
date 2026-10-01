@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MvcApp.Core.Abstractions;
+using MvcApp.Infrastructure.Seeding;
+using MvcApp.Infrastructure.Seeding.Packs;
+
 using MySql.EntityFrameworkCore.Extensions;
 
 namespace MvcApp.Infrastructure
@@ -20,6 +23,10 @@ namespace MvcApp.Infrastructure
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<SeedPackService>();
+            services.AddScoped<ISeedPack, CommunityPack>();
+            services.AddScoped<ISeedPack, BlogPack>();
+            services.AddScoped<ISeedPack, DatingPack>();
             services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAdminRepository, AdminRepository>();

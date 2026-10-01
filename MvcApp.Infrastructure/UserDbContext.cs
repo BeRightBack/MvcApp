@@ -63,6 +63,7 @@ namespace MvcApp.Infrastructure
         public virtual DbSet<PointTransaction> PointTransactions { get; set; }
         public virtual DbSet<SuperLike> SuperLikes { get; set; }
         public virtual DbSet<UserBoost> UserBoosts { get; set; }
+        public virtual DbSet<SeedManifest> SeedManifest { get; set; }
 
         //private static readonly int[] convertFromProviderExpression = [18, 100];
 
@@ -446,6 +447,8 @@ namespace MvcApp.Infrastructure
 
             builder.Entity<UserBoost>()
                 .HasIndex(e => new { e.UserId, e.EndDate });
+
+            builder.ApplyConfigurationsFromAssembly(typeof(UserDbContext).Assembly);
 
             // Apply module entity configurations via dynamic assembly scanning
             foreach (var assembly in ModuleConfigurationRegistry.Assemblies)

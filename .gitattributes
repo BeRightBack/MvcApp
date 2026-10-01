@@ -1,0 +1,52 @@
+# Normalise all text to LF in the repository.
+# The index and HEAD already store LF; the working tree had drifted to CRLF,
+# which made 804 of 872 "modified" files differ by line endings alone.
+# With this in place a checkout on any platform reproduces the LF content,
+# and `git add --renormalize .` collapses the phantom diff.
+* text=auto
+
+# Keep LF in the working tree too. The app targets Debian (Apache, MariaDB,
+# .NET 10 as a systemd service), so LF is the correct checkout everywhere.
+* text=auto eol=lf
+
+# --- Binary files: never inspect for EOL conversion, never renormalise. ---
+
+*.jpg  binary
+*.jpeg binary
+*.png  binary
+*.gif  binary
+*.ico  binary
+*.webp binary
+*.avif binary
+
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+
+*.pdf   binary
+*.apk   binary
+*.gz    binary
+*.zip   binary
+*.xlsx  binary
+*.docx  binary
+*.dll   binary
+*.so    binary
+*.dylib binary
+
+# Build artefacts and IDE state that happen to be tracked already.
+*.db    binary
+*.bin   binary
+*.suo   binary
+*.vsidx binary
+
+# Log files tracked in the project template. Serilog writes UTF-16/UTF-8
+# mixed content into these, which defeats text detection.
+*.log        binary
+MvcApp.Template/ProjectTemplates/MvcAppMonolith/MvcApp.Web/logs/*.txt binary
+
+# --- Explicit end-of-line for text formats where CRLF is meaningful. ---
+# .bat/.cmd genuinely require CRLF; everything else follows the LF rule above.
+*.bat text eol=crlf
+*.cmd text eol=crlf
