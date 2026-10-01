@@ -94,6 +94,14 @@ public class TemplateService : ITemplateService
             Description = "Faithful Quebec IPTV landing with hero, live TV and streaming plans",
             CssPath = "~/css/templates/iptv.css",
             Thumbnail = "/images/templates/iptv-thumb.png"
+        },
+        new()
+        {
+            Name = "Frenzyzone",
+            DisplayName = "Frenzyzone Business Portal",
+            Description = "Consultancy portal: services, publishing, storefront and contact, on the standard top navigation",
+            CssPath = "~/css/templates/frenzyzone.css",
+            Thumbnail = "/images/templates/frenzyzone-thumb.png"
         }
     ];
 

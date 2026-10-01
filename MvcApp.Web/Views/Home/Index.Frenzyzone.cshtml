@@ -1,0 +1,195 @@
+@inject MvcApp.Core.Abstractions.IModuleManager ModuleManager
+@{
+    ViewData["Title"] = "Frenzyzone";
+    ViewData["Description"] = "Frenzyzone is a business portal: services, company pages, publishing and commerce in one place.";
+    ViewData["Keywords"] = "business portal, services, company, blog, store";
+
+    // Every section below links into a module. A portal with Store switched off must not
+    // advertise a storefront that 404s, so each link is gated the way NavService gates the
+    // navbar. Contact and Pages are the spine of the page: without them there is no portal.
+    var pagesOn = await ModuleManager.IsModuleEnabledAsync("Pages");
+    var blogOn = await ModuleManager.IsModuleEnabledAsync("Blog");
+    var storeOn = await ModuleManager.IsModuleEnabledAsync("Store");
+    var forumOn = await ModuleManager.IsModuleEnabledAsync("Forum");
+}
+
+<section class="fz-hero">
+    <div class="container">
+        <span class="fz-eyebrow">@Localizer["Business Portal"]</span>
+        <h1>@Localizer["The work behind the work, in one place."]</h1>
+        <p class="lead">@Localizer["Services, company pages, publishing and a storefront — one portal your team actually runs, and your customers can actually use."]</p>
+        <div class="fz-hero-actions">
+            <a class="fz-btn-primary" asp-controller="Home" asp-action="Contact">@Localizer["Start a conversation"]</a>
+            @if (pagesOn)
+            {
+                <a class="fz-btn-ghost" asp-controller="Pages" asp-action="Index">@Localizer["Explore the company"]</a>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="fz-section">
+    <div class="container">
+        <div class="fz-section-head">
+            <h2>@Localizer["What this portal covers"]</h2>
+            <p>@Localizer["Each area is a live part of the site, maintained on its own terms. Nothing here is a placeholder."]</p>
+        </div>
+        <div class="row g-4">
+            @if (pagesOn)
+            {
+                <div class="col-md-6 col-xl-3">
+                    <div class="fz-card">
+                        <span class="fz-icon"><i class="bx bx-briefcase"></i></span>
+                        <h3>@Localizer["Services"]</h3>
+                        <p>@Localizer["Publish what you offer as structured pages, so the answer to what you do is always one click away."]</p>
+                    </div>
+                </div>
+            }
+            @if (blogOn)
+            {
+                <div class="col-md-6 col-xl-3">
+                    <div class="fz-card">
+                        <span class="fz-icon"><i class="bx bx-news"></i></span>
+                        <h3>@Localizer["Publishing"]</h3>
+                        <p>@Localizer["A blog with categories and tags, for announcements, guides and the thinking behind the work."]</p>
+                    </div>
+                </div>
+            }
+            @if (storeOn)
+            {
+                <div class="col-md-6 col-xl-3">
+                    <div class="fz-card">
+                        <span class="fz-icon"><i class="bx bx-store"></i></span>
+                        <h3>@Localizer["Storefront"]</h3>
+                        <p>@Localizer["Products, categories, a cart and checkout. You supply the catalogue; the portal handles the rest."]</p>
+                    </div>
+                </div>
+            }
+            <div class="col-md-6 col-xl-3">
+                <div class="fz-card">
+                    <span class="fz-icon"><i class="bx bx-message-dots"></i></span>
+                    <h3>@Localizer["Direct contact"]</h3>
+                    <p>@Localizer["A contact form that reaches your inbox, and a way to reach a person rather than a queue."]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="fz-section fz-section-alt">
+    <div class="container">
+        <div class="row g-5 align-items-start">
+            <div class="col-lg-5">
+                <div class="fz-section-head mb-lg-0">
+                    <h2>@Localizer["How it runs"]</h2>
+                    <p>@Localizer["Four steps, no mystery. The same order every time, whether the job is small or large."]</p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="fz-step">
+                    <span class="fz-step-num">1</span>
+                    <div>
+                        <h3>@Localizer["You tell us the outcome"]</h3>
+                        <p>@Localizer["Not a list of deliverables — the result you need and the date it has to exist by."]</p>
+                    </div>
+                </div>
+                <div class="fz-step">
+                    <span class="fz-step-num">2</span>
+                    <div>
+                        <h3>@Localizer["We scope it in writing"]</h3>
+                        <p>@Localizer["What is included, what is explicitly not, and what it costs. You see all of it before anything starts."]</p>
+                    </div>
+                </div>
+                <div class="fz-step">
+                    <span class="fz-step-num">3</span>
+                    <div>
+                        <h3>@Localizer["The work happens in the open"]</h3>
+                        <p>@Localizer["Progress lives on the portal, not in an inbox that nobody has read since March."]</p>
+                    </div>
+                </div>
+                <div class="fz-step">
+                    <span class="fz-step-num">4</span>
+                    <div>
+                        <h3>@Localizer["You own the result"]</h3>
+                        <p>@Localizer["Everything built for you stays yours, documented, and portable if you ever want to take it elsewhere."]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="fz-section">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <div class="fz-section-head">
+                    <h2>@Localizer["Built to be run, not just visited"]</h2>
+                    <p>@Localizer["A portal earns its keep on the days nobody is looking at it. That means the content, the catalogue and the navigation are all manageable without a developer in the room."]</p>
+                </div>
+                <ul class="fz-link-list">
+                    @if (blogOn)
+                    {
+                        <li>
+                            <a asp-controller="Blog" asp-action="Index">
+                                <span>@Localizer["Read the blog"]</span>
+                                <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (pagesOn)
+                    {
+                        <li>
+                            <a asp-controller="Pages" asp-action="Index">
+                                <span>@Localizer["Browse the company pages"]</span>
+                                <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (storeOn)
+                    {
+                        <li>
+                            <a asp-controller="Store" asp-action="Index">
+                                <span>@Localizer["Visit the storefront"]</span>
+                                <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (forumOn)
+                    {
+                        <li>
+                            <a asp-controller="Forum" asp-action="Index">
+                                <span>@Localizer["Ask a question in the forum"]</span>
+                                <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </li>
+                    }
+                    <li>
+                        <a asp-controller="Home" asp-action="Contact">
+                            <span>@Localizer["Send a message"]</span>
+                            <i class="bx bx-right-arrow-alt"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <div class="fz-card">
+                    <span class="fz-icon"><i class="bx bx-shield-quarter"></i></span>
+                    <h3>@Localizer["Nobody has to guess"]</h3>
+                    <p>@Localizer["Accounts and roles are built in, so the people who need to publish and the people who need to read are not sharing a login."]</p>
+                    <p class="mt-3">@Localizer["And if you would rather not manage anything at all, that is a perfectly reasonable way to use this too."]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="fz-section pt-0">
+    <div class="container">
+        <div class="fz-cta">
+            <h2>@Localizer["Have something in mind?"]</h2>
+            <p>@Localizer["Describe it in a sentence or two. If it is something we can do well, you will get a straight answer about scope and cost."]</p>
+            <a class="fz-btn-primary" asp-controller="Home" asp-action="Contact">@Localizer["Get in touch"]</a>
+        </div>
+    </div>
+</section>

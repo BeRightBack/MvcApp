@@ -1,0 +1,365 @@
+/* Frenzyzone — business portal.
+
+   A conventional top-navigation shell with a consultancy identity: deep emerald and
+   slate, an amber accent reserved for calls to action, and tighter geometry than the
+   Business template's 0.375rem radius. Business overrides the whole app shell to a
+   fixed sidebar (32 .sidebar rules in business.css); this one deliberately does not,
+   so the two templates do not collide and each keeps its own layout behaviour.
+
+   layout-override.css loads AFTER this file, so it wins on the footer, the navbar and
+   every dropdown. Nothing here fights it: the rules below are scoped to the landing
+   page and to the shared surface tokens, which override does not set. */
+
+:root {
+    --template-primary: #0b6e4f;
+    --template-primary-dark: #075138;
+    --template-primary-light: #e6f4ef;
+    --template-secondary: #475569;
+    --template-accent: #b45309;
+    --template-bg: #f5f8f7;
+    --template-bg-alt: #ffffff;
+    --template-text: #1f2933;
+    --template-text-light: #64748b;
+    --template-heading: #0a2019;
+    --template-border: #d9e3df;
+    --template-font: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --template-font-heading: var(--template-font);
+    --template-radius: 0.25rem;
+    --template-radius-sm: 0.125rem;
+    --template-shadow: 0 1px 2px rgba(10, 32, 25, .06);
+    --template-shadow-hover: 0 10px 24px rgba(10, 32, 25, .10);
+    --template-transition: .18s ease;
+    --template-gradient: linear-gradient(135deg, #0b6e4f 0%, #06382a 100%);
+}
+
+body {
+    font-family: var(--template-font);
+    color: var(--template-text);
+    background: var(--template-bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--template-font-heading);
+    color: var(--template-heading);
+    font-weight: 650;
+    letter-spacing: -.015em;
+}
+
+a {
+    color: var(--template-primary);
+    text-decoration: none;
+    transition: color var(--template-transition);
+}
+
+a:hover {
+    color: var(--template-primary-dark);
+    text-decoration: underline;
+}
+
+.navbar .nav-link {
+    font-weight: 500;
+    letter-spacing: .01em;
+}
+
+/* ---------------------------------------------------------------- landing page */
+
+.fz-hero {
+    background: var(--template-gradient);
+    color: #fff;
+    padding: 5.5rem 0 4.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.fz-hero::after {
+    content: '';
+    position: absolute;
+    inset: auto -10% -60% 55%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(180, 83, 9, .28) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.fz-hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.fz-eyebrow {
+    display: inline-block;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #fcd9a8;
+    margin-bottom: 1rem;
+}
+
+.fz-hero h1 {
+    color: #fff;
+    font-size: clamp(2.1rem, 4.4vw, 3.4rem);
+    line-height: 1.1;
+    max-width: 18ch;
+    margin-bottom: 1.25rem;
+}
+
+.fz-hero .lead {
+    color: rgba(255, 255, 255, .86);
+    font-size: 1.1rem;
+    max-width: 54ch;
+    margin-bottom: 2rem;
+}
+
+.fz-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+
+.fz-btn-primary {
+    background: var(--template-accent);
+    border: 1px solid var(--template-accent);
+    color: #fff;
+    font-weight: 600;
+    padding: .7rem 1.4rem;
+    border-radius: var(--template-radius-sm);
+    transition: background var(--template-transition), transform var(--template-transition);
+}
+
+.fz-btn-primary:hover {
+    background: #92400e;
+    border-color: #92400e;
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.fz-btn-ghost {
+    border: 1px solid rgba(255, 255, 255, .45);
+    color: #fff;
+    font-weight: 600;
+    padding: .7rem 1.4rem;
+    border-radius: var(--template-radius-sm);
+    transition: background var(--template-transition), border-color var(--template-transition);
+}
+
+.fz-btn-ghost:hover {
+    background: rgba(255, 255, 255, .12);
+    border-color: rgba(255, 255, 255, .7);
+    color: #fff;
+    text-decoration: none;
+}
+
+.fz-section {
+    padding: 4.5rem 0;
+}
+
+.fz-section-alt {
+    background: var(--template-bg-alt);
+    border-top: 1px solid var(--template-border);
+    border-bottom: 1px solid var(--template-border);
+}
+
+.fz-section-head {
+    max-width: 62ch;
+    margin-bottom: 2.75rem;
+}
+
+.fz-section-head h2 {
+    font-size: clamp(1.6rem, 2.6vw, 2.15rem);
+    margin-bottom: .75rem;
+}
+
+.fz-section-head p {
+    color: var(--template-text-light);
+    margin-bottom: 0;
+}
+
+.fz-card {
+    background: var(--template-bg-alt);
+    border: 1px solid var(--template-border);
+    border-radius: var(--template-radius);
+    padding: 1.75rem;
+    height: 100%;
+    transition: box-shadow var(--template-transition), transform var(--template-transition),
+                border-color var(--template-transition);
+}
+
+.fz-card:hover {
+    box-shadow: var(--template-shadow-hover);
+    border-color: #bcd4cb;
+    transform: translateY(-3px);
+}
+
+.fz-card .fz-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: var(--template-radius-sm);
+    background: var(--template-primary-light);
+    color: var(--template-primary);
+    font-size: 1.4rem;
+    margin-bottom: 1.1rem;
+}
+
+.fz-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: .6rem;
+}
+
+.fz-card p {
+    color: var(--template-text-light);
+    font-size: .93rem;
+    margin-bottom: 0;
+}
+
+.fz-step {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--template-border);
+}
+
+.fz-step:last-child {
+    border-bottom: 0;
+}
+
+.fz-step-num {
+    flex: 0 0 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--template-primary);
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fz-step h3 {
+    font-size: 1.05rem;
+    margin-bottom: .35rem;
+}
+
+.fz-step p {
+    color: var(--template-text-light);
+    font-size: .93rem;
+    margin-bottom: 0;
+}
+
+.fz-cta {
+    background: var(--template-gradient);
+    color: #fff;
+    border-radius: var(--template-radius);
+    padding: 3.25rem 2.5rem;
+    text-align: center;
+}
+
+.fz-cta h2 {
+    color: #fff;
+    margin-bottom: .75rem;
+}
+
+.fz-cta p {
+    color: rgba(255, 255, 255, .85);
+    max-width: 56ch;
+    margin: 0 auto 1.75rem;
+}
+
+.fz-link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.fz-link-list li {
+    border-bottom: 1px solid var(--template-border);
+}
+
+.fz-link-list li:last-child {
+    border-bottom: 0;
+}
+
+.fz-link-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem .25rem;
+    font-weight: 550;
+    color: var(--template-text);
+}
+
+.fz-link-list a:hover {
+    color: var(--template-primary);
+    text-decoration: none;
+}
+
+.fz-link-list a i {
+    color: var(--template-text-light);
+    transition: transform var(--transition, .18s ease);
+}
+
+.fz-link-list a:hover i {
+    transform: translateX(4px);
+    color: var(--template-primary);
+}
+
+/* ------------------------------------------------------------ shared surfaces */
+
+.card {
+    border: 1px solid var(--template-border);
+    border-radius: var(--template-radius);
+    box-shadow: var(--template-shadow);
+}
+
+.btn {
+    border-radius: var(--template-radius-sm);
+    font-weight: 550;
+}
+
+.btn-primary {
+    background: var(--template-primary);
+    border-color: var(--template-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: var(--template-primary-dark);
+    border-color: var(--template-primary-dark);
+}
+
+.btn-outline-primary {
+    color: var(--template-primary);
+    border-color: var(--template-primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--template-primary);
+    border-color: var(--template-primary);
+}
+
+.badge.bg-primary {
+    background: var(--template-primary) !important;
+}
+
+.form-control:focus {
+    border-color: var(--template-primary);
+    box-shadow: 0 0 0 .2rem rgba(11, 110, 79, .15);
+}
+
+@media (max-width: 767.98px) {
+    .fz-hero {
+        padding: 3.5rem 0 3rem;
+    }
+
+    .fz-section {
+        padding: 3rem 0;
+    }
+
+    .fz-cta {
+        padding: 2.25rem 1.5rem;
+    }
+}
