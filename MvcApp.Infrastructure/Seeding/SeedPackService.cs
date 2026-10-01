@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 using MvcApp.Core;
 
 namespace MvcApp.Infrastructure.Seeding;
@@ -146,6 +147,30 @@ public sealed class SeedPackService(UserDbContext db, ILogger<SeedPackService> l
 
     public async Task<bool> IsAppliedAsync(string packName, CancellationToken ct = default) =>
         await db.SeedManifest.AnyAsync(m => m.PackName == packName, ct);
+
+    /// <summary>
+    /// Whether SeedManifest exists yet. It is created by the AddSeedManifest migration, so on
+    /// any database that has not been migrated past that point every method on this class
+    /// throws ER_NO_SUCH_TABLE (1146) — including the admin page that is supposed to explain
+    /// the situation. Callers check this first and say so in words.
+    ///
+    /// This is a real state, not a hypothetical one: MariaDB deployments cannot migrate
+    /// in-process, because the Oracle provider takes GET_LOCK with a negative timeout that
+    /// MariaDB answers with NULL. They apply migrations from a generated script, so until
+    /// somebody runs it the site is fully migrated except for this table.
+    /// </summary>
+    public async Task<bool> IsManifestAvailableAsync(CancellationToken ct = default)
+    {
+        try
+        {
+            return await db.SeedManifest.AsNoTracking().AnyAsync(ct);
+        }
+        catch (MySqlException ex) when (ex.Number == 1146)
+        {
+            logger.LogWarning("SeedManifest is not present; seed packs are unavailable until the pending migrations are applied.");
+            return false;
+        }
+    }
 
     public async Task<IReadOnlyList<string>> GetAppliedPacksAsync(CancellationToken ct = default) =>
         await db.SeedManifest

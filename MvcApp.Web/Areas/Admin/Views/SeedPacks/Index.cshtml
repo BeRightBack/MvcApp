@@ -6,6 +6,7 @@
     var templates = (List<MvcApp.Core.Abstractions.UiTemplateInfo>)ViewBag.Templates;
     var details = ViewBag.PackDetails as List<dynamic>;
     var profileList = ViewBag.Profiles as List<dynamic>;
+    var manifestAvailable = ViewBag.ManifestAvailable is bool hasManifest && hasManifest;
 }
 
 <div class="page-header">
@@ -24,6 +25,21 @@
     <div class="alert alert-danger">@err</div>
 }
 
+@if (!manifestAvailable)
+{
+    <div class="alert alert-warning">
+        <h5 class="mb-1">@Localizer["Database migrations are pending"]</h5>
+        <p class="mb-2">
+            @Localizer["The SeedManifest table does not exist yet, so no pack can be applied or removed. The rest of the site is unaffected."]
+        </p>
+        <p class="mb-0 small">
+            @Localizer["This is expected on a MariaDB deployment: the application cannot migrate the database itself, so migrations are applied from a generated script."]
+            <code class="d-block mt-1">dotnet ef migrations script --project MvcApp.Infrastructure --startup-project MvcApp.Web -c UserDbContext --idempotent --output migrations.sql</code>
+            @Localizer["Apply it with mysql, then reload this page."]
+        </p>
+    </div>
+}
+
 <div class="content-card mb-4">
     <div class="card-body">
         <h5 class="mb-1">@Localizer["Template profile"]</h5>
@@ -34,9 +50,18 @@
         <form asp-action="ApplyProfile" method="post" class="d-flex flex-wrap gap-2 align-items-center">
             @Html.AntiForgeryToken()
             <input type="hidden" name="template" value="@selected" />
-            <button type="submit" class="btn btn-primary btn-admin">
-                <i class="bx bx-play me-1"></i>@Localizer["Apply this template's profile"]
-            </button>
+            @if (manifestAvailable)
+            {
+                <button type="submit" class="btn btn-primary btn-admin">
+                    <i class="bx bx-play me-1"></i>@Localizer["Apply this template's profile"]
+                </button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-primary btn-admin" disabled>
+                    <i class="bx bx-play me-1"></i>@Localizer["Apply this template's profile"]
+                </button>
+            }
             <span class="text-muted small">@Localizer["Viewing:"] <strong>@selected</strong></span>
         </form>
     </div>
@@ -148,6 +173,14 @@
                                     </button>
                                 </form>
                             }
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            @Localizer["Pack status is unavailable until the pending migrations are applied."]
                         </td>
                     </tr>
                 }

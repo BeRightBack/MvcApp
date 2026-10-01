@@ -26,7 +26,10 @@ public class SeedPacksController(
 
         ViewBag.ActiveTemplate = active;
         ViewBag.SelectedTemplate = selected;
-        ViewBag.Packs = await planner.PlanAsync(selected, ct);
+        ViewBag.ManifestAvailable = await packs.IsManifestAvailableAsync(ct);
+        ViewBag.Packs = ViewBag.ManifestAvailable
+            ? await planner.PlanAsync(selected, ct)
+            : [];
         ViewBag.Templates = await templateService.GetAvailableTemplatesAsync();
         ViewBag.PackDetails = allPacks
             .Select(p => new { p.Name, p.DisplayName, p.Description })
@@ -45,6 +48,9 @@ public class SeedPacksController(
         var found = Find(pack);
         if (found is null)
             return Unknown(pack);
+
+        if (!await packs.IsManifestAvailableAsync(ct))
+            return ManifestMissing();
 
         var before = await RowCountAsync(found.Name, ct);
         await found.SeedAsync(packs, db, "admin", ct);
@@ -67,6 +73,9 @@ public class SeedPacksController(
         if (found is null)
             return Unknown(pack);
 
+        if (!await packs.IsManifestAvailableAsync(ct))
+            return ManifestMissing();
+
         var removal = await packs.RemoveAsync(found.Name, ct);
 
         await auditService.LogAsync("Remove", "SeedPack", found.Name,
@@ -81,6 +90,9 @@ public class SeedPacksController(
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ApplyProfile(string? template, CancellationToken ct)
     {
+        if (!await packs.IsManifestAvailableAsync(ct))
+            return ManifestMissing();
+
         var target = string.IsNullOrWhiteSpace(template)
             ? await templateService.GetActiveTemplateAsync()
             : template;
@@ -94,6 +106,13 @@ public class SeedPacksController(
         TempData["Success"] = $"Applied the '{target}' profile: "
             + $"{plan.Count(i => i.Applied)} pack(s) on disk"
             + (unused > 0 ? $", {unused} of them not used by this template (left alone)." : ".");
+        return RedirectToAction(nameof(Index));
+    }
+
+    private IActionResult ManifestMissing()
+    {
+        TempData["Error"] = "The seed manifest table does not exist yet, so seed packs cannot be "
+            + "applied or removed. Apply the pending database migrations, then reload this page.";
         return RedirectToAction(nameof(Index));
     }
 
