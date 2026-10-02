@@ -179,15 +179,30 @@ public sealed class SeedPackService(UserDbContext db, ILogger<SeedPackService> l
             .OrderBy(n => n)
             .ToListAsync(ct);
 
+    /// <remarks>
+    /// The grouping is done in SQL and the Ordinal sort is applied in memory. Ordering inside
+    /// the query with a <see cref="StringComparer"/> cannot be translated — the comparer is a
+    /// .NET object with no SQL equivalent, so EF throws InvalidOperationException naming the
+    /// whole expression rather than just the offending clause, which reads as if the GroupBy
+    /// were at fault. It was not: the same group/count without a comparer translates fine
+    /// (see SeedPackPlanner.RowsByPackAsync). The result set is one row per entity type for a
+    /// single pack, so a client-side sort is not a material cost.
+    /// </remarks>
     public async Task<IReadOnlyList<SeedPackEntityCount>> DescribeAsync(
         string packName,
-        CancellationToken ct = default) =>
-        await db.SeedManifest
+        CancellationToken ct = default)
+    {
+        var groups = await db.SeedManifest
+            .AsNoTracking()
             .Where(m => m.PackName == packName)
             .GroupBy(m => m.EntityType)
             .Select(g => new SeedPackEntityCount(g.Key, g.Count()))
-            .OrderBy(x => x.EntityType, StringComparer.Ordinal)
             .ToListAsync(ct);
+
+        return groups
+            .OrderBy(g => g.EntityType, StringComparer.Ordinal)
+            .ToList();
+    }
 
     private Type ResolveClrType(string entityTypeName)
     {
