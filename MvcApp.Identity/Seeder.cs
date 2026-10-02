@@ -135,7 +135,22 @@ namespace MvcApp.Identity
                 string adminRole = ConfigOrDefault(config, "Administrator:Role", "Admin");
                 string adminUsername = ConfigOrDefault(config, "Administrator:Username", "admin");
                 string adminEmail = ConfigOrDefault(config, "Administrator:User", "admin@frenzyzone.com");
-                string adminPassword = ConfigOrDefault(config, "Administrator:Password", "Electro@2013");
+
+                // No default. This used to fall back to a real, working admin password, which put
+                // a live credential into tracked source — and into every generated app's source
+                // tree. A bootstrap that can start with no configuration must not also be able to
+                // start with a known password, so the operator has to supply one explicitly.
+                // Administrator:Password should come from appsettings.json (gitignored) or the
+                // Administrator__Password environment variable.
+                string? adminPassword = ConfigOrDefault(config, "Administrator:Password", "");
+                if (string.IsNullOrWhiteSpace(adminPassword))
+                {
+                    logger.LogError(
+                        "Administrator:Password is not configured, so the admin user was not created. "
+                        + "Set it in appsettings.json (gitignored) or via the Administrator__Password "
+                        + "environment variable. No default password is compiled in on purpose.");
+                    return;
+                }
 
                 logger.LogInformation("Checking for admin user: {AdminEmail} (username {AdminUsername})", adminEmail, adminUsername);
 

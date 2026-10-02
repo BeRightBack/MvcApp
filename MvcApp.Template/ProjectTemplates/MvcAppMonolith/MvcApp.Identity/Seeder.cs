@@ -115,8 +115,21 @@ namespace MvcApp.Identity
             {
                 string adminRole = config["Administrator:Role"] ?? "Admin";
                 string adminUsername = config["Administrator:Username"] ?? "admin";
-                string adminEmail = config["Administrator:User"] ?? "admin@frenzyzone.com";
-                string adminPassword = config["Administrator:Password"] ?? "Electro@2013";
+                string adminEmail = config["Administrator:User"] ?? "admin@yourdomain.com";
+
+                // No compiled-in default. The source tree's Seeder.cs carries the same rule: a
+                // working password as a fallback put a live credential into tracked source and
+                // into every generated app. Administrator:Password must be supplied explicitly
+                // via appsettings.json or the Administrator__Password environment variable.
+                string? adminPassword = config["Administrator:Password"] ?? "";
+                if (string.IsNullOrWhiteSpace(adminPassword))
+                {
+                    logger.LogError(
+                        "Administrator:Password is not configured, so the admin user was not created. "
+                        + "Set it in appsettings.json (gitignored) or via the Administrator__Password "
+                        + "environment variable. No default password is compiled in on purpose.");
+                    return;
+                }
 
                 logger.LogInformation("Checking for admin user: {AdminEmail}", adminEmail);
 

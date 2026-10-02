@@ -116,7 +116,7 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
 ## Remote MariaDB (mysql.xtrasvr.com / svr1.xtrasvr.com) — FIXED + VERIFIED 2026-09-26
 - `mysql.xtrasvr.com` and `svr1.xtrasvr.com` are the same box (149.56.102.60, Debian 13, ISPConfig,
   OVH). MariaDB runs there and the source app's gitignored `appsettings.json` points its
-  ConnectionStrings at it (uid `swan3344`, DBs `Identity_db`/`Localisation_db`).
+  ConnectionStrings at it (uid `<db-user>`, DBs `Identity_db`/`Localisation_db`).
 - **2026-09-26 fix:** access was killed by a raw runtime iptables rule `DROP tcp dpt:3306 !lo`
   sitting at INPUT position 1, ABOVE the ufw chains — ufw already had `3306/tcp ALLOW`
   (persisted in `/etc/ufw/user.rules`), but the raw rule overrode it (host firewall, NOT a
@@ -318,7 +318,7 @@ CSS-only changes under `wwwroot` need no rebuild/restart.
     (", puis de redémarrer l'application."). Merging them into one key would mean moving or
     dropping the inline styling — a copy decision, not a bug.
 - SSH: `ssh root@svr1.xtrasvr.com` (root password is user-held, not on this machine). MySQL root shell
-  on the server needs its own password; `swan3344` (the app user) has `GRANT ALL ON *.* WITH GRANT
+  on the server needs its own password; `<db-user>` (the app user) has `GRANT ALL ON *.* WITH GRANT
   OPTION` including `mysql.*` — usable for server-side MySQL inspections instead of root.
 - The app's Serilog `Logs` sink reads `ConnectionStrings:SerilogLogs`, which points at the
   REMOTE `mysql.xtrasvr.com` / database `serilogsDb` (see the corrected Databases entry —
@@ -962,7 +962,7 @@ The documented pitfalls catalog is exhaustive; if it’s not there, it hasn’t 
 ## Session log 2026-09-29 – appsettings.json restoration with sanitized values
 
 **Incident:** Investigation revealed that both `./MvcApp.Web/appsettings.json` and `./MvcApp.Template/.../appsettings.json` contained **real production credentials**:
-- MySQL: `swan3344` / `stevenP@2025www` @ `mysql.xtrasvr.com`
+- MySQL: `<db-user>` / `<db-password>` @ `mysql.xtrasvr.com` (values redacted)
 - All connection strings, SMTP, PayPal, DeepL API keys exposed
 
 **Root cause:** Files existed on disk with unsanitized credentials. The `New-Template.ps1` script's `ConvertTo-SanitizedAppSettings` function should run during VSIX build to replace these, but the files were never passed through that process.
