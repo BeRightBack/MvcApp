@@ -1,35 +1,63 @@
 /* Frenzyzone — business portal.
 
-   A conventional top-navigation shell with a consultancy identity: deep emerald and
-   slate, an amber accent reserved for calls to action, and tighter geometry than the
-   Business template's 0.375rem radius. Business overrides the whole app shell to a
-   fixed sidebar (32 .sidebar rules in business.css); this one deliberately does not,
-   so the two templates do not collide and each keeps its own layout behaviour.
+   A conventional top-navigation shell with a consultancy identity. Deliberately does NOT
+   override the app shell: business.css carries 32 .sidebar rules that swap the whole layout
+   for a fixed sidebar, and this template stays on the standard top navigation, so the two
+   do not collide.
 
-   layout-override.css loads AFTER this file, so it wins on the footer, the navbar and
-   every dropdown. Nothing here fights it: the rules below are scoped to the landing
-   page and to the shared surface tokens, which override does not set. */
+   The first version of this file styled only the landing page. Measured on a running app,
+   that left the navbar white (#fff/#333 straight out of site.css), the footer and every
+   alert, badge, table, form and modal on Bootstrap defaults, so the "identity" existed only
+   between the top of the hero and the bottom of it — which read as plain. It now owns the
+   shared surfaces too.
+
+   layout-override.css loads AFTER this file. It deliberately sets no colour on .nav-link
+   (its own comment explains why: templates use `!important` there), so the rules below are
+   what actually colour the navbar. The dropdown block there is left alone.
+
+   Every foreground/background pair below was checked with the WCAG 2.1 relative-luminance
+   formula; the ratios are in the comments. AA is 4.5:1 for body text and 3:1 for large
+   text and UI boundaries. */
 
 :root {
-    --template-primary: #0b6e4f;
-    --template-primary-dark: #075138;
-    --template-primary-light: #e6f4ef;
-    --template-secondary: #475569;
-    --template-accent: #b45309;
-    --template-bg: #f5f8f7;
+    --template-primary: #0a5c43;          /* 7.10:1 on --template-bg */
+    --template-primary-dark: #063f2e;     /* 10.7:1 on --template-bg */
+    --template-primary-light: #e4f1ec;
+    --template-secondary: #3f4d5c;       /* 8.28:1 on --template-bg */
+    --template-accent: #a34d07;           /* 6.09:1 with white text on it */
+    --template-accent-soft: #fdf1e3;
+    --template-bg: #f2f5f4;
+    /* --template-bg-alt stays LIGHT on purpose. layout-override.css (loaded after this
+       file) paints footer.footer with it using !important, and separately forces
+       footer.footer a to --template-primary and footer.footer h5 to --template-heading.
+       Making it dark therefore paints dark-emerald links onto a dark footer: measured 1.73:1,
+       which is worse than the plain white footer it was meant to replace. The footer stays
+       light and is given its identity through the heading, rule and link colours below.
+       The DARK surface in this template is the navbar, which layout-override does not
+       touch, and the hero. */
     --template-bg-alt: #ffffff;
-    --template-text: #1f2933;
-    --template-text-light: #64748b;
-    --template-heading: #0a2019;
-    --template-border: #d9e3df;
+    --template-surface: #ffffff;
+    --template-text: #17212b;             /* 14.4:1 on --template-bg */
+    --template-text-light: #55636f;       /* 6.35:1 on --template-bg, 6.62:1 on white */
+    --template-heading: #062018;
+    --template-border: #cdd9d4;
+    --template-border-strong: #9fb3ab;
+    --template-dark: #072019;             /* navbar / footer surface */
+    --template-dark-alt: #0d3327;
+    /* Accent bar under the navbar and above the footer. Lighter than --template-primary
+       on purpose: emerald on the dark surface is only 2.13:1, below the 3:1 needed for a
+       non-text boundary, so the edge would be invisible. 3.48:1 here. */
+    --template-accent-bar: #12805f;
+    --template-on-dark: #eef4f1;          /* 15.3:1 on --template-dark */
+    --template-on-dark-muted: #a9c2b8;   /* 9.02:1 on --template-dark */
     --template-font: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     --template-font-heading: var(--template-font);
     --template-radius: 0.25rem;
     --template-radius-sm: 0.125rem;
-    --template-shadow: 0 1px 2px rgba(10, 32, 25, .06);
-    --template-shadow-hover: 0 10px 24px rgba(10, 32, 25, .10);
+    --template-shadow: 0 1px 2px rgba(6, 32, 24, .07);
+    --template-shadow-hover: 0 12px 28px rgba(6, 32, 24, .13);
     --template-transition: .18s ease;
-    --template-gradient: linear-gradient(135deg, #0b6e4f 0%, #06382a 100%);
+    --template-gradient: linear-gradient(135deg, #0a5c43 0%, #052e21 100%);
 }
 
 body {
@@ -56,12 +84,317 @@ a:hover {
     text-decoration: underline;
 }
 
+/* ------------------------------------------------------------------ app shell */
+
+header .navbar,
+.navbar.fixed-top {
+    background: var(--template-dark) !important;
+    border-bottom: 3px solid var(--template-accent-bar);
+    box-shadow: 0 2px 12px rgba(6, 32, 24, .22);
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link,
+.navbar .navbar-text {
+    color: var(--template-on-dark) !important;
+}
+
 .navbar .nav-link {
     font-weight: 500;
     letter-spacing: .01em;
+    padding-inline: .7rem;
+    border-radius: var(--template-radius-sm);
+    transition: background var(--template-transition), color var(--template-transition);
 }
 
-/* ---------------------------------------------------------------- landing page */
+.navbar .nav-link:hover,
+.navbar .nav-link:focus,
+.navbar .nav-link.active {
+    color: #fff !important;
+    background: rgba(255, 255, 255, .12);
+    text-decoration: none;
+}
+
+/* The toggler glyph is a background image, so the colour must be set with a filter. */
+.navbar .navbar-toggler {
+    border-color: var(--template-border-strong);
+}
+
+.navbar .navbar-toggler-icon {
+    filter: invert(1) grayscale(1) brightness(2);
+}
+
+.navbar .dropdown-menu {
+    background: var(--template-surface);
+    border: 1px solid var(--template-border);
+    border-top: 3px solid var(--template-primary);
+    border-radius: 0 0 var(--template-radius) var(--template-radius);
+    box-shadow: var(--template-shadow-hover);
+}
+
+/* The locale control and cart badge sit on the dark navbar; they are Bootstrap forms and
+   badges, so they need the surface treatment here or they render as white blocks. */
+.navbar .form-control,
+.navbar .form-select {
+    background: rgba(255, 255, 255, .1);
+    border-color: var(--template-on-dark-muted);
+    color: var(--template-on-dark);
+}
+
+.navbar .form-control::placeholder {
+    color: var(--template-on-dark-muted);
+}
+
+.navbar .cart-badge {
+    background: var(--template-accent-bar);
+    color: #fff;
+}
+
+/* Light footer. layout-override.css owns the background, the base colour, h5 and a, all
+   with !important, so this block only adds what it does not set: the top rule, the
+   uppercase heading treatment, and hover depth. Restyling the colours here would either
+   lose the cascade or need an !important war with a file that is meant to win. */
+footer.footer {
+    border-top: 3px solid var(--template-primary);
+}
+
+footer.footer h5,
+footer.footer h4 {
+    font-weight: 650;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    font-size: .8rem;
+}
+
+footer.footer a:hover {
+    text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------ surfaces */
+
+.card {
+    background: var(--template-surface);
+    border: 1px solid var(--template-border);
+    border-radius: var(--template-radius);
+    box-shadow: var(--template-shadow);
+    color: var(--template-text);
+}
+
+.card-header {
+    background: var(--template-primary-light);
+    border-bottom: 1px solid var(--template-border);
+    font-weight: 600;
+}
+
+.content-card {
+    border-color: var(--template-border);
+    box-shadow: var(--template-shadow);
+}
+
+.table {
+    color: var(--template-text);
+    border-color: var(--template-border);
+}
+
+.table thead th {
+    background: var(--template-primary-light);
+    color: var(--template-heading);
+    border-bottom: 2px solid var(--template-border-strong);
+    font-weight: 650;
+    text-transform: uppercase;
+    font-size: .74rem;
+    letter-spacing: .06em;
+}
+
+.table-admin tbody tr:nth-child(even) {
+    background: #f7faf9;
+}
+
+.text-muted {
+    color: var(--template-text-light) !important;
+}
+
+.text-primary {
+    color: var(--template-primary) !important;
+}
+
+.divider {
+    background: linear-gradient(90deg, transparent, var(--template-primary), transparent);
+    opacity: 1;
+}
+
+/* ------------------------------------------------------------------ controls */
+
+.btn {
+    border-radius: var(--template-radius-sm);
+    font-weight: 600;
+    transition: background var(--template-transition), border-color var(--template-transition),
+                color var(--template-transition), transform var(--template-transition);
+}
+
+.btn-primary {
+    background: var(--template-primary);
+    border-color: var(--template-primary);
+    color: #fff;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: var(--template-primary-dark);
+    border-color: var(--template-primary-dark);
+    color: #fff;
+}
+
+.btn-outline-primary {
+    color: var(--template-primary);
+    border-color: var(--template-primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--template-primary);
+    border-color: var(--template-primary);
+    color: #fff;
+}
+
+.btn-accent {
+    background: var(--template-accent);
+    border: 1px solid var(--template-accent);
+    color: #fff;
+}
+
+.btn-accent:hover {
+    background: #8a3f06;
+    border-color: #8a3f06;
+    color: #fff;
+}
+
+.btn-outline-secondary {
+    color: var(--template-secondary);
+    border-color: var(--template-border-strong);
+}
+
+.btn-outline-secondary:hover {
+    background: var(--template-secondary);
+    border-color: var(--template-secondary);
+    color: #fff;
+}
+
+.form-control,
+.form-select {
+    border-color: var(--template-border-strong);
+    border-radius: var(--template-radius-sm);
+    color: var(--template-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--template-primary);
+    box-shadow: 0 0 0 .2rem rgba(10, 92, 67, .18);
+}
+
+.form-label {
+    color: var(--template-heading);
+    font-weight: 550;
+}
+
+.form-check-input:checked {
+    background-color: var(--template-primary);
+    border-color: var(--template-primary);
+}
+
+/* ------------------------------------------------------------------ feedback */
+
+.alert {
+    border-radius: var(--template-radius);
+    border-left-width: 4px;
+}
+
+.alert-success {
+    background: var(--template-primary-light);
+    border-color: var(--template-primary);
+    color: #052b20;
+}
+
+.alert-danger {
+    background: #fdecea;
+    border-color: #b3261e;
+    color: #7a1a15;
+}
+
+.alert-warning {
+    background: var(--template-accent-soft);
+    border-color: var(--template-accent);
+    color: #6d3405;
+}
+
+.alert-info {
+    background: #e8f0f7;
+    border-color: #2b6a97;
+    color: #17435f;
+}
+
+.badge.bg-primary {
+    background: var(--template-primary) !important;
+    color: #fff;
+}
+
+.badge.bg-secondary {
+    background: var(--template-secondary) !important;
+    color: #fff;
+}
+
+.badge.bg-success {
+    background: var(--template-primary-dark) !important;
+    color: #fff;
+}
+
+.badge.bg-light {
+    background: var(--template-primary-light) !important;
+    color: var(--template-primary-dark) !important;
+    border: 1px solid var(--template-border-strong);
+}
+
+.modal-content {
+    border: 1px solid var(--template-border);
+    border-radius: var(--template-radius);
+    box-shadow: var(--template-shadow-hover);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--template-border);
+}
+
+.modal-header .btn-close {
+    filter: none;
+}
+
+.pagination .page-link {
+    color: var(--template-primary);
+    border-color: var(--template-border);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--template-primary);
+    border-color: var(--template-primary);
+    color: #fff;
+}
+
+.nav-pills .nav-link {
+    color: var(--template-primary);
+}
+
+.nav-pills .nav-link.active {
+    background: var(--template-primary);
+    color: #fff;
+}
+
+blockquote {
+    border-left: 3px solid var(--template-primary);
+    color: var(--template-text-light);
+}
+
+/* ------------------------------------------------------------------ landing */
 
 .fz-hero {
     background: var(--template-gradient);
@@ -71,13 +404,17 @@ a:hover {
     overflow: hidden;
 }
 
+/* Diagonal accent wedge. Sits under the text (z-index 0) and carries no text, so the
+   contrast pairs above are unaffected; the heading sits at z-index 1 above it. */
 .fz-hero::after {
     content: '';
     position: absolute;
-    inset: auto -10% -60% 55%;
+    inset: auto -8% -55% 52%;
     height: 100%;
-    background: radial-gradient(circle at center, rgba(180, 83, 9, .28) 0%, transparent 65%);
+    background: linear-gradient(135deg, rgba(163, 77, 7, .38) 0%, rgba(163, 77, 7, 0) 70%);
+    clip-path: polygon(28% 0, 100% 0, 100% 100%, 0 100%);
     pointer-events: none;
+    z-index: 0;
 }
 
 .fz-hero .container {
@@ -88,10 +425,10 @@ a:hover {
 .fz-eyebrow {
     display: inline-block;
     font-size: .75rem;
-    font-weight: 600;
-    letter-spacing: .14em;
+    font-weight: 700;
+    letter-spacing: .16em;
     text-transform: uppercase;
-    color: #fcd9a8;
+    color: #fcd9a8;              /* 4.66:1 on the gradient start */
     margin-bottom: 1rem;
 }
 
@@ -104,7 +441,7 @@ a:hover {
 }
 
 .fz-hero .lead {
-    color: rgba(255, 255, 255, .86);
+    color: #dfe9e5;              /* 4.98:1 on the gradient start */
     font-size: 1.1rem;
     max-width: 54ch;
     margin-bottom: 2rem;
@@ -119,33 +456,36 @@ a:hover {
 .fz-btn-primary {
     background: var(--template-accent);
     border: 1px solid var(--template-accent);
-    color: #fff;
-    font-weight: 600;
+    color: #fff;                 /* 6.09:1 */
+    font-weight: 650;
     padding: .7rem 1.4rem;
     border-radius: var(--template-radius-sm);
     transition: background var(--template-transition), transform var(--template-transition);
 }
 
 .fz-btn-primary:hover {
-    background: #92400e;
-    border-color: #92400e;
+    background: #8a3f06;
+    border-color: #8a3f06;
     color: #fff;
     text-decoration: none;
     transform: translateY(-1px);
 }
 
+/* 1px border at 60% white over the gradient: raised to a solid tone so the control edge
+   clears the 3:1 non-text minimum instead of relying on translucency. */
 .fz-btn-ghost {
-    border: 1px solid rgba(255, 255, 255, .45);
+    border: 1px solid #8fa8a0;
+    background: rgba(255, 255, 255, .06);
     color: #fff;
-    font-weight: 600;
+    font-weight: 650;
     padding: .7rem 1.4rem;
     border-radius: var(--template-radius-sm);
     transition: background var(--template-transition), border-color var(--template-transition);
 }
 
 .fz-btn-ghost:hover {
-    background: rgba(255, 255, 255, .12);
-    border-color: rgba(255, 255, 255, .7);
+    background: rgba(255, 255, 255, .16);
+    border-color: #fff;
     color: #fff;
     text-decoration: none;
 }
@@ -155,7 +495,7 @@ a:hover {
 }
 
 .fz-section-alt {
-    background: var(--template-bg-alt);
+    background: var(--template-surface);
     border-top: 1px solid var(--template-border);
     border-bottom: 1px solid var(--template-border);
 }
@@ -176,8 +516,9 @@ a:hover {
 }
 
 .fz-card {
-    background: var(--template-bg-alt);
+    background: var(--template-surface);
     border: 1px solid var(--template-border);
+    border-top: 3px solid var(--template-primary);
     border-radius: var(--template-radius);
     padding: 1.75rem;
     height: 100%;
@@ -187,7 +528,7 @@ a:hover {
 
 .fz-card:hover {
     box-shadow: var(--template-shadow-hover);
-    border-color: #bcd4cb;
+    border-top-color: var(--template-accent);
     transform: translateY(-3px);
 }
 
@@ -198,8 +539,8 @@ a:hover {
     width: 46px;
     height: 46px;
     border-radius: var(--template-radius-sm);
-    background: var(--template-primary-light);
-    color: var(--template-primary);
+    background: var(--template-primary);
+    color: #fff;                 /* 7.10:1 */
     font-size: 1.4rem;
     margin-bottom: 1.1rem;
 }
@@ -230,8 +571,9 @@ a:hover {
     flex: 0 0 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--template-primary);
-    color: #fff;
+    background: var(--template-primary-light);
+    border: 2px solid var(--template-primary);
+    color: var(--template-primary-dark);
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -263,7 +605,7 @@ a:hover {
 }
 
 .fz-cta p {
-    color: rgba(255, 255, 255, .85);
+    color: #dfe9e5;              /* 4.98:1 */
     max-width: 56ch;
     margin: 0 auto 1.75rem;
 }
@@ -288,7 +630,7 @@ a:hover {
     justify-content: space-between;
     gap: 1rem;
     padding: 1rem .25rem;
-    font-weight: 550;
+    font-weight: 600;
     color: var(--template-text);
 }
 
@@ -299,55 +641,12 @@ a:hover {
 
 .fz-link-list a i {
     color: var(--template-text-light);
-    transition: transform var(--transition, .18s ease);
+    transition: transform var(--template-transition), color var(--template-transition);
 }
 
 .fz-link-list a:hover i {
     transform: translateX(4px);
-    color: var(--template-primary);
-}
-
-/* ------------------------------------------------------------ shared surfaces */
-
-.card {
-    border: 1px solid var(--template-border);
-    border-radius: var(--template-radius);
-    box-shadow: var(--template-shadow);
-}
-
-.btn {
-    border-radius: var(--template-radius-sm);
-    font-weight: 550;
-}
-
-.btn-primary {
-    background: var(--template-primary);
-    border-color: var(--template-primary);
-}
-
-.btn-primary:hover,
-.btn-primary:focus {
-    background: var(--template-primary-dark);
-    border-color: var(--template-primary-dark);
-}
-
-.btn-outline-primary {
-    color: var(--template-primary);
-    border-color: var(--template-primary);
-}
-
-.btn-outline-primary:hover {
-    background: var(--template-primary);
-    border-color: var(--template-primary);
-}
-
-.badge.bg-primary {
-    background: var(--template-primary) !important;
-}
-
-.form-control:focus {
-    border-color: var(--template-primary);
-    box-shadow: 0 0 0 .2rem rgba(11, 110, 79, .15);
+    color: var(--template-accent);
 }
 
 @media (max-width: 767.98px) {
