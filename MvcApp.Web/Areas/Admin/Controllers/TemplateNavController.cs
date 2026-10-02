@@ -95,9 +95,19 @@ public class TemplateNavController : Controller
     private List<TemplateNavEditorItem> BuildEditorItems(List<NavItem> current, string template, List<ModuleInfo> modules, List<ContentPage> pages)
     {
         var items = new List<TemplateNavEditorItem>();
-        foreach (var cat in NavCatalog.Items.Where(c => NavCatalog.IsForTemplate(c, template)))
+        var catalog = NavCatalog.Items.Where(c => NavCatalog.IsForTemplate(c, template)).ToList();
+
+        // Render the links that are CURRENTLY SAVED first, in the order they are saved, then
+        // everything else the template could offer. Previously the editor always walked the
+        // catalog, so a hand-arranged order was invisible on the very screen used to arrange it —
+        // you could not see what you had done, let alone adjust it.
+        int SavedIndex(NavItem i) => current.FindIndex(c =>
+            string.Equals(NavCatalog.KeyOf(c), NavCatalog.KeyOf(i), StringComparison.OrdinalIgnoreCase));
+
+        foreach (var cat in catalog.OrderBy(c => SavedIndex(c.Item)).ThenBy(c => catalog.IndexOf(c)))
         {
-            var inNav = current.Any(i => string.Equals(NavCatalog.KeyOf(i), cat.Key, StringComparison.OrdinalIgnoreCase));
+            var savedAt = SavedIndex(cat.Item);
+            var inNav = savedAt >= 0;
             items.Add(new TemplateNavEditorItem
             {
                 Key = cat.Key,
@@ -111,6 +121,7 @@ public class TemplateNavController : Controller
                 RequiresAdmin = cat.Item.RequiresAdmin,
                 RequiresModerator = cat.Item.RequiresModerator,
                 IsChecked = inNav,
+                SavedPosition = savedAt,
                 ModuleEnabled = cat.Item.Module == null
                     ? null
                     : modules.FirstOrDefault(m => m.Name.Equals(cat.Item.Module, StringComparison.OrdinalIgnoreCase))?.IsEnabled
@@ -174,10 +185,32 @@ public class TemplateNavController : Controller
         var nav = new List<NavItem>();
         var selected = form[$"{section}.selected"];
 
-        foreach (var cat in NavCatalog.Items.Where(c => NavCatalog.IsForTemplate(c, template)))
+        // Ordering. The nav used to be emitted in NavCatalog.Items order, so an admin could choose
+        // WHICH links appeared but never the order they appeared in — the single biggest reason a
+        // navigation editor feels broken.
+        //
+        // The order comes from the ORDER OF form["{section}.selected"] itself. Browsers submit a
+        // checkbox group in document order, so the position of each checkbox in the rendered page
+        // is the position the admin sees and can drag/reorder. That needs no extra field, no
+        // paired key/value encoding that can desynchronise, and an unchanged form post keeps the
+        // order it had. Items not in the catalog (pages|, custom) are appended afterwards in the
+        // order they were submitted.
+        var ordered = new List<NavCatalogItem>();
+        var consumed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var key in selected)
         {
-            if (!selected.Contains(cat.Key, StringComparer.OrdinalIgnoreCase))
+            if (key == null || consumed.Contains(key))
                 continue;
+            var cat = NavCatalog.FindByKey(key);
+            if (cat == null || !NavCatalog.IsForTemplate(cat, template))
+                continue;
+            ordered.Add(cat);
+            consumed.Add(key);
+        }
+
+        foreach (var cat in ordered)
+        {
             nav.Add(new NavItem
             {
                 Label = cat.Item.Label,

@@ -32,7 +32,8 @@ public sealed class VideoPack : ISeedPack
         {
             if (d.Set<VideoRoom>().Any()) return;
             d.Set<VideoRoom>().AddRange(Build());
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.Set<VideoRoom>(),
+            appliedBy: appliedBy, ct: ct);
     }
 
     internal static IReadOnlyList<VideoRoom> Build() =>

@@ -29,7 +29,8 @@ public sealed class CommunityPack : ISeedPack
                 new ForumCategory { Name = "General", Description = "General discussions", SortOrder = 0 },
                 new ForumCategory { Name = "Support", Description = "Get help and support", SortOrder = 1 },
                 new ForumCategory { Name = "Off-Topic", Description = "Anything not covered elsewhere", SortOrder = 2 });
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.ForumCategories,
+            appliedBy: appliedBy, ct: ct);
 
         await packs.ApplyAsync<Forum>(Name, d =>
         {
@@ -46,7 +47,8 @@ public sealed class CommunityPack : ISeedPack
                 new Forum { CategoryId = support.Id, Name = "Feature Requests", Description = "Suggest new features", SortOrder = 1 },
                 new Forum { CategoryId = offTopic.Id, Name = "Random Chat", Description = "Casual conversation", SortOrder = 0 },
                 new Forum { CategoryId = offTopic.Id, Name = "Games & Fun", Description = "Gaming discussions and fun threads", SortOrder = 1 });
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.Forums,
+            appliedBy: appliedBy, ct: ct);
     }
 }
 
@@ -66,7 +68,8 @@ public sealed class BlogPack : ISeedPack
                 new BlogCategory { Name = "Technology", Slug = "technology", Description = "Tech news and tutorials", SortOrder = 0 },
                 new BlogCategory { Name = "News", Slug = "news", Description = "Company and product announcements", SortOrder = 1 },
                 new BlogCategory { Name = "Guides", Slug = "guides", Description = "How-to guides and best practices", SortOrder = 2 });
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.BlogCategories,
+            appliedBy: appliedBy, ct: ct);
 
         await packs.ApplyAsync<BlogTag>(Name, d =>
         {
@@ -76,7 +79,8 @@ public sealed class BlogPack : ISeedPack
                 new BlogTag { Name = "Tips & Tricks", Slug = "tips-tricks" },
                 new BlogTag { Name = "Updates", Slug = "updates" },
                 new BlogTag { Name = "Tutorial", Slug = "tutorial" });
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.BlogTags,
+            appliedBy: appliedBy, ct: ct);
     }
 }
 
@@ -96,6 +100,7 @@ public sealed class DatingPack : ISeedPack
         {
             if (d.InterestTags.Any()) return;
             d.InterestTags.AddRange(DatingInterestTags.Build());
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.InterestTags,
+            appliedBy: appliedBy, ct: ct);
     }
 }

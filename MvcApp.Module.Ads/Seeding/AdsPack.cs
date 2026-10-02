@@ -34,7 +34,8 @@ public sealed class AdsPack : ISeedPack
         {
             if (d.Set<AdZone>().Any()) return;
             d.Set<AdZone>().AddRange(Build());
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.Set<AdZone>(),
+            appliedBy: appliedBy, ct: ct);
     }
 
     internal static IReadOnlyList<AdZone> Build() =>

@@ -25,6 +25,14 @@ public static class NavCatalog
     public static NavCatalogItem? Find(NavItem item) =>
         Items.FirstOrDefault(c => string.Equals(c.Key, KeyOf(item), StringComparison.OrdinalIgnoreCase));
 
+    /// <summary>
+    /// Looks a catalog entry up by its key. The nav editor receives keys as form values and needs
+    /// to resolve them; <see cref="Find"/> takes a whole NavItem and cannot be used for that.
+    /// </summary>
+    public static NavCatalogItem? FindByKey(string? key) =>
+        key == null ? null
+                    : Items.FirstOrDefault(c => string.Equals(c.Key, key, StringComparison.OrdinalIgnoreCase));
+
     public static bool IsForTemplate(NavCatalogItem item, string template) =>
         string.IsNullOrWhiteSpace(item.Templates)
         || item.Templates.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)

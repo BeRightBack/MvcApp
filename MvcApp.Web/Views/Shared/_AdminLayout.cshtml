@@ -136,7 +136,11 @@
                 <a asp-area="Admin" asp-controller="RoleAdmin" asp-action="Index" class="nav-item">@Localizer["User Roles"]</a>
             </div>
 
-            @if (await ModuleManager.IsModuleEnabledAsync("Forum") || await ModuleManager.IsModuleEnabledAsync("Chat") || await ModuleManager.IsModuleEnabledAsync("Messages"))
+            @* Community lists the modules a moderator actually administers: forum structure,
+               chat rooms, and private-message oversight. *@
+            @if (await ModuleManager.IsModuleEnabledAsync("Forum")
+                 || await ModuleManager.IsModuleEnabledAsync("Chat")
+                 || await ModuleManager.IsModuleEnabledAsync("Messages"))
             {
                 <div class="nav-item" onclick="toggleSubmenu(this)">
                     <i class='bx bxs-group'></i>
@@ -144,17 +148,25 @@
                     <i class='bx bx-chevron-right nav-chevron'></i>
                 </div>
                 <div class="nav-submenu">
+                    @* Both admin links below name a class "ForumController"/"ChatController"; it is
+                       the asp-area value that disambiguates the module's admin controller from its
+                       public one. asp-area="" sent moderators out of the panel to the front-end
+                       forum, which is not a configuration page. *@
                     @if (await ModuleManager.IsModuleEnabledAsync("Forum"))
                     {
-                        <a asp-area="" asp-controller="Forum" asp-action="Index" class="nav-item">@Localizer["Forums"]</a>
+                        <a asp-area="Admin" asp-controller="Forum" asp-action="Index" class="nav-item">@Localizer["Forums"]</a>
                     }
                     @if (await ModuleManager.IsModuleEnabledAsync("Chat"))
                     {
                         <a asp-area="Admin" asp-controller="Chat" asp-action="Index" class="nav-item">@Localizer["Chat Rooms"]</a>
                     }
+                    @* Points at MvcApp.Module.Messages/Controllers/Areas/Admin/MessagesController.cs
+                       ([Area("Admin")], class MessagesController). The public MessagesController is
+                       also called MessagesController and its Index is [Authorize], so asp-area is
+                       what distinguishes the oversight page from an admin's own inbox. *@
                     @if (await ModuleManager.IsModuleEnabledAsync("Messages"))
                     {
-                        <a asp-area="" asp-controller="Messages" asp-action="Index" class="nav-item">@Localizer["Messages"]</a>
+                        <a asp-area="Admin" asp-controller="Messages" asp-action="Index" class="nav-item">@Localizer["Messages"]</a>
                     }
                 </div>
             }
