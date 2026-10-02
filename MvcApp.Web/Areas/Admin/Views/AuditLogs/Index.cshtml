@@ -49,7 +49,14 @@
                 @for (int i = 1; i <= ViewBag.TotalPages; i++)
                 {
                     <li class="page-item @(i == ViewBag.Page ? "active" : "")">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=@i">@i</a>
+                        @* asp-action/asp-route, not a hand-written href="?search=..&page=..".
+                           A bare query-only href resolves against whatever path the browser
+                           currently has, so it silently lands on the front page as soon as the
+                           area path is not exactly as assumed. The tag helper builds the absolute
+                           /Admin/AuditLogs?… URL and URL-encodes the search term, which a raw
+                           href does not. Same pattern as SystemLogs and VerificationModeration. *@
+                        <a class="page-link" asp-action="Index" asp-route-search="@ViewBag.Search"
+                           asp-route-page="@i">@i</a>
                     </li>
                 }
             </ul>

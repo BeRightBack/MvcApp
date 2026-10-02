@@ -1,0 +1,134 @@
+@model MvcApp.Module.Messages.ViewModels.AdminMessagesViewModel
+@{
+    ViewData["Title"] = "Messages";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1><i class="bx bx-envelope"></i> @Localizer["Messages"]</h1>
+        <span class="text-muted small">@Localizer["Oversight only — members read and send their own messages."]</span>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <form method="get" asp-action="Index" class="row g-2 align-items-end mb-3">
+        <div class="col-md-5">
+            <label class="form-label" for="search">@Localizer["Search"]</label>
+            <input class="form-control" type="text" id="search" name="search" value="@Model.Search"
+                   placeholder="@Localizer["Username or message text"]" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label" for="flagged">@Localizer["Show"]</label>
+            <select class="form-select" id="flagged" name="flagged">
+                <option value="" selected="@(Model.Flagged == "")">@Localizer["All messages"]</option>
+                <option value="deleted" selected="@(Model.Flagged == "deleted")">@Localizer["Deleted by a party"]</option>
+                <option value="unread" selected="@(Model.Flagged == "unread")">@Localizer["Never read"]</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">
+                <i class="bx bx-filter me-1"></i>@Localizer["Filter"]
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                <i class="bx bx-x"></i>@Localizer["Clear"]
+            </a>
+        </div>
+    </form>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>@Localizer["From"]</th>
+                        <th>@Localizer["To"]</th>
+                        <th>@Localizer["Message"]</th>
+                        <th>@Localizer["Sent"]</th>
+                        <th class="text-center">@Localizer["Actions"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Messages.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                @Localizer["No messages match this filter."]
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var m in Model.Messages)
+                    {
+                        <tr>
+                            <td>
+                                @m.SenderUsername
+                                @if (m.SenderBanned)
+                                {
+                                    <span class="badge bg-danger" title="@Localizer["This sender is currently banned"]">@Localizer["banned"]</span>
+                                }
+                            </td>
+                            <td>@m.RecipientUsername</td>
+                            <td style="max-width:420px;">
+                                <div style="white-space:pre-wrap;word-break:break-word;">@m.Content</div>
+                                @if (m.SenderDeleted || m.RecipientDeleted)
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        @(m.SenderDeleted && m.RecipientDeleted
+                                            ? Localizer["deleted by both"].Value
+                                            : m.SenderDeleted
+                                                ? Localizer["deleted by sender"].Value
+                                                : Localizer["deleted by recipient"].Value)
+                                    </span>
+                                }
+                                @if (m.DateRead == null)
+                                {
+                                    <span class="badge bg-info">@Localizer["unread"]</span>
+                                }
+                            </td>
+                            <td class="text-nowrap small">@m.MessageSent.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td class="text-end">
+                                @* No global data-confirm handler exists: every other admin form
+                                   pairs the attribute with an inline onsubmit, because the text is
+                                   localized and must not be hardcoded into a JS literal. *@
+                                <form asp-action="Delete" method="post" class="d-inline"
+                                      data-confirm="@Localizer["Delete this message permanently?"]"
+                                      onsubmit="return confirm(this.dataset.confirm);">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@m.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bx bx-trash me-1"></i>@Localizer["Delete"]
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p class="text-muted small mt-2">
+        @Localizer["{0} message(s) total"].Value.Replace("{0}", Model.Total.ToString())
+    </p>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination pagination-sm justify-content-center">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.Page ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-search="@Model.Search"
+                           asp-route-flagged="@Model.Flagged" asp-route-page="@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

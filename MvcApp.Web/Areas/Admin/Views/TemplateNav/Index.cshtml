@@ -32,64 +32,83 @@
             <div class="content-card">
                 <div class="card-body">
                     <h5 class="card-title">@Localizer["Navbar"]</h5>
-                    <p class="text-muted small mb-3">@Localizer["Links shown in the top navigation bar."]</p>
-                    @foreach (var group in Model.NavbarItems.GroupBy(i => i.Group))
+                    <p class="text-muted small mb-3">@Localizer["Shown links appear in this order. Clear a box to hide a link; tick one to show it."]</p>
+                    @* Deliberately NOT GroupBy: grouping would regroup the list and destroy the
+                       saved order, which is the one thing this screen now lets you control. The
+                       currently-shown links keep the exact order they render in, and the rest are
+                       listed underneath as available choices. *@
+                    @{
+                        var shownNavbar = Model.NavbarItems.Where(i => i.IsChecked).ToList();
+                        var availableNavbar = Model.NavbarItems.Where(i => !i.IsChecked).ToList();
+                    }
+                    @if (shownNavbar.Count == 0)
                     {
-                        <h6 class="text-uppercase mt-3 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@group.Key</h6>
-                        @foreach (var item in group)
+                        <p class="text-muted small fst-italic">@Localizer["No links shown yet."]</p>
+                    }
+                    else
+                    {
+                        <h6 class="text-uppercase mt-1 mb-2" style="font-size:.75rem;color:var(--text-muted);letter-spacing:.05em">@Localizer["Shown, in order"]</h6>
+                    }
+                    @{
+                        var allNavbar = shownNavbar.Concat(availableNavbar).ToList();
+                    }
+                    @foreach (var item in allNavbar)
+                    {
+                        if (item.IsAdditional)
                         {
-                            if (item.IsAdditional)
-                            {
-                                <div class="d-flex align-items-center gap-2 py-1">
-                                    <input type="hidden" name="navbarCustom.Index" value="@item.Index" />
-                                    <input class="form-check-input mt-0" type="checkbox" name="navbarCustom.Keep" value="@item.Index" checked />
-                                    <span>@item.Label</span>
-                                    <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
-                                    <span class="badge bg-warning text-dark">@Localizer["Custom"]</span>
-                                    <input type="hidden" name="navbarCustom.Label" value="@item.Label" />
-                                    <input type="hidden" name="navbarCustom.Area" value="@item.Area" />
-                                    <input type="hidden" name="navbarCustom.Controller" value="@item.Controller" />
-                                    <input type="hidden" name="navbarCustom.Action" value="@item.Action" />
-                                    <input type="hidden" name="navbarCustom.Module" value="@item.Module" />
-                                    <input type="hidden" name="navbarCustom.RequiresAuth" value="@(item.RequiresAuth ? "true" : "false")" />
-                                    <input type="hidden" name="navbarCustom.RequiresAdmin" value="@(item.RequiresAdmin ? "true" : "false")" />
-                                    <input type="hidden" name="navbarCustom.RequiresModerator" value="@(item.RequiresModerator ? "true" : "false")" />
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="d-flex align-items-center gap-2 py-1">
-                                    <input class="form-check-input mt-0" type="checkbox" name="navbar.selected" value="@item.Key" checked="@(item.IsChecked)" />
-                                    <span>@item.Label</span>
-                                    @if (item.Slug != null)
+                            <div class="d-flex align-items-center gap-2 py-1">
+                                <input type="hidden" name="navbarCustom.Index" value="@item.Index" />
+                                <input class="form-check-input mt-0" type="checkbox" name="navbarCustom.Keep" value="@item.Index" checked />
+                                <span>@item.Label</span>
+                                <span class="text-muted small">/@(item.Area)/@(item.Controller)/@(item.Action)</span>
+                                <span class="badge bg-warning text-dark">@Localizer["Custom"]</span>
+                                <input type="hidden" name="navbarCustom.Label" value="@item.Label" />
+                                <input type="hidden" name="navbarCustom.Area" value="@item.Area" />
+                                <input type="hidden" name="navbarCustom.Controller" value="@item.Controller" />
+                                <input type="hidden" name="navbarCustom.Action" value="@item.Action" />
+                                <input type="hidden" name="navbarCustom.Module" value="@item.Module" />
+                                <input type="hidden" name="navbarCustom.RequiresAuth" value="@(item.RequiresAuth ? "true" : "false")" />
+                                <input type="hidden" name="navbarCustom.RequiresAdmin" value="@(item.RequiresAdmin ? "true" : "false")" />
+                                <input type="hidden" name="navbarCustom.RequiresModerator" value="@(item.RequiresModerator ? "true" : "false")" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center gap-2 py-1 @(item.IsChecked ? "" : "opacity-50")">
+                                <input class="form-check-input mt-0" type="checkbox" name="navbar.selected" value="@item.Key" checked="@(item.IsChecked)" />
+                                @if (item.IsChecked)
+                                {
+                                    <span class="badge bg-light text-dark" title="@Localizer["Position in the navigation"]">@allNavbar.IndexOf(item)</span>
+                                }
+                                <span>@item.Label</span>
+                                @if (item.Slug != null)
+                                {
+                                    <span class="text-muted small">/pages/@item.Slug</span>
+                                }
+                                @if (item.Module != null)
+                                {
+                                    if (item.ModuleEnabled == true)
                                     {
-                                        <span class="text-muted small">/pages/@item.Slug</span>
+                                        <span class="badge bg-success">@item.Module</span>
                                     }
-                                    @if (item.Module != null)
+                                    else
                                     {
-                                        if (item.ModuleEnabled == true)
-                                        {
-                                            <span class="badge bg-success">@item.Module</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">@item.Module (disabled)</span>
-                                        }
+                                        <span class="badge bg-secondary">@item.Module (@Localizer["module off"])</span>
                                     }
-                                    @if (item.RequiresAdmin)
-                                    {
-                                        <span class="badge bg-warning text-dark">@Localizer["Admin"]</span>
-                                    }
-                                    @if (item.RequiresModerator)
-                                    {
-                                        <span class="badge bg-info">@Localizer["Moderator"]</span>
-                                    }
-                                    @if (item.RequiresAuth)
-                                    {
-                                        <span class="badge bg-info text-dark">@Localizer["Members"]</span>
-                                    }
-                                </div>
-                            }
+                                }
+                                @if (item.RequiresAdmin)
+                                {
+                                    <span class="badge bg-warning text-dark">@Localizer["Admin"]</span>
+                                }
+                                @if (item.RequiresModerator)
+                                {
+                                    <span class="badge bg-info">@Localizer["Moderator"]</span>
+                                }
+                                @if (item.RequiresAuth)
+                                {
+                                    <span class="badge bg-info text-dark">@Localizer["Members"]</span>
+                                }
+                            </div>
                         }
                     }
 

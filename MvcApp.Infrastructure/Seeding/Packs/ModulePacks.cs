@@ -25,7 +25,8 @@ public sealed class PlansPack : ISeedPack
         {
             if (d.SubscriptionPlans.Any()) return;
             d.SubscriptionPlans.AddRange(SubscriptionPlanSeedData.Build());
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.SubscriptionPlans,
+            appliedBy: appliedBy, ct: ct);
 
         // The details are cascade-created through plan.SubscriptionDetails, so ApplyAsync above
         // only ever tracks SubscriptionPlan. Record them here or the manifest understates what
@@ -51,7 +52,8 @@ public sealed class ChatPack : ISeedPack
                 new ChatRoom { Name = "General Discussion", Description = "Talk about anything and everything" },
                 new ChatRoom { Name = "Tech Support", Description = "Get help with technical issues" },
                 new ChatRoom { Name = "Announcements", Description = "Official announcements and updates" });
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.ChatRooms,
+            appliedBy: appliedBy, ct: ct);
     }
 }
 
@@ -78,7 +80,8 @@ public sealed class EventsPack : ISeedPack
                 new EventCategory { Name = "Arts & Culture", Icon = "bx-palette" },
                 new EventCategory { Name = "Tech", Icon = "bx-chip" },
                 new EventCategory { Name = "Other", Icon = "bx-calendar" });
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.EventCategories,
+            appliedBy: appliedBy, ct: ct);
     }
 }
 
@@ -97,7 +100,8 @@ public sealed class GamificationPack : ISeedPack
         {
             if (d.Badges.Any()) return;
             d.Badges.AddRange(GamificationBadges.Build());
-        }, appliedBy: appliedBy, ct: ct);
+        }, existing: c => c.Badges,
+            appliedBy: appliedBy, ct: ct);
     }
 }
 

@@ -32,7 +32,27 @@ public sealed class SeedPackService(UserDbContext db, ILogger<SeedPackService> l
             .ToList();
 
         if (added.Count == 0)
+        {
+            // Every pack guards its own add() with "if (d.X.Any()) return;", so a database that
+            // already holds the rows (a previous install, a restored backup, rows seeded before
+            // the manifest existed) produces zero additions. Without this branch the pack reported
+            // nothing, the manifest stayed empty, the admin page showed "Not applied", and
+            // clicking Apply answered "already applied" — status and action contradicting each
+            // other, which is exactly what was reported.
+            //
+            // When the caller supplied an `existing` selector, adopt what is already there so the
+            // manifest becomes the truthful record. It is optional because a pack whose rows are
+            // not individually addressable (no stable key) cannot adopt them; those keep the old
+            // behaviour of recording nothing.
+            if (existing is not null)
+            {
+                var adopted = await AdoptAsync(packName, existing, appliedBy, ct);
+                if (adopted > 0)
+                    return new SeedPackResult(packName, 0, adopted);
+            }
+
             return new SeedPackResult(packName, 0, 0);
+        }
 
         await db.SaveChangesAsync(ct);
 

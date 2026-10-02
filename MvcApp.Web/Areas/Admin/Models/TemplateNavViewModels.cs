@@ -30,5 +30,9 @@ public class TemplateNavEditorItem
     public bool RequiresModerator { get; set; }
     public bool IsChecked { get; set; }
     public bool IsAdditional { get; set; }
+
+    /// <summary>Where this link sits in the SAVED navigation, or -1 if it is not currently shown.</summary>
+    public int SavedPosition { get; set; } = -1;
+
     public bool? ModuleEnabled { get; set; }
 }
