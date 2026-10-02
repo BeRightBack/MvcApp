@@ -28,6 +28,19 @@ public static class SettingsSeeder
         new() { Key = "Branding.Tagline",  Value = "",           Description = "Optional short tagline for the site",             Group = "Branding" },
     ];
 
+    // Non-secret operational knobs. Seeded so they exist in the database before anyone visits the
+    // admin panel, which is the point of presets: the app is configurable from Admin -> Settings
+    // on a fresh install, with no appsettings.json edit and no redeploy.
+    //
+    // Deliberately NOT here: ConnectionStrings:*, PayPal:*, SmtpSettings:Password,
+    // DeepLConfig:AuthKey, Encryption:Key. Those are credentials and are read during startup
+    // before any DbContext exists. RetentionDays is safe because SystemLogRetentionHostedService
+    // reads this row on every cycle and falls back to Logging:RetentionDays in appsettings.json.
+    private static readonly List<SystemSetting> _loggingDefaults =
+    [
+        new() { Key = "Logging.RetentionDays", Value = "30", Description = "Auto-purge system log rows older than this. 0 disables auto-purge. Takes effect on the next daily cycle.", Group = "Logging" },
+    ];
+
     public static async Task SeedAsync(UserDbContext db)
     {
         if (!await db.SystemSettings.AnyAsync())
@@ -48,12 +61,13 @@ public static class SettingsSeeder
             };
             defaults.AddRange(_moduleDefaults);
             defaults.AddRange(_brandingDefaults);
+            defaults.AddRange(_loggingDefaults);
             db.SystemSettings.AddRange(defaults);
         }
         else
         {
-            // Always ensure module and branding settings exist (upsert)
-            foreach (var ms in _moduleDefaults.Concat(_brandingDefaults))
+            // Always ensure module, branding and logging settings exist (upsert)
+            foreach (var ms in _moduleDefaults.Concat(_brandingDefaults).Concat(_loggingDefaults))
             {
                 var existing = await db.SystemSettings.FirstOrDefaultAsync(s => s.Key == ms.Key);
                 if (existing == null)
