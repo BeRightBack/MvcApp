@@ -77,7 +77,15 @@ public class SeedPackIntegrationTests
         var packs = scope.ServiceProvider.GetRequiredService<SeedPackService>();
 
         await ClearInterestTagsAsync(db);
-        var pack = scope.ServiceProvider.GetRequiredService<ISeedPack>();
+
+        // Select by name. GetRequiredService<ISeedPack>() on a service registered nine times
+        // returns the LAST registration — AdsPack here, since AddAdsModule runs after
+        // AddInfrastructure — so this test was silently exercising the ads pack while
+        // asserting that 41 interest tags had been created. The failure surfaced as
+        // "Expected: 41, Actual: 0", which reads like a seeding bug and is not one.
+        var pack = scope.ServiceProvider
+            .GetServices<ISeedPack>()
+            .Single(p => p.Name == SeedPackNames.Dating);
 
         var before = await db.InterestTags.CountAsync();
         Assert.Equal(0, before);
