@@ -92,25 +92,78 @@ function ConvertTo-Utf8NoBom([string]$content) {
 }
 
 # Sanitize real credentials out of all text files (keeps structure/sections).
+#
+# This used to be a literal map whose KEYS were the live credentials, because it could only
+# redact values it already knew. That put a working MySQL password, SMTP password, PayPal
+# client id + secret, PayPal.me username, DeepL key and ipgeolocation key into tracked source
+# -- and therefore into every clone of this repository. It now works from KEY NAMES and from
+# the shape of connection strings, so it never has to know what the secret was.
+#
+# Placeholder outputs are unchanged, so ConvertTo-Tokenized below still recognises them.
 function ConvertTo-SanitizedAppSettings([string]$content) {
+    # 1. Connection strings: rewrite the credentials generically.
+    $content = $content -replace '(?i)\bUid=[^;"]*', 'Uid=yourusername'
+    $content = $content -replace '(?i)\bPwd=[^;"]*',  'Pwd=yourpassword'
+    $content = $content -replace '(?i)\bPassword=[^;"]*', 'Password=yourpassword'
+    # A generated app talks to its own database, not the source box. Leaving the real host in a
+    # shipped template both leaks infrastructure and points the generated app at the wrong server.
+    $content = $content -replace '(?i)\bServer=[^;"]*', 'Server=localhost'
+
+    # 2. Structured pass over JSON config: blank any value whose KEY looks like a secret.
+    #    Key-name driven, so a rotated or newly added credential is still caught.
+    $secretKeyPattern = '(?i)(password|pwd|secret|apikey|authkey|clientsecret|clientid|encryption|passkey|token)'
+
+    try {
+        $json = $content | ConvertFrom-Json
+    } catch {
+        $json = $null
+    }
+
+    if ($null -ne $json) {
+        function Scrub-Node($node) {
+            if ($node -is [System.Collections.IEnumerable] -and $node -isnot [string]) {
+                foreach ($i in $node) { Scrub-Node $i }
+                return
+            }
+            if ($node -is [pscustomobject]) {
+                foreach ($p in @($node.PSObject.Properties)) {
+                    if ($p.Name -match $secretKeyPattern) {
+                        switch -Regex ($p.Name) {
+                            '(?i)clientsecret' { $p.Value = 'your-paypal-client-secret' }
+                            '(?i)clientid'     { $p.Value = 'your-paypal-client-id' }
+                            '(?i)authkey'      { $p.Value = 'yourAuthKey' }
+                            '(?i)apikey'       { $p.Value = 'yourApiKey' }
+                            '(?i)(encryption|^key$)' { $p.Value = 'your-very-secure-encryption-key-here-32-chars' }
+                            default            { $p.Value = 'yourpassword' }
+                        }
+                    } elseif ($p.Value -is [pscustomobject]) {
+                        Scrub-Node $p.Value
+                    }
+                }
+            }
+        }
+        Scrub-Node $json
+        $content = ($json | ConvertTo-Json -Depth 20)
+    }
+
+    # 3. Non-secret structural rewrites, matched by shape rather than by live host.
     $map = [ordered]@{
-        'Uid=swan3344;Pwd=stevenP@2025www;'      = 'Uid=yourusername;Pwd=yourpassword;'
-        'User=swan3344;Password=stevenP@2025www;' = 'User=yourusername;Password=yourpassword;'
-        'Database=Identity_db'              = 'Database=$safeprojectname$_Identity'
-        'Database=Localisation_db'          = 'Database=$safeprojectname$_Localisation'
-        'admin@frenzyzone.com'              = 'admin@yourdomain.com'
-        'svr.frenzyzone.com'                = 'svr.yourdomain.com'
-        'Electro@2013'                      = 'yourpassword'
-        'AWuMuZZDEaAerszlAAryuePRbFQrUZgmr-AhaW0yx8p22byAZAXLELNvIO2hMJZKSQCWdp_t_eeDyInt' = 'your-paypal-client-id'
-        'EFccSwsaD2ltOcJeVyew5KYrI4zBDFZ77B8uF0qt3zO_Hli85enTOdfc_Xu5B7RaT9fnuJOVE4n4kkOJ' = 'your-paypal-client-secret'
-        'd849b26678864886ae628510db90ba07'  = 'yourApiKey'
-        '0aa94010-9c34-4e77-7822-c40707fa5e83:fx' = 'yourAuthKey'
-        'payment@tvquebec.com'              = 'admin@yourdomain.com'
-        'admin@tvquebec.com'                = 'admin@yourdomain.com'
+        'Database=Identity_db'     = 'Database=$safeprojectname$_Identity'
+        'Database=Localisation_db' = 'Database=$safeprojectname$_Localisation'
     }
     foreach ($k in $map.Keys) {
         $content = $content.Replace($k, $map[$k])
     }
+
+    # 4. Real hostnames and personal addresses. Generic on purpose: any address or host in the
+    #    config becomes a yourdomain placeholder rather than matching a known internal value.
+    $content = $content -replace '(?i)[A-Za-z0-9._%-]+@(?!yourdomain)[A-Za-z0-9.-]+\.[A-Za-z]{2,}', 'admin@yourdomain.com'
+    $content = $content -replace '(?i)(smtp|mail|svr)\.[A-Za-z0-9-]+\.[A-Za-z]{2,}', '$1.yourdomain.com'
+
+    # 5. A PayPal.me handle is an account identifier; blank anything that is not already a
+    #    placeholder. Keeps "$paypalmeuser$" tokenizing intact via ConvertTo-Tokenized.
+    $content = $content -replace '(?i)("PayPalMeUsername"\s*:\s*")(?!\$|\$paypalmeuser\$|yourpaypalusername)[^"]*(")', '${1}yourpaypalusername${2}'
+
     return $content
 }
 
@@ -133,7 +186,9 @@ function ConvertTo-Tokenized([string]$content) {
     # --- Encryption key ---
     $content = $content.Replace('your-very-secure-encryption-key-here-32-chars', '$encrypkey$')
     # --- PayPal ---
-    $content = $content.Replace('"PayPalMeUsername": "spweb063"', '"PayPalMeUsername": "$paypalmeuser$"')
+    # Matches whatever handle the sanitizer left behind, so this no longer needs to know which
+    # PayPal account it was previously pointed at.
+    $content = $content -replace '(?i)("PayPalMeUsername"\s*:\s*")yourpaypalusername(")', '${1}$paypalmeuser$${2}'
     $content = $content.Replace('your-paypal-client-id', '$paypalclientid$')
     $content = $content.Replace('your-paypal-client-secret', '$paypalclientsecret$')
     # --- External services ---
