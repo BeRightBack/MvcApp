@@ -23,6 +23,7 @@ public sealed class SystemLogOptions
 public sealed class SystemLogService(
     IConfiguration configuration,
     IOptions<SystemLogOptions> options,
+    ISettingsService settings,
     ILogger<SystemLogService> logger) : ISystemLogService
 {
     private const MySqlErrorCode TableNotFoundErrorCode = MySqlErrorCode.NoSuchTable;
@@ -32,13 +33,34 @@ public sealed class SystemLogService(
     private string? ConnectionString =>
         configuration.GetConnectionString(_options.ConnectionStringName ?? "SerilogLogs");
 
+    /// <summary>
+    /// The retention actually in force, read the same way the hosted service reads it: the
+    /// SystemSettings row wins, configuration is the fallback. Reading only the bound option here
+    /// would let the page display a number that differs from the one the purge uses.
+    /// </summary>
+    private async Task<int> ResolveRetentionDaysAsync(CancellationToken ct)
+    {
+        try
+        {
+            var fromDb = await settings.GetAsync("Logging.RetentionDays");
+            if (!string.IsNullOrWhiteSpace(fromDb) && int.TryParse(fromDb.Trim(), out var days))
+                return days;
+        }
+        catch (Exception)
+        {
+            // Settings unavailable (schema-less first run): fall through to configuration.
+        }
+
+        return _options.RetentionDays;
+    }
+
     public async Task<SystemLogPage> QueryAsync(SystemLogQuery query, CancellationToken cancellationToken = default)
     {
         var page = new SystemLogPage
         {
             Page = Math.Max(1, query.Page),
             PageSize = Math.Clamp(query.PageSize, 10, 200),
-            RetentionDays = _options.RetentionDays
+            RetentionDays = await ResolveRetentionDaysAsync(cancellationToken)
         };
 
         var connectionString = ConnectionString;
