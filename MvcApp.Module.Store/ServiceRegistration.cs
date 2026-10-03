@@ -13,6 +13,9 @@ public static class ServiceRegistration
         services.AddScoped<IRepository<Product>, Repository<Product>>();
         services.AddScoped<IRepository<ProductCategory>, Repository<ProductCategory>>();
         services.AddScoped<IRepository<CartItem>, Repository<CartItem>>();
+
+        // The platform asks for cart badges through its own contract; the module owns the answer.
+        services.AddScoped<MvcApp.Common.Cart.ICartBadgeProvider, MvcApp.Module.Store.Services.StoreCartBadgeProvider>();
         services.AddScoped<IRepository<Order>, Repository<Order>>();
         services.AddScoped<IRepository<OrderItem>, Repository<OrderItem>>();
         // The PayPal integration now comes from the platform payment gate, so this module no longer

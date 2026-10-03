@@ -1,22 +1,27 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MvcApp.Core;
+using MvcApp.Common.Cart;
 using MvcApp.Core.Abstractions;
-using MvcApp.Module.IPTV.Data.Extensions;
-using MvcApp.Module.IPTV.Services;
 
 namespace MvcApp.Web.Components;
 
+/// <summary>
+/// Renders one cart badge per cart-owning module that the site's navigation currently offers.
+///
+/// The platform does not know which modules have carts, or how to count one: it asks whatever
+/// <see cref="ICartBadgeProvider"/> implementations are registered. It previously named IPTV's
+/// IShoppingCartService directly, so a site composed without IPTV could not construct this component
+/// — and because it renders in the shared layout, EVERY page answered 500 (verified). A module owns
+/// its cart; the platform owns only the contract.
+/// </summary>
 public class CartBadgesViewComponent(
     INavService navService,
-    IShoppingCartService iptvCartService,
-    IRepository<CartItem> storeCartRepo) : ViewComponent
+    IEnumerable<ICartBadgeProvider> badgeProviders) : ViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var navbar = await navService.GetNavItemsAsync();
         var footer = await navService.GetFooterItemsAsync();
+
         var selectedModules = navbar.Concat(footer)
             .Select(i => i.Module)
             .Where(m => !string.IsNullOrWhiteSpace(m))
@@ -25,66 +30,13 @@ public class CartBadgesViewComponent(
 
         var badges = new List<CartBadge>();
 
-        if (selectedModules.Contains("Store"))
+        // A module shows a badge only if the navigation offers it AND a registered module provides
+        // one. Whether that module is part of this deployment is not this class's concern.
+        foreach (var provider in badgeProviders.Where(p => selectedModules.Contains(p.Module)))
         {
-            badges.Add(new CartBadge
-            {
-                Module = "Store",
-                Label = "Store Cart",
-                Controller = "Store",
-                Action = "Cart",
-                Count = await GetStoreCountAsync()
-            });
-        }
-
-        if (selectedModules.Contains("Iptv"))
-        {
-            badges.Add(new CartBadge
-            {
-                Module = "Iptv",
-                Label = "IPTV Cart",
-                Controller = "IptvCart",
-                Action = "Index",
-                Count = await GetIptvCountAsync()
-            });
+            badges.Add(await provider.GetBadgeAsync(HttpContext.User, HttpContext.Session));
         }
 
         return View(badges);
     }
-
-    private async Task<int> GetStoreCountAsync()
-    {
-        var user = HttpContext.User;
-        if (user.Identity?.IsAuthenticated != true)
-            return 0;
-
-        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrEmpty(userId))
-            return 0;
-
-        var items = await storeCartRepo.Query()
-            .Where(c => c.UserId == userId)
-            .ToListAsync();
-        return items.Sum(c => c.Quantity);
-    }
-
-    private async Task<int> GetIptvCountAsync()
-    {
-        var user = HttpContext.User;
-        var userIdClaim = user.Identity?.IsAuthenticated == true ? user.FindFirstValue(ClaimTypes.NameIdentifier) : null;
-        if (Guid.TryParse(userIdClaim, out var userId))
-            return await iptvCartService.GetCartItemsCountAsync(userId);
-
-        var sessionCart = HttpContext.Session.GetObjectFromJson<List<ShoppingCartItem>>("Cart");
-        return sessionCart?.Sum(i => i.Quantity) ?? 0;
-    }
-}
-
-public class CartBadge
-{
-    public string Module { get; set; } = string.Empty;
-    public string Label { get; set; } = string.Empty;
-    public string Controller { get; set; } = string.Empty;
-    public string Action { get; set; } = string.Empty;
-    public int Count { get; set; }
 }
