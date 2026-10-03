@@ -325,6 +325,51 @@ try
 
     var app = builder.Build();
 
+    // Lockout policy (audit 2.6). SignInManager owns lockout; its attempt count and window come from
+    // the admin-editable SystemSettings so the app does not carry two disagreeing policies. Read
+    // ONCE here, after the container is built: doing it from an IConfigureOptions<IdentityOptions>
+    // deadlocked startup, because options construction is synchronous and would have to make a
+    // blocking database call. Applied to the resolved options singleton before the first request;
+    // a change made in the admin UI takes effect on the next restart.
+    {
+        using var startupScope = app.Services.CreateScope();
+        var startupLogger = startupScope.ServiceProvider
+            .GetRequiredService<ILoggerFactory>()
+            .CreateLogger("MvcApp.Startup.Lockout");
+
+        var lockoutOptions = app.Services
+            .GetRequiredService<Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Identity.IdentityOptions>>()
+            .Value;
+
+        try
+        {
+            var lockoutSettings = startupScope.ServiceProvider
+                .GetRequiredService<MvcApp.Core.Abstractions.ISettingsService>();
+
+            lockoutOptions.Lockout.MaxFailedAccessAttempts =
+                await lockoutSettings.GetAsync<int>("MaxLoginAttempts")
+                ?? lockoutOptions.Lockout.MaxFailedAccessAttempts;
+
+            var lockoutMinutes = await lockoutSettings.GetAsync<int>("LockoutDurationMinutes")
+                                 ?? (int)lockoutOptions.Lockout.DefaultLockoutTimeSpan.TotalMinutes;
+
+            lockoutOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(lockoutMinutes);
+            lockoutOptions.Lockout.AllowedForNewUsers = true;
+
+            startupLogger.LogInformation(
+                "Lockout policy from settings: {Attempts} attempts, {Minutes} minute window.",
+                lockoutOptions.Lockout.MaxFailedAccessAttempts, lockoutMinutes);
+        }
+        catch (Exception ex)
+        {
+            // A settings read must never prevent the app from starting; keep Identity's defaults.
+            startupLogger.LogWarning(ex,
+                "Could not read lockout settings; keeping Identity defaults: {Attempts} attempts / {Minutes} minutes.",
+                lockoutOptions.Lockout.MaxFailedAccessAttempts,
+                (int)lockoutOptions.Lockout.DefaultLockoutTimeSpan.TotalMinutes);
+        }
+    }
+
     // Structured request logging via Serilog (duration, status, client IP).
     app.UseSerilogRequestLogging();
 
