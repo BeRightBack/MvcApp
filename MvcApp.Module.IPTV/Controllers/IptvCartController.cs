@@ -30,6 +30,8 @@ public class IptvCartController(
     IRepository<UserDetails> userRepository,
     IEmailSender emailSender,
     MvcApp.Common.Payments.ActivationPolicy activationPolicy,
+    MvcApp.Common.Payments.PaymentIntentProtector paymentIntents,
+    MvcApp.Common.Payments.IPaymentGatewayResolver paymentGateways,
     Microsoft.Extensions.Logging.ILogger<IptvCartController> logger,
     IStringLocalizer<SharedResource> localizer) : Controller
 {
@@ -306,19 +308,34 @@ public class IptvCartController(
                 return RedirectToAction("PayPalMePayment", new { link = payPalMeLink });
 
             case "PayPal":
+                // Record the order BEFORE leaving the app. The confirmation used to look the cart up
+                // again on return — but the cart lines are removed on the way out, so it found
+                // nothing, created no subscription at all, and still told the customer the payment had
+                // succeeded. The admin email below was the only trace of the order (audit 3.12).
+                await AddSubscriptionToAccount((Guid)userId!, cartItems, "pending");
+
                 if (!string.IsNullOrEmpty(adminEmail))
                 {
                     await emailSender.SendEmailAsync(adminEmail, "New Subscription Added", emailMessage);
                 }
-                var returnUrl = Url.Action("PaymentSuccess", "IptvCart", null, Request.Scheme);
+
+                // Seal what is owed: the return cannot re-read a cart that no longer exists, so the
+                // figure is carried back inside a tamper-proof payload instead. This is the converted
+                // total actually being charged, computed by the same service that creates the order.
+                var chargeAmount = await payPalService.ExpectedTotalAsync(cartItems, currency);
+                var amountBinding = paymentIntents.ProtectAmount(chargeAmount, currency);
+
+                var returnUrl = Url.Action("PaymentSuccess", "IptvCart", new { b = amountBinding }, Request.Scheme);
                 var cancelUrl = Url.Action("PaymentCancel", "IptvCart", null, Request.Scheme);
 
-                var orderResponse = await payPalService.CreateOrderAsync(returnUrl!, cancelUrl!, cartItems, currency);
-
-                var order = JsonDocument.Parse(orderResponse);
-                var approvalUrl = order.RootElement.GetProperty("links").EnumerateArray()
-                    .First(link => link.GetProperty("rel").GetString() == "approve")
-                    .GetProperty("href").GetString();
+                var payPalGateway = paymentGateways.Resolve(MvcApp.Common.Payments.PaymentProviderKind.PayPal);
+                var initiation = await payPalGateway.InitiateAsync(new MvcApp.Common.Payments.PaymentRequest(
+                    Amount: chargeAmount,
+                    Currency: currency,
+                    Reference: userId!.Value.ToString(),
+                    Description: $"IPTV subscription ({cartItems.Count} item(s))",
+                    ReturnUrl: returnUrl,
+                    CancelUrl: cancelUrl));
 
                 foreach (var item in cartItems)
                 {
@@ -326,7 +343,12 @@ public class IptvCartController(
                 }
                 HttpContext.Session.Clear();
 
-                return Redirect(approvalUrl!);
+                if (string.IsNullOrEmpty(initiation.RedirectUrl))
+                {
+                    throw new InvalidOperationException("The PayPal rail returned no approval URL.");
+                }
+
+                return Redirect(initiation.RedirectUrl);
 
             case "Interact":
                 var interactAmount = cartItems.Sum(item => item.SubscriptionDetail!.Price);
@@ -351,71 +373,61 @@ public class IptvCartController(
     }
 
     [HttpGet("iptv-cart/payment-success")]
-    public async Task<IActionResult> PaymentSuccess(string token, string PayerID)
+    public async Task<IActionResult> PaymentSuccess(string b, string token, string PayerID)
     {
-        var capture = await payPalService.CaptureOrderAsync(token);
-
-        if (capture.Status == "COMPLETED")
-        {
-            var userId = GetUserId();
-            if (userId.HasValue)
-            {
-                var cartItems = await shoppingCartService.GetCartItemsAsync(userId.Value);
-
-                // Refuse to grant anything unless we can say what was charged. An unreadable currency
-                // would otherwise reach the conversion below and throw mid-grant.
-                if (string.IsNullOrEmpty(capture.Currency))
-                {
-                    logger.LogWarning("IPTV capture returned no currency; refusing to grant.");
-                    ViewBag.Message = localizer["We could not confirm your payment. Please contact support."];
-                    ViewBag.Token = token;
-                    ViewBag.PayerID = PayerID;
-                    return View();
-                }
-
-                // Verify what was captured against what the cart costs, in the currency that was
-                // actually charged. Reading only the status meant any completed payment satisfied
-                // this — the same defect fixed for Store and VIP (audit 3.12). The expected value is
-                // recomputed through the same conversion CreateOrderAsync used, so the check needs
-                // no knowledge of which currency the customer had selected.
-                var expected = await payPalService.ExpectedTotalAsync(cartItems, capture.Currency);
-
-                if (capture.Amount != expected)
-                {
-                    logger.LogWarning(
-                        "IPTV capture does not match the cart: expected {Expected} {Currency}, captured {Captured}.",
-                        expected, capture.Currency, capture.Amount);
-
-                    ViewBag.Message = localizer["The amount paid did not match your order. Please contact support."];
-                    ViewBag.Token = token;
-                    ViewBag.PayerID = PayerID;
-                    return View();
-                }
-
-                await AddSubscriptionToAccount(userId.Value, cartItems, "pending");
-
-                var subscriptions = await context.Subscriptions.Where(s => s.UserId == userId.ToString() && s.Status == "pending").ToListAsync();
-                foreach (var subscription in subscriptions)
-                {
-                    subscription.Status = "processing";
-                }
-                await context.SaveChangesAsync();
-
-                foreach (var item in cartItems)
-                {
-                    await shoppingCartService.RemoveFromCartAsync(userId.Value, item.SubscriptionPlanId, item.SubscriptionDetailId);
-                }
-
-                ViewBag.Message = localizer["Your payment was successful. Thank you for your purchase!"];
-            }
-        }
-        else
-        {
-            ViewBag.Message = "Your payment is pending. Please check your PayPal account for more details.";
-        }
-
         ViewBag.Token = token;
         ViewBag.PayerID = PayerID;
+
+        // The cart is emptied at checkout, so the figure that was charged arrives in a sealed payload
+        // instead. No binding means there is nothing to match a payment to.
+        var intent = paymentIntents.UnprotectAmount(b);
+        if (intent is null)
+        {
+            logger.LogWarning("IPTV payment returned without a valid amount binding; refusing to grant.");
+            ViewBag.Message = localizer["We could not match this payment to an order. If you were charged, contact support."];
+            return View();
+        }
+
+        var payPalGateway = paymentGateways.Resolve(MvcApp.Common.Payments.PaymentProviderKind.PayPal);
+        var capture = await payPalGateway.CaptureAsync(token);
+
+        if (capture.Status != MvcApp.Common.Payments.PaymentStatus.Completed)
+        {
+            ViewBag.Message = "Your payment is pending. Please check your PayPal account for more details.";
+            return View();
+        }
+
+        // Matches() fails closed on a non-positive amount or blank currency, so a capture that
+        // reported no amount can never satisfy the sealed figure.
+        if (!capture.Matches(intent.Value.Amount, intent.Value.Currency))
+        {
+            logger.LogWarning(
+                "IPTV capture does not match the sealed amount: expected {Expected} {Currency}, captured {Captured} {CapturedCurrency}.",
+                intent.Value.Amount, intent.Value.Currency, capture.Amount, capture.Currency);
+
+            ViewBag.Message = localizer["The amount paid did not match your order. Please contact support."];
+            return View();
+        }
+
+        var userId = GetUserId();
+        if (userId.HasValue)
+        {
+            // The subscriptions already exist — they were recorded at checkout. Move them to
+            // processing, which is where a paid-but-not-yet-issued subscription belongs; issuing the
+            // credentials stays an explicit administrator step (the admin-confirmed activation mode).
+            var subscriptions = await context.Subscriptions
+                .Where(s => s.UserId == userId.ToString() && s.Status == "pending")
+                .ToListAsync();
+
+            foreach (var subscription in subscriptions)
+            {
+                subscription.Status = "processing";
+            }
+            await context.SaveChangesAsync();
+
+            ViewBag.Message = localizer["Your payment was successful. Thank you for your purchase!"];
+        }
+
         return View();
     }
 
