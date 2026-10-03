@@ -15,7 +15,8 @@ public static class ServiceRegistration
         services.AddScoped<IRepository<CartItem>, Repository<CartItem>>();
         services.AddScoped<IRepository<Order>, Repository<Order>>();
         services.AddScoped<IRepository<OrderItem>, Repository<OrderItem>>();
-        services.AddHttpClient<Services.StorePayPalService>();
+        // The PayPal integration now comes from the platform payment gate, so this module no longer
+        // registers a rail of its own.
         return services;
     }
 }

@@ -7,7 +7,6 @@ using MvcApp.Core;
 using MvcApp.Common.Filters;
 using MvcApp.Core.Abstractions;
 using MvcApp.Infrastructure;
-using MvcApp.Module.Store.Services;
 using Microsoft.Extensions.Localization;
 using MvcApp.Localization;
 
@@ -23,8 +22,9 @@ public class StoreController(
     IRepository<CartItem> cartRepo,
     IRepository<Order> orderRepo,
     IRepository<OrderItem> orderItemRepo,
-    StorePayPalService payPalService, IStringLocalizer<SharedResource> localizer,
-    Microsoft.Extensions.Logging.ILogger<StoreController> logger) : Controller
+    IStringLocalizer<SharedResource> localizer,
+    Microsoft.Extensions.Logging.ILogger<StoreController> logger,
+    MvcApp.Common.Payments.IPaymentGatewayResolver paymentGateways) : Controller
 {
     [AllowAnonymous]
     public async Task<IActionResult> Index(int page = 1, int? categoryId = null)
@@ -248,13 +248,31 @@ public class StoreController(
         {
             try
             {
+                // The rail comes from the platform gate, so this module no longer owns a PayPal
+                // integration of its own.
+                var gateway = paymentGateways.Resolve(MvcApp.Common.Payments.PaymentProviderKind.PayPal);
+
                 var returnUrl = Url.Action(nameof(PaymentSuccess), "Store", new { orderId = order.Id }, Request.Scheme);
                 var cancelUrl = Url.Action(nameof(PaymentCancel), "Store", null, Request.Scheme);
-                var approvalUrl = await payPalService.CreateOrderAsync(total, "USD", returnUrl!, cancelUrl!);
-                return Redirect(approvalUrl);
+
+                var initiation = await gateway.InitiateAsync(new MvcApp.Common.Payments.PaymentRequest(
+                    Amount: total,
+                    Currency: "USD",
+                    Reference: order.Id.ToString(),
+                    Description: $"Order {order.Id}",
+                    ReturnUrl: returnUrl,
+                    CancelUrl: cancelUrl));
+
+                if (string.IsNullOrEmpty(initiation.RedirectUrl))
+                {
+                    throw new InvalidOperationException("The PayPal rail returned no approval URL.");
+                }
+
+                return Redirect(initiation.RedirectUrl);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Could not start a PayPal payment for order {OrderId}.", order.Id);
                 TempData["Error"] = localizer["Unable to start PayPal payment. Please try again or choose Cash on Delivery."];
                 return RedirectToAction(nameof(Checkout));
             }
@@ -275,36 +293,39 @@ public class StoreController(
 
         try
         {
-            var capture = await payPalService.CaptureOrderAsync(token);
+            var gateway = paymentGateways.Resolve(MvcApp.Common.Payments.PaymentProviderKind.PayPal);
+            var verification = await gateway.CaptureAsync(token);
 
-            // Verify the captured amount against THIS order before treating it as paid. Previously only
-            // the status was inspected and nothing tied the provider token to the order id, so a valid
-            // token from a cheap order on the same account would settle an expensive one (audit 3.12).
-            // The order row is already the server-side record, so no extra binding is needed.
-            var amountMatches = capture.Currency.Equals("USD", StringComparison.OrdinalIgnoreCase)
-                                && capture.Amount == order.TotalAmount;
+            // A capture that has not completed is still pending, not a failure — keep that distinction
+            // for the customer rather than reporting a failed payment that may yet settle.
+            if (verification.Status != MvcApp.Common.Payments.PaymentStatus.Completed)
+            {
+                ViewBag.PaymentStatus = "pending";
+                return View(order);
+            }
 
-            if (capture.Status == "COMPLETED" && !amountMatches)
+            // Only a completed capture matching THIS order's total counts. Matches() fails closed on a
+            // non-positive expectation, so an empty capture can never satisfy a forgotten amount. The
+            // order row is already the server-side record, so no separate binding is needed — but the
+            // amount is what ties the captured token to this order (audit 3.12).
+            if (!verification.Matches(order.TotalAmount, "USD"))
             {
                 logger.LogWarning(
                     "Store capture does not match order {OrderId}: expected {Expected} USD, captured {Captured} {Currency}.",
-                    order.Id, order.TotalAmount, capture.Amount, capture.Currency);
+                    order.Id, order.TotalAmount, verification.Amount, verification.Currency);
 
                 TempData["Error"] = localizer["We could not match this payment to your order. If you were charged, contact support with your PayPal receipt."];
                 ViewBag.PaymentStatus = "failed";
                 return View(order);
             }
 
-            ViewBag.PaymentStatus = capture.Status == "COMPLETED" ? "paid" : "pending";
-            if (capture.Status == "COMPLETED")
-            {
-                order.PaymentStatus = PaymentStatus.Paid;
-                order.Status = OrderStatus.Processing;
-                await orderRepo.UpdateAsync(order);
+            ViewBag.PaymentStatus = "paid";
+            order.PaymentStatus = PaymentStatus.Paid;
+            order.Status = OrderStatus.Processing;
+            await orderRepo.UpdateAsync(order);
 
-                // The payment is confirmed, so now commit stock and clear the lines this order covers.
-                await CommitOrderAsync(order);
-            }
+            // The payment is confirmed, so now commit stock and clear the lines this order covers.
+            await CommitOrderAsync(order);
         }
         catch
         {
