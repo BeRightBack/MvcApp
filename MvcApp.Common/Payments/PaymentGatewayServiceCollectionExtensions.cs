@@ -19,6 +19,10 @@ public static class PaymentGatewayServiceCollectionExtensions
         services.Configure<ManualPaymentOptions>(configuration.GetSection(ManualPaymentOptions.SectionName));
         services.AddSingleton<IPaymentGateway, ManualPaymentGateway>();
 
+        // Whether an unverifiable payment claim activates on its own is a per-template choice.
+        services.Configure<ActivationOptions>(configuration.GetSection(ActivationOptions.SectionName));
+        services.AddSingleton<ActivationPolicy>();
+
         services.AddSingleton<IPaymentGatewayResolver, PaymentGatewayResolver>();
 
         return services;
