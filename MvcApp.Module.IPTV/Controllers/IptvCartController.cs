@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -122,33 +123,45 @@ public class IptvCartController(
     [HttpGet("iptv-cart/checkout")]
     public async Task<IActionResult> Checkout()
     {
+        SetCheckoutViewData();
+        return View(await BuildCheckoutModelAsync());
+    }
+
+    private void SetCheckoutViewData()
+    {
         ViewData["Title"] = "Checkout";
         ViewData["Description"] = "Enter your payment details to complete your purchase.";
         ViewData["Keywords"] = "IPTV, Quebec, Streaming, Live Channels, Online TV, VOD, Canada TV";
+    }
 
+    private async Task<CheckoutViewModel> BuildCheckoutModelAsync()
+    {
         var userId = GetUserId();
-        if (userId.HasValue)
+
+        var cartItems = userId.HasValue
+            ? await shoppingCartService.GetCartItemsAsync(userId.Value)
+            : HttpContext.Session.GetObjectFromJson<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
+
+        return new CheckoutViewModel
         {
-            var cartItems = await shoppingCartService.GetCartItemsAsync(userId.Value);
-            var model = new CheckoutViewModel
-            {
-                CartItems = cartItems,
-                SelectedDeviceType = cartItems.FirstOrDefault()?.SubscriptionDetail?.Description,
-                VerificationCode = string.Empty
-            };
-            return View(model);
-        }
-        else
-        {
-            var cart = HttpContext.Session.GetObjectFromJson<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
-            var model = new CheckoutViewModel
-            {
-                CartItems = cart,
-                SelectedDeviceType = cart.FirstOrDefault()?.SubscriptionDetail?.Description,
-                VerificationCode = string.Empty
-            };
-            return View(model);
-        }
+            CartItems = cartItems,
+            SelectedDeviceType = cartItems.FirstOrDefault()?.SubscriptionDetail?.Description,
+            VerificationCode = string.Empty
+        };
+    }
+
+    /// <summary>
+    /// Validates the CAPTCHA posted with the checkout form and consumes it (single use). This form
+    /// carries an email address and, for a new account, a password, so the challenge is mandatory —
+    /// the posted code used to be collected by the view and never checked by the controller.
+    /// </summary>
+    private bool IsVerificationCodeValid(string? provided)
+    {
+        var expected = HttpContext.Session.GetString("CaptchaCode");
+        HttpContext.Session.Remove("CaptchaCode");
+
+        return !string.IsNullOrEmpty(expected) &&
+               string.Equals(expected, provided, StringComparison.Ordinal);
     }
 
     [HttpPost("iptv-cart/checkout/update-device-type")]
@@ -169,6 +182,22 @@ public class IptvCartController(
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ProcessPayment(CheckoutViewModel model)
     {
+        // Mandatory CAPTCHA. The view collected this code, but the controller never checked it — so
+        // the one form that carries an email address (and a password, for new accounts) had no
+        // challenge at all. On failure the typed details are preserved so the visitor just
+        // re-enters the code; only the code is cleared.
+        if (!IsVerificationCodeValid(model.VerificationCode))
+        {
+            ModelState.AddModelError(nameof(model.VerificationCode),
+                localizer["The verification code is incorrect or has expired. Please request a new code."]);
+
+            model.CartItems = (await BuildCheckoutModelAsync()).CartItems;
+            model.VerificationCode = string.Empty;
+            SetCheckoutViewData();
+
+            return View("Checkout", model);
+        }
+
         var userId = GetUserId();
         UserDetails? user = null;
         var cartItems = userId.HasValue

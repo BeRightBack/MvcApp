@@ -82,7 +82,7 @@ public class IptvHomeController(UserDbContext context, IStringLocalizer<SharedRe
         try
         {
             var random = new Random();
-            var captchaCode = random.Next(1000, 9999).ToString();
+            var captchaCode = random.Next(100000, 999999).ToString();
             HttpContext.Session.SetString("CaptchaCode", captchaCode);
 
             var svg = GenerateSvgCaptcha(captchaCode);

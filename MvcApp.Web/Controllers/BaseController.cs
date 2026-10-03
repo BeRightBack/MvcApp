@@ -246,7 +246,7 @@ public class BaseController : Controller
         try
         {
             var random = new Random();
-            var captchaCode = random.Next(1000, 9999).ToString(); // Generate a 4-digit random number
+            var captchaCode = random.Next(100000, 999999).ToString(); // 6 digits
             HttpContext.Session.SetString("CaptchaCode", captchaCode); // Store it in session
 
             // Generate a simple text-based captcha as SVG
