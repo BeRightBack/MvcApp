@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using MvcApp.Common.Filters;
 using MvcApp.Core;
 using MvcApp.Core.Abstractions;
@@ -28,6 +29,8 @@ public class IptvCartController(
     IConfiguration configuration,
     IRepository<UserDetails> userRepository,
     IEmailSender emailSender,
+    MvcApp.Common.Payments.ActivationPolicy activationPolicy,
+    Microsoft.Extensions.Logging.ILogger<IptvCartController> logger,
     IStringLocalizer<SharedResource> localizer) : Controller
 {
     [HttpPost("iptv-cart/add")]
@@ -424,8 +427,7 @@ public class IptvCartController(
             return Challenge();
         }
 
-        await SetPendingSubscriptionsToProcessing(currentUserId.Value);
-        await ActivateSubscription(currentUserId.Value);
+        await HandleOfflinePaymentClaimAsync(currentUserId.Value, "PayPal.Me");
         return RedirectToAction(nameof(PaymentSuccess));
     }
 
@@ -440,9 +442,52 @@ public class IptvCartController(
             return Challenge();
         }
 
-        await SetPendingSubscriptionsToProcessing(currentUserId.Value);
-        await ActivateSubscription(currentUserId.Value);
+        await HandleOfflinePaymentClaimAsync(currentUserId.Value, "Interac e-Transfer");
         return RedirectToAction(nameof(PaymentSuccess));
+    }
+
+    /// <summary>
+    /// A customer reports that they have paid over a rail nothing can verify automatically (Interac
+    /// e-Transfer, PayPal.Me). Whether that claim activates the subscription is a PER-TEMPLATE
+    /// setting, not a fixed behaviour.
+    ///
+    /// Previously both endpoints unconditionally flipped the caller's own pending subscriptions to
+    /// processing and then to active, generating working credentials — so any signed-in user could
+    /// POST to them and grant themselves a subscription for free, with no payment involved
+    /// (audit 3.12). Under the default mode a claim now only notifies an administrator, and the
+    /// subscription stays pending until a human checks the deposit.
+    /// </summary>
+    private async Task HandleOfflinePaymentClaimAsync(Guid userId, string rail)
+    {
+        var total = (await shoppingCartService.GetCartItemsAsync(userId))
+            .Sum(item => item.SubscriptionDetail?.Price ?? 0m);
+
+        if (activationPolicy.ShouldActivateAutomatically(total))
+        {
+            logger.LogInformation(
+                "Activating subscription(s) automatically for {UserId}: {Amount} claimed via {Rail} (activation mode {Mode}).",
+                userId, total, rail, activationPolicy.Mode);
+
+            await SetPendingSubscriptionsToProcessing(userId);
+            await ActivateSubscription(userId);
+            return;
+        }
+
+        // No verified payment exists, so nothing activates. Ask the administrator to check the
+        // deposit — this is the email step the offline model depends on.
+        logger.LogInformation(
+            "Payment claim from {UserId} for {Amount} via {Rail} held for verification (activation mode {Mode}).",
+            userId, total, rail, activationPolicy.Mode);
+
+        var adminEmail = configuration["AdminEmail"];
+        if (!string.IsNullOrEmpty(adminEmail))
+        {
+            await emailSender.SendEmailAsync(
+                adminEmail,
+                "IPTV subscription awaiting payment verification",
+                $"User {userId} reports paying {total:F2} via {rail}. "
+                + "Check the deposit against the reference before activating this subscription.");
+        }
     }
 
     private async Task SetPendingSubscriptionsToProcessing(Guid userId)
