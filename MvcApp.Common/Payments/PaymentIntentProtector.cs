@@ -73,4 +73,15 @@ public sealed class PaymentIntentProtector
 
         return new PaymentIntent(planId, detailId, amount, parts[3]);
     }
+
+    /// <summary>
+    /// Seals only an amount and currency, for a checkout whose plan identity is already recorded
+    /// server-side before the customer leaves the app (the IPTV flow creates its pending
+    /// subscriptions at checkout, so what is owed is already stored and only the figure needs
+    /// protecting). The returned intent carries zero ids, which such a caller ignores.
+    /// </summary>
+    public string ProtectAmount(decimal amount, string currency) => Protect(0, 0, amount, currency);
+
+    /// <summary>The amount/currency intent, or null if the payload is missing or unreadable.</summary>
+    public PaymentIntent? UnprotectAmount(string? payload) => Unprotect(payload);
 }
