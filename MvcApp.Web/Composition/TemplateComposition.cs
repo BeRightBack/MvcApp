@@ -55,6 +55,8 @@ public sealed class TemplateComposition
         var explicitModules = ReadList(configuration.GetSection(ModulesKey));
         if (explicitModules.Count > 0)
         {
+            EnsureKnown(explicitModules, ModulesKey);
+
             return new TemplateComposition(
                 new HashSet<string>(explicitModules, StringComparer.OrdinalIgnoreCase),
                 ModulesKey);
@@ -72,9 +74,32 @@ public sealed class TemplateComposition
                 + $"Known templates: {string.Join(", ", profiles.GetTemplates())}. "
                 + "Composing every module instead would ship features this site is not made of.");
 
+        EnsureKnown(profile.Composition.Modules, $"{TemplateNameKey} = {profile.Template}");
+
         return new TemplateComposition(
             new HashSet<string>(profile.Composition.Modules, StringComparer.OrdinalIgnoreCase),
             $"{TemplateNameKey} = {profile.Template}");
+    }
+
+    /// <summary>
+    /// Composition can only name something with an assembly behind it: it decides which assemblies
+    /// are loaded and which MVC application parts exist, so a name with nothing behind it can only
+    /// fail. This is checked where the composition is resolved rather than at request time.
+    ///
+    /// It exists because 'Gamification' was listed for Dating: a real feature with a real runtime
+    /// flag, but living inside MvcApp.Web rather than in a module assembly. The app refused to start
+    /// (verified). Features like it are switched by their setting, not by composition.
+    /// </summary>
+    private static void EnsureKnown(IEnumerable<string> modules, string source)
+    {
+        var unknown = modules.Where(module => !ModuleNames.IsKnown(module)).ToList();
+        if (unknown.Count > 0)
+        {
+            throw new InvalidOperationException(
+                $"{source} names module(s) that are not modules: {string.Join(", ", unknown)}. "
+                + $"A composed module must have an assembly. Known modules: {string.Join(", ", ModuleNames.All)}. "
+                + "Features inside MvcApp.Web (Events, Gamification) are switched by their setting, not by composition.");
+        }
     }
 
     /// <summary>
