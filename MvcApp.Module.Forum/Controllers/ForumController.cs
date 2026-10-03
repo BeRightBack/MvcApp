@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcApp.Core;
 using MvcApp.Common.Filters;
+using MvcApp.Common.Html;
 using MvcApp.Core.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -19,7 +20,8 @@ public class ForumController(
     IRepository<MvcApp.Core.Forum> forumRepo,
     IRepository<ForumThread> threadRepo,
     IRepository<ForumPost> postRepo,
-    IBanService banService, IStringLocalizer<SharedResource> localizer) : Controller
+    IBanService banService, IStringLocalizer<SharedResource> localizer,
+    IHtmlContentSanitizer htmlSanitizer) : Controller
 {
     public async Task<IActionResult> Index()
     {
@@ -108,7 +110,9 @@ public class ForumController(
             CreatedById = currentUser.Id,
             CreatedByUsername = currentUser.UserName!,
             CreatedAt = DateTime.UtcNow,
-            Content = content
+            // Sanitised on the way in: the body is rich text and is rendered with Html.Raw, so an
+            // unvetted body is stored XSS for every reader (audit 2.1).
+            Content = htmlSanitizer.Sanitize(content)
         });
 
         thread.ReplyCount = 1;
@@ -189,7 +193,9 @@ public class ForumController(
             CreatedById = currentUser.Id,
             CreatedByUsername = currentUser.UserName!,
             CreatedAt = DateTime.UtcNow,
-            Content = content
+            // Sanitised on the way in: the body is rich text and is rendered with Html.Raw, so an
+            // unvetted body is stored XSS for every reader (audit 2.1).
+            Content = htmlSanitizer.Sanitize(content)
         });
 
         thread.ReplyCount++;
@@ -289,7 +295,7 @@ public class ForumController(
             return View();
         }
 
-        post.Content = content;
+        post.Content = htmlSanitizer.Sanitize(content);
         post.UpdatedAt = DateTime.UtcNow;
         post.UpdatedById = currentUser.Id;
         await postRepo.UpdateAsync(post);

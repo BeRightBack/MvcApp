@@ -190,6 +190,8 @@ try
     // not merely that a TCP connection to MySQL succeeded.
     builder.Services.AddSingleton<StartupState>();
     builder.Services.AddSingleton<MvcApp.Web.Storage.VerificationDocumentStore>();
+    // User-authored rich text is allow-list sanitised before it is stored or rendered (audit 2.1).
+    builder.Services.AddSingleton<MvcApp.Common.Html.IHtmlContentSanitizer, MvcApp.Common.Html.HtmlContentSanitizer>();
     builder.Services.AddHealthChecks()
         .AddCheck<DatabaseHealthCheck>("database")
         .AddCheck<PendingMigrationsHealthCheck>("migrations")

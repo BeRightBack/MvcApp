@@ -1,3 +1,5 @@
+@using MvcApp.Common.Html
+@inject IHtmlContentSanitizer ForumContentSanitizer
 @model IEnumerable<ForumPost>
 @{
     var thread = ViewBag.Thread as ForumThread;
@@ -98,7 +100,9 @@
             </div>
             <div class="card-body">
                 <div class="forum-post-content">
-                    @Html.Raw(post.Content)
+                    @* Sanitised again here, not just on write: rows stored before the write path was
+                       fixed would otherwise still execute their payload for every reader. *@
+                    @Html.Raw(ForumContentSanitizer.Sanitize(post.Content))
                 </div>
             </div>
         </div>
