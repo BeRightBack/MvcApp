@@ -82,4 +82,11 @@ public sealed class ManualPaymentGateway(IOptions<ManualPaymentOptions> options,
             Currency: string.Empty,
             ProviderReference: providerReference,
             FailureReason: null));
+
+    /// <summary>
+    /// Also always pending: there is nothing to capture. An offline rail settles outside the app, so
+    /// this deliberately cannot advance the payment — only an administrator can.
+    /// </summary>
+    public Task<PaymentVerification> CaptureAsync(string providerReference, CancellationToken cancellationToken = default)
+        => VerifyAsync(providerReference, cancellationToken);
 }

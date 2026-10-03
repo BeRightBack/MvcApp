@@ -22,6 +22,10 @@ public class PaymentGatewayTests
 
         var services = new ServiceCollection();
         services.AddLogging();
+        // Mirror the real container: a client factory and the configuration are both present there,
+        // and the PayPal rail resolves both.
+        services.AddHttpClient();
+        services.AddSingleton<IConfiguration>(configuration);
         PaymentGatewayServiceCollectionExtensions.AddPaymentGateways(services, configuration);
 
         return services.BuildServiceProvider();
@@ -104,8 +108,10 @@ public class PaymentGatewayTests
 
         var services = new ServiceCollection();
         services.AddLogging();
-        PaymentGatewayServiceCollectionExtensions.AddPaymentGateways(
-            services, new ConfigurationBuilder().Build());
+        services.AddHttpClient();
+        var secondConfiguration = new ConfigurationBuilder().Build();
+        services.AddSingleton<IConfiguration>(secondConfiguration);
+        PaymentGatewayServiceCollectionExtensions.AddPaymentGateways(services, secondConfiguration);
         services.AddSingleton<IPaymentGateway>(new StubGateway(PaymentProviderKind.Card));
         using var provider2 = services.BuildServiceProvider();
 
@@ -145,5 +151,8 @@ public class PaymentGatewayTests
 
         public Task<PaymentVerification> VerifyAsync(string providerReference, CancellationToken cancellationToken = default)
             => Task.FromResult(new PaymentVerification(PaymentStatus.Completed, 10.00m, "CAD", providerReference));
+
+        public Task<PaymentVerification> CaptureAsync(string providerReference, CancellationToken cancellationToken = default)
+            => VerifyAsync(providerReference, cancellationToken);
     }
 }
