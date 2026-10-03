@@ -16,6 +16,7 @@ using MvcApp.Web.Models.HomeViewModels;
 
 namespace MvcApp.Web.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     public class HomeController : BaseController
     {
 

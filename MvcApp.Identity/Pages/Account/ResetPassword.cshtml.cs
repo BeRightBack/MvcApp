@@ -15,7 +15,8 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace MvcApp.Identity.Pages.Account
 {
     [EnableRateLimiting("auth")]
-    public class ResetPasswordModel : PageModel
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<UserDetails> _userManager;
 

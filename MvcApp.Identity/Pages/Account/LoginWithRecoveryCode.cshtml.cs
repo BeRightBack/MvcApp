@@ -12,7 +12,8 @@ using MvcApp.Localization.Custom;
 
 namespace MvcApp.Identity.Pages.Account
 {
-    public class LoginWithRecoveryCodeModel : PageModel
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+public class LoginWithRecoveryCodeModel : PageModel
     {
         private readonly SignInManager<UserDetails> _signInManager;
         private readonly UserManager<UserDetails> _userManager;

@@ -17,7 +17,8 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace MvcApp.Identity.Pages.Account
 {
     [EnableRateLimiting("auth")]
-    public class ForgotPasswordModel : PageModel
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<UserDetails> _userManager;
         private readonly IEmailSender _emailSender;

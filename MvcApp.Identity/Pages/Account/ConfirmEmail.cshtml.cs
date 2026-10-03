@@ -11,7 +11,8 @@ using System.Text;
 
 namespace MvcApp.Identity.Pages.Account
 {
-    public class ConfirmEmailModel : PageModel
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<UserDetails> _userManager;
         private readonly SignInManager<UserDetails> _signInManager;

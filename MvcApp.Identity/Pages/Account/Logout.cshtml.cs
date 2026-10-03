@@ -10,7 +10,8 @@ using MvcApp.Core;
 
 namespace MvcApp.Identity.Pages.Account
 {
-    public class LogoutModel : PageModel
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+public class LogoutModel : PageModel
     {
         private readonly SignInManager<UserDetails> _signInManager;
         private readonly ILogger<LogoutModel> _logger;

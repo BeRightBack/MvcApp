@@ -274,6 +274,16 @@ try
     {
         options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
         options.Filters.Add(new MobileLayoutFilter());
+
+        // Phase 2 default-deny: every action now requires an authenticated user unless it (or its
+        // controller) is explicitly marked [AllowAnonymous]. Deliberately a global AuthorizeFilter
+        // rather than a FallbackPolicy: the fallback also applies when NO endpoint matched, which
+        // turned every unknown URL from a 404 into a redirect to the login page (observed on
+        // /does-not-exist), so it was replaced with this.
+        options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(
+            new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build()));
     })
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
@@ -293,6 +303,9 @@ try
     builder.Services.AddRazorPages(options =>
     {
         options.Conventions.ConfigureFilter(new MobileLayoutPageFilter());
+
+        // Same default-deny for pages (Phase 2); the public Identity pages carry [AllowAnonymous].
+        options.Conventions.AuthorizeFolder("/");
     })
     .AddRazorRuntimeCompilation() // Enable runtime compilation for debugging
     .AddViewLocalization()
@@ -459,12 +472,14 @@ try
     app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
     {
         Predicate = _ => false
-    });
+    }).AllowAnonymous();
 
     // Readiness: safe to receive traffic — schema current AND seeding finished. "/health" remains
     // the readiness alias so existing probes keep working unchanged.
-    app.MapHealthChecks("/health/ready");
-    app.MapHealthChecks("/health");
+    // AllowAnonymous on all three: under the Phase 2 fallback policy an endpoint with no
+    // authorization metadata would otherwise require a login, which would take the probes down.
+    app.MapHealthChecks("/health/ready").AllowAnonymous();
+    app.MapHealthChecks("/health").AllowAnonymous();
 
     // Seed in the background while the server starts. The bootstrap tier (languages,
     // settings, module flags, roles, the administrator, reference data) runs in EVERY

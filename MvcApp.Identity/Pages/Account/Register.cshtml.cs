@@ -20,7 +20,8 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace MvcApp.Identity.Pages.Account
 {
     [EnableRateLimiting("auth")]
-    public class RegisterModel : PageModel
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+public class RegisterModel : PageModel
     {
         private readonly SignInManager<UserDetails> _signInManager;
         private readonly UserManager<UserDetails> _userManager;

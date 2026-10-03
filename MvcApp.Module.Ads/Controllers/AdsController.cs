@@ -6,6 +6,7 @@ using MvcApp.Module.Ads.Services;
 namespace MvcApp.Module.Ads.Controllers;
 
 [Route("ads")]
+[Microsoft.AspNetCore.Authorization.AllowAnonymous]
 public class AdsController : Controller
 {
     private readonly IAdTrackingService _trackingService;
