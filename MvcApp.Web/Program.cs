@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -186,6 +187,28 @@ try
 
     // Operational endpoints: /health reports database reachability for load balancers / uptime probes.
     builder.Services.AddHealthChecks().AddCheck<DatabaseHealthCheck>("database");
+
+    // Data Protection keys must OUTLIVE a deployment and be shared between instances, or auth
+    // cookies, session state and antiforgery tokens are invalidated on every restart and every
+    // additional instance. The default per-user ring is machine-local and not deploy-stable, and
+    // without a stable application name the ring is shared with any other app on the box.
+    var dataProtectionPath = builder.Configuration.GetValue<string>("DataProtection:KeyPath");
+    if (string.IsNullOrWhiteSpace(dataProtectionPath))
+    {
+        dataProtectionPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "MvcApp",
+            "keys");
+    }
+
+    dataProtectionPath = Path.GetFullPath(dataProtectionPath);
+    Directory.CreateDirectory(dataProtectionPath);
+
+    builder.Services.AddDataProtection()
+        .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionPath))
+        .SetApplicationName("MvcApp");
+
+    Log.Information("Data Protection key ring: {KeyPath}", dataProtectionPath);
 
     // Rate limiting. A NAMED policy is optional metadata that any endpoint can simply lack —
     // which is exactly how the "auth" policy ended up throttling nothing. A global limiter
