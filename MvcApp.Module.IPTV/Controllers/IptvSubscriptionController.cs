@@ -83,6 +83,55 @@ public class IptvSubscriptionController(
         return View(viewModel);
     }
 
+    /// <summary>
+    /// Confirms that money for an offline (or otherwise unverifiable) payment actually arrived, then
+    /// activates the subscription: credentials are generated and emailed to the customer.
+    ///
+    /// This is the step the admin-confirmed activation mode depends on — without it a customer's
+    /// claim raises a notification and nothing can ever fulfil it. Activation is an explicit,
+    /// audited administrator action rather than something the customer's own POST performs, which
+    /// was the exploit: either claim endpoint used to activate and mint credentials for the caller
+    /// with no payment at all (audit 3.12).
+    /// </summary>
+    [HttpPost("iptv-subscription/activate/{id:int}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Activate(int id)
+    {
+        var subscription = await subscriptionRepository.GetByIdAsync(id);
+        if (subscription == null)
+        {
+            return NotFound();
+        }
+
+        if (subscription.Status == "active")
+        {
+            TempData["Message"] = localizer["That subscription is already active."];
+            return RedirectToAction(nameof(Index));
+        }
+
+        subscription.UserCode = MvcApp.Module.IPTV.Services.SubscriptionCredentials.GenerateUserCode();
+        subscription.Password = MvcApp.Module.IPTV.Services.SubscriptionCredentials.GeneratePassword();
+        subscription.Status = "active";
+        await subscriptionRepository.UpdateAsync(subscription);
+
+        // Email is the fulfilment channel in this model: the customer is told their credentials and
+        // the date the term ends. Credentials are never written to the log.
+        var user = await userManager.FindByIdAsync(subscription.UserId);
+        if (!string.IsNullOrEmpty(user?.Email))
+        {
+            await emailSender.SendEmailAsync(
+                user.Email,
+                "Your subscription is active",
+                "Your payment has been confirmed and your subscription is now active."
+                + $"\n\nUsername: {subscription.UserCode}"
+                + $"\nPassword: {subscription.Password}"
+                + $"\n\nActive until {subscription.EndDate:yyyy-MM-dd}.");
+        }
+
+        TempData["Message"] = localizer["Subscription activated and the customer has been emailed."];
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpGet("iptv-subscription/details/{id:int}")]
     public async Task<IActionResult> Details(int id)
     {
