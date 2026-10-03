@@ -10,7 +10,7 @@ using MvcApp.Localization;
 namespace MvcApp.Web.Controllers;
 
 [Authorize]
-public class VerificationController(UserDbContext db, UserManager<UserDetails> userManager, IStringLocalizer<SharedResource> localizer) : Controller
+public class VerificationController(UserDbContext db, UserManager<UserDetails> userManager, IStringLocalizer<SharedResource> localizer, MvcApp.Web.Storage.VerificationDocumentStore verificationDocuments) : Controller
 {
     private static readonly string[] AllowedImageTypes = ["image/jpeg", "image/png", "image/webp"];
     private const long MaxFileSize = 10 * 1024 * 1024; // 10MB
@@ -79,12 +79,13 @@ public class VerificationController(UserDbContext db, UserManager<UserDetails> u
 
         var ext = Path.GetExtension(selfieFile.FileName);
         var fileName = $"verify_{Guid.NewGuid()}{ext}";
-        var dir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Verifications", user.UserName ?? user.Id);
 
-        if (!Directory.Exists(dir))
-            Directory.CreateDirectory(dir);
+        // Written OUTSIDE the web root. Under wwwroot these were served by the static-file
+        // middleware with no authorization at all, so an identity document was readable by anyone
+        // holding the URL (audit 2.3). They are now streamed only by an authorized action, and the
+        // owner key is the immutable user id rather than the (changeable) username.
+        var filePath = verificationDocuments.CreatePath(user.Id, fileName);
 
-        var filePath = Path.Combine(dir, fileName);
         using (var stream = new FileStream(filePath, FileMode.Create))
         {
             await selfieFile.CopyToAsync(stream);

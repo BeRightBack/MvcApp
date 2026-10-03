@@ -13,9 +13,40 @@ namespace MvcApp.Web.Areas.Admin.Controllers;
 public class VerificationModerationController(
     UserDbContext db,
     UserManager<UserDetails> userManager,
-    IGamificationService gamification) : Controller
+    IGamificationService gamification,
+    MvcApp.Web.Storage.VerificationDocumentStore verificationDocuments) : Controller
 {
     private const int PageSize = 12;
+
+    /// <summary>
+    /// Streams a submitted identity document to an administrator. The file lives outside the web
+    /// root precisely so it cannot be fetched directly — this action, behind the controller's
+    /// [Authorize(Roles = "Admin")], is the only way to read one.
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> Document(int id)
+    {
+        var request = await db.VerificationRequests.FirstOrDefaultAsync(v => v.Id == id);
+        if (request is null)
+        {
+            return NotFound();
+        }
+
+        var path = verificationDocuments.TryResolve(request.UserId, request.Filename);
+        if (path is null)
+        {
+            return NotFound();
+        }
+
+        return PhysicalFile(path, ContentTypeFor(path));
+    }
+
+    private static string ContentTypeFor(string path) => Path.GetExtension(path).ToLowerInvariant() switch
+    {
+        ".png" => "image/png",
+        ".webp" => "image/webp",
+        _ => "image/jpeg"
+    };
 
     public async Task<IActionResult> Index(string filter = "pending", int page = 1)
     {

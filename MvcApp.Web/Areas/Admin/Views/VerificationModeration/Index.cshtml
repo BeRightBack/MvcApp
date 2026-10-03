@@ -60,7 +60,7 @@
                     <div class="col-md-4">
                         <div class="card border-0 rounded-4 shadow-sm h-100">
                             <div class="position-relative bg-light" style="height:250px;">
-                                <img src="/Verifications/@request.User?.UserName/@request.Filename"
+                                <img src="@Url.Action("Document", "VerificationModeration", new { area = "Admin", id = request.Id })"
                                      class="w-100 h-100" style="object-fit:cover; border-radius:1rem 1rem 0 0;"
                                      onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'d-flex align-items-center justify-content-center h-100 text-muted\'><i class=\'bx bx-image\' style=\'font-size:3rem;\'></i></div>';"
                                      alt="@(Localizer["Verification photo"])">
