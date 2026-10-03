@@ -192,6 +192,9 @@ try
     builder.Services.AddSingleton<MvcApp.Web.Storage.VerificationDocumentStore>();
     // User-authored rich text is allow-list sanitised before it is stored or rendered (audit 2.1).
     builder.Services.AddSingleton<MvcApp.Common.Html.IHtmlContentSanitizer, MvcApp.Common.Html.HtmlContentSanitizer>();
+    // Seals the quoted plan/detail/amount into the payment return URL so the grant cannot be pointed
+    // at a different plan than the one that was paid for (audit 3.12).
+    builder.Services.AddSingleton<MvcApp.Common.Payments.PaymentIntentProtector>();
     builder.Services.AddHealthChecks()
         .AddCheck<DatabaseHealthCheck>("database")
         .AddCheck<PendingMigrationsHealthCheck>("migrations")

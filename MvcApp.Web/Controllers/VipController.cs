@@ -6,6 +6,7 @@ using MvcApp.Core;
 using MvcApp.Infrastructure;
 using MvcApp.Web.Services;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using MvcApp.Localization;
 
 namespace MvcApp.Web.Controllers;
@@ -14,7 +15,9 @@ namespace MvcApp.Web.Controllers;
 public class VipController(
     UserDbContext db,
     UserManager<UserDetails> userManager,
-    VipPayPalService payPalService, IStringLocalizer<SharedResource> localizer) : Controller
+    VipPayPalService payPalService, IStringLocalizer<SharedResource> localizer,
+    MvcApp.Common.Payments.PaymentIntentProtector paymentIntents,
+    ILogger<VipController> logger) : Controller
 {
     private static readonly Dictionary<string, (decimal Rate, string Symbol, string Code)> _currencies = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -71,7 +74,11 @@ public class VipController(
         var detail = plan.SubscriptionDetails.FirstOrDefault(d => d.Id == detailId);
         if (detail == null) return BadRequest("Plan has no such pricing detail.");
 
-        var returnUrl = Url.Action(nameof(PaymentSuccess), "Vip", new { planId, detailId }, Request.Scheme)!;
+        // Bind the checkout to the payment: the plan, detail and quoted amount travel back from the
+        // provider inside a signed payload instead of raw query-string ids, so they cannot be swapped
+        // for a cheaper order's token (audit 3.12).
+        var binding = paymentIntents.Protect(plan.Id, detail.Id, detail.Price, "USD");
+        var returnUrl = Url.Action(nameof(PaymentSuccess), "Vip", new { b = binding }, Request.Scheme)!;
         var cancelUrl = Url.Action(nameof(Index), "Vip", null, Request.Scheme)!;
 
         try
@@ -86,23 +93,50 @@ public class VipController(
         }
     }
 
-    public async Task<IActionResult> PaymentSuccess(int planId, int detailId, string token, string? PayerID)
+    public async Task<IActionResult> PaymentSuccess(string b, string token, string? PayerID)
     {
         var user = await userManager.GetUserAsync(User);
         if (user == null) return Challenge();
 
+        // The plan, detail and quoted amount come from the signed binding issued at checkout — never
+        // from the query string. Without a readable binding there is nothing to honour: previously
+        // planId/detailId were plain parameters, so a buyer could pay for the cheapest detail and
+        // present that order's token alongside an expensive detail id (audit 3.12).
+        var intent = paymentIntents.Unprotect(b);
+        if (intent is null)
+        {
+            logger.LogWarning("VIP payment returned without a valid binding; refusing to grant.");
+            TempData["Error"] = localizer["We could not match this payment to an order. If you were charged, contact support with your PayPal receipt."];
+            return RedirectToAction(nameof(Index));
+        }
+
         var plan = await db.SubscriptionPlans
             .Include(p => p.SubscriptionDetails)
-            .FirstOrDefaultAsync(p => p.Id == planId);
+            .FirstOrDefaultAsync(p => p.Id == intent.Value.PlanId);
         if (plan == null) return NotFound();
 
-        var detail = plan.SubscriptionDetails.FirstOrDefault(d => d.Id == detailId);
+        var detail = plan.SubscriptionDetails.FirstOrDefault(d => d.Id == intent.Value.DetailId);
         if (detail == null) return BadRequest("Plan has no such pricing detail.");
 
         try
         {
-            var status = await payPalService.CaptureOrderAsync(token);
-            if (status == "COMPLETED")
+            var capture = await payPalService.CaptureOrderAsync(token);
+
+            // Compare what was actually captured with what was quoted. The old code inspected only the
+            // status, so a completed payment for a different (cheaper) order satisfied it.
+            if (capture.Status == "COMPLETED" &&
+                (!string.Equals(capture.Currency, intent.Value.Currency, StringComparison.OrdinalIgnoreCase) ||
+                 capture.Amount != intent.Value.Amount))
+            {
+                logger.LogWarning(
+                    "VIP capture does not match the bound order: quoted {QuotedAmount} {QuotedCurrency}, captured {CapturedAmount} {CapturedCurrency}.",
+                    intent.Value.Amount, intent.Value.Currency, capture.Amount, capture.Currency);
+
+                TempData["Error"] = localizer["The amount paid did not match this order. Please contact support."];
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (capture.Status == "COMPLETED")
             {
                 var now = DateTime.UtcNow;
                 var months = detail.DurationInMonths > 0 ? detail.DurationInMonths : 1;
