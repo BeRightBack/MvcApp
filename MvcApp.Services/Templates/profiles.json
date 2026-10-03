@@ -10,93 +10,468 @@
     "Only packs in SeedPackNames.All may be listed. An unknown name fails the profile tests.",
     "Override this file without rebuilding by pointing Templates:ProfilesPath at another copy."
   ],
-
   "profiles": [
     {
       "template": "Default",
       "purpose": "Neutral starting point: the community shell only.",
-      "content": { "packs": ["Community"] },
-      "composition": { "modules": ["Forum", "Messages", "Pages"], "offModules": ["Iptv"] }
+      "content": {
+        "packs": [
+          "Community"
+        ]
+      },
+      "composition": {
+        "modules": [
+          "Forum",
+          "Messages",
+          "Pages"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "false",
+          "Module.Chat.Enabled": "false",
+          "Module.Video.Enabled": "false",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "false",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "false",
+          "Module.Utility.Enabled": "false",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
+      }
     },
     {
       "template": "Dating",
       "purpose": "Adult dating club. Interest tags and VIP tiers are the point.",
-      "content": { "packs": ["Community", "Dating", "Plans"] },
+      "content": {
+        "packs": [
+          "Community",
+          "Dating",
+          "Plans"
+        ]
+      },
       "composition": {
-        "modules": ["Forum", "Chat", "Messages", "Video", "Utility", "Pages"],
-        "offModules": ["Iptv"]
+        "modules": [
+          "Forum",
+          "Chat",
+          "Messages",
+          "Video",
+          "Utility",
+          "Pages"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "false",
+          "Module.Chat.Enabled": "true",
+          "Module.Video.Enabled": "true",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "false",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "false",
+          "Module.Utility.Enabled": "true",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
       }
     },
     {
       "template": "Luxury",
       "purpose": "Members-only premium club. VIP tiers, chat and video.",
-      "content": { "packs": ["Community", "Dating", "Plans", "Chat", "Video"] },
+      "content": {
+        "packs": [
+          "Community",
+          "Dating",
+          "Plans",
+          "Chat",
+          "Video"
+        ]
+      },
       "composition": {
-        "modules": ["Forum", "Chat", "Messages", "Video", "Utility", "Pages"],
-        "offModules": ["Iptv"]
+        "modules": [
+          "Forum",
+          "Chat",
+          "Messages",
+          "Video",
+          "Utility",
+          "Pages"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "false",
+          "Module.Chat.Enabled": "true",
+          "Module.Video.Enabled": "true",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "false",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "false",
+          "Module.Utility.Enabled": "true",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
       }
     },
     {
       "template": "Social",
       "purpose": "Social community. Forum, chat, messages and video.",
-      "content": { "packs": ["Community", "Chat", "Video"] },
-      "composition": { "modules": ["Forum", "Chat", "Video", "Messages", "Pages"], "offModules": ["Iptv"] }
+      "content": {
+        "packs": [
+          "Community",
+          "Chat",
+          "Video"
+        ]
+      },
+      "composition": {
+        "modules": [
+          "Forum",
+          "Chat",
+          "Video",
+          "Messages",
+          "Pages"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "false",
+          "Module.Chat.Enabled": "true",
+          "Module.Video.Enabled": "true",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "false",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "false",
+          "Module.Utility.Enabled": "false",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
+      }
     },
     {
       "template": "Store",
       "purpose": "Commerce front. The community shell; products come from the owner.",
-      "content": { "packs": ["Community"] },
-      "composition": { "modules": ["Store", "Forum", "Messages", "Pages", "Ads"], "offModules": ["Iptv"] }
+      "content": {
+        "packs": [
+          "Community"
+        ]
+      },
+      "composition": {
+        "modules": [
+          "Store",
+          "Forum",
+          "Messages",
+          "Pages",
+          "Ads"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "false",
+          "Module.Chat.Enabled": "false",
+          "Module.Video.Enabled": "false",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "true",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "true",
+          "Module.Utility.Enabled": "false",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
+      }
     },
     {
       "template": "Business",
       "purpose": "Corporate portal. Content, pages, forums and a store; no dating, no IPTV.",
-      "content": { "packs": ["Community", "Blog", "Ads"] },
+      "content": {
+        "packs": [
+          "Community",
+          "Blog",
+          "Ads"
+        ]
+      },
       "composition": {
-        "modules": ["Forum", "Messages", "Pages", "Blog", "Store", "Ads", "Utility"],
-        "offModules": ["Iptv"]
+        "modules": [
+          "Forum",
+          "Messages",
+          "Pages",
+          "Blog",
+          "Store",
+          "Ads",
+          "Utility"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "true",
+          "Module.Chat.Enabled": "false",
+          "Module.Video.Enabled": "false",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "true",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "true",
+          "Module.Utility.Enabled": "true",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
       }
     },
     {
       "template": "Professional",
       "purpose": "Business and professional networking, with a store.",
-      "content": { "packs": ["Community", "Blog", "Ads"] },
-      "composition": { "modules": ["Forum", "Messages", "Pages", "Blog", "Store", "Ads"], "offModules": ["Iptv"] }
+      "content": {
+        "packs": [
+          "Community",
+          "Blog",
+          "Ads"
+        ]
+      },
+      "composition": {
+        "modules": [
+          "Forum",
+          "Messages",
+          "Pages",
+          "Blog",
+          "Store",
+          "Ads"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "true",
+          "Module.Chat.Enabled": "false",
+          "Module.Video.Enabled": "false",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "true",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "true",
+          "Module.Utility.Enabled": "false",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
+      }
     },
     {
       "template": "Magazine",
       "purpose": "Editorial publication. Blog-led, with pages and discussion.",
-      "content": { "packs": ["Community", "Blog", "Ads"] },
-      "composition": { "modules": ["Blog", "Pages", "Forum", "Messages", "Ads"], "offModules": ["Iptv"] }
+      "content": {
+        "packs": [
+          "Community",
+          "Blog",
+          "Ads"
+        ]
+      },
+      "composition": {
+        "modules": [
+          "Blog",
+          "Pages",
+          "Forum",
+          "Messages",
+          "Ads"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "true",
+          "Module.Chat.Enabled": "false",
+          "Module.Video.Enabled": "false",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "false",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "true",
+          "Module.Utility.Enabled": "false",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
+      }
     },
     {
       "template": "Minimal",
       "purpose": "Content-first reading site. Blog and pages, nothing else.",
-      "content": { "packs": ["Blog"] },
-      "composition": { "modules": ["Blog", "Pages"], "offModules": ["Iptv"] }
+      "content": {
+        "packs": [
+          "Blog"
+        ]
+      },
+      "composition": {
+        "modules": [
+          "Blog",
+          "Pages"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "false",
+          "Module.Blog.Enabled": "true",
+          "Module.Chat.Enabled": "false",
+          "Module.Video.Enabled": "false",
+          "Module.Messages.Enabled": "false",
+          "Module.Store.Enabled": "false",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "false",
+          "Module.Utility.Enabled": "false",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
+      }
     },
     {
       "template": "Gaming",
       "purpose": "Gaming community. Chat, events, gamification and leaderboards.",
-      "content": { "packs": ["Community", "Chat", "Events", "Gamification"] },
+      "content": {
+        "packs": [
+          "Community",
+          "Chat",
+          "Events",
+          "Gamification"
+        ]
+      },
       "composition": {
-        "modules": ["Forum", "Chat", "Messages", "Utility", "Pages"],
-        "offModules": ["Iptv"]
+        "modules": [
+          "Forum",
+          "Chat",
+          "Messages",
+          "Utility",
+          "Pages"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "false",
+          "Module.Chat.Enabled": "true",
+          "Module.Video.Enabled": "false",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "false",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "false",
+          "Module.Utility.Enabled": "true",
+          "Module.Events.Enabled": "true",
+          "Module.Gamification.Enabled": "true"
+        }
       }
     },
     {
       "template": "IPTV",
       "purpose": "Streaming service. Subscription plans and a support forum.",
-      "content": { "packs": ["Community", "Plans"] },
-      "composition": { "modules": ["Iptv", "Forum", "Pages", "Messages"], "offModules": [] }
+      "content": {
+        "packs": [
+          "Community",
+          "Plans"
+        ]
+      },
+      "composition": {
+        "modules": [
+          "Iptv",
+          "Forum",
+          "Pages",
+          "Messages"
+        ],
+        "offModules": []
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "false",
+          "Module.Chat.Enabled": "false",
+          "Module.Video.Enabled": "false",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "false",
+          "Module.Iptv.Enabled": "true",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "false",
+          "Module.Utility.Enabled": "false",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
+      }
     },
     {
       "template": "Frenzyzone",
       "purpose": "Business portal: services, publishing, a storefront and contact. No dating, no IPTV, no membership tiers.",
-      "content": { "packs": ["Community", "Blog", "Ads"] },
+      "content": {
+        "packs": [
+          "Community",
+          "Blog",
+          "Ads"
+        ]
+      },
       "composition": {
-        "modules": ["Forum", "Messages", "Pages", "Blog", "Store", "Ads", "Utility"],
-        "offModules": ["Iptv"]
+        "modules": [
+          "Forum",
+          "Messages",
+          "Pages",
+          "Blog",
+          "Store",
+          "Ads",
+          "Utility"
+        ],
+        "offModules": [
+          "Iptv"
+        ]
+      },
+      "defaults": {
+        "settings": {
+          "Module.Forum.Enabled": "true",
+          "Module.Blog.Enabled": "true",
+          "Module.Chat.Enabled": "false",
+          "Module.Video.Enabled": "false",
+          "Module.Messages.Enabled": "true",
+          "Module.Store.Enabled": "true",
+          "Module.Iptv.Enabled": "false",
+          "Module.Pages.Enabled": "true",
+          "Module.Ads.Enabled": "true",
+          "Module.Utility.Enabled": "true",
+          "Module.Events.Enabled": "false",
+          "Module.Gamification.Enabled": "false"
+        }
       }
     }
   ]
