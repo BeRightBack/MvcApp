@@ -86,14 +86,26 @@ namespace MvcApp.Web.Middlewares
             var ipAddress = context.Connection.RemoteIpAddress;
 
             // Check for X-Forwarded-For header
-            if (context.Request.Headers.ContainsKey("X-Forwarded-For"))
+            var forwardedFor = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(forwardedFor))
             {
-                ipAddress = IPAddress.Parse(context.Request.Headers["X-Forwarded-For"].FirstOrDefault()!);
+                // X-Forwarded-For is a comma-separated list ("client, proxy1, proxy2") and can be
+                // junk. IPAddress.Parse threw on both, turning an ordinary proxied request into a
+                // 500 on "/", "/Home*" and "/Subscription*" (audit 3.9). Take the first entry and
+                // never let a malformed header fail the request.
+                var candidate = forwardedFor.Split(',')[0].Trim();
+                if (IPAddress.TryParse(candidate, out var forwarded))
+                {
+                    ipAddress = forwarded;
+                }
             }
-            // Check for other common headers used by proxies
             else if (context.Request.Headers.ContainsKey("X-Real-IP"))
             {
-                ipAddress = IPAddress.Parse(context.Request.Headers["X-Real-IP"].FirstOrDefault()!);
+                var realIp = context.Request.Headers["X-Real-IP"].FirstOrDefault()?.Trim();
+                if (!string.IsNullOrWhiteSpace(realIp) && IPAddress.TryParse(realIp, out var real))
+                {
+                    ipAddress = real;
+                }
             }
 
             // If the IP address is IPv6 loopback, use IPv4 loopback instead

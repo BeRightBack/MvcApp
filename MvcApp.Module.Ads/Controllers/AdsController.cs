@@ -38,7 +38,16 @@ public class AdsController : Controller
 
         await _trackingService.RecordClickAsync(bannerId, page, zone, ipHash, referrer, userId);
 
-        var targetUrl = !string.IsNullOrWhiteSpace(redirect) ? redirect : banner.TargetUrl;
+        // The caller-supplied `redirect` must never be trusted: going straight into Redirect() made
+        // this an open redirect (audit 2.7). Only a LOCAL url is honoured; anything else falls back
+        // to the banner's own admin-configured target, which is allowed to be external.
+        var targetUrl = Url.IsLocalUrl(redirect) ? redirect : banner.TargetUrl;
+
+        if (string.IsNullOrWhiteSpace(targetUrl))
+        {
+            return LocalRedirect("~/");
+        }
+
         return Redirect(targetUrl);
     }
 
