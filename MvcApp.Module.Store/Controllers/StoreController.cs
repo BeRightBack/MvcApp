@@ -238,13 +238,10 @@ public class StoreController(
                 Quantity = item.Quantity
             });
 
-            if (product != null)
-            {
-                product.StockQuantity -= item.Quantity;
-                await productRepo.UpdateAsync(product);
-            }
-
-            await cartRepo.DeleteAsync(item);
+            // Stock is NOT decremented and the cart is NOT cleared here: both moved to
+            // CommitOrderAsync, which runs only once the order is confirmed. Doing it at this point
+            // meant an abandoned or cancelled PayPal checkout still consumed stock and wiped the
+            // customer's cart (audit 3.12).
         }
 
         if (paymentMethod == "PayPal")
@@ -262,6 +259,8 @@ public class StoreController(
                 return RedirectToAction(nameof(Checkout));
             }
         }
+
+        await CommitOrderAsync(order);
 
         TempData["Success"] = localizer["Order placed successfully!"];
         return RedirectToAction(nameof(OrderConfirmation), new { id = order.Id });
@@ -302,6 +301,9 @@ public class StoreController(
                 order.PaymentStatus = PaymentStatus.Paid;
                 order.Status = OrderStatus.Processing;
                 await orderRepo.UpdateAsync(order);
+
+                // The payment is confirmed, so now commit stock and clear the lines this order covers.
+                await CommitOrderAsync(order);
             }
         }
         catch
@@ -310,6 +312,42 @@ public class StoreController(
         }
 
         return View(order);
+    }
+
+    /// <summary>
+    /// Commits an order: decrements stock and removes the cart lines it covers. Called only once the
+    /// order is confirmed — immediately for a non-PayPal method, and from PaymentSuccess after the
+    /// PayPal capture has been verified. Previously this ran at placement, so abandoning the approval
+    /// page still consumed stock and emptied the cart (audit 3.12).
+    /// </summary>
+    private async Task CommitOrderAsync(Order order)
+    {
+        var orderItems = await orderItemRepo.Query()
+            .Where(i => i.OrderId == order.Id)
+            .ToListAsync();
+
+        var db = HttpContext.RequestServices.GetRequiredService<UserDbContext>();
+
+        foreach (var item in orderItems)
+        {
+            var product = await db.Products.FindAsync(item.ProductId);
+            if (product != null)
+            {
+                product.StockQuantity -= item.Quantity;
+                await productRepo.UpdateAsync(product);
+            }
+
+            // Only the cart lines this order covers are removed, so anything the customer added since
+            // checkout survives.
+            var cartItems = await cartRepo.Query()
+                .Where(c => c.UserId == order.UserId && c.ProductId == item.ProductId)
+                .ToListAsync();
+
+            foreach (var cartItem in cartItems)
+            {
+                await cartRepo.DeleteAsync(cartItem);
+            }
+        }
     }
 
     [Authorize]
