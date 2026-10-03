@@ -2,6 +2,9 @@
 @inject MvcApp.Core.Abstractions.ITemplateService TemplateService
 @inject MvcApp.Core.Abstractions.IBrandingService Branding
 @inject MvcApp.Core.Abstractions.INavService NavService
+@* Which modules this site is made of. The layout renders a module's component only when that
+   module is part of the deployment — the platform must not demand a module it may not contain. *@
+@inject MvcApp.Web.Composition.TemplateComposition Composition
 @{
     var activeTemplate = await TemplateService.GetActiveTemplateAsync();
     var templateCss = (await TemplateService.GetAvailableTemplatesAsync())
@@ -99,9 +102,15 @@
                 <partial name="_LocalPartial" />
             </div>
             <article class="content px-4">
-                @await Component.InvokeAsync("AdZone", new { zoneKey = "content-top" })
+                @if (Composition.Includes("Ads"))
+                {
+                    @await Component.InvokeAsync("AdZone", new { zoneKey = "content-top" })
+                }
                 @RenderBody()
-                @await Component.InvokeAsync("AdZone", new { zoneKey = "content-bottom" })
+                @if (Composition.Includes("Ads"))
+                {
+                    @await Component.InvokeAsync("AdZone", new { zoneKey = "content-bottom" })
+                }
             </article>
         </main>
     </div>
@@ -166,12 +175,21 @@ else
             </div>
         </nav>
     </header>
-    @await Component.InvokeAsync("AdZone", new { zoneKey = "top-header" })
+    @if (Composition.Includes("Ads"))
+    {
+        @await Component.InvokeAsync("AdZone", new { zoneKey = "top-header" })
+    }
     <div class="container" style="padding-top: 80px;">
         <main role="main" class="main pb-3">
-            @await Component.InvokeAsync("AdZone", new { zoneKey = "content-top" })
+            @if (Composition.Includes("Ads"))
+            {
+                @await Component.InvokeAsync("AdZone", new { zoneKey = "content-top" })
+            }
             @RenderBody()
-            @await Component.InvokeAsync("AdZone", new { zoneKey = "content-bottom" })
+            @if (Composition.Includes("Ads"))
+            {
+                @await Component.InvokeAsync("AdZone", new { zoneKey = "content-bottom" })
+            }
         </main>
     </div>
 }
@@ -221,7 +239,10 @@ else
                 &copy; @DateTime.Now.Year - @siteName - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
             </div>
         </div>
-        @await Component.InvokeAsync("AdZone", new { zoneKey = "footer" })
+        @if (Composition.Includes("Ads"))
+        {
+            @await Component.InvokeAsync("AdZone", new { zoneKey = "footer" })
+        }
     </div>
 </footer>
     <script src="~/lib/jquery/jquery.min.js"></script>

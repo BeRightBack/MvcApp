@@ -167,17 +167,59 @@ try
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddMvcAppIdentity(builder.Configuration);
 
-    // Register optional modules — comment out to remove the feature
-    builder.Services.AddForum();
-    builder.Services.AddBlog();
-    builder.Services.AddChat();
-    builder.Services.AddVideo();
-    builder.Services.AddMessages();
-    builder.Services.AddStore();
-    builder.Services.AddIptv();
-    builder.Services.AddPages();
-    builder.Services.AddAdsModule();
-    builder.Services.AddUtility();
+    // Composition: which modules this deployment is built FROM. Read from configuration, never from
+    // the database — a site is composed of its modules before it can ask the database anything, and
+    // the seeding that writes SiteTemplate happens long after the container exists.
+    //
+    // With nothing configured every module is composed (the mother application's behaviour, and what
+    // this did before). A published site sets Template:Name and ships only what its template
+    // declares: no IPTV code in a dating site, and no runtime flag needed to say so.
+    var composition = MvcApp.Web.Composition.TemplateComposition.From(
+        builder.Configuration,
+        new MvcApp.Services.TemplateProfileService(builder.Configuration));
+
+    // Views consult the same decision: the shared layout renders a module's component only if that
+    // module is part of this site. Without this the layout demanded the Ads module's AdZone on every
+    // page and answered 500 on a site composed without Ads (verified).
+    builder.Services.AddSingleton(composition);
+
+    // One entry per module: the name a profile uses, how to register it, and the assembly whose
+    // controllers it contributes. Every composition point below reads this one table.
+    var moduleCatalogue = new (string Name, Action Register, Type Part)[]
+    {
+        ("Forum", () => builder.Services.AddForum(), typeof(MvcApp.Module.Forum.ServiceRegistration)),
+        ("Blog", () => builder.Services.AddBlog(), typeof(MvcApp.Module.Blog.ServiceRegistration)),
+        ("Chat", () => builder.Services.AddChat(), typeof(MvcApp.Module.Chat.ServiceRegistration)),
+        ("Video", () => builder.Services.AddVideo(), typeof(MvcApp.Module.Video.ServiceRegistration)),
+        ("Messages", () => builder.Services.AddMessages(), typeof(MvcApp.Module.Messages.ServiceRegistration)),
+        ("Store", () => builder.Services.AddStore(), typeof(MvcApp.Module.Store.ServiceRegistration)),
+        ("Iptv", () => builder.Services.AddIptv(), typeof(MvcApp.Module.IPTV.ServiceRegistration)),
+        ("Pages", () => builder.Services.AddPages(), typeof(MvcApp.Module.Pages.ServiceRegistration)),
+        ("Ads", () => builder.Services.AddAdsModule(), typeof(MvcApp.Module.Ads.ServiceRegistration)),
+        ("Utility", () => builder.Services.AddUtility(), typeof(MvcApp.Module.Utility.ServiceRegistration)),
+    };
+
+    var composedModules = new List<string>();
+
+    foreach (var module in moduleCatalogue)
+    {
+        if (!composition.Includes(module.Name))
+        {
+            continue;
+        }
+
+        module.Register();
+        composedModules.Add(module.Name);
+    }
+
+    // A declared name that matched no module would compose nothing, silently, and leave a site
+    // missing a feature it asked for.
+    composition.EnsureEveryDeclaredNameMatched(composedModules);
+
+    Serilog.Log.Information(
+        "Template composition from {Source}: {Modules}",
+        composition.Source,
+        composedModules.Count > 0 ? string.Join(", ", composedModules) : "(none)");
 
     builder.Services.AddApplicationServices(builder.Configuration);
     // The PayPal + hosted-checkout rail is registered by the platform payment gate
@@ -295,17 +337,17 @@ try
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
 
-    // Discover controllers and pages from optional modules
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.Forum.ServiceRegistration).Assembly);
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.Blog.ServiceRegistration).Assembly);
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.Chat.ServiceRegistration).Assembly);
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.Video.ServiceRegistration).Assembly);
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.Messages.ServiceRegistration).Assembly);
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.Store.ServiceRegistration).Assembly);
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.IPTV.ServiceRegistration).Assembly);
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.Pages.ServiceRegistration).Assembly);
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.Ads.ServiceRegistration).Assembly);
-    mvcBuilder.AddApplicationPart(typeof(MvcApp.Module.Utility.ServiceRegistration).Assembly);
+    // Discover controllers from the COMPOSED modules only. A module that is not part of this
+    // deployment contributes no controllers at all, rather than contributing them and hiding them
+    // behind a runtime flag. (Modules are Razor class libraries, so they also register their own
+    // parts — see the removal after Build() below.)
+    foreach (var module in moduleCatalogue)
+    {
+        if (composition.Includes(module.Name))
+        {
+            mvcBuilder.AddApplicationPart(module.Part.Assembly);
+        }
+    }
 
     builder.Services.AddRazorPages(options =>
     {
@@ -346,6 +388,38 @@ try
     builder.Services.AddScoped<SecureVerificationService>();
 
     var app = builder.Build();
+
+    // Modules are Razor class libraries, so each registers its OWN MVC application part and merely
+    // skipping AddApplicationPart does not remove it. Trimming has to remove the part explicitly:
+    // otherwise an uncomposed module's controllers stay reachable while none of its services are
+    // registered, and such a request fails as a 500 instead of a clean 404. (Verified: without this,
+    // IptvStoreController was still being activated on a site composed without IPTV.)
+    var excludedAssemblies = moduleCatalogue
+        .Where(m => !composition.Includes(m.Name))
+        .Select(m => m.Part.Assembly)
+        .ToHashSet();
+
+    if (excludedAssemblies.Count > 0)
+    {
+        var partManager = app.Services
+            .GetRequiredService<Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartManager>();
+
+        // Reading ApplicationParts populates the default parts first, so this is the final set.
+        var removed = partManager.ApplicationParts
+            .OfType<Microsoft.AspNetCore.Mvc.ApplicationParts.AssemblyPart>()
+            .Where(part => excludedAssemblies.Contains(part.Assembly))
+            .ToList();
+
+        foreach (var part in removed)
+        {
+            partManager.ApplicationParts.Remove(part);
+        }
+
+        Serilog.Log.Information(
+            "Template composition: {Count} module assembly(ies) not part of this site: {Assemblies}",
+            removed.Count,
+            string.Join(", ", removed.Select(p => p.Assembly.GetName().Name)));
+    }
 
     // Lockout policy (audit 2.6). SignInManager owns lockout; its attempt count and window come from
     // the admin-editable SystemSettings so the app does not carry two disagreeing policies. Read
