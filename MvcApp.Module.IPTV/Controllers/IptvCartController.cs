@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,8 +26,6 @@ public class IptvCartController(
     InteractService interactService,
     UserDbContext context,
     IConfiguration configuration,
-    SignInManager<UserDetails> signInManager,
-    UserManager<UserDetails> userManager,
     IRepository<UserDetails> userRepository,
     IEmailSender emailSender,
     IStringLocalizer<SharedResource> localizer) : Controller
@@ -199,10 +198,23 @@ public class IptvCartController(
         }
 
         var userId = GetUserId();
+
+        if (!userId.HasValue)
+        {
+            // Identity must come from authentication, NEVER from the posted email. Deriving it from
+            // the form previously signed the caller in as any existing account with no password
+            // check at all (audit 2.8 — anonymous account takeover). Ask properly, then come back;
+            // the cart lives in the session, so nothing is lost across the round trip.
+            return RedirectToPage("/Account/Login", new { returnUrl = Url.Action(nameof(Checkout), "IptvCart") });
+        }
+
         UserDetails? user = null;
-        var cartItems = userId.HasValue
-            ? await shoppingCartService.GetCartItemsAsync(userId.Value)
-            : HttpContext.Session.GetObjectFromJson<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
+
+        // Prefer the persisted cart, but fall back to the session cart so a basket started
+        // anonymously is not silently emptied by the sign-in round trip.
+        var sessionCart = HttpContext.Session.GetObjectFromJson<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
+        var persistedCart = (await shoppingCartService.GetCartItemsAsync(userId.Value)).ToList();
+        var cartItems = persistedCart.Count > 0 ? persistedCart : sessionCart;
 
         var adminEmail = configuration["AdminEmail"];
         var currency = model.SelectedCurrency ?? "USD";
@@ -214,44 +226,11 @@ public class IptvCartController(
 
         if (totalAmount == 0)
         {
-            if (!userId.HasValue)
+            user = await userRepository.GetFirstOrDefaultAsync(u => u.Id == userId.ToString());
+
+            if (user is null)
             {
-                user = await userManager.FindByEmailAsync(model.Email!);
-                if (user == null)
-                {
-                    if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
-                    {
-                        return BadRequest("Email and Password are required for unauthenticated users.");
-                    }
-
-                    user = new UserDetails
-                    {
-                        UserName = model.Email,
-                        Email = model.Email,
-                        EmailConfirmed = true,
-                        IsActive = true,
-                        CreatedDate = DateTime.Now,
-                        LastLoginDate = DateTime.Now
-                    };
-
-                    var result = await userManager.CreateAsync(user, model.Password);
-                    if (!result.Succeeded)
-                    {
-                        return BadRequest("Failed to create user account.");
-                    }
-
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    userId = Guid.Parse(user.Id);
-                }
-                else
-                {
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    userId = Guid.Parse(user.Id);
-                }
-            }
-            else
-            {
-                user = await userRepository.GetFirstOrDefaultAsync(u => u.Id == userId.ToString());
+                return RedirectToPage("/Account/Login", new { returnUrl = Url.Action(nameof(Checkout), "IptvCart") });
             }
 
             cartItemsDescription = string.Join("<br>", cartItems.Select(item =>
@@ -283,39 +262,11 @@ public class IptvCartController(
             return View("FreeSubscriptionSuccess");
         }
 
-        if (!userId.HasValue)
+        user = await userRepository.GetFirstOrDefaultAsync(u => u.Id == userId.ToString());
+
+        if (user is null)
         {
-            user = await userManager.FindByEmailAsync(model.Email!);
-            if (user == null)
-            {
-                if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
-                {
-                    return BadRequest("Email and Password are required for unauthenticated users.");
-                }
-
-                user = new UserDetails
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    EmailConfirmed = true,
-                    IsActive = true,
-                    CreatedDate = DateTime.Now,
-                    LastLoginDate = DateTime.Now
-                };
-
-                var result = await userManager.CreateAsync(user, model.Password);
-                if (!result.Succeeded)
-                {
-                    return BadRequest("Failed to create user account.");
-                }
-            }
-
-            await signInManager.SignInAsync(user, isPersistent: false);
-            userId = Guid.Parse(user.Id);
-        }
-        else
-        {
-            user = await userRepository.GetFirstOrDefaultAsync(u => u.Id == userId.ToString());
+            return RedirectToPage("/Account/Login", new { returnUrl = Url.Action(nameof(Checkout), "IptvCart") });
         }
 
         cartItemsDescription = string.Join("<br>", cartItems.Select(item =>
@@ -456,21 +407,38 @@ public class IptvCartController(
         return View();
     }
 
+    // The route still carries userId so the existing forms keep working, but it is deliberately
+    // IGNORED: trustworthy identity comes from the authenticated principal. Taking it from the URL
+    // let any caller activate an arbitrary user's pending subscriptions (audit 2.4).
+    [Authorize]
     [HttpPost("iptv-cart/verify-paypal-me/{userId:guid}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> VerifyPayPalMePayment(Guid userId)
     {
-        await SetPendingSubscriptionsToProcessing(userId);
-        await ActivateSubscription(userId);
+        var currentUserId = GetUserId();
+        if (!currentUserId.HasValue)
+        {
+            return Challenge();
+        }
+
+        await SetPendingSubscriptionsToProcessing(currentUserId.Value);
+        await ActivateSubscription(currentUserId.Value);
         return RedirectToAction(nameof(PaymentSuccess));
     }
 
+    [Authorize]
     [HttpPost("iptv-cart/verify-interact/{userId:guid}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> VerifyInteractPayment(Guid userId)
     {
-        await SetPendingSubscriptionsToProcessing(userId);
-        await ActivateSubscription(userId);
+        var currentUserId = GetUserId();
+        if (!currentUserId.HasValue)
+        {
+            return Challenge();
+        }
+
+        await SetPendingSubscriptionsToProcessing(currentUserId.Value);
+        await ActivateSubscription(currentUserId.Value);
         return RedirectToAction(nameof(PaymentSuccess));
     }
 
