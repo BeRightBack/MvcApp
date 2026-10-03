@@ -455,6 +455,29 @@ namespace MvcApp.Infrastructure
             {
                 builder.ApplyConfigurationsFromAssembly(assembly);
             }
+
+            // Composition: an entity whose owning module is NOT part of this deployment is removed
+            // from the model, not merely left unconfigured. The DbSets above are declared for every
+            // module, so a site composed without Blog would otherwise carry BlogPostTag with no key
+            // configured and EF would refuse to build the model at all — every request answered 500
+            // (verified: Dating, Gaming and IPTV, all of which exclude Blog).
+            //
+            // Deliberately last: the platform's configuration above has already run, so this removes
+            // only what composition excluded. Anything that still references a removed entity fails
+            // loudly at validation rather than silently.
+            var composedModules = ModuleEntityMap.ComposedModuleKeys(ModuleConfigurationRegistry.Assemblies);
+
+            foreach (var property in GetType().GetProperties()
+                         .Where(p => p.PropertyType.IsGenericType
+                                     && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>)))
+            {
+                var entityType = property.PropertyType.GetGenericArguments()[0];
+
+                if (ModuleEntityMap.IsIgnored(entityType.Name, composedModules))
+                {
+                    builder.Ignore(entityType);
+                }
+            }
         }
     }
 }
