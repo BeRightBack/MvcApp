@@ -22,20 +22,17 @@ namespace MvcApp.Identity.Pages.Account
         private readonly SignInManager<UserDetails> _signInManager;
         private readonly UserManager<UserDetails> _userManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly ISettingsService _settings;
         private readonly IBanService _banService;
 
         public LoginModel(
             SignInManager<UserDetails> signInManager,
             UserManager<UserDetails> userManager,
             ILogger<LoginModel> logger,
-            ISettingsService settings,
             IBanService banService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
-            _settings = settings;
             _banService = banService;
         }
 
@@ -128,24 +125,14 @@ namespace MvcApp.Identity.Pages.Account
                     return Page();
                 }
 
-                // Check DB-configured lockout before signing in
-                var maxAttempts = await _settings.GetAsync<int>("MaxLoginAttempts") ?? 3;
-                var lockoutMinutes = await _settings.GetAsync<int>("LockoutDurationMinutes") ?? 15;
-
-                if (await _userManager.IsLockedOutAsync(user))
-                {
-                    _logger.LogWarning("User {Username} account locked out.", user.UserName);
-                    return RedirectToPage("./Lockout");
-                }
-
-                if (user.AccessFailedCount >= maxAttempts)
-                {
-                    var lockoutEnd = DateTimeOffset.UtcNow.AddMinutes(lockoutMinutes);
-                    await _userManager.SetLockoutEndDateAsync(user, lockoutEnd);
-                    await _userManager.UpdateAsync(user);
-                    _logger.LogWarning("User {Username} account locked out (DB setting: {MaxAttempts} attempts, {Minutes} min).", user.UserName, maxAttempts, lockoutMinutes);
-                    return RedirectToPage("./Lockout");
-                }
+                // Lockout is owned by SignInManager below (PasswordSignInAsync with
+                // lockoutOnFailure: true). The previous code locked the account HERE, before the
+                // password had even been checked, and Identity's counter was never cleared on a
+                // successful sign-in — so three attempts locked a user out permanently even with
+                // the correct password, and the window came from a second set of numbers that
+                // disagreed with Identity's own (audit 2.6). The window is now supplied by
+                // LockoutOptionsFromSettings, so the admin-editable SystemSettings drive it, and
+                // result.IsLockedOut below is the single path that sends a locked user to Lockout.
 
                 var activeBan = await _banService.GetActiveBanAsync(user.Id);
                 if (activeBan != null)
