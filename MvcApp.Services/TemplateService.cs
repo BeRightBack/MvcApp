@@ -5,6 +5,7 @@ namespace MvcApp.Services;
 public class TemplateService : ITemplateService
 {
     private readonly ISettingsService _settings;
+    private readonly ITemplateProfileService _profiles;
     private static readonly List<UiTemplateInfo> _templates =
     [
         new()
@@ -105,9 +106,10 @@ public class TemplateService : ITemplateService
         }
     ];
 
-    public TemplateService(ISettingsService settings)
+    public TemplateService(ISettingsService settings, ITemplateProfileService profiles)
     {
         _settings = settings;
+        _profiles = profiles;
     }
 
     public async Task<string> GetActiveTemplateAsync()
@@ -128,6 +130,50 @@ public class TemplateService : ITemplateService
             throw new ArgumentException($"Template '{name}' not found.");
 
         await _settings.SetAsync("SiteTemplate", template.Name, updatedBy);
+
+        // A template arrives set up for its purpose: its presets are applied at the moment it is
+        // chosen. Nothing re-applies them afterwards, automatically or otherwise — that is what
+        // keeps the owner's later edits.
+        await ApplyPresetsAsync(template.Name, updatedBy);
+    }
+
+    /// <summary>
+    /// Applies the presets a template declares in its profile. Public so a re-apply can be offered
+    /// deliberately later (a "reset to template defaults"), which is the only way presets may ever
+    /// overwrite an owner's own values.
+    ///
+    /// A preset naming a setting that does not exist is refused rather than written: it would create
+    /// an orphan row nothing reads, and the template would silently not do what its author intended.
+    /// </summary>
+    public async Task ApplyPresetsAsync(string templateName, string? updatedBy = null)
+    {
+        var profile = _profiles.GetProfile(templateName);
+
+        // A template the profile manifest does not describe simply has no presets.
+        if (profile is null || profile.Defaults.Settings.Count == 0)
+        {
+            return;
+        }
+
+        var unknown = new List<string>();
+        foreach (var key in profile.Defaults.Settings.Keys)
+        {
+            if (await _settings.GetAsync(key) is null)
+            {
+                unknown.Add(key);
+            }
+        }
+
+        if (unknown.Count > 0)
+        {
+            throw new InvalidOperationException(
+                $"Template '{profile.Template}' presets setting(s) that do not exist: {string.Join(", ", unknown)}.");
+        }
+
+        foreach (var (key, value) in profile.Defaults.Settings)
+        {
+            await _settings.SetAsync(key, value, updatedBy);
+        }
     }
 
     public async Task<bool> IsLandingPageEnabledAsync(string template)

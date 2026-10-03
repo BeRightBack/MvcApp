@@ -202,7 +202,7 @@ public class TemplateProfileTests
     {
         // TemplateService is the list the admin actually sees. A template with no profile would
         // fall through the planner with nothing to apply and nothing to remove.
-        var offered = await new TemplateService(new UnusedSettingsService()).GetAvailableTemplatesAsync();
+        var offered = await new TemplateService(new UnusedSettingsService(), Profiles).GetAvailableTemplatesAsync();
         var profiled = Profiles.GetTemplates().ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var unprofiled = offered.Select(t => t.Name).Where(t => !profiled.Contains(t)).ToList();
