@@ -33,6 +33,13 @@ public static class PaymentGatewayServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddPaymentGateways(this IServiceCollection services, IConfiguration configuration)
     {
+        // The platform registers its OWN infrastructure requirement. The PayPal rail needs a client
+        // factory, and until composition existed that factory arrived incidentally from a module's
+        // AddHttpClient<T>() call — so a deployment composed without that module could not resolve a
+        // rail at all and failed on every request that touched it. Idempotent: repeated
+        // AddHttpClient() calls do not duplicate the core services.
+        services.AddHttpClient();
+
         // Registered as an ordinary gateway so modules resolve it through IPaymentGateway instead of
         // each holding their own copy of the integration. It uses the shared client factory and stays
         // a singleton, so the resolver never captures a stale handler.
