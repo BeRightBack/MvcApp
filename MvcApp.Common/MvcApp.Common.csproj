@@ -15,6 +15,14 @@
     <ProjectReference Include="..\MvcApp.Core\MvcApp.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- CAPTCHA rendering. SkiaSharp is cross-platform and licence-clean (unlike ImageSharp's
+         split licence for commercial use). The Linux native assets are required: without them the
+         first render throws at runtime, since the managed package carries no native skia binary. -->
+    <PackageReference Include="SkiaSharp" Version="4.153.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="4.153.1" />
+  </ItemGroup>
+
 
 
 </Project>

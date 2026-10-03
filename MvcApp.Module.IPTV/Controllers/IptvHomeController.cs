@@ -85,43 +85,13 @@ public class IptvHomeController(UserDbContext context, IStringLocalizer<SharedRe
             var captchaCode = random.Next(100000, 999999).ToString();
             HttpContext.Session.SetString("CaptchaCode", captchaCode);
 
-            var svg = GenerateSvgCaptcha(captchaCode);
-            return Content(svg, "image/svg+xml");
+            var png = MvcApp.Common.Captcha.CaptchaChallenge.RenderPng(captchaCode);
+            return File(png, "image/png");
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error generating captcha: {ex.Message}");
             return StatusCode(500, "Internal server error while generating captcha.");
         }
-    }
-
-    private static string GenerateSvgCaptcha(string code)
-    {
-        var random = new Random();
-        var svg = new StringBuilder();
-        svg.Append("<svg xmlns='http://www.w3.org/2000/svg' width='100' height='40' viewBox='0 0 100 40'>");
-        svg.Append("<rect width='100%' height='100%' fill='white'/>");
-
-        for (int i = 0; i < 5; i++)
-        {
-            var x1 = random.Next(100);
-            var y1 = random.Next(40);
-            var x2 = random.Next(100);
-            var y2 = random.Next(40);
-            var color = $"rgb({random.Next(200)},{random.Next(200)},{random.Next(200)})";
-            svg.Append($"<line x1='{x1}' y1='{y1}' x2='{x2}' y2='{y2}' stroke='{color}' stroke-width='1' />");
-        }
-
-        for (int i = 0; i < code.Length; i++)
-        {
-            var x = 15 + i * 20;
-            var y = 25 + random.Next(-5, 5);
-            var rotation = random.Next(-15, 15);
-            var color = $"rgb(0,0,{random.Next(100, 200)})";
-            svg.Append($"<text x='{x}' y='{y}' font-family='Arial' font-size='20' fill='{color}' transform='rotate({rotation} {x} {y})'>{code[i]}</text>");
-        }
-
-        svg.Append("</svg>");
-        return svg.ToString();
     }
 }
