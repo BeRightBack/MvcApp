@@ -514,12 +514,12 @@ public class IptvCartController(
 
     private static string GenerateUserCode()
     {
-        return Guid.NewGuid().ToString();
+        return SubscriptionCredentials.GenerateUserCode();
     }
 
     private static string GeneratePassword()
     {
-        return Guid.NewGuid().ToString("N").Substring(0, 8);
+        return SubscriptionCredentials.GeneratePassword();
     }
 
     private Guid? GetUserId()

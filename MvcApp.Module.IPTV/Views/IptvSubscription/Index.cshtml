@@ -90,6 +90,22 @@
                             }
                         </td>
                         <td class="text-end">
+                            @* Confirm an offline payment and activate. Only offered while the subscription
+                               is not already active, and deliberately an explicit admin action: the
+                               customer's own claim can no longer activate anything (audit 3.12).
+                               The confirmation text rides in data-confirm, NOT in an onclick handler:
+                               localised text inside an event-handler attribute breaks the quoting and
+                               is what LocalizationCallSiteTests guards against. *@
+                            @if (subscription.Status != "active")
+                            {
+                                <form asp-controller="IptvSubscription" asp-action="Activate" asp-route-id="@subscription.Id" method="post" class="d-inline"
+                                      data-confirm="@Localizer["Confirm the payment has been received? The customer will be emailed their credentials."]"
+                                      onsubmit="return confirm(this.dataset.confirm);">
+                                    <button type="submit" class="btn btn-sm btn-success" title="@Localizer["Confirm payment and activate"]">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                </form>
+                            }
                             <a asp-controller="IptvSubscription" asp-action="Details" asp-route-id="@subscription.Id" class="btn btn-sm btn-info" title="@Localizer["Details"]">
                                 <i class="fa fa-eye"></i>
                             </a>
