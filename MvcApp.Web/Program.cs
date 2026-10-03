@@ -185,8 +185,14 @@ try
 
     builder.Services.AddHttpContextAccessor();
 
-    // Operational endpoints: /health reports database reachability for load balancers / uptime probes.
-    builder.Services.AddHealthChecks().AddCheck<DatabaseHealthCheck>("database");
+    // Operational endpoints. Liveness must not depend on downstream services; readiness is what a
+    // load balancer or deploy gate should use, and it reflects the SCHEMA and the SEEDING outcome,
+    // not merely that a TCP connection to MySQL succeeded.
+    builder.Services.AddSingleton<StartupState>();
+    builder.Services.AddHealthChecks()
+        .AddCheck<DatabaseHealthCheck>("database")
+        .AddCheck<PendingMigrationsHealthCheck>("migrations")
+        .AddCheck<StartupReadinessHealthCheck>("startup");
 
     // Data Protection keys must OUTLIVE a deployment and be shared between instances, or auth
     // cookies, session state and antiforgery tokens are invalidated on every restart and every
@@ -400,6 +406,16 @@ try
     app.MapHub<ChatHub>("/chathub");
     app.MapHub<VideoChatHub>("/videohub");
     app.MapHub<NotificationHub>("/notificationhub");
+    // Liveness: the process is up. No dependency checks — a database outage must trigger readiness
+    // failures, not restarts.
+    app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+    {
+        Predicate = _ => false
+    });
+
+    // Readiness: safe to receive traffic — schema current AND seeding finished. "/health" remains
+    // the readiness alias so existing probes keep working unchanged.
+    app.MapHealthChecks("/health/ready");
     app.MapHealthChecks("/health");
 
     // Seed in the background while the server starts. The bootstrap tier (languages,
@@ -409,6 +425,10 @@ try
     // snippets) is opt-in via Seeding:IncludeDemoData, which defaults to on in
     // Development and off everywhere else.
     var includeDemoData = app.Configuration.GetValue("Seeding:IncludeDemoData", app.Environment.IsDevelopment());
+
+    // Seeding runs off the startup path, so its outcome has to be recorded for readiness to see.
+    // Previously a failure here was a Fatal log line and nothing else, while the app served 500s.
+    var startupState = app.Services.GetRequiredService<StartupState>();
 
     _ = Task.Run(async () =>
     {
@@ -434,10 +454,12 @@ try
                 await SeedPageSnippetsAsync(app);
             }
 
+            startupState.MarkCompleted();
             Log.Information("Background seeding completed.");
         }
         catch (Exception ex)
         {
+            startupState.MarkFailed(ex.Message);
             Log.Fatal(ex, "Error during background seeding");
         }
     });

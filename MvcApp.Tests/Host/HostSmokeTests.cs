@@ -46,9 +46,9 @@ public class HostSmokeTests : IClassFixture<MvcAppWebFactory>
     [Fact]
     public async Task Health_endpoint_reports_healthy()
     {
-        var response = await Client().GetAsync("/health");
+        // Readiness now gates on seeding, which runs off the startup path — so poll.
+        var body = await HealthProbe.WaitForHealthyAsync(Client(), "/health");
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal("Healthy", (await response.Content.ReadAsStringAsync()).Trim());
+        Assert.Equal("Healthy", body);
     }
 }
