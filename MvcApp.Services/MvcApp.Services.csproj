@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
- 	  <FrameworkReference Include="Microsoft.AspNetCore.App" />
- 	</ItemGroup>
+	  <FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <!-- Template profiles as data. Embedded so they are always present (including under test),
+	       with an override path so a deployment can supply its own without a rebuild. -->
+	  <EmbeddedResource Include="Templates/profiles.json" LogicalName="MvcApp.Services.Templates.profiles.json" />
+	</ItemGroup>
 
  	<ItemGroup>
  		<PackageReference Include="MailKit" Version="4.17.0" />
