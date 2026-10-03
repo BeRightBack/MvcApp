@@ -76,7 +76,7 @@ public static class CaptchaChallenge
 
             canvas.Save();
             canvas.RotateDegrees(angle, x, y);
-            canvas.DrawText(code[i].ToString(), x, y, font, ink);
+            canvas.DrawText(code[i].ToString(), x, y, SKTextAlign.Left, font, ink);
             canvas.Restore();
         }
 
