@@ -29,7 +29,7 @@ public sealed class SeedPackPlanner(
         CancellationToken ct = default)
     {
         var profile = profiles.GetProfile(template);
-        var needed = profile?.Packs.ToHashSet(StringComparer.OrdinalIgnoreCase)
+        var needed = profile?.Content.Packs.ToHashSet(StringComparer.OrdinalIgnoreCase)
             ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         var byName = allPacks.ToDictionary(p => p.Name, StringComparer.OrdinalIgnoreCase);
@@ -73,10 +73,10 @@ public sealed class SeedPackPlanner(
             return await PlanAsync(template, ct);
         }
 
-        var needed = profile.Packs.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var needed = profile.Content.Packs.ToHashSet(StringComparer.OrdinalIgnoreCase);
         var byName = allPacks.ToDictionary(p => p.Name, StringComparer.OrdinalIgnoreCase);
 
-        foreach (var name in profile.Packs)
+        foreach (var name in profile.Content.Packs)
         {
             if (!byName.TryGetValue(name, out var pack))
             {

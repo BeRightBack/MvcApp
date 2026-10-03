@@ -52,7 +52,7 @@ public class TemplateProfileTests
     public void Every_pack_a_profile_lists_is_implemented()
     {
         var implemented = RegisteredPacks().Select(p => p.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var requested = Profiles.GetProfiles().SelectMany(p => p.Packs).Distinct(StringComparer.OrdinalIgnoreCase);
+        var requested = Profiles.GetProfiles().SelectMany(p => p.Content.Packs).Distinct(StringComparer.OrdinalIgnoreCase);
 
         var missing = requested.Where(pack => !implemented.Contains(pack)).ToList();
 
@@ -124,7 +124,7 @@ public class TemplateProfileTests
         var profile = Profiles.GetProfile(template);
 
         Assert.NotNull(profile);
-        Assert.Contains(SeedPackNames.Plans, profile!.Packs);
+        Assert.Contains(SeedPackNames.Plans, profile!.Content.Packs);
     }
 
     [Fact]
@@ -166,7 +166,7 @@ public class TemplateProfileTests
         var incomplete = profiles
             .Where(p => string.IsNullOrWhiteSpace(p.Template)
                      || string.IsNullOrWhiteSpace(p.Purpose)
-                     || p.Modules.Count == 0)
+                     || p.Composition.Modules.Count == 0)
             .Select(p => p.Template)
             .ToList();
 
@@ -177,7 +177,7 @@ public class TemplateProfileTests
     public void A_profile_never_lists_a_module_it_turns_off()
     {
         var conflicts = Profiles.GetProfiles()
-            .Where(p => p.Modules.Intersect(p.OffModules, StringComparer.OrdinalIgnoreCase).Any())
+            .Where(p => p.Composition.Modules.Intersect(p.Composition.OffModules, StringComparer.OrdinalIgnoreCase).Any())
             .Select(p => p.Template)
             .ToList();
 
@@ -190,7 +190,7 @@ public class TemplateProfileTests
     public void A_profile_does_not_ask_for_the_same_pack_twice()
     {
         var duplicates = Profiles.GetProfiles()
-            .Where(p => p.Packs.Count != p.Packs.Distinct(StringComparer.OrdinalIgnoreCase).Count())
+            .Where(p => p.Content.Packs.Count != p.Content.Packs.Distinct(StringComparer.OrdinalIgnoreCase).Count())
             .Select(p => p.Template)
             .ToList();
 
