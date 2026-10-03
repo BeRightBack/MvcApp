@@ -29,3 +29,9 @@
 # so the template trees (which legitimately ship appsettings.json) keep working.
 /appsettings.json
 /appsettings.Development.json
+
+# Audit / hardening notes are kept LOCAL on purpose. docs/AUDIT.md names exploitable findings
+# with file:line evidence, and this repository is public — committing it would publish a roadmap
+# to unpatched vulnerabilities. Ignore the file, not the whole docs/ tree, so other docs can
+# still be tracked when they legitimately belong in the repo.
+/docs/AUDIT.md
