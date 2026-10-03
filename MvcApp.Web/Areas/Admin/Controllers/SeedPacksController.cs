@@ -35,7 +35,7 @@ public class SeedPacksController(
             .Select(p => new { p.Name, p.DisplayName, p.Description })
             .ToList();
         ViewBag.Profiles = profiles.GetProfiles()
-            .Select(p => new { p.Template, p.Purpose, Packs = string.Join(", ", p.Packs) })
+            .Select(p => new { p.Template, p.Purpose, Packs = string.Join(", ", p.Content.Packs) })
             .ToList();
 
         return View();
