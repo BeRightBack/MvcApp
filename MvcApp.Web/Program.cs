@@ -195,6 +195,9 @@ try
     // Seals the quoted plan/detail/amount into the payment return URL so the grant cannot be pointed
     // at a different plan than the one that was paid for (audit 3.12).
     builder.Services.AddSingleton<MvcApp.Common.Payments.PaymentIntentProtector>();
+    // The payment gate: rails are resolved through IPaymentGateway so a template owner can enable
+    // whichever ones they want (offline/manual first; card and entity rails register alongside).
+    MvcApp.Common.Payments.PaymentGatewayServiceCollectionExtensions.AddPaymentGateways(builder.Services, builder.Configuration);
     builder.Services.AddHealthChecks()
         .AddCheck<DatabaseHealthCheck>("database")
         .AddCheck<PendingMigrationsHealthCheck>("migrations")
