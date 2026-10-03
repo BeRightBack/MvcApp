@@ -6,11 +6,12 @@ using Xunit;
 namespace MvcApp.Tests.Unit;
 
 /// <summary>
-/// The payment gate exists so a template owner can enable whichever rails they want without the
-/// checkout code knowing which one it is. Two properties matter enough to pin down: an offline rail
-/// must never report a payment completed on its own authority (only a human can see money arrive),
-/// and asking for a rail that is not enabled must fail loudly rather than quietly take the money on
-/// a different one.
+/// The payment gate exists so a template owner can configure whichever rails they want without the
+/// checkout code knowing which one it is. The properties pinned down here are the ones that would
+/// otherwise fail quietly in production: an offline rail must never report a payment completed on its
+/// own authority (only a human can see money arrive), asking for a rail that is not enabled must fail
+/// loudly rather than take the money on a different one, and a rail someone configured must not be
+/// silently dropped.
 /// </summary>
 public class PaymentGatewayTests
 {
@@ -38,9 +39,8 @@ public class PaymentGatewayTests
     public async Task An_offline_rail_records_what_is_owed_and_waits_for_a_human()
     {
         using var provider = Build(
-            ("Payments:Manual:Kind", "Interac"),
-            ("Payments:Manual:Recipient", "pay@example.com"),
-            ("Payments:Manual:ReferencePrefix", "REF-"));
+            ("Payments:Manual:Rails:Interac:Recipient", "pay@example.com"),
+            ("Payments:Manual:Rails:Interac:ReferencePrefix", "REF-"));
 
         var gateway = provider.GetRequiredService<IPaymentGatewayResolver>()
             .Resolve(PaymentProviderKind.Interac);
@@ -63,9 +63,34 @@ public class PaymentGatewayTests
     }
 
     [Fact]
+    public async Task Two_offline_rails_can_be_configured_independently()
+    {
+        // The normal case: an e-transfer address and a payment link do not share a destination.
+        using var provider = Build(
+            ("Payments:Manual:Rails:Interac:Recipient", "transfer@example.com"),
+            ("Payments:Manual:Rails:Interac:ReferencePrefix", "BANK-"),
+            ("Payments:Manual:Rails:PayPalMe:Recipient", "https://paypal.me/example"),
+            ("Payments:Manual:Rails:PayPalMe:ReferencePrefix", "ME-"));
+
+        var resolver = provider.GetRequiredService<IPaymentGatewayResolver>();
+
+        var interac = await resolver.Resolve(PaymentProviderKind.Interac).InitiateAsync(SampleRequest);
+        var payPalMe = await resolver.Resolve(PaymentProviderKind.PayPalMe).InitiateAsync(SampleRequest);
+
+        Assert.Contains("transfer@example.com", interac.Instructions);
+        Assert.Contains("BANK-42", interac.ProviderReference);
+
+        Assert.Contains("https://paypal.me/example", payPalMe.Instructions);
+        Assert.Contains("ME-42", payPalMe.ProviderReference);
+
+        // Neither leaks the other's destination.
+        Assert.DoesNotContain("paypal.me", interac.Instructions);
+    }
+
+    [Fact]
     public async Task An_offline_rail_never_reports_a_payment_completed_by_itself()
     {
-        using var provider = Build(("Payments:Manual:Kind", "Manual"));
+        using var provider = Build(("Payments:Manual:Rails:Manual:Recipient", "somewhere"));
         var gateway = provider.GetRequiredService<IPaymentGatewayResolver>()
             .Resolve(PaymentProviderKind.Manual);
 
@@ -76,21 +101,25 @@ public class PaymentGatewayTests
 
         // And an unconfirmed offline payment can never satisfy an amount check.
         Assert.False(verification.Matches(49.99m, "CAD"));
+
+        // Capturing is equally powerless: only an administrator can advance an offline payment.
+        var capture = await gateway.CaptureAsync("REF-42");
+        Assert.NotEqual(PaymentStatus.Completed, capture.Status);
     }
 
     [Fact]
     public void Offline_rails_do_not_claim_recurring_support()
     {
-        using var provider = Build(("Payments:Manual:Kind", "Interac"));
+        using var provider = Build(("Payments:Manual:Rails:Interac:Recipient", "pay@example.com"));
 
         Assert.False(provider.GetRequiredService<IPaymentGatewayResolver>()
             .Resolve(PaymentProviderKind.Interac).SupportsRecurring);
     }
 
     [Fact]
-    public void Resolving_a_rail_that_is_not_enabled_fails_loudly()
+    public void Resolving_a_rail_that_is_not_enabled_fails_loudly_and_says_how()
     {
-        using var provider = Build(("Payments:Manual:Kind", "Manual"));
+        using var provider = Build(("Payments:Manual:Rails:Manual:Recipient", "somewhere"));
         var resolver = provider.GetRequiredService<IPaymentGatewayResolver>();
 
         Assert.True(resolver.TryResolve(PaymentProviderKind.Manual, out _));
@@ -99,13 +128,35 @@ public class PaymentGatewayTests
 
         var ex = Assert.Throws<InvalidOperationException>(() => resolver.Resolve(PaymentProviderKind.Card));
         Assert.Contains("Card", ex.Message);
+        // The message must point at where a rail is configured, or the operator is left guessing.
+        Assert.Contains("Payments:Manual:Rails", ex.Message);
+    }
+
+    [Fact]
+    public void A_misspelled_rail_name_is_a_configuration_error_not_a_silent_drop()
+    {
+        // Skipping it would leave a checkout option that looks configured and is missing at runtime,
+        // which surfaces as a customer who cannot pay.
+        var ex = Assert.Throws<InvalidOperationException>(() => Build(
+            ("Payments:Manual:Rails:InteracTransfer:Recipient", "pay@example.com")));
+
+        Assert.Contains("InteracTransfer", ex.Message);
+        Assert.Contains("Interac", ex.Message);
     }
 
     [Fact]
     public async Task Several_rails_can_be_registered_and_resolve_to_their_own_implementation()
     {
-        using var provider = Build(("Payments:Manual:Kind", "Interac"));
+        // PayPal is always present; a card rail is not registered here because it needs a processor
+        // account, so the gate must not pretend to offer one.
+        using var provider = Build(("Payments:Manual:Rails:Interac:Recipient", "pay@example.com"));
+        var resolver = provider.GetRequiredService<IPaymentGatewayResolver>();
 
+        Assert.Contains(PaymentProviderKind.PayPal, resolver.Available);
+        Assert.Contains(PaymentProviderKind.Interac, resolver.Available);
+        Assert.DoesNotContain(PaymentProviderKind.Card, resolver.Available);
+
+        // A rail registered alongside these resolves to itself, and is usable through the interface.
         var services = new ServiceCollection();
         services.AddLogging();
         services.AddHttpClient();
@@ -115,14 +166,12 @@ public class PaymentGatewayTests
         services.AddSingleton<IPaymentGateway>(new StubGateway(PaymentProviderKind.Card));
         using var provider2 = services.BuildServiceProvider();
 
-        var resolver = provider2.GetRequiredService<IPaymentGatewayResolver>();
+        var resolver2 = provider2.GetRequiredService<IPaymentGatewayResolver>();
 
-        Assert.Equal(PaymentProviderKind.Card, resolver.Resolve(PaymentProviderKind.Card).Kind);
-        Assert.True(resolver.Resolve(PaymentProviderKind.Card).SupportsRecurring);
-        Assert.Contains(PaymentProviderKind.Manual, resolver.Available);
+        Assert.Equal(PaymentProviderKind.Card, resolver2.Resolve(PaymentProviderKind.Card).Kind);
+        Assert.True(resolver2.Resolve(PaymentProviderKind.Card).SupportsRecurring);
 
-        // A card rail reports completion and the amount, so the caller can verify it.
-        var verification = await resolver.Resolve(PaymentProviderKind.Card).VerifyAsync("pi_123");
+        var verification = await resolver2.Resolve(PaymentProviderKind.Card).VerifyAsync("pi_123");
         Assert.True(verification.Matches(10.00m, "CAD"));
     }
 

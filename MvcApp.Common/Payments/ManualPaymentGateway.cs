@@ -4,18 +4,38 @@ using Microsoft.Extensions.Options;
 namespace MvcApp.Common.Payments;
 
 /// <summary>
-/// Configuration for an offline rail (bank transfer, Interac e-Transfer, or a plain manual
-/// settlement). Bound from <c>Payments:Manual</c>, so a template owner sets their own recipient and
-/// wording without touching code.
+/// Configuration for the offline rails, bound from <c>Payments:Manual</c>.
+///
+/// Rails are keyed by <see cref="PaymentProviderKind"/> name, so a template owner can offer Interac
+/// e-Transfer and PayPal.Me side by side with different destinations and different wording — which is
+/// the normal case, since those two rarely share an address:
+///
+/// <code>
+/// "Payments": {
+///   "Manual": {
+///     "Rails": {
+///       "Interac":  { "Recipient": "payments@example.com", "ReferencePrefix": "IPTV-" },
+///       "PayPalMe": { "Recipient": "https://paypal.me/yourname", "ReferencePrefix": "IPTV-" }
+///     }
+///   }
+/// }
+/// </code>
 /// </summary>
 public sealed class ManualPaymentOptions
 {
     public const string SectionName = "Payments:Manual";
 
-    /// <summary>Which kind this instance reports as, so one class serves several offline rails.</summary>
-    public PaymentProviderKind Kind { get; set; } = PaymentProviderKind.Manual;
+    /// <summary>Offline rails to offer, keyed by rail name.</summary>
+    public Dictionary<string, ManualRailOptions> Rails { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+}
 
-    /// <summary>Who receives the money (e-transfer address, bank details, or free text).</summary>
+/// <summary>One offline rail's settings.</summary>
+public sealed class ManualRailOptions
+{
+    /// <summary>
+    /// Who receives the money: an e-transfer address, a payment link, bank details, or free text.
+    /// This is shown to the payer, so it must be the real destination.
+    /// </summary>
     public string Recipient { get; set; } = string.Empty;
 
     /// <summary>
@@ -40,29 +60,29 @@ public sealed class ManualPaymentOptions
 /// <see cref="VerifyAsync"/> never reports <see cref="PaymentStatus.Completed"/> on its own, because
 /// no machine can see the money arrive. Activation is an explicit, auditable human step.
 /// </summary>
-public sealed class ManualPaymentGateway(IOptions<ManualPaymentOptions> options, ILogger<ManualPaymentGateway> logger)
-    : IPaymentGateway
+public sealed class ManualPaymentGateway(
+    PaymentProviderKind kind,
+    ManualRailOptions rail,
+    ILogger<ManualPaymentGateway> logger) : IPaymentGateway
 {
-    private readonly ManualPaymentOptions _options = options.Value;
-
-    public PaymentProviderKind Kind => _options.Kind;
+    public PaymentProviderKind Kind => kind;
 
     /// <summary>Offline rails cannot bill repeatedly; the payer must send each time.</summary>
     public bool SupportsRecurring => false;
 
     public Task<PaymentInitiation> InitiateAsync(PaymentRequest request, CancellationToken cancellationToken = default)
     {
-        var reference = $"{_options.ReferencePrefix}{request.Reference}";
+        var reference = $"{rail.ReferencePrefix}{request.Reference}";
 
-        var instructions = _options.InstructionsTemplate
+        var instructions = rail.InstructionsTemplate
             .Replace("{amount}", request.Amount.ToString("F2", System.Globalization.CultureInfo.InvariantCulture))
             .Replace("{currency}", request.Currency)
             .Replace("{reference}", reference)
-            .Replace("{recipient}", _options.Recipient);
+            .Replace("{recipient}", rail.Recipient);
 
         logger.LogInformation(
             "Offline payment requested for {Reference}: {Amount} {Currency} via {Kind}.",
-            reference, request.Amount, request.Currency, Kind);
+            reference, request.Amount, request.Currency, kind);
 
         return Task.FromResult(new PaymentInitiation(
             Status: PaymentStatus.RequiresManualVerification,
