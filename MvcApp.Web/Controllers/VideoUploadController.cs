@@ -13,9 +13,6 @@ namespace MvcApp.Web.Controllers;
 [Authorize]
 public class VideoUploadController(UserDbContext db, UserManager<UserDetails> userManager, IGamificationService gamification, IStringLocalizer<SharedResource> localizer) : Controller
 {
-    private static readonly string[] AllowedVideoTypes = [
-        "video/mp4", "video/webm", "video/ogg", "video/quicktime", "video/x-msvideo"
-    ];
     private const long MaxFileSize = 100 * 1024 * 1024; // 100MB
     private const int PageSize = 12;
 
@@ -76,11 +73,29 @@ public class VideoUploadController(UserDbContext db, UserManager<UserDetails> us
             return View();
         }
 
-        if (!AllowedVideoTypes.Contains(videoFile.ContentType.ToLower()))
+        // Validate the CONTENT and take the stored extension from the detected type. The previous
+        // check trusted the client's Content-Type and then the filename extension, so an arbitrary
+        // file could be stored under wwwroot and served as its own type (audit 2.2).
+        var detectedVideo = await MvcApp.Common.Uploads.FileSignature.DetectVideoAsync(videoFile);
+        if (!detectedVideo.IsValid)
         {
-            TempData["Error"] = localizer["Only MP4, WebM, OGG, MOV, and AVI videos are allowed."];
+            TempData["Error"] = localizer["Only MP4 and WebM videos are allowed."];
             ViewBag.Categories = Enum.GetValues<VideoCategory>();
             return View();
+        }
+
+        // The thumbnail is validated up front too — it previously had no validation whatsoever, and
+        // checking it here means an invalid one cannot leave an orphaned video file behind.
+        MvcApp.Common.Uploads.FileSignature.Detection detectedThumbnail = default;
+        if (thumbnailFile != null && thumbnailFile.Length > 0)
+        {
+            detectedThumbnail = await MvcApp.Common.Uploads.FileSignature.DetectImageAsync(thumbnailFile);
+            if (!detectedThumbnail.IsValid)
+            {
+                TempData["Error"] = localizer["The thumbnail must be a JPEG, PNG, GIF or WebP image."];
+                ViewBag.Categories = Enum.GetValues<VideoCategory>();
+                return View();
+            }
         }
 
         if (videoFile.Length > MaxFileSize)
@@ -90,8 +105,7 @@ public class VideoUploadController(UserDbContext db, UserManager<UserDetails> us
             return View();
         }
 
-        var videoExt = Path.GetExtension(videoFile.FileName);
-        var videoName = $"{Guid.NewGuid()}{videoExt}";
+        var videoName = $"{Guid.NewGuid()}{detectedVideo.Extension}";
         var userDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Videos", user.UserName ?? user.Id);
 
         if (!Directory.Exists(userDir))
@@ -106,8 +120,7 @@ public class VideoUploadController(UserDbContext db, UserManager<UserDetails> us
         string? thumbName = null;
         if (thumbnailFile != null && thumbnailFile.Length > 0)
         {
-            var thumbExt = Path.GetExtension(thumbnailFile.FileName);
-            thumbName = $"{Guid.NewGuid()}{thumbExt}";
+            thumbName = $"{Guid.NewGuid()}{detectedThumbnail.Extension}";
             var thumbPath = Path.Combine(userDir, thumbName);
             using (var stream = new FileStream(thumbPath, FileMode.Create))
             {

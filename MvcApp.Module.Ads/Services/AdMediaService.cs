@@ -19,7 +19,6 @@ public record AdMediaResult(bool Success, string? Error, string? Url);
 
 public class AdMediaService : IAdMediaService
 {
-    private static readonly string[] AllowedExtensions = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"];
     private const long MaxBytes = 2 * 1024 * 1024; // 2 MB
     private const string AdsRoot = "images/ads";
 
@@ -34,9 +33,14 @@ public class AdMediaService : IAdMediaService
         if (file.Length > MaxBytes)
             return new(false, $"The file exceeds the {MaxBytes / 1024 / 1024} MB limit.", null);
 
-        var ext = Path.GetExtension(file.FileName);
-        if (string.IsNullOrEmpty(ext) || !AllowedExtensions.Contains(ext, StringComparer.OrdinalIgnoreCase))
-            return new(false, $"Unsupported file type '{ext}'. Allowed: {string.Join(", ", AllowedExtensions)}.", null);
+        // Sniff the CONTENT and derive the stored extension from the detected type. The previous
+        // check trusted the filename extension (and then re-used it for the stored name), and that
+        // allow-list included .svg — which is not an image format at all but an XML document that
+        // can carry script, stored under wwwroot and served inline from the site's own origin
+        // (audit 2.2). SVG banners are no longer accepted.
+        var detected = await MvcApp.Common.Uploads.FileSignature.DetectImageAsync(file);
+        if (!detected.IsValid)
+            return new(false, "Unsupported file type. Allowed: PNG, JPEG, GIF, WebP.", null);
 
         // Enforce the zone's declared format when the dimensions are readable (PNG/JPEG/GIF).
         if (expectedWidth.HasValue && expectedHeight.HasValue)
@@ -50,7 +54,7 @@ public class AdMediaService : IAdMediaService
         if (string.IsNullOrEmpty(safeZone))
             return new(false, "Invalid zone key.", null);
 
-        var fileName = $"{Guid.NewGuid():N}{ext.ToLowerInvariant()}";
+        var fileName = $"{Guid.NewGuid():N}{detected.Extension}";
         var absDir = Path.Combine(_env.WebRootPath, "images", "ads", safeZone);
         Directory.CreateDirectory(absDir);
         var absPath = Path.Combine(absDir, fileName);

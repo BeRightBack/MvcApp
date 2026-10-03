@@ -56,8 +56,12 @@ namespace MvcApp.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif", "image/webp" };
-            if (!allowedTypes.Contains(file.ContentType.ToLower()))
+            // Sniff the CONTENT instead of trusting the client's Content-Type, and take the stored
+            // extension from the DETECTED type rather than the uploaded filename. Previously
+            // "evil.html" sent as image/png passed the header check and was stored as .html under
+            // wwwroot, then served as text/html — stored XSS in the site's own origin (audit 2.2).
+            var detected = await MvcApp.Common.Uploads.FileSignature.DetectImageAsync(file);
+            if (!detected.IsValid)
             {
                 TempData["Error"] = _localizer["Only JPEG, PNG, GIF, and WebP images are allowed."];
                 return RedirectToAction(nameof(Index));
@@ -76,8 +80,7 @@ namespace MvcApp.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var fileExtension = Path.GetExtension(file.FileName);
-            var newFileName = $"{Guid.NewGuid()}{fileExtension}";
+            var newFileName = $"{Guid.NewGuid()}{detected.Extension}";
             var subPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Photos", user.UserName ?? user.Id);
 
             if (!Directory.Exists(subPath))

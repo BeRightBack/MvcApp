@@ -20,6 +20,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\MvcApp.Core\MvcApp.Core.csproj" />
+	  <ProjectReference Include="..\MvcApp.Common\MvcApp.Common.csproj" />
 	  <ProjectReference Include="..\MvcApp.Infrastructure\MvcApp.Infrastructure.csproj" />
 	  <ProjectReference Include="..\MvcApp.Localization\MvcApp.Localization.csproj" />
 	  <ProjectReference Include="..\MvcApp.Services\MvcApp.Services.csproj" />
