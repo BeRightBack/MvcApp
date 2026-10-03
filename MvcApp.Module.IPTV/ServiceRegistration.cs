@@ -11,6 +11,9 @@ public static class ServiceRegistration
         ModuleConfigurationRegistry.AddEntityConfigurationAssembly(typeof(ServiceRegistration).Assembly);
 
         services.AddTransient<IShoppingCartService, ShoppingCartService>();
+
+        // The platform asks for cart badges through its own contract; the module owns the answer.
+        services.AddTransient<MvcApp.Common.Cart.ICartBadgeProvider, IptvCartBadgeProvider>();
         services.AddTransient<ISubscriptionService, SubscriptionService>();
         services.AddHttpClient<PayPalService>();
         services.AddHttpClient<PayPalMeService>();
