@@ -12,7 +12,6 @@ namespace MvcApp.Web.Controllers;
 [Authorize]
 public class VerificationController(UserDbContext db, UserManager<UserDetails> userManager, IStringLocalizer<SharedResource> localizer, MvcApp.Web.Storage.VerificationDocumentStore verificationDocuments) : Controller
 {
-    private static readonly string[] AllowedImageTypes = ["image/jpeg", "image/png", "image/webp"];
     private const long MaxFileSize = 10 * 1024 * 1024; // 10MB
 
     public async Task<IActionResult> Index()
@@ -65,7 +64,10 @@ public class VerificationController(UserDbContext db, UserManager<UserDetails> u
             return RedirectToAction(nameof(Index));
         }
 
-        if (!AllowedImageTypes.Contains(selfieFile.ContentType.ToLower()))
+        // Content-validated, as everywhere else: the ContentType header was client-supplied and the
+        // stored name previously took the extension from the uploaded filename (audit 2.2).
+        var detected = await MvcApp.Common.Uploads.FileSignature.DetectImageAsync(selfieFile);
+        if (!detected.IsValid)
         {
             TempData["Error"] = localizer["Only JPEG, PNG, and WebP images are allowed."];
             return RedirectToAction(nameof(Index));
@@ -77,8 +79,7 @@ public class VerificationController(UserDbContext db, UserManager<UserDetails> u
             return RedirectToAction(nameof(Index));
         }
 
-        var ext = Path.GetExtension(selfieFile.FileName);
-        var fileName = $"verify_{Guid.NewGuid()}{ext}";
+        var fileName = $"verify_{Guid.NewGuid()}{detected.Extension}";
 
         // Written OUTSIDE the web root. Under wwwroot these were served by the static-file
         // middleware with no authorization at all, so an identity document was readable by anyone

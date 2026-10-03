@@ -112,8 +112,16 @@ namespace MvcApp.Identity.Pages.Account
             if (Input.ProfilePictureFile != null)
             {
                 var file = Input.ProfilePictureFile;
-                var fileExtension = Path.GetExtension(file.FileName);
-                var newFileName = $"{Guid.NewGuid()}{fileExtension}";
+
+                // Content-validated, extension from the detected type (audit 2.2).
+                var detected = await MvcApp.Common.Uploads.FileSignature.DetectImageAsync(file);
+                if (!detected.IsValid)
+                {
+                    ModelState.AddModelError(string.Empty, "Only JPEG, PNG, GIF or WebP images are allowed.");
+                    return Page();
+                }
+
+                var newFileName = $"{Guid.NewGuid()}{detected.Extension}";
                 var subPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", user.Id);
 
                 if (!Directory.Exists(subPath))

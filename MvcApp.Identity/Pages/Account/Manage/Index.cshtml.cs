@@ -226,8 +226,18 @@ namespace MvcApp.Identity.Pages.Account.Manage
             if (Input.ProfilePictureFile != null)
             {
                 var file = Input.ProfilePictureFile;
-                var fileExtension = Path.GetExtension(file.FileName);
-                var newFileName = $"{Guid.NewGuid()}{fileExtension}";
+
+                // Validate the CONTENT and take the extension from the DETECTED type. This upload had
+                // no validation at all and derived the extension from the filename, so any file could
+                // be stored under wwwroot and served as its own type (audit 2.2).
+                var detected = await MvcApp.Common.Uploads.FileSignature.DetectImageAsync(file);
+                if (!detected.IsValid)
+                {
+                    StatusMessage = "Only JPEG, PNG, GIF or WebP images are allowed.";
+                    return Page();
+                }
+
+                var newFileName = $"{Guid.NewGuid()}{detected.Extension}";
                 var subPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", user.Id);
 
                 if (!Directory.Exists(subPath))
