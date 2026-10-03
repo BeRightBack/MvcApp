@@ -72,9 +72,15 @@ public sealed record PaymentVerification(
     /// <summary>
     /// True only when the payment completed AND matches the expected amount and currency exactly.
     /// Callers must gate grants on this, never on <see cref="Status"/> alone.
+    ///
+    /// A non-positive expected amount or a blank expected currency is refused outright rather than
+    /// compared: otherwise an empty capture (no amount, no currency) would trivially "match" a zero
+    /// expectation, and a caller that forgot to pass either would be handed a free pass.
     /// </summary>
     public bool Matches(decimal expectedAmount, string expectedCurrency)
-        => Status == PaymentStatus.Completed
+        => expectedAmount > 0m
+           && !string.IsNullOrWhiteSpace(expectedCurrency)
+           && Status == PaymentStatus.Completed
            && string.Equals(Currency, expectedCurrency, StringComparison.OrdinalIgnoreCase)
            && Amount == expectedAmount;
 }
@@ -92,6 +98,13 @@ public interface IPaymentGateway
     bool SupportsRecurring { get; }
 
     Task<PaymentInitiation> InitiateAsync(PaymentRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Completes a payment the provider approved but has not settled — hosted-approval rails capture
+    /// here. Offline rails return the initiation outcome unchanged, because no machine can confirm
+    /// them. Must report the captured amount so callers can compare it with what was quoted.
+    /// </summary>
+    Task<PaymentVerification> CaptureAsync(string providerReference, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Ask the provider what happened to a reference. Implementations must return the captured amount

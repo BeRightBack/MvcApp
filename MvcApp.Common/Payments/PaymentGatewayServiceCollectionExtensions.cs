@@ -19,6 +19,11 @@ public static class PaymentGatewayServiceCollectionExtensions
         services.Configure<ManualPaymentOptions>(configuration.GetSection(ManualPaymentOptions.SectionName));
         services.AddSingleton<IPaymentGateway, ManualPaymentGateway>();
 
+        // The PayPal rail, registered as an ordinary gateway so modules resolve it through
+        // IPaymentGateway instead of each holding their own copy of the integration. It uses the
+        // shared client factory and stays a singleton, so the resolver never captures a stale handler.
+        services.AddSingleton<IPaymentGateway, PayPalGateway>();
+
         // Whether an unverifiable payment claim activates on its own is a per-template choice.
         services.Configure<ActivationOptions>(configuration.GetSection(ActivationOptions.SectionName));
         services.AddSingleton<ActivationPolicy>();
