@@ -353,17 +353,44 @@ public class IptvCartController(
     [HttpGet("iptv-cart/payment-success")]
     public async Task<IActionResult> PaymentSuccess(string token, string PayerID)
     {
-        var captureResponse = await payPalService.CaptureOrderAsync(token);
+        var capture = await payPalService.CaptureOrderAsync(token);
 
-        var captureResult = JsonDocument.Parse(captureResponse);
-        var status = captureResult.RootElement.GetProperty("status").GetString();
-
-        if (status == "COMPLETED")
+        if (capture.Status == "COMPLETED")
         {
             var userId = GetUserId();
             if (userId.HasValue)
             {
                 var cartItems = await shoppingCartService.GetCartItemsAsync(userId.Value);
+
+                // Refuse to grant anything unless we can say what was charged. An unreadable currency
+                // would otherwise reach the conversion below and throw mid-grant.
+                if (string.IsNullOrEmpty(capture.Currency))
+                {
+                    logger.LogWarning("IPTV capture returned no currency; refusing to grant.");
+                    ViewBag.Message = localizer["We could not confirm your payment. Please contact support."];
+                    ViewBag.Token = token;
+                    ViewBag.PayerID = PayerID;
+                    return View();
+                }
+
+                // Verify what was captured against what the cart costs, in the currency that was
+                // actually charged. Reading only the status meant any completed payment satisfied
+                // this — the same defect fixed for Store and VIP (audit 3.12). The expected value is
+                // recomputed through the same conversion CreateOrderAsync used, so the check needs
+                // no knowledge of which currency the customer had selected.
+                var expected = await payPalService.ExpectedTotalAsync(cartItems, capture.Currency);
+
+                if (capture.Amount != expected)
+                {
+                    logger.LogWarning(
+                        "IPTV capture does not match the cart: expected {Expected} {Currency}, captured {Captured}.",
+                        expected, capture.Currency, capture.Amount);
+
+                    ViewBag.Message = localizer["The amount paid did not match your order. Please contact support."];
+                    ViewBag.Token = token;
+                    ViewBag.PayerID = PayerID;
+                    return View();
+                }
 
                 await AddSubscriptionToAccount(userId.Value, cartItems, "pending");
 

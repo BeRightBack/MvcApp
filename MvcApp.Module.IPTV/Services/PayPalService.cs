@@ -102,7 +102,36 @@ public class PayPalService(HttpClient httpClient, IConfiguration configuration)
         return responseContent;
     }
 
-    public async Task<string> CaptureOrderAsync(string orderId)
+    /// <summary>
+    /// The total this service would charge for a cart, in the given currency.
+    ///
+    /// Exposed so payment confirmation can verify the captured amount against the SAME conversion
+    /// that created the order. Recomputing it at the call site would mean a second copy of the rate
+    /// table, which is how a verification ends up disagreeing with the charge it is verifying.
+    /// </summary>
+    public async Task<decimal> ExpectedTotalAsync(IEnumerable<ShoppingCartItem> cartItems, string currency)
+    {
+        var total = 0m;
+        foreach (var item in cartItems)
+        {
+            total += await ConvertCurrencyAsync(item.SubscriptionDetail?.Price ?? 0m, "USD", currency);
+        }
+
+        return decimal.Round(total, 2);
+    }
+
+    /// <summary>What the provider actually captured, summed across the order's purchase units.</summary>
+    public readonly record struct PayPalCapture(string Status, decimal Amount, string Currency);
+
+    /// <summary>
+    /// Captures an approved order and returns the status plus the TOTAL captured amount.
+    ///
+    /// The total is summed across purchase_units because CreateOrderAsync builds one unit per cart
+    /// item — reading only the first unit's amount would understate any multi-item order and let a
+    /// partially-paid cart through. The previous version returned the raw JSON for the caller to
+    /// pick the status out of, so no amount check was possible at all (audit 3.12).
+    /// </summary>
+    public async Task<PayPalCapture> CaptureOrderAsync(string orderId)
     {
         var accessToken = await GetAccessTokenAsync();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -111,7 +140,43 @@ public class PayPalService(HttpClient httpClient, IConfiguration configuration)
         var response = await httpClient.PostAsync($"https://api.paypal.com/v2/checkout/orders/{orderId}/capture", content);
         response.EnsureSuccessStatusCode();
 
-        var responseContent = await response.Content.ReadAsStringAsync();
-        return responseContent;
+        using var json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        var status = json.RootElement.GetProperty("status").GetString() ?? "UNKNOWN";
+
+        var amount = 0m;
+        var currency = string.Empty;
+
+        if (json.RootElement.TryGetProperty("purchase_units", out var units))
+        {
+            foreach (var unit in units.EnumerateArray())
+            {
+                if (!unit.TryGetProperty("payments", out var payments) ||
+                    !payments.TryGetProperty("captures", out var captures))
+                {
+                    continue;
+                }
+
+                foreach (var capture in captures.EnumerateArray())
+                {
+                    if (!capture.TryGetProperty("amount", out var captured))
+                    {
+                        continue;
+                    }
+
+                    if (captured.TryGetProperty("value", out var value))
+                    {
+                        decimal.TryParse(value.GetString(), NumberStyles.Number, CultureInfo.InvariantCulture, out var parsed);
+                        amount += parsed;
+                    }
+
+                    if (string.IsNullOrEmpty(currency) && captured.TryGetProperty("currency_code", out var code))
+                    {
+                        currency = code.GetString() ?? string.Empty;
+                    }
+                }
+            }
+        }
+
+        return new PayPalCapture(status, amount, currency);
     }
 }
