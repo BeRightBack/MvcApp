@@ -14,7 +14,8 @@ using MvcApp.Localization.Custom;
 namespace MvcApp.Identity.Pages.Account
 {
     [EnableRateLimiting("auth")]
-    public class LoginWith2faModel : PageModel
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+public class LoginWith2faModel : PageModel
     {
         private readonly SignInManager<UserDetails> _signInManager;
         private readonly UserManager<UserDetails> _userManager;

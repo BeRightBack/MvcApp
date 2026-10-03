@@ -11,6 +11,7 @@ using MvcApp.Module.IPTV.Services;
 namespace MvcApp.Module.IPTV.Controllers;
 
 [ModuleEnabledFilter("Iptv")]
+[Microsoft.AspNetCore.Authorization.AllowAnonymous]
 public class IptvStoreController(UserDbContext context, IShoppingCartService shoppingCartService) : Controller
 {
     [HttpGet("iptv-store")]

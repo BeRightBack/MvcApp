@@ -14,6 +14,7 @@ using MvcApp.Module.IPTV.Models.Localization;
 namespace MvcApp.Module.IPTV.Controllers;
 
 [ModuleEnabledFilter("Iptv")]
+[Microsoft.AspNetCore.Authorization.AllowAnonymous]
 public class IptvHomeController(UserDbContext context, IStringLocalizer<SharedResource> localizer) : Controller
 {
     [TempData]

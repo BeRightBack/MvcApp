@@ -23,6 +23,7 @@ public class ForumController(
     IBanService banService, IStringLocalizer<SharedResource> localizer,
     IHtmlContentSanitizer htmlSanitizer) : Controller
 {
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         var categories = await categoryRepo.Query().OrderBy(c => c.SortOrder).ToListAsync();
@@ -33,6 +34,7 @@ public class ForumController(
         return View(categories);
     }
 
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     public async Task<IActionResult> Forum(int id, int page = 1)
     {
         var forum = await forumRepo.GetFirstOrDefaultAsync(f => f.Id == id);
@@ -126,6 +128,7 @@ public class ForumController(
         return RedirectToAction(nameof(Thread), new { id = thread.Id });
     }
 
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     public async Task<IActionResult> Thread(int id, int page = 1)
     {
         var currentUser = await userManager.GetUserAsync(User);

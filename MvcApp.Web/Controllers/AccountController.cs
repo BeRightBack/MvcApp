@@ -6,6 +6,7 @@ using MvcApp.Infrastructure;
 
 namespace MvcApp.Web.Controllers;
 
+[Microsoft.AspNetCore.Authorization.AllowAnonymous]
 public class AccountController(UserManager<UserDetails> userManager, UserDbContext db) : Controller
 {
     public async Task<IActionResult> GetProfilePicture(string userId)

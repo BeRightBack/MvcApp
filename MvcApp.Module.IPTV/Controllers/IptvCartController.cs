@@ -31,6 +31,7 @@ public class IptvCartController(
     IStringLocalizer<SharedResource> localizer) : Controller
 {
     [HttpPost("iptv-cart/add")]
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddToCart(int subscriptionPlanId, int subscriptionDetailId)
     {
@@ -78,6 +79,7 @@ public class IptvCartController(
     }
 
     [HttpGet("iptv-cart")]
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         ViewData["Title"] = "Shopping Cart";
@@ -98,6 +100,7 @@ public class IptvCartController(
     }
 
     [HttpPost("iptv-cart/remove")]
+    [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> RemoveFromCart(int subscriptionPlanId, int subscriptionDetailId)
     {
