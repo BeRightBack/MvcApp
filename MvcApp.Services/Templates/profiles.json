@@ -1,0 +1,103 @@
+{
+  "$comment": [
+    "Template profiles as data, so a template is a manifest rather than a static list inside the",
+    "platform. Each entry declares three independent things:",
+    "  content     - seed packs whose rows are seeded once into a site.",
+    "  composition - the modules the template is built from. A BUILD-TIME fact: a published site",
+    "                should ship only these, not every module plus a flag saying which are on.",
+    "  defaults    - settings this template seeds; the owner edits them afterwards. Values are a",
+    "                product decision, which is why this is empty rather than invented.",
+    "Only packs in SeedPackNames.All may be listed. An unknown name fails the profile tests.",
+    "Override this file without rebuilding by pointing Templates:ProfilesPath at another copy."
+  ],
+
+  "profiles": [
+    {
+      "template": "Default",
+      "purpose": "Neutral starting point: the community shell only.",
+      "content": { "packs": ["Community"] },
+      "composition": { "modules": ["Forum", "Messages", "Pages"], "offModules": ["Iptv"] }
+    },
+    {
+      "template": "Dating",
+      "purpose": "Adult dating club. Interest tags and VIP tiers are the point.",
+      "content": { "packs": ["Community", "Dating", "Plans"] },
+      "composition": {
+        "modules": ["Forum", "Chat", "Messages", "Video", "Utility", "Gamification", "Pages"],
+        "offModules": ["Iptv"]
+      }
+    },
+    {
+      "template": "Luxury",
+      "purpose": "Members-only premium club. VIP tiers, chat and video.",
+      "content": { "packs": ["Community", "Dating", "Plans", "Chat", "Video"] },
+      "composition": {
+        "modules": ["Forum", "Chat", "Messages", "Video", "Utility", "Gamification", "Pages"],
+        "offModules": ["Iptv"]
+      }
+    },
+    {
+      "template": "Social",
+      "purpose": "Social community. Forum, chat, messages and video.",
+      "content": { "packs": ["Community", "Chat", "Video"] },
+      "composition": { "modules": ["Forum", "Chat", "Video", "Messages", "Pages"], "offModules": ["Iptv"] }
+    },
+    {
+      "template": "Store",
+      "purpose": "Commerce front. The community shell; products come from the owner.",
+      "content": { "packs": ["Community"] },
+      "composition": { "modules": ["Store", "Forum", "Messages", "Pages", "Ads"], "offModules": ["Iptv"] }
+    },
+    {
+      "template": "Business",
+      "purpose": "Corporate portal. Content, pages, forums and a store; no dating, no IPTV.",
+      "content": { "packs": ["Community", "Blog", "Ads"] },
+      "composition": {
+        "modules": ["Forum", "Messages", "Pages", "Blog", "Store", "Ads", "Utility"],
+        "offModules": ["Iptv"]
+      }
+    },
+    {
+      "template": "Professional",
+      "purpose": "Business and professional networking, with a store.",
+      "content": { "packs": ["Community", "Blog", "Ads"] },
+      "composition": { "modules": ["Forum", "Messages", "Pages", "Blog", "Store", "Ads"], "offModules": ["Iptv"] }
+    },
+    {
+      "template": "Magazine",
+      "purpose": "Editorial publication. Blog-led, with pages and discussion.",
+      "content": { "packs": ["Community", "Blog", "Ads"] },
+      "composition": { "modules": ["Blog", "Pages", "Forum", "Messages", "Ads"], "offModules": ["Iptv"] }
+    },
+    {
+      "template": "Minimal",
+      "purpose": "Content-first reading site. Blog and pages, nothing else.",
+      "content": { "packs": ["Blog"] },
+      "composition": { "modules": ["Blog", "Pages"], "offModules": ["Iptv"] }
+    },
+    {
+      "template": "Gaming",
+      "purpose": "Gaming community. Chat, events, gamification and leaderboards.",
+      "content": { "packs": ["Community", "Chat", "Events", "Gamification"] },
+      "composition": {
+        "modules": ["Forum", "Chat", "Messages", "Events", "Gamification", "Utility", "Pages"],
+        "offModules": ["Iptv"]
+      }
+    },
+    {
+      "template": "IPTV",
+      "purpose": "Streaming service. Subscription plans and a support forum.",
+      "content": { "packs": ["Community", "Plans"] },
+      "composition": { "modules": ["Iptv", "Forum", "Pages", "Messages"], "offModules": [] }
+    },
+    {
+      "template": "Frenzyzone",
+      "purpose": "Business portal: services, publishing, a storefront and contact. No dating, no IPTV, no membership tiers.",
+      "content": { "packs": ["Community", "Blog", "Ads"] },
+      "composition": {
+        "modules": ["Forum", "Messages", "Pages", "Blog", "Store", "Ads", "Utility"],
+        "offModules": ["Iptv"]
+      }
+    }
+  ]
+}

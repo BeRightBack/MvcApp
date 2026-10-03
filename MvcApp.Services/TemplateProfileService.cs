@@ -1,136 +1,54 @@
+using System.Reflection;
+using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 using MvcApp.Core.Abstractions;
 using MvcApp.Core.Seeding;
 
 namespace MvcApp.Services;
 
 /// <summary>
-/// The seed contract for every template. A profile declares three independent things — what content
-/// it seeds, what it is composed of, and what it defaults — so switching templates no longer leaves
-/// one template's content sitting in the next template's database.
+/// The seed contract for every template, loaded as DATA rather than compiled into the platform.
 ///
-/// Nothing here applies or removes anything. A profile is data: the packs own the rows, the manifest
-/// owns the bookkeeping, and removal stays an explicit admin action.
+/// A profile declares three independent things — what content it seeds, what it is composed of, and
+/// what it defaults — so switching templates no longer leaves one template's content sitting in the
+/// next template's database, and so a template is a manifest rather than a static list inside core.
 ///
-/// Only packs that exist in <c>SeedPackNames.All</c> may be listed. A module with no reference rows
-/// to seed — Store, Pages, IPTV — belongs in <c>Composition.Modules</c> rather than
-/// <c>Content.Packs</c>; its content is supplied by the owner, not invented here.
+/// Source of truth: <c>Templates/profiles.json</c>, embedded in this assembly. Point
+/// <c>Templates:ProfilesPath</c> at another copy of that file to supply your own without rebuilding —
+/// which is the first step toward templates that live entirely outside the platform.
 ///
-/// These profiles live in the platform today, which is itself a coupling worth removing: a template
-/// should be addable without editing core. Keeping the three concerns separate is the prerequisite
-/// for moving them out to data.
+/// Nothing here applies or removes anything. The packs own the rows, the manifest owns the
+/// bookkeeping, and removal stays an explicit admin action.
+///
+/// Only packs that exist in <c>SeedPackNames.All</c> may be listed: a name that no pack implements is
+/// reported by <see cref="GetUnknownPacks"/> and fails the profile tests, rather than silently
+/// applying as "nothing".
 /// </summary>
 public class TemplateProfileService : ITemplateProfileService
 {
-    private static readonly List<TemplateSeedProfile> _profiles =
-    [
-        new()
-        {
-            Template = "Default",
-            Purpose = "Neutral starting point: the community shell only.",
-            Content = new() { Packs = [SeedPackNames.Community] },
-            Composition = new() { Modules = ["Forum", "Messages", "Pages"], OffModules = ["Iptv"] },
-        },
-        new()
-        {
-            Template = "Dating",
-            Purpose = "Adult dating club. Interest tags and VIP tiers are the point.",
-            Content = new() { Packs = [SeedPackNames.Community, SeedPackNames.Dating, SeedPackNames.Plans] },
-            Composition = new()
-            {
-                Modules = ["Forum", "Chat", "Messages", "Video", "Utility", "Gamification", "Pages"],
-                OffModules = ["Iptv"],
-            },
-        },
-        new()
-        {
-            Template = "Luxury",
-            Purpose = "Members-only premium club. VIP tiers, chat and video.",
-            Content = new()
-            {
-                Packs = [SeedPackNames.Community, SeedPackNames.Dating, SeedPackNames.Plans, SeedPackNames.Chat, SeedPackNames.Video],
-            },
-            Composition = new()
-            {
-                Modules = ["Forum", "Chat", "Messages", "Video", "Utility", "Gamification", "Pages"],
-                OffModules = ["Iptv"],
-            },
-        },
-        new()
-        {
-            Template = "Social",
-            Purpose = "Social community. Forum, chat, messages and video.",
-            Content = new() { Packs = [SeedPackNames.Community, SeedPackNames.Chat, SeedPackNames.Video] },
-            Composition = new() { Modules = ["Forum", "Chat", "Video", "Messages", "Pages"], OffModules = ["Iptv"] },
-        },
-        new()
-        {
-            Template = "Store",
-            Purpose = "Commerce front. The community shell; products come from the owner.",
-            Content = new() { Packs = [SeedPackNames.Community] },
-            Composition = new() { Modules = ["Store", "Forum", "Messages", "Pages", "Ads"], OffModules = ["Iptv"] },
-        },
-        new()
-        {
-            Template = "Business",
-            Purpose = "Corporate portal. Content, pages, forums and a store; no dating, no IPTV.",
-            Content = new() { Packs = [SeedPackNames.Community, SeedPackNames.Blog, SeedPackNames.Ads] },
-            Composition = new()
-            {
-                Modules = ["Forum", "Messages", "Pages", "Blog", "Store", "Ads", "Utility"],
-                OffModules = ["Iptv"],
-            },
-        },
-        new()
-        {
-            Template = "Professional",
-            Purpose = "Business and professional networking, with a store.",
-            Content = new() { Packs = [SeedPackNames.Community, SeedPackNames.Blog, SeedPackNames.Ads] },
-            Composition = new() { Modules = ["Forum", "Messages", "Pages", "Blog", "Store", "Ads"], OffModules = ["Iptv"] },
-        },
-        new()
-        {
-            Template = "Magazine",
-            Purpose = "Editorial publication. Blog-led, with pages and discussion.",
-            Content = new() { Packs = [SeedPackNames.Community, SeedPackNames.Blog, SeedPackNames.Ads] },
-            Composition = new() { Modules = ["Blog", "Pages", "Forum", "Messages", "Ads"], OffModules = ["Iptv"] },
-        },
-        new()
-        {
-            Template = "Minimal",
-            Purpose = "Content-first reading site. Blog and pages, nothing else.",
-            Content = new() { Packs = [SeedPackNames.Blog] },
-            Composition = new() { Modules = ["Blog", "Pages"], OffModules = ["Iptv"] },
-        },
-        new()
-        {
-            Template = "Gaming",
-            Purpose = "Gaming community. Chat, events, gamification and leaderboards.",
-            Content = new() { Packs = [SeedPackNames.Community, SeedPackNames.Chat, SeedPackNames.Events, SeedPackNames.Gamification] },
-            Composition = new()
-            {
-                Modules = ["Forum", "Chat", "Messages", "Events", "Gamification", "Utility", "Pages"],
-                OffModules = ["Iptv"],
-            },
-        },
-        new()
-        {
-            Template = "IPTV",
-            Purpose = "Streaming service. Subscription plans and a support forum.",
-            Content = new() { Packs = [SeedPackNames.Community, SeedPackNames.Plans] },
-            Composition = new() { Modules = ["Iptv", "Forum", "Pages", "Messages"], OffModules = [] },
-        },
-        new()
-        {
-            Template = "Frenzyzone",
-            Purpose = "Business portal: services, publishing, a storefront and contact. No dating, no IPTV, no membership tiers.",
-            Content = new() { Packs = [SeedPackNames.Community, SeedPackNames.Blog, SeedPackNames.Ads] },
-            Composition = new()
-            {
-                Modules = ["Forum", "Messages", "Pages", "Blog", "Store", "Ads", "Utility"],
-                OffModules = ["Iptv"],
-            },
-        },
-    ];
+    /// <summary>Logical name of the embedded manifest, pinned in the project file.</summary>
+    public const string EmbeddedProfilesResource = "MvcApp.Services.Templates.profiles.json";
+
+    /// <summary>Configuration key holding a path to an alternative profiles file.</summary>
+    public const string ProfilesPathKey = "Templates:ProfilesPath";
+
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        ReadCommentHandling = JsonCommentHandling.Skip,
+    };
+
+    private readonly IReadOnlyList<TemplateSeedProfile> _profiles;
+
+    /// <summary>Uses the embedded manifest. Kept so the profile can be inspected without a container.</summary>
+    public TemplateProfileService() : this(new ConfigurationBuilder().Build())
+    {
+    }
+
+    public TemplateProfileService(IConfiguration configuration)
+    {
+        _profiles = Load(configuration);
+    }
 
     public IReadOnlyList<TemplateSeedProfile> GetProfiles() => _profiles;
 
@@ -147,4 +65,75 @@ public class TemplateProfileService : ITemplateProfileService
             .Where(pack => !SeedPackNames.All.Contains(pack, StringComparer.OrdinalIgnoreCase))
             .Distinct(StringComparer.OrdinalIgnoreCase),
     ];
+
+    private static IReadOnlyList<TemplateSeedProfile> Load(IConfiguration configuration)
+    {
+        var configuredPath = configuration[ProfilesPathKey];
+
+        if (!string.IsNullOrWhiteSpace(configuredPath))
+        {
+            // Configured but absent is a misconfiguration, not a reason to fall back: quietly using
+            // the embedded set would mean the deployment runs templates nobody asked for.
+            if (!File.Exists(configuredPath))
+            {
+                throw new InvalidOperationException(
+                    $"{ProfilesPathKey} points at '{configuredPath}', which does not exist.");
+            }
+
+            return Parse(File.ReadAllText(configuredPath), configuredPath);
+        }
+
+        using var stream = typeof(TemplateProfileService).Assembly
+            .GetManifestResourceStream(EmbeddedProfilesResource)
+            ?? throw new InvalidOperationException(
+                $"The embedded template profiles '{EmbeddedProfilesResource}' are missing from the assembly. "
+                + "The project file must keep the EmbeddedResource entry for Templates/profiles.json.");
+
+        using var reader = new StreamReader(stream);
+        return Parse(reader.ReadToEnd(), EmbeddedProfilesResource);
+    }
+
+    private static IReadOnlyList<TemplateSeedProfile> Parse(string json, string source)
+    {
+        TemplateProfileDocument? document;
+
+        try
+        {
+            document = JsonSerializer.Deserialize<TemplateProfileDocument>(json, JsonOptions);
+        }
+        catch (JsonException ex)
+        {
+            throw new InvalidOperationException($"Template profiles from {source} are not valid JSON: {ex.Message}", ex);
+        }
+
+        var profiles = document?.Profiles ?? [];
+
+        if (profiles.Count == 0)
+        {
+            throw new InvalidOperationException(
+                $"Template profiles from {source} define no templates. An empty set would leave the "
+                + "admin template list blank and apply no content for any template.");
+        }
+
+        var duplicates = profiles
+            .GroupBy(p => p.Template, StringComparer.OrdinalIgnoreCase)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToList();
+
+        if (duplicates.Count > 0)
+        {
+            throw new InvalidOperationException(
+                $"Template profiles from {source} define the same template more than once: "
+                + string.Join(", ", duplicates) + ".");
+        }
+
+        return profiles;
+    }
+
+    /// <summary>Root object of the manifest, so the file can gain fields without reshaping.</summary>
+    private sealed class TemplateProfileDocument
+    {
+        public List<TemplateSeedProfile> Profiles { get; set; } = [];
+    }
 }
