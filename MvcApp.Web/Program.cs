@@ -150,6 +150,9 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     ContentRootPath = contentRoot
 });
 
+// Do not advertise the server implementation.
+builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
+
 
 
 try
@@ -274,6 +277,21 @@ try
     app.UseSerilogRequestLogging();
 
     // Configure the HTTP request pipeline.
+
+    // Forwarded headers must run BEFORE anything that inspects the scheme (HSTS, HTTPS redirect).
+    // Behind the TLS-terminating reverse proxy the request otherwise still looks like http, and
+    // HSTS silently declines to emit.
+    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost,
+        RequireHeaderSymmetry = false,
+        ForwardLimit = null,
+        KnownProxies = { IPAddress.Parse("127.0.0.1") } // or your Apache proxy IP
+    });
+
+    // Baseline security headers on every response.
+    app.UseMiddleware<SecurityHeadersMiddleware>();
+
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();
@@ -284,13 +302,6 @@ try
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
-    app.UseForwardedHeaders(new ForwardedHeadersOptions
-    {
-        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost,
-        RequireHeaderSymmetry = false,
-        ForwardLimit = null,
-        KnownProxies = { IPAddress.Parse("127.0.0.1") } // or your Apache proxy IP
-    });
 
     app.UseHttpsRedirection();
 
@@ -526,5 +537,9 @@ static void RegisterBlazorPageWidgetAssemblies(WebApplication app)
 // Event categories are seeded by EventsPack and badges by GamificationPack; see
 // ApplySeedPacksAsync. Neither has an inline seeder here on purpose: rows created outside
 // SeedManifest cannot be removed by a pack.
+
+// Exposed so the host-level test harness can reference this entry-point assembly
+// (WebApplicationFactory<Program>). Required because Program.cs uses top-level statements.
+public partial class Program { }
 
 
