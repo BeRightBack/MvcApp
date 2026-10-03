@@ -180,7 +180,8 @@ try
     builder.Services.AddUtility();
 
     builder.Services.AddApplicationServices(builder.Configuration);
-    builder.Services.AddHttpClient<MvcApp.Web.Services.VipPayPalService>();
+    // The PayPal + hosted-checkout rail is registered by the platform payment gate
+    // (MvcApp.Common.Payments), so the web project no longer registers one of its own.
     builder.Services.AddMvcAppLocalization(builder.Configuration);
 
     builder.Services.AddHttpContextAccessor();

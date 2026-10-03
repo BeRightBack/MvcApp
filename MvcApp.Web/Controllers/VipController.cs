@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcApp.Core;
 using MvcApp.Infrastructure;
-using MvcApp.Web.Services;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MvcApp.Localization;
@@ -14,9 +13,9 @@ namespace MvcApp.Web.Controllers;
 [Authorize]
 public class VipController(
     UserDbContext db,
-    UserManager<UserDetails> userManager,
-    VipPayPalService payPalService, IStringLocalizer<SharedResource> localizer,
+    UserManager<UserDetails> userManager, IStringLocalizer<SharedResource> localizer,
     MvcApp.Common.Payments.PaymentIntentProtector paymentIntents,
+    MvcApp.Common.Payments.IPaymentGatewayResolver paymentGateways,
     ILogger<VipController> logger) : Controller
 {
     private static readonly Dictionary<string, (decimal Rate, string Symbol, string Code)> _currencies = new(StringComparer.OrdinalIgnoreCase)
@@ -83,8 +82,22 @@ public class VipController(
 
         try
         {
-            var approvalUrl = await payPalService.CreateOrderAsync(detail.Price, "USD", returnUrl, cancelUrl);
-            return Redirect(approvalUrl);
+            var gateway = paymentGateways.Resolve(MvcApp.Common.Payments.PaymentProviderKind.PayPal);
+
+            var initiation = await gateway.InitiateAsync(new MvcApp.Common.Payments.PaymentRequest(
+                Amount: detail.Price,
+                Currency: "USD",
+                Reference: $"{plan.Id}:{detail.Id}",
+                Description: $"{plan.Name} - {detail.Description}",
+                ReturnUrl: returnUrl,
+                CancelUrl: cancelUrl));
+
+            if (string.IsNullOrEmpty(initiation.RedirectUrl))
+            {
+                throw new InvalidOperationException("The PayPal rail returned no approval URL.");
+            }
+
+            return Redirect(initiation.RedirectUrl);
         }
         catch (Exception ex)
         {
@@ -120,23 +133,25 @@ public class VipController(
 
         try
         {
-            var capture = await payPalService.CaptureOrderAsync(token);
+            var gateway = paymentGateways.Resolve(MvcApp.Common.Payments.PaymentProviderKind.PayPal);
+            var verification = await gateway.CaptureAsync(token);
 
-            // Compare what was actually captured with what was quoted. The old code inspected only the
-            // status, so a completed payment for a different (cheaper) order satisfied it.
-            if (capture.Status == "COMPLETED" &&
-                (!string.Equals(capture.Currency, intent.Value.Currency, StringComparison.OrdinalIgnoreCase) ||
-                 capture.Amount != intent.Value.Amount))
+            // Compare what was actually captured with what was quoted, through the sanctioned gate:
+            // Matches() fails closed on a non-positive or blank expectation, which the hand-written
+            // comparison it replaces did not. This is what ties the captured token to the plan the
+            // customer was quoted (audit 3.12).
+            if (verification.Status == MvcApp.Common.Payments.PaymentStatus.Completed &&
+                !verification.Matches(intent.Value.Amount, intent.Value.Currency))
             {
                 logger.LogWarning(
                     "VIP capture does not match the bound order: quoted {QuotedAmount} {QuotedCurrency}, captured {CapturedAmount} {CapturedCurrency}.",
-                    intent.Value.Amount, intent.Value.Currency, capture.Amount, capture.Currency);
+                    intent.Value.Amount, intent.Value.Currency, verification.Amount, verification.Currency);
 
                 TempData["Error"] = localizer["The amount paid did not match this order. Please contact support."];
                 return RedirectToAction(nameof(Index));
             }
 
-            if (capture.Status == "COMPLETED")
+            if (verification.Status == MvcApp.Common.Payments.PaymentStatus.Completed)
             {
                 var now = DateTime.UtcNow;
                 var months = detail.DurationInMonths > 0 ? detail.DurationInMonths : 1;
