@@ -189,6 +189,7 @@ try
     // load balancer or deploy gate should use, and it reflects the SCHEMA and the SEEDING outcome,
     // not merely that a TCP connection to MySQL succeeded.
     builder.Services.AddSingleton<StartupState>();
+    builder.Services.AddSingleton<MvcApp.Web.Storage.VerificationDocumentStore>();
     builder.Services.AddHealthChecks()
         .AddCheck<DatabaseHealthCheck>("database")
         .AddCheck<PendingMigrationsHealthCheck>("migrations")
