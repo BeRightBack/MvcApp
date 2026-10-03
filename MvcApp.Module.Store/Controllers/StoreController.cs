@@ -11,6 +11,8 @@ using MvcApp.Module.Store.Services;
 using Microsoft.Extensions.Localization;
 using MvcApp.Localization;
 
+using Microsoft.Extensions.Logging;
+
 namespace MvcApp.Module.Store.Controllers;
 
 [ModuleEnabledFilter("Store")]
@@ -21,7 +23,8 @@ public class StoreController(
     IRepository<CartItem> cartRepo,
     IRepository<Order> orderRepo,
     IRepository<OrderItem> orderItemRepo,
-    StorePayPalService payPalService, IStringLocalizer<SharedResource> localizer) : Controller
+    StorePayPalService payPalService, IStringLocalizer<SharedResource> localizer,
+    Microsoft.Extensions.Logging.ILogger<StoreController> logger) : Controller
 {
     [AllowAnonymous]
     public async Task<IActionResult> Index(int page = 1, int? categoryId = null)
@@ -273,9 +276,28 @@ public class StoreController(
 
         try
         {
-            var status = await payPalService.CaptureOrderAsync(token);
-            ViewBag.PaymentStatus = status == "COMPLETED" ? "paid" : "pending";
-            if (status == "COMPLETED")
+            var capture = await payPalService.CaptureOrderAsync(token);
+
+            // Verify the captured amount against THIS order before treating it as paid. Previously only
+            // the status was inspected and nothing tied the provider token to the order id, so a valid
+            // token from a cheap order on the same account would settle an expensive one (audit 3.12).
+            // The order row is already the server-side record, so no extra binding is needed.
+            var amountMatches = capture.Currency.Equals("USD", StringComparison.OrdinalIgnoreCase)
+                                && capture.Amount == order.TotalAmount;
+
+            if (capture.Status == "COMPLETED" && !amountMatches)
+            {
+                logger.LogWarning(
+                    "Store capture does not match order {OrderId}: expected {Expected} USD, captured {Captured} {Currency}.",
+                    order.Id, order.TotalAmount, capture.Amount, capture.Currency);
+
+                TempData["Error"] = localizer["We could not match this payment to your order. If you were charged, contact support with your PayPal receipt."];
+                ViewBag.PaymentStatus = "failed";
+                return View(order);
+            }
+
+            ViewBag.PaymentStatus = capture.Status == "COMPLETED" ? "paid" : "pending";
+            if (capture.Status == "COMPLETED")
             {
                 order.PaymentStatus = PaymentStatus.Paid;
                 order.Status = OrderStatus.Processing;
