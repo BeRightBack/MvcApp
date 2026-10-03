@@ -23,7 +23,7 @@
       "purpose": "Adult dating club. Interest tags and VIP tiers are the point.",
       "content": { "packs": ["Community", "Dating", "Plans"] },
       "composition": {
-        "modules": ["Forum", "Chat", "Messages", "Video", "Utility", "Gamification", "Pages"],
+        "modules": ["Forum", "Chat", "Messages", "Video", "Utility", "Pages"],
         "offModules": ["Iptv"]
       }
     },
@@ -32,7 +32,7 @@
       "purpose": "Members-only premium club. VIP tiers, chat and video.",
       "content": { "packs": ["Community", "Dating", "Plans", "Chat", "Video"] },
       "composition": {
-        "modules": ["Forum", "Chat", "Messages", "Video", "Utility", "Gamification", "Pages"],
+        "modules": ["Forum", "Chat", "Messages", "Video", "Utility", "Pages"],
         "offModules": ["Iptv"]
       }
     },
@@ -80,7 +80,7 @@
       "purpose": "Gaming community. Chat, events, gamification and leaderboards.",
       "content": { "packs": ["Community", "Chat", "Events", "Gamification"] },
       "composition": {
-        "modules": ["Forum", "Chat", "Messages", "Events", "Gamification", "Utility", "Pages"],
+        "modules": ["Forum", "Chat", "Messages", "Utility", "Pages"],
         "offModules": ["Iptv"]
       }
     },

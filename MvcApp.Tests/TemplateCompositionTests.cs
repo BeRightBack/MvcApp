@@ -87,13 +87,13 @@ public class TemplateCompositionTests
     [Fact]
     public void A_declared_module_name_that_matches_nothing_fails_loudly()
     {
-        // A typo would otherwise compose nothing, silently, leaving the site missing a feature.
-        var composition = Resolve(
-            (TemplateComposition.ModulesKey + ":0", "Blog"),
-            (TemplateComposition.ModulesKey + ":1", "Bloog"));
-
+        // A typo must not compose nothing, silently, leaving the site missing a feature. Resolution
+        // now refuses it outright, before any request is served — so it is caught even earlier than
+        // the catalogue-drift guard.
         var ex = Assert.Throws<InvalidOperationException>(
-            () => composition.EnsureEveryDeclaredNameMatched(["Blog", "Pages"]));
+            () => Resolve(
+                (TemplateComposition.ModulesKey + ":0", "Blog"),
+                (TemplateComposition.ModulesKey + ":1", "Bloog")));
 
         Assert.Contains("Bloog", ex.Message);
     }
@@ -103,5 +103,46 @@ public class TemplateCompositionTests
     {
         // Nothing was declared, so there is nothing to be unmatched — this must not throw.
         Resolve().EnsureEveryDeclaredNameMatched(["Forum"]);
+    }
+
+    [Fact]
+    public void Every_template_can_actually_be_composed()
+    {
+        // The regression test for the defect this guard was written for: Dating, Luxury and Gaming
+        // declared 'Gamification'/'Events', which are features inside MvcApp.Web and not modules, so
+        // resolving their composition threw at startup and the app would not run at all.
+        var profiles = new TemplateProfileService();
+
+        foreach (var template in profiles.GetTemplates())
+        {
+            var composition = Resolve((TemplateComposition.TemplateNameKey, template));
+
+            Assert.True(composition.IsTrimmed, $"{template} should trim");
+        }
+    }
+
+    [Fact]
+    public void Every_profiles_declared_module_has_an_assembly_to_compose()
+    {
+        var profiles = new TemplateProfileService();
+
+        var notModules = profiles.GetTemplates()
+            .SelectMany(template => profiles.GetProfile(template)!.Composition.Modules
+                .Where(module => !ModuleNames.IsKnown(module))
+                .Select(module => $"{template} -> {module}"))
+            .ToList();
+
+        Assert.Empty(notModules);
+    }
+
+    [Fact]
+    public void A_declared_name_that_is_not_a_module_fails_at_resolution()
+    {
+        // 'Gamification' is the exact name that took the app down: a real feature, not a module.
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Resolve((TemplateComposition.ModulesKey + ":0", "Gamification")));
+
+        Assert.Contains("not modules", ex.Message);
+        Assert.Contains("Known modules", ex.Message);
     }
 }
