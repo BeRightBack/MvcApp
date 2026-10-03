@@ -187,10 +187,32 @@ try
     // Operational endpoints: /health reports database reachability for load balancers / uptime probes.
     builder.Services.AddHealthChecks().AddCheck<DatabaseHealthCheck>("database");
 
-    // Global auth rate limiting (keyed per client IP) to blunt brute-force/spam against credential endpoints.
+    // Rate limiting. A NAMED policy is optional metadata that any endpoint can simply lack —
+    // which is exactly how the "auth" policy ended up throttling nothing. A global limiter
+    // cannot be forgotten, so it is the baseline; static files are served before this middleware,
+    // so only dynamic requests are counted.
     builder.Services.AddRateLimiter(options =>
     {
         options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+        // Limits are read from configuration when a partition is first created (not at startup),
+        // so they can be overridden per environment — and per test — without touching this code.
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+            RateLimitPartition.GetFixedWindowLimiter(
+                partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                factory: _ =>
+                {
+                    var configuration = context.RequestServices.GetRequiredService<IConfiguration>();
+
+                    return new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = configuration.GetValue("RateLimiting:PermitLimit", 120),
+                        Window = TimeSpan.FromSeconds(configuration.GetValue("RateLimiting:WindowSeconds", 60)),
+                        QueueLimit = 0
+                    };
+                }));
+
+        // A tighter policy, still available for endpoints that opt in explicitly.
         options.AddPolicy("auth", context => RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
             factory: _ => new FixedWindowRateLimiterOptions
