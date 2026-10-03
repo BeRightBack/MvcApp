@@ -63,7 +63,10 @@ public class VipPayPalService(HttpClient httpClient, IConfiguration configuratio
             .GetProperty("href").GetString()!;
     }
 
-    public async Task<string> CaptureOrderAsync(string payPalOrderId)
+    /// <summary>What the provider actually captured — the status alone cannot tell a $5 order from a $500 one.</summary>
+    public readonly record struct PayPalCapture(string Status, decimal Amount, string Currency);
+
+    public async Task<PayPalCapture> CaptureOrderAsync(string payPalOrderId)
     {
         var accessToken = await GetAccessTokenAsync();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -74,6 +77,29 @@ public class VipPayPalService(HttpClient httpClient, IConfiguration configuratio
         response.EnsureSuccessStatusCode();
 
         using var json = JsonDocument.Parse(responseContent);
-        return json.RootElement.GetProperty("status").GetString() ?? "UNKNOWN";
+        var status = json.RootElement.GetProperty("status").GetString() ?? "UNKNOWN";
+
+        // The captured amount is read back so the caller can compare it with what was quoted. The
+        // previous version returned only the status, which made any amount check impossible.
+        var amount = 0m;
+        var currency = string.Empty;
+
+        if (json.RootElement.TryGetProperty("purchase_units", out var units) && units.GetArrayLength() > 0 &&
+            units[0].TryGetProperty("payments", out var payments) &&
+            payments.TryGetProperty("captures", out var captures) && captures.GetArrayLength() > 0 &&
+            captures[0].TryGetProperty("amount", out var capturedAmount))
+        {
+            if (capturedAmount.TryGetProperty("value", out var value))
+            {
+                decimal.TryParse(value.GetString(), NumberStyles.Number, CultureInfo.InvariantCulture, out amount);
+            }
+
+            if (capturedAmount.TryGetProperty("currency_code", out var code))
+            {
+                currency = code.GetString() ?? string.Empty;
+            }
+        }
+
+        return new PayPalCapture(status, amount, currency);
     }
 }
