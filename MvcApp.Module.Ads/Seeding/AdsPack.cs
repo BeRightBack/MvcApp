@@ -160,10 +160,15 @@ public sealed class AdsPack : ISeedPack
 
     internal static IReadOnlyList<AdZone> Build() =>
     [
-        new() { Key = "top-header", Name = "Top Header", Description = "Full-width banner at the very top of the page", MaxBanners = 1, DisplayOrder = 10, DefaultCssClass = "ad-zone ad-top-header mb-3", ExcludeFromLandingPage = true, IsActive = true },
+        // top-header and content-top are NOT landing-page excluded: the most valuable inventory is
+        // the top of the landing page, and refusing it there (which the original rows did) meant a
+        // freshly seeded site appeared to have no banner positions at all - they were all below the
+        // fold or excluded. in-article stays excluded from the landing page, which is correct: there
+        // is no article on it.
+        new() { Key = "top-header", Name = "Top Header", Description = "Full-width banner at the very top of the page", MaxBanners = 1, DisplayOrder = 10, DefaultCssClass = "ad-zone ad-top-header mb-3", IsActive = true },
         new() { Key = "sidebar-left", Name = "Left Sidebar", Description = "Vertical banner in the left sidebar", MaxBanners = 2, DisplayOrder = 20, DefaultCssClass = "ad-zone ad-sidebar-left mb-3", IsActive = true },
         new() { Key = "sidebar-right", Name = "Right Sidebar", Description = "Vertical banner in the right sidebar", MaxBanners = 2, DisplayOrder = 30, DefaultCssClass = "ad-zone ad-sidebar-right mb-3", IsActive = true },
-        new() { Key = "content-top", Name = "Content Top", Description = "Banner at the top of the main content area", MaxBanners = 1, DisplayOrder = 40, DefaultCssClass = "ad-zone ad-content-top mb-4", ExcludeFromLandingPage = true, IsActive = true },
+        new() { Key = "content-top", Name = "Content Top", Description = "Banner at the top of the main content area", MaxBanners = 1, DisplayOrder = 40, DefaultCssClass = "ad-zone ad-content-top mb-4", IsActive = true },
         new() { Key = "content-bottom", Name = "Content Bottom", Description = "Banner at the bottom of the main content area", MaxBanners = 1, DisplayOrder = 50, DefaultCssClass = "ad-zone ad-content-bottom mt-4", IsActive = true },
         new() { Key = "footer", Name = "Footer", Description = "Banner in the footer area", MaxBanners = 3, DisplayOrder = 60, DefaultCssClass = "ad-zone ad-footer mt-4", IsActive = true },
         new() { Key = "in-article", Name = "In-Article", Description = "Banner inserted between paragraphs in article content", MaxBanners = 1, DisplayOrder = 70, DefaultCssClass = "ad-zone ad-in-article my-4", ExcludeFromLandingPage = true, IsActive = true },
