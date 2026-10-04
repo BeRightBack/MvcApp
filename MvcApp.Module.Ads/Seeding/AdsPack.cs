@@ -23,8 +23,14 @@ public sealed class AdsPack : ISeedPack
         + "declares this pack has something to show instead of seven empty zones.";
     public IReadOnlyList<string> EntityNames => ["AdZone", "AdBanner"];
 
-    /// <summary>The creatives ship with this module, served from its own static assets.</summary>
-    private const string CreativeBase = "/_content/MvcApp.Module.Ads/images/ads";
+    /// <summary>
+    /// Site-relative, deliberately. The creatives live in the site's own wwwroot - the template
+    /// project already ships its ad images there - so this path resolves in EVERY environment.
+    /// Pointing at the module's /_content/... instead only works from a published output, and an
+    /// instance running a plain build output then shows broken images (verified: that is exactly
+    /// what happened here).
+    /// </summary>
+    private const string CreativeBase = "/images/ads";
 
     public async Task SeedAsync(SeedPackService packs, UserDbContext db, string? appliedBy, CancellationToken ct)
     {
@@ -83,7 +89,11 @@ public sealed class AdsPack : ISeedPack
                     AltText = example.AltText,
                     Weight = example.Weight,
                     TargetRoles = example.TargetRoles,
-                    IsActive = true,
+                    // Only real creatives are live. The type-coverage and targeting examples are
+                    // fixtures: they exist so every render path can be exercised on demand, but a
+                    // site that simply declares the Ads pack should show advertisements, not the
+                    // word "Text banner". They are one toggle away in the admin.
+                    IsActive = example.Type == AdBannerType.Image,
                     CreatedAt = now,
                     UpdatedAt = now
                 });
