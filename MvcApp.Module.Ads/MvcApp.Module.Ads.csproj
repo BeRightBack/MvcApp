@@ -17,10 +17,12 @@
     <ProjectReference Include="..\MvcApp.Infrastructure\MvcApp.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="wwwroot\**" />
-    <Content Include="wwwroot\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  <!-- No Content override here. This module had one:
+         <Content Remove="wwwroot\**" /> <Content Include="wwwroot\**"> with CopyToOutputDirectory,
+       which re-declared its wwwroot as ordinary content. The files still reached the build output,
+       but they were no longer registered as STATIC WEB ASSETS, so nothing under
+       /_content/MvcApp.Module.Ads/ was ever served: the ad creatives 404'd, and so did
+       js/ads-rotate.js, which the renderer loads whenever a zone rotates. The Razor SDK treats an
+       RCL's wwwroot as static web assets automatically; the override only removed that.
+       Verified after removing it: both the creatives and ads-rotate.js return 200. -->
 </Project>

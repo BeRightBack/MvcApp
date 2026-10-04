@@ -411,7 +411,8 @@
       "content": {
         "packs": [
           "Community",
-          "Plans"
+          "Plans",
+          "Ads"
         ]
       },
       "composition": {
@@ -420,7 +421,8 @@
           "Forum",
           "Pages",
           "Messages",
-          "Blog"
+          "Blog",
+          "Ads"
         ],
         "offModules": []
       },
@@ -434,7 +436,7 @@
           "Module.Store.Enabled": "false",
           "Module.Iptv.Enabled": "true",
           "Module.Pages.Enabled": "true",
-          "Module.Ads.Enabled": "false",
+          "Module.Ads.Enabled": "true",
           "Module.Utility.Enabled": "false",
           "Module.Events.Enabled": "false",
           "Module.Gamification.Enabled": "false"
