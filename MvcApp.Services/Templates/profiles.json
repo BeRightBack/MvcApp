@@ -23,7 +23,8 @@
         "modules": [
           "Forum",
           "Messages",
-          "Pages"
+          "Pages",
+          "Blog"
         ],
         "offModules": [
           "Iptv"
@@ -32,7 +33,7 @@
       "defaults": {
         "settings": {
           "Module.Forum.Enabled": "true",
-          "Module.Blog.Enabled": "false",
+          "Module.Blog.Enabled": "true",
           "Module.Chat.Enabled": "false",
           "Module.Video.Enabled": "false",
           "Module.Messages.Enabled": "true",
@@ -63,7 +64,8 @@
           "Messages",
           "Video",
           "Utility",
-          "Pages"
+          "Pages",
+          "Blog"
         ],
         "offModules": [
           "Iptv"
@@ -72,7 +74,7 @@
       "defaults": {
         "settings": {
           "Module.Forum.Enabled": "true",
-          "Module.Blog.Enabled": "false",
+          "Module.Blog.Enabled": "true",
           "Module.Chat.Enabled": "true",
           "Module.Video.Enabled": "true",
           "Module.Messages.Enabled": "true",
@@ -105,7 +107,8 @@
           "Messages",
           "Video",
           "Utility",
-          "Pages"
+          "Pages",
+          "Blog"
         ],
         "offModules": [
           "Iptv"
@@ -114,7 +117,7 @@
       "defaults": {
         "settings": {
           "Module.Forum.Enabled": "true",
-          "Module.Blog.Enabled": "false",
+          "Module.Blog.Enabled": "true",
           "Module.Chat.Enabled": "true",
           "Module.Video.Enabled": "true",
           "Module.Messages.Enabled": "true",
@@ -144,7 +147,8 @@
           "Chat",
           "Video",
           "Messages",
-          "Pages"
+          "Pages",
+          "Blog"
         ],
         "offModules": [
           "Iptv"
@@ -153,7 +157,7 @@
       "defaults": {
         "settings": {
           "Module.Forum.Enabled": "true",
-          "Module.Blog.Enabled": "false",
+          "Module.Blog.Enabled": "true",
           "Module.Chat.Enabled": "true",
           "Module.Video.Enabled": "true",
           "Module.Messages.Enabled": "true",
@@ -181,7 +185,8 @@
           "Forum",
           "Messages",
           "Pages",
-          "Ads"
+          "Ads",
+          "Blog"
         ],
         "offModules": [
           "Iptv"
@@ -190,7 +195,7 @@
       "defaults": {
         "settings": {
           "Module.Forum.Enabled": "true",
-          "Module.Blog.Enabled": "false",
+          "Module.Blog.Enabled": "true",
           "Module.Chat.Enabled": "false",
           "Module.Video.Enabled": "false",
           "Module.Messages.Enabled": "true",
@@ -335,7 +340,8 @@
       "composition": {
         "modules": [
           "Blog",
-          "Pages"
+          "Pages",
+          "Forum"
         ],
         "offModules": [
           "Iptv"
@@ -343,7 +349,7 @@
       },
       "defaults": {
         "settings": {
-          "Module.Forum.Enabled": "false",
+          "Module.Forum.Enabled": "true",
           "Module.Blog.Enabled": "true",
           "Module.Chat.Enabled": "false",
           "Module.Video.Enabled": "false",
@@ -375,7 +381,8 @@
           "Chat",
           "Messages",
           "Utility",
-          "Pages"
+          "Pages",
+          "Blog"
         ],
         "offModules": [
           "Iptv"
@@ -384,7 +391,7 @@
       "defaults": {
         "settings": {
           "Module.Forum.Enabled": "true",
-          "Module.Blog.Enabled": "false",
+          "Module.Blog.Enabled": "true",
           "Module.Chat.Enabled": "true",
           "Module.Video.Enabled": "false",
           "Module.Messages.Enabled": "true",
@@ -412,14 +419,15 @@
           "Iptv",
           "Forum",
           "Pages",
-          "Messages"
+          "Messages",
+          "Blog"
         ],
         "offModules": []
       },
       "defaults": {
         "settings": {
           "Module.Forum.Enabled": "true",
-          "Module.Blog.Enabled": "false",
+          "Module.Blog.Enabled": "true",
           "Module.Chat.Enabled": "false",
           "Module.Video.Enabled": "false",
           "Module.Messages.Enabled": "true",
