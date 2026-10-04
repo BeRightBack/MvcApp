@@ -264,19 +264,9 @@ a:hover {
     font-size: 0.85rem;
 }
 
-/* Center ad banners rendered inside the Business shell (content + footer) */
-.content .ad-zone,
-footer .ad-zone {
-    text-align: center;
-}
-.content .ad-zone .ad-banner,
-footer .ad-zone .ad-banner {
-    display: inline-block;
-}
-.content .ad-zone .ad-banner img,
-footer .ad-zone .ad-banner img {
-    display: inline-block !important;
-}
+/* (The per-template ad centring was removed: site.css now centres every zone for every template.
+   These rules existed only for Business's content + footer and would have drifted from the
+   global ones.) */
 
 /* Dashboard home page */
 .dashboard-header {
