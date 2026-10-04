@@ -1,4 +1,4 @@
-namespace MvcApp.Web.Composition;
+namespace MvcApp.Common.Composition;
 
 /// <summary>
 /// The modules a site can be composed FROM — one entry per module assembly.

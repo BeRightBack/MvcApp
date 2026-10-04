@@ -4,7 +4,7 @@
 @inject MvcApp.Core.Abstractions.INavService NavService
 @* Which modules this site is made of. The layout renders a module's component only when that
    module is part of the deployment — the platform must not demand a module it may not contain. *@
-@inject MvcApp.Web.Composition.TemplateComposition Composition
+@inject MvcApp.Common.Composition.TemplateComposition Composition
 @{
     var activeTemplate = await TemplateService.GetActiveTemplateAsync();
     var templateCss = (await TemplateService.GetAvailableTemplatesAsync())
@@ -179,18 +179,41 @@ else
     {
         @await Component.InvokeAsync("AdZone", new { zoneKey = "top-header" })
     }
+    // Sidebar zones are captured before the markup so an EMPTY zone costs nothing: when a zone
+    // renders no banners its column is never emitted and the content keeps its full width. Each
+    // component is invoked exactly once — invoking it twice would double its impression tracking.
+    Microsoft.AspNetCore.Html.IHtmlContent? sidebarLeftHtml = Composition.Includes("Ads")
+        ? await Component.InvokeAsync("AdZone", new { zoneKey = "sidebar-left" })
+        : null;
+    Microsoft.AspNetCore.Html.IHtmlContent? sidebarRightHtml = Composition.Includes("Ads")
+        ? await Component.InvokeAsync("AdZone", new { zoneKey = "sidebar-right" })
+        : null;
+    var hasSidebarLeft = !string.IsNullOrWhiteSpace(sidebarLeftHtml?.ToString());
+    var hasSidebarRight = !string.IsNullOrWhiteSpace(sidebarRightHtml?.ToString());
     <div class="container" style="padding-top: 80px;">
-        <main role="main" class="main pb-3">
-            @if (Composition.Includes("Ads"))
+        <div class="row">
+            @if (hasSidebarLeft)
             {
-                @await Component.InvokeAsync("AdZone", new { zoneKey = "content-top" })
+                <aside class="col-lg-2 d-none d-lg-block">@sidebarLeftHtml</aside>
             }
-            @RenderBody()
-            @if (Composition.Includes("Ads"))
+            <div class="@(hasSidebarLeft || hasSidebarRight ? "col-lg-8" : "col-12")">
+                <main role="main" class="main pb-3">
+                    @if (Composition.Includes("Ads"))
+                    {
+                        @await Component.InvokeAsync("AdZone", new { zoneKey = "content-top" })
+                    }
+                    @RenderBody()
+                    @if (Composition.Includes("Ads"))
+                    {
+                        @await Component.InvokeAsync("AdZone", new { zoneKey = "content-bottom" })
+                    }
+                </main>
+            </div>
+            @if (hasSidebarRight)
             {
-                @await Component.InvokeAsync("AdZone", new { zoneKey = "content-bottom" })
+                <aside class="col-lg-2 d-none d-lg-block">@sidebarRightHtml</aside>
             }
-        </main>
+        </div>
     </div>
 }
     <hr />

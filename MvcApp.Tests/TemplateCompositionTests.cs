@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using MvcApp.Core.Abstractions;
 using MvcApp.Services;
-using MvcApp.Web.Composition;
+using MvcApp.Common.Composition;
 using Xunit;
 
 namespace MvcApp.Tests;

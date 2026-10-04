@@ -174,7 +174,7 @@ try
     // With nothing configured every module is composed (the mother application's behaviour, and what
     // this did before). A published site sets Template:Name and ships only what its template
     // declares: no IPTV code in a dating site, and no runtime flag needed to say so.
-    var composition = MvcApp.Web.Composition.TemplateComposition.From(
+    var composition = MvcApp.Common.Composition.TemplateComposition.From(
         builder.Configuration,
         new MvcApp.Services.TemplateProfileService(builder.Configuration));
 

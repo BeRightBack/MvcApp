@@ -1,4 +1,7 @@
 @model BlogPost
+@* The shared composition decision, so a module view drops the slot when Ads is not part of the
+   deployment instead of invoking a component that does not exist. *@
+@inject MvcApp.Common.Composition.TemplateComposition Composition
 @{
     ViewData["Title"] = Model.Title;
     var comments = ViewBag.Comments as IEnumerable<BlogComment> ?? [];
@@ -47,6 +50,14 @@
                 <div class="blog-post-content">
                     @Html.Raw(Model.Content)
                 </div>
+
+                @* In-article zone. Placed after the body rather than between paragraphs: splitting
+                   the owner's stored HTML to inject mid-article would rewrite content they wrote.
+                   The slot is real; this is the conservative position for it. *@
+                @if (Composition.Includes("Ads"))
+                {
+                    @await Component.InvokeAsync("AdZone", new { zoneKey = "in-article" })
+                }
             </article>
 
             <hr />

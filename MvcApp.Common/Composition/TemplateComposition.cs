@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using MvcApp.Core.Abstractions;
 
-namespace MvcApp.Web.Composition;
+namespace MvcApp.Common.Composition;
 
 /// <summary>
 /// Which modules this deployment is built from.
