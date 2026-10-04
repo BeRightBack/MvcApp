@@ -102,29 +102,33 @@
                 }
 
                 <div class="card mt-3">
-                    <div class="card-body">
-                        <h5>@Localizer["Leave a Comment"]</h5>
-                        <form asp-action="AddComment" method="post">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="postId" value="@Model.Id" />
-                            @if (!User.Identity?.IsAuthenticated == true)
-                            {
-                                <div class="row mb-2">
-                                    <div class="col">
-                                        <input type="text" name="guestName" class="form-control" placeholder="@(Localizer["Your Name"])" />
-                                    </div>
-                                    <div class="col">
-                                        <input type="email" name="guestEmail" class="form-control" placeholder="@(Localizer["Your Email"])" />
-                                    </div>
-                                </div>
-                            }
-                            <div class="mb-2">
-                                <textarea name="content" class="form-control" rows="4" placeholder="@(Localizer["Write your comment..."])" required></textarea>
+                            <div class="card-body">
+                                <h5>@Localizer["Leave a Comment"]</h5>
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <form asp-action="AddComment" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="postId" value="@Model.Id" />
+                                        <div class="mb-2">
+                                            <textarea name="content" class="form-control" rows="4" placeholder="@(Localizer["Write your comment..."])" required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-paper-plane"></i> @Localizer["Submit"]</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    @* Posting requires an account. The form used to be shown to guests too, with
+                                       name and email fields, but the action is behind the default-deny filter, so
+                                       submitting it could only ever bounce to the login page. Inviting someone to
+                                       fill in a form that cannot work is worse than asking them to sign in. *@
+                                    <p class="mb-2 text-muted">@Localizer["Sign in to leave a comment."]</p>
+                                    <a class="btn btn-outline-primary btn-sm" asp-area=""
+                                       asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path">
+                                        <i class="fa fa-sign-in"></i> @Localizer["Sign in"]
+                                    </a>
+                                }
                             </div>
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-paper-plane"></i> @Localizer["Submit"]</button>
-                        </form>
-                    </div>
-                </div>
+                        </div>
             </section>
         </div>
         <div class="col-lg-4">

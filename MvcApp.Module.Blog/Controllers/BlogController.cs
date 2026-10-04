@@ -249,9 +249,17 @@ public partial class BlogController(
         return View(pagedPosts);
     }
 
+    /// <summary>
+    /// Posting requires an account: reads are public, posting is not. Marked [Authorize] explicitly
+    /// rather than leaning on the global default-deny filter, so the intent is declared where it is
+    /// read. The guest parameters are gone with it — they could never be reached, because the filter
+    /// rejected anonymous posts before they arrived, and leaving them in invited a form that only
+    /// bounced to the login page.
+    /// </summary>
+    [Authorize]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddComment(int postId, string content, string? guestName, string? guestEmail)
+    public async Task<IActionResult> AddComment(int postId, string content)
     {
         var post = await postRepo.Query().FirstOrDefaultAsync(p => p.Id == postId && p.IsPublished);
         if (post == null) return NotFound();
@@ -263,8 +271,9 @@ public partial class BlogController(
         }
 
         var currentUser = await userManager.GetUserAsync(User);
+        if (currentUser == null) return Challenge();
 
-        if (currentUser != null && await banService.IsBannedAsync(currentUser.Id))
+        if (await banService.IsBannedAsync(currentUser.Id))
         {
             TempData["Error"] = localizer["Your account is suspended. You cannot post comments."];
             return RedirectToAction(nameof(Post), "Blog", new { slug = post.Slug });
@@ -274,17 +283,13 @@ public partial class BlogController(
         {
             PostId = postId,
             Content = content,
-            CreatedById = currentUser?.Id,
-            CreatedByUsername = currentUser?.UserName,
-            GuestName = currentUser == null ? guestName : null,
-            GuestEmail = currentUser == null ? guestEmail : null,
-            IsApproved = currentUser != null
+            CreatedById = currentUser.Id,
+            CreatedByUsername = currentUser.UserName,
+            IsApproved = true
         };
 
         await commentRepo.AddAsync(comment);
-        TempData["Success"] = currentUser != null
-            ? "Comment posted."
-            : "Comment submitted for moderation.";
+        TempData["Success"] = "Comment posted.";
         return RedirectToAction(nameof(Post), "Blog", new { slug = post.Slug });
     }
 
