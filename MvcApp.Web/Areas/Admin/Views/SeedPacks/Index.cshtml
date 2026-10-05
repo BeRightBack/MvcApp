@@ -118,6 +118,15 @@
                 </tr>
             </thead>
             <tbody>
+                @if (packs.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            @Localizer["Pack status is unavailable until the pending migrations are applied."]
+                        </td>
+                    </tr>
+                }
+
                 @foreach (var pack in packs)
                 {
                     <tr>
@@ -173,14 +182,6 @@
                                     </button>
                                 </form>
                             }
-                        </td>
-                    </tr>
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="6" class="text-center text-muted py-4">
-                            @Localizer["Pack status is unavailable until the pending migrations are applied."]
                         </td>
                     </tr>
                 }
