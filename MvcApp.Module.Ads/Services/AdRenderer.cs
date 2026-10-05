@@ -98,14 +98,14 @@ public class AdRenderer : IAdRenderer
             return string.Empty;
 
         // Determine CSS class and wrapper
-        var cssClass = placement?.CssClassOverride ?? zone.DefaultCssClass ?? $"ad-zone ad-{zoneKey}";
+        var cssClass = placement?.CssClassOverride ?? zone.DefaultCssClass ?? $"promo-slot promo-{zoneKey}";
         var wrapperTemplate = placement?.WrapperTemplateOverride ?? zone.BannerWrapperTemplate;
 
         var html = new StringBuilder();
         var rotateAttrs = rotate
-            ? $" data-ad-rotate=\"6000\" data-ad-rotate-count=\"{maxBanners}\""
+            ? $" data-promo-rotate=\"6000\" data-promo-rotate-count=\"{maxBanners}\""
             : string.Empty;
-        html.AppendLine($"<div class=\"{cssClass}\" data-ad-zone=\"{zoneKey}\"{rotateAttrs}>");
+        html.AppendLine($"<div class=\"{cssClass}\" data-promo-slot=\"{zoneKey}\"{rotateAttrs}>");
 
         for (var i = 0; i < banners.Count; i++)
         {
@@ -118,7 +118,7 @@ public class AdRenderer : IAdRenderer
             if (rotate)
             {
                 var hidden = i >= maxBanners ? " style=\"display:none\"" : string.Empty;
-                html.AppendLine($"<div class=\"ad-rotate-item\"{hidden}>{bannerHtml}</div>");
+                html.AppendLine($"<div class=\"promo-rotate-item\"{hidden}>{bannerHtml}</div>");
             }
             else
             {
@@ -130,7 +130,7 @@ public class AdRenderer : IAdRenderer
 
         if (rotate)
         {
-            html.AppendLine("<script src=\"/_content/MvcApp.Module.Ads/js/ads-rotate.js\" defer></script>");
+            html.AppendLine("<script src=\"/_content/MvcApp.Module.Ads/js/promo-rotate.js\" defer></script>");
         }
 
         // Queue impression tracking (fire-and-forget) — only for banners visible on
@@ -200,8 +200,8 @@ public class AdRenderer : IAdRenderer
 
     private string RenderBanner(AdBanner banner, string zoneKey, string pageSlug, HttpContext? httpContext)
     {
-        var clickUrl = $"/ads/click/{banner.Id}?zone={Uri.EscapeDataString(zoneKey)}&page={Uri.EscapeDataString(pageSlug)}";
-        var cssClass = string.IsNullOrWhiteSpace(banner.CssClass) ? "ad-banner" : $"ad-banner {banner.CssClass}";
+        var clickUrl = $"/promo/click/{banner.Id}?zone={Uri.EscapeDataString(zoneKey)}&page={Uri.EscapeDataString(pageSlug)}";
+        var cssClass = string.IsNullOrWhiteSpace(banner.CssClass) ? "promo" : $"promo {banner.CssClass}";
 
         return banner.Type switch
         {
@@ -218,10 +218,10 @@ public class AdRenderer : IAdRenderer
         var imgUrl = banner.Content ?? "";
         var alt = banner.AltText ?? banner.Name;
         var target = !string.IsNullOrWhiteSpace(banner.TargetUrl) ? $"href=\"{clickUrl}\"" : "";
-        var linkStart = !string.IsNullOrWhiteSpace(banner.TargetUrl) ? $"<a {target} class=\"ad-banner-link\" data-ad-banner=\"{banner.Id}\">" : "";
+        var linkStart = !string.IsNullOrWhiteSpace(banner.TargetUrl) ? $"<a {target} class=\"promo-link\" data-promo-id=\"{banner.Id}\">" : "";
         var linkEnd = !string.IsNullOrWhiteSpace(banner.TargetUrl) ? "</a>" : "";
 
-        return $"<div class=\"{cssClass} ad-banner-image\" data-ad-banner=\"{banner.Id}\">{linkStart}<img src=\"{imgUrl}\" alt=\"{alt}\" loading=\"lazy\" />{linkEnd}</div>";
+        return $"<div class=\"{cssClass} promo-image\" data-promo-id=\"{banner.Id}\">{linkStart}<img src=\"{imgUrl}\" alt=\"{alt}\" loading=\"lazy\" />{linkEnd}</div>";
     }
 
     private string RenderHtmlBanner(AdBanner banner, string clickUrl, string cssClass)
@@ -233,23 +233,23 @@ public class AdRenderer : IAdRenderer
             html = Regex.Replace(html, @"href\s*=\s*[""']([^""']*)[""']", m =>
                 $"href=\"{clickUrl}&redirect={Uri.EscapeDataString(m.Groups[1].Value)}\"");
         }
-        return $"<div class=\"{cssClass} ad-banner-html\" data-ad-banner=\"{banner.Id}\">{html}</div>";
+        return $"<div class=\"{cssClass} promo-html\" data-promo-id=\"{banner.Id}\">{html}</div>";
     }
 
     private string RenderScriptBanner(AdBanner banner, string cssClass)
     {
         // For script banners (AdSense, etc.), render the script tag directly
         var script = banner.Content ?? "";
-        return $"<div class=\"{cssClass} ad-banner-script\" data-ad-banner=\"{banner.Id}\">{script}</div>";
+        return $"<div class=\"{cssClass} promo-script\" data-promo-id=\"{banner.Id}\">{script}</div>";
     }
 
     private string RenderTextBanner(AdBanner banner, string clickUrl, string cssClass)
     {
         var text = banner.Content ?? banner.Name;
         var link = !string.IsNullOrWhiteSpace(banner.TargetUrl)
-            ? $"<a href=\"{clickUrl}\" class=\"ad-banner-link\" data-ad-banner=\"{banner.Id}\">{text}</a>"
+            ? $"<a href=\"{clickUrl}\" class=\"promo-link\" data-promo-id=\"{banner.Id}\">{text}</a>"
             : text;
-        return $"<div class=\"{cssClass} ad-banner-text\" data-ad-banner=\"{banner.Id}\">{link}</div>";
+        return $"<div class=\"{cssClass} promo-text\" data-promo-id=\"{banner.Id}\">{link}</div>";
     }
 
     private static string HashIp(string? ip)

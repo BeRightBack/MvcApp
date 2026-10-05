@@ -6,12 +6,12 @@ namespace MvcApp.Module.Ads.Services;
 public interface IAdMediaService
 {
     /// <summary>
-    /// Validates and saves an uploaded banner image under wwwroot/images/ads/{zoneKey}/,
+    /// Validates and saves an uploaded banner image under wwwroot/images/promo/{zoneKey}/,
     /// enforcing the zone's declared format (width × height) when set.
     /// </summary>
     Task<AdMediaResult> SaveBannerImageAsync(IFormFile file, string zoneKey, int? expectedWidth, int? expectedHeight);
 
-    /// <summary>Deletes a previously uploaded banner image (only paths under /images/ads/).</summary>
+    /// <summary>Deletes a previously uploaded banner image (only paths under /images/promo/).</summary>
     void DeleteBannerImage(string? contentPath);
 }
 
@@ -20,7 +20,7 @@ public record AdMediaResult(bool Success, string? Error, string? Url);
 public class AdMediaService : IAdMediaService
 {
     private const long MaxBytes = 2 * 1024 * 1024; // 2 MB
-    private const string AdsRoot = "images/ads";
+    private const string AdsRoot = "images/promo";
 
     private readonly IWebHostEnvironment _env;
 

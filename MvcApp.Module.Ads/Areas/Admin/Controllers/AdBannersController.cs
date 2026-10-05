@@ -126,7 +126,7 @@ public class AdBannersController : Controller
 
     /// <summary>
     /// When an image file is uploaded for an Image banner, validate it against the zone's
-    /// declared format and save it under /images/ads/{zoneKey}/, replacing the Content URL.
+    /// declared format and save it under /images/promo/{zoneKey}/, replacing the Content URL.
     /// </summary>
     private async Task HandleUploadAsync(AdBanner banner, IFormFile? imageFile)
     {

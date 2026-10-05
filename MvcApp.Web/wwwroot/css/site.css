@@ -193,24 +193,24 @@ body {
   text-align: start;
 }
 /* Ad module banners */
-.ad-zone { display: block; }
-.ad-zone .ad-banner img { max-width: 100%; height: auto; display: block; }
-.ad-zone .ad-banner-link { display: inline-block; }
+.promo-slot { display: block; }
+.promo-slot .promo img { max-width: 100%; height: auto; display: block; }
+.promo-slot .promo-link { display: inline-block; }
 
 /* Centre every banner zone, all templates. Handles the rotation case too: with rotation, banners
-   are wrapped in a block-level .ad-rotate-item. This used to exist only for the footer (and,
+   are wrapped in a block-level .promo-rotate-item. This used to exist only for the footer (and,
    separately, only for the Business template's content zones); every template centres the footer
    and content zones alike, so the rule lives once here instead of per-template. */
-.ad-zone {
+.promo-slot {
   text-align: center;
 }
-.ad-zone .ad-banner,
-.ad-zone .ad-banner-link,
-.ad-zone .ad-rotate-item {
+.promo-slot .promo,
+.promo-slot .promo-link,
+.promo-slot .promo-rotate-item {
   display: inline-block;
   vertical-align: middle;
 }
-.ad-zone .ad-banner img {
+.promo-slot .promo img {
   display: inline-block;
   margin-left: auto;
   margin-right: auto;
@@ -218,8 +218,8 @@ body {
 
 
 /* Ad banner rotation */
-.ad-rotate-item.ad-rotate-visible { animation: adRotateFadeIn .6s ease; }
-@keyframes adRotateFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.promo-rotate-item.promo-rotate-visible { animation: promoRotateFadeIn .6s ease; }
+@keyframes promoRotateFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .navbar.scrolled {
     background-color: #fff;

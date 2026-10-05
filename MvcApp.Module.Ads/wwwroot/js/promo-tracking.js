@@ -4,10 +4,10 @@
 (function () {
     'use strict';
 
-    const IMPRESSION_ENDPOINT = '/ads/impression/';
-    const CLICK_SELECTOR = '.ad-banner-link, .ad-banner-image a, .ad-banner-text a';
-    const BANNER_SELECTOR = '[data-ad-banner]';
-    const ZONE_SELECTOR = '[data-ad-zone]';
+    const IMPRESSION_ENDPOINT = '/promo/impression/';
+    const CLICK_SELECTOR = '.promo-link, .promo-image a, .promo-text a';
+    const BANNER_SELECTOR = '[data-promo-id]';
+    const ZONE_SELECTOR = '[data-promo-slot]';
 
     let impressionSent = new Set();
     let observer = null;
@@ -29,9 +29,9 @@
             const bannerEl = link.closest(BANNER_SELECTOR);
             if (!bannerEl) return;
 
-            const bannerId = bannerEl.dataset.adBanner;
+            const bannerId = bannerEl.dataset.promoId;
             const zoneEl = bannerEl.closest(ZONE_SELECTOR);
-            const zoneKey = zoneEl?.dataset.adZone || '';
+            const zoneKey = zoneEl?.dataset.promoSlot || '';
             const pageSlug = getPageSlug();
 
             // Click is tracked server-side via the redirect endpoint
@@ -50,7 +50,7 @@
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
                     const bannerEl = entry.target;
-                    const bannerId = bannerEl.dataset.adBanner;
+                    const bannerId = bannerEl.dataset.promoId;
                     if (bannerId && !impressionSent.has(bannerId)) {
                         sendImpression(bannerId, bannerEl);
                     }
@@ -69,7 +69,7 @@
 
     function trackAllVisible() {
         document.querySelectorAll(BANNER_SELECTOR).forEach(function (el) {
-            const bannerId = el.dataset.adBanner;
+            const bannerId = el.dataset.promoId;
             if (bannerId && !impressionSent.has(bannerId)) {
                 sendImpression(bannerId, el);
             }
@@ -80,7 +80,7 @@
         impressionSent.add(bannerId);
 
         const zoneEl = bannerEl.closest(ZONE_SELECTOR);
-        const zoneKey = zoneEl?.dataset.adZone || '';
+        const zoneKey = zoneEl?.dataset.promoSlot || '';
         const pageSlug = getPageSlug();
         const culture = document.documentElement.lang || 'en';
 

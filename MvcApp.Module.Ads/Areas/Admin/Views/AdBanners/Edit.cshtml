@@ -65,7 +65,7 @@
                 <input type="file" name="imageFile" id="imageFile" class="form-control" accept=".png,.jpg,.jpeg,.gif,.webp,.svg" />
                 @Html.ValidationMessage("imageFile", new { @class = "text-danger" })
                 <div class="form-text">
-                    Saved into this zone's folder (<code>/images/ads/ zone /</code>). Max 2 MB. Overrides the URL above when a file is chosen.
+                    Saved into this zone's folder (<code>/images/promo/ zone /</code>). Max 2 MB. Overrides the URL above when a file is chosen.
                     @if (ViewBag.ZoneFormat != null)
                     {
                         <text>@Localizer["This zone expects"] <strong>@ViewBag.ZoneFormat</strong> @Localizer["px images."]</text>
